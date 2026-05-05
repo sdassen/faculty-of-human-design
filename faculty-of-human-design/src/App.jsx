@@ -1,194 +1,432 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const F = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@200;300;400;500&display=swap');`;
+const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');`;
 
-const IMG = {
-  hero:     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80",
-  cosmos:   "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1200&q=80",
-  ibiza:    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&q=80",
-  journal:  "https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&q=80",
-  couple:   "https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=900&q=80",
-  child:    "https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=900&q=80",
-  career:   "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900&q=80",
-  calendar: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&q=80",
-  med:      "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=900&q=80",
-  stars:    "https://images.unsplash.com/photo-1464802686167-b939a6910659?w=1200&q=80",
+const CSS = `
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #F8F6F1; --card: #FFFFFF; --dark: #1C1917; --muted: #F1EEE8;
+  --text: #1C1917; --text-muted: #78716C; --text-light: #A8A29E;
+  --brand: #3D2C5E; --gold: #9A8050; --border: #E7E3DC;
+  --white: #FFFFFF; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,.07);
+  --shadow-lg: 0 12px 40px rgba(0,0,0,.09);
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Jost', system-ui, sans-serif;
+}
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-sans); background: var(--bg); color: var(--text);
+  font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { display: block; max-width: 100%; }
+button { cursor: pointer; font-family: var(--font-sans); }
+
+/* TYPOGRAPHY */
+.h1 { font-family: var(--font-serif); font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 300; line-height: 1.1; }
+.h1-hero { font-family: var(--font-serif); font-size: clamp(2.5rem,6vw,4.2rem); font-weight: 300; line-height: 1.05; color: white; }
+.h2 { font-family: var(--font-serif); font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 300; line-height: 1.15; }
+.h3 { font-family: var(--font-serif); font-size: clamp(1.3rem,2.5vw,1.8rem); font-weight: 400; line-height: 1.2; }
+.label { font-size:.65rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); }
+.body-lg { font-size:1.1rem; font-weight:300; line-height:1.8; color:var(--text-muted); }
+.body-md { font-size:1rem; font-weight:300; line-height:1.75; color:var(--text-muted); }
+.body-sm { font-size:.875rem; font-weight:300; line-height:1.7; color:var(--text-muted); }
+
+/* LAYOUT */
+.pg { padding-top:72px; min-height:100vh; }
+.section { padding:96px 24px; }
+.section-sm { padding:64px 24px; }
+.section.bg-white { background:var(--white); }
+.section.bg-muted { background:var(--muted); }
+.section.bg-dark { background:var(--dark); }
+.container { max-width:1240px; margin:0 auto; width:100%; }
+.container-sm { max-width:760px; margin:0 auto; width:100%; }
+.container-md { max-width:960px; margin:0 auto; width:100%; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
+.text-center { text-align:center; }
+.divider { width:40px; height:2px; background:var(--gold); }
+.divider-center { margin:0 auto; }
+
+/* BUTTONS */
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  border:none; border-radius:var(--radius-md); font-family:var(--font-sans);
+  font-weight:500; letter-spacing:.04em; transition:all 200ms ease; white-space:nowrap; }
+.btn-primary { background:var(--brand); color:white; padding:14px 32px; font-size:.95rem; box-shadow:0 2px 8px rgba(61,44,94,.25); }
+.btn-primary:hover { background:#2e2147; transform:translateY(-1px); box-shadow:0 4px 16px rgba(61,44,94,.35); }
+.btn-secondary { background:transparent; color:var(--brand); padding:13px 30px; font-size:.95rem; border:1.5px solid var(--brand); }
+.btn-secondary:hover { background:var(--brand); color:white; }
+.btn-white { background:white; color:var(--brand); padding:14px 32px; font-size:.95rem; box-shadow:var(--shadow-md); }
+.btn-white:hover { box-shadow:var(--shadow-lg); transform:translateY(-1px); }
+.btn-ghost { background:rgba(255,255,255,.12); color:white; padding:13px 30px; font-size:.95rem; border:1.5px solid rgba(255,255,255,.25); }
+.btn-ghost:hover { background:rgba(255,255,255,.2); }
+.btn-gold { background:var(--gold); color:white; padding:14px 32px; font-size:.95rem; }
+.btn-gold:hover { background:#876e43; transform:translateY(-1px); }
+.btn-lg { padding:17px 40px; font-size:1.05rem; }
+.btn-sm { padding:10px 22px; font-size:.85rem; }
+.btn-full { width:100%; }
+.btn:disabled { opacity:.4; cursor:not-allowed; transform:none !important; }
+
+/* CARDS */
+.card { background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow-sm); overflow:hidden; }
+.rcard { background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border); cursor:pointer; transition:all 200ms; display:flex; flex-direction:column; overflow:hidden; }
+.rcard:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--brand); }
+.rcard-accent { height:4px; background:var(--brand); }
+.rcard-body { padding:24px; flex:1; display:flex; flex-direction:column; }
+.rcard-tag { display:inline-block; background:rgba(61,44,94,.08); color:var(--brand); font-size:.6rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:4px 10px; border-radius:100px; margin-bottom:12px; }
+.rcard-icon { font-size:1.4rem; margin-bottom:8px; }
+.rcard-title { font-family:var(--font-serif); font-size:1.2rem; font-weight:400; color:var(--text); margin-bottom:6px; line-height:1.3; }
+.rcard-tagline { font-size:.85rem; font-weight:300; color:var(--text-muted); line-height:1.6; flex:1; margin-bottom:20px; }
+.rcard-footer { display:flex; justify-content:space-between; align-items:center; padding-top:16px; border-top:1px solid var(--border); margin-top:auto; }
+.rcard-price { font-family:var(--font-serif); font-size:1.6rem; font-weight:300; color:var(--text); }
+.rcard-cta { font-size:.72rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--brand); }
+
+/* TRUST */
+.trust-strip { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 24px; }
+.trust-item { display:flex; align-items:center; gap:6px; font-size:.8rem; font-weight:400; color:var(--text-muted); }
+
+/* STEP */
+.step-card { display:flex; gap:20px; align-items:flex-start; }
+.step-num { width:40px; height:40px; border-radius:50%; background:var(--brand); color:white; font-family:var(--font-serif); font-size:1.1rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.step-body h4 { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; color:var(--text); margin-bottom:4px; }
+.step-body p { font-size:.9rem; font-weight:300; color:var(--text-muted); line-height:1.65; }
+
+/* TESTIMONIAL */
+.tcard { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); padding:28px; }
+.tcard-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; color:var(--text); line-height:1.75; margin-bottom:16px; }
+.tcard-author { font-size:.75rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--text-light); }
+.tcard-report { font-size:.7rem; color:var(--gold); margin-top:2px; }
+.stars { color:#F59E0B; font-size:.85rem; margin-bottom:10px; }
+
+/* STAT */
+.stat-n { font-family:var(--font-serif); font-size:2.6rem; font-weight:300; color:var(--text); line-height:1; }
+.stat-l { font-size:.72rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--text-muted); margin-top:4px; }
+
+/* NAV */
+.nav { position:fixed; top:0; left:0; right:0; z-index:200; height:72px; background:rgba(248,246,241,.96); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); display:flex; align-items:center; padding:0 32px; }
+.nav-inner { max-width:1240px; margin:0 auto; width:100%; display:flex; align-items:center; justify-content:space-between; }
+.nav-logo { cursor:pointer; }
+.nav-logo-main { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; color:var(--text); letter-spacing:.08em; text-transform:uppercase; }
+.nav-logo-sub { font-size:.55rem; letter-spacing:.18em; text-transform:uppercase; color:var(--text-light); margin-top:1px; }
+.nav-links { display:flex; align-items:center; gap:2px; }
+.nav-link { font-size:.78rem; font-weight:400; color:var(--text-muted); padding:8px 14px; border-radius:var(--radius-sm); transition:all 150ms; cursor:pointer; }
+.nav-link:hover, .nav-link.active { color:var(--brand); background:rgba(61,44,94,.06); }
+.mobile-nav { display:none; }
+.mobile-menu { position:fixed; inset:0; background:white; z-index:300; padding:24px; display:flex; flex-direction:column; gap:8px; padding-top:88px; }
+.mobile-menu-link { font-size:1.1rem; font-weight:300; color:var(--text); padding:16px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+.menu-btn { background:none; border:none; padding:8px; color:var(--text); }
+
+/* HERO */
+.hero { min-height:100vh; position:relative; display:flex; align-items:center; overflow:hidden; }
+.hero-bg { position:absolute; inset:0; background:linear-gradient(135deg,#1C1917 0%,#2d1f4a 55%,#3D2C5E 100%); }
+.hero-pattern { position:absolute; inset:0; opacity:.04; background-image:radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px); background-size:48px 48px; }
+.hero-glow { position:absolute; top:-100px; right:-100px; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle, rgba(154,128,80,.15), transparent 65%); }
+.hero-content { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:0 32px; width:100%; display:grid; grid-template-columns:1fr 400px; gap:80px; align-items:center; }
+.hero-eyebrow { font-size:.65rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:rgba(154,128,80,.85); margin-bottom:20px; }
+.hero-title em { color:rgba(255,255,255,.6); font-style:italic; }
+.hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:28px; margin-top:28px; }
+.hero-micro { display:flex; gap:20px; flex-wrap:wrap; }
+.hero-micro-item { font-size:.78rem; font-weight:300; color:rgba(255,255,255,.45); }
+.hero-card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-lg); padding:32px; backdrop-filter:blur(12px); }
+.hero-card-label { font-size:.6rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:rgba(154,128,80,.7); margin-bottom:16px; }
+.hero-stat { margin-bottom:20px; }
+.hero-stat-n { font-family:var(--font-serif); font-size:2.2rem; font-weight:300; color:white; line-height:1; }
+.hero-stat-l { font-size:.7rem; color:rgba(255,255,255,.4); margin-top:3px; }
+.hero-divider { height:1px; background:rgba(255,255,255,.1); margin:20px 0; }
+
+/* FORM */
+.form-wrap { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow-md); padding:36px; }
+.form-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.form-group { display:flex; flex-direction:column; gap:6px; }
+.form-group.full { grid-column:1/-1; }
+.form-label { font-size:.65rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); }
+.form-input { border:1.5px solid var(--border); background:var(--bg); border-radius:var(--radius-sm); padding:11px 14px; font-family:var(--font-sans); font-size:.95rem; font-weight:300; color:var(--text); outline:none; transition:border-color 200ms; width:100%; }
+.form-input:focus { border-color:var(--brand); }
+.form-select { border:1.5px solid var(--border); background:var(--bg); border-radius:var(--radius-sm); padding:11px 14px; font-family:var(--font-sans); font-size:.95rem; font-weight:300; color:var(--text); outline:none; width:100%; cursor:pointer; }
+.form-select:focus { border-color:var(--brand); }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.form-note { font-size:.8rem; color:var(--text-light); text-align:center; line-height:1.6; margin-top:10px; }
+.form-divider { height:1px; background:var(--border); margin:20px 0; }
+
+/* CHART */
+.chart-result { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); padding:28px; }
+.chart-table { width:100%; border-collapse:collapse; }
+.chart-table tr { border-bottom:1px solid var(--border); }
+.chart-table td { padding:9px 0; font-size:.875rem; vertical-align:top; }
+.chart-table td:first-child { font-size:.65rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:var(--text-light); width:140px; padding-right:12px; }
+.tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:3px; }
+.tag-def { font-size:.68rem; padding:2px 9px; background:var(--brand); color:white; border-radius:100px; }
+.tag-open { font-size:.68rem; padding:2px 9px; border:1px solid var(--border); color:var(--text-muted); border-radius:100px; }
+.tag-gate { font-size:.65rem; padding:2px 7px; background:rgba(61,44,94,.07); color:var(--brand); border-radius:100px; }
+.order-block { background:var(--dark); border-radius:var(--radius-md); padding:24px; margin-top:20px; }
+.order-block-title { font-family:var(--font-serif); font-size:1.1rem; font-weight:300; color:white; margin-bottom:6px; }
+.order-block-sub { font-size:.82rem; font-weight:300; color:rgba(255,255,255,.45); margin-bottom:16px; line-height:1.65; }
+
+/* LOADING */
+.loading-overlay { position:fixed; inset:0; background:rgba(28,25,23,.97); z-index:400; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:32px; }
+.loading-icon { font-family:var(--font-serif); font-size:2.5rem; font-weight:300; color:rgba(154,128,80,.5); margin-bottom:32px; animation:pulse 2.5s ease-in-out infinite; }
+@keyframes pulse { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:.9;transform:scale(1.04)} }
+.loading-title { font-family:var(--font-serif); font-size:1.5rem; font-weight:300; color:white; margin-bottom:8px; }
+.loading-counter { font-size:.62rem; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.35); margin-bottom:28px; }
+.loading-steps { width:360px; max-width:100%; }
+.loading-step { display:flex; align-items:center; gap:12px; padding:7px 0; transition:opacity .4s; }
+.loading-step-dot { width:6px; height:6px; border-radius:50%; flex-shrink:0; transition:background .4s; }
+.loading-step-text { font-size:.65rem; letter-spacing:.1em; text-transform:uppercase; }
+.loading-step-badge { margin-left:auto; font-size:.6rem; color:rgba(154,128,80,.6); }
+.loading-bar-wrap { width:320px; height:2px; background:rgba(154,128,80,.12); border-radius:2px; margin:20px auto 0; overflow:hidden; }
+.loading-bar-fill { height:100%; background:var(--gold); transition:width .5s; border-radius:2px; }
+
+/* REPORT OUTPUT */
+.report-pg { background:var(--muted); min-height:100vh; padding:48px 24px; }
+.report-header { max-width:760px; margin:0 auto 24px; }
+.report-inst-label { font-size:.6rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:var(--gold); margin-bottom:6px; }
+.report-title { font-family:var(--font-serif); font-size:1.9rem; font-weight:300; color:var(--text); margin-bottom:4px; }
+.report-meta { font-size:.8rem; font-weight:300; color:var(--text-light); margin-bottom:20px; }
+.report-summary { max-width:760px; margin:0 auto 20px; background:white; border:1px solid var(--border); border-radius:var(--radius-lg); padding:22px 26px; }
+.report-summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.rsg-label { font-size:.58rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--text-light); margin-bottom:3px; }
+.rsg-value { font-size:.85rem; font-weight:300; color:var(--text); line-height:1.4; }
+.report-body { max-width:760px; margin:0 auto; background:white; border:1px solid var(--border); border-radius:var(--radius-lg); padding:48px; box-shadow:var(--shadow-md); }
+.report-section-title { font-family:var(--font-serif); font-size:1.2rem; font-weight:400; color:var(--brand); margin:32px 0 10px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+.report-section-title:first-child { margin-top:0; }
+.report-section-body { font-size:.88rem; font-weight:300; line-height:1.95; color:#2c2820; white-space:pre-wrap; }
+
+/* UPSELL */
+.upsell-card { background:linear-gradient(135deg,#2e1f4e 0%,var(--brand) 100%); border-radius:var(--radius-lg); padding:32px; color:white; margin-top:20px; }
+.upsell-label { font-size:.6rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(154,128,80,.8); margin-bottom:10px; }
+.upsell-title { font-family:var(--font-serif); font-size:1.5rem; font-weight:300; color:white; margin-bottom:8px; }
+.upsell-sub { font-size:.85rem; font-weight:300; color:rgba(255,255,255,.55); margin-bottom:20px; line-height:1.65; }
+.upsell-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:20px; }
+.upsell-item { display:flex; gap:8px; font-size:.8rem; font-weight:300; color:rgba(255,255,255,.7); line-height:1.5; }
+
+/* BLOG */
+.blog-card { border-radius:var(--radius-lg); border:1px solid var(--border); background:white; padding:28px; cursor:pointer; transition:all 200ms; margin-bottom:16px; }
+.blog-card:hover { transform:translateY(-2px); box-shadow:var(--shadow-md); border-color:var(--brand); }
+.blog-tag { font-size:.6rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--gold); margin-bottom:8px; }
+.blog-title { font-family:var(--font-serif); font-size:1.2rem; font-weight:400; color:var(--text); margin-bottom:8px; line-height:1.35; }
+.blog-excerpt { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.7; margin-bottom:14px; }
+.blog-more { font-size:.68rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--brand); }
+
+/* DETAIL HERO */
+.detail-hero { background:var(--dark); padding:80px 24px 56px; }
+.detail-hero-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1fr 280px; gap:60px; align-items:start; }
+.detail-hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(154,128,80,.15); border:1px solid rgba(154,128,80,.25); padding:5px 12px; border-radius:100px; font-size:.65rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:rgba(154,128,80,.9); margin-bottom:20px; }
+.detail-hero-title { font-family:var(--font-serif); font-size:clamp(2rem,4vw,3rem); font-weight:300; color:white; margin-bottom:12px; line-height:1.1; }
+.detail-hero-tagline { font-size:.95rem; font-weight:300; color:rgba(255,255,255,.5); margin-bottom:24px; line-height:1.7; }
+.detail-hero-meta { display:flex; gap:20px; flex-wrap:wrap; }
+.detail-hero-m { font-size:.65rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.3); }
+.price-box { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-lg); padding:28px; text-align:center; }
+.price-box-amount { font-family:var(--font-serif); font-size:3rem; font-weight:300; color:white; line-height:1; }
+.price-box-period { font-size:.7rem; color:rgba(255,255,255,.4); margin-top:4px; margin-bottom:20px; }
+
+/* INCLUDES */
+.includes-list { list-style:none; display:flex; flex-direction:column; gap:11px; }
+.includes-item { display:flex; gap:10px; align-items:flex-start; font-size:.9rem; font-weight:300; color:var(--text-muted); line-height:1.6; }
+.includes-num { width:22px; height:22px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:600; color:var(--brand); flex-shrink:0; margin-top:1px; }
+
+/* FAQ */
+.faq-item { border-bottom:1px solid var(--border); padding:18px 0; }
+.faq-q { font-family:var(--font-serif); font-size:1rem; font-weight:400; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.faq-q:hover { color:var(--brand); }
+.faq-toggle { font-size:1.2rem; color:var(--brand); flex-shrink:0; transition:transform .25s; }
+.faq-toggle.open { transform:rotate(45deg); }
+.faq-a { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.85; margin-top:12px; }
+
+/* STICKY MOBILE CTA */
+.sticky-cta { display:none; position:fixed; bottom:0; left:0; right:0; z-index:150; padding:12px 16px; background:rgba(248,246,241,.97); backdrop-filter:blur(12px); border-top:1px solid var(--border); }
+
+/* FOOTER */
+.footer { background:var(--dark); padding:56px 32px 32px; }
+.footer-inner { max-width:1240px; margin:0 auto; }
+.footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; padding-bottom:40px; border-bottom:1px solid rgba(255,255,255,.07); }
+.footer-logo-main { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; color:white; letter-spacing:.08em; text-transform:uppercase; }
+.footer-logo-sub { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:2px; }
+.footer-desc { font-size:.82rem; font-weight:300; color:rgba(255,255,255,.4); line-height:1.7; margin-top:12px; max-width:260px; }
+.footer-col-title { font-size:.65rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:14px; }
+.footer-link { display:block; font-size:.85rem; font-weight:300; color:rgba(255,255,255,.5); margin-bottom:9px; cursor:pointer; transition:color 150ms; }
+.footer-link:hover { color:rgba(255,255,255,.85); }
+.footer-bottom { padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.footer-copy { font-size:.75rem; font-weight:300; color:rgba(255,255,255,.25); }
+.footer-trust { display:flex; gap:16px; }
+.footer-trust-item { font-size:.7rem; color:rgba(255,255,255,.25); }
+
+/* THANK YOU */
+.thankyou-hero { background:linear-gradient(135deg,#1a3a2e 0%,#1C1917 100%); padding:80px 24px; text-align:center; }
+.thankyou-icon { font-size:3rem; margin-bottom:20px; }
+.thankyou-title { font-family:var(--font-serif); font-size:2.5rem; font-weight:300; color:white; margin-bottom:12px; }
+.thankyou-sub { font-size:1rem; font-weight:300; color:rgba(255,255,255,.55); max-width:480px; margin:0 auto; line-height:1.7; }
+
+/* SUB CARD */
+.sub-card { background:linear-gradient(135deg,var(--brand) 0%,#2e1f4e 100%); border-radius:var(--radius-lg); padding:40px; color:white; position:relative; overflow:hidden; }
+.sub-price { font-family:var(--font-serif); font-size:3rem; font-weight:300; color:white; line-height:1; }
+.sub-price-period { font-size:.8rem; color:rgba(255,255,255,.5); margin-top:4px; }
+
+/* RESPONSIVE */
+@media (max-width:1024px) {
+  .hero-content { grid-template-columns:1fr; gap:48px; }
+  .detail-hero-inner { grid-template-columns:1fr; }
+  .footer-top { grid-template-columns:1fr 1fr; gap:32px; }
+}
+@media (max-width:768px) {
+  .nav { padding:0 16px; }
+  .nav-links, .nav-cta-wrap { display:none; }
+  .mobile-nav { display:flex; }
+  .section { padding:64px 20px; }
+  .section-sm { padding:48px 20px; }
+  .grid-2, .grid-3 { grid-template-columns:1fr; }
+  .grid-4 { grid-template-columns:1fr 1fr; }
+  .form-grid { grid-template-columns:1fr; }
+  .form-group.full { grid-column:1; }
+  .report-body { padding:28px 20px; }
+  .sticky-cta { display:block; }
+  .detail-hero { padding:64px 20px 44px; }
+  .loading-steps { width:100%; }
+  .upsell-grid { grid-template-columns:1fr; }
+  .report-summary-grid { grid-template-columns:1fr 1fr; }
+  .footer-top { grid-template-columns:1fr; gap:28px; }
+  .footer-bottom { flex-direction:column; align-items:flex-start; }
+}
+@media (max-width:480px) {
+  .hero-actions { flex-direction:column; }
+  .hero-actions .btn { width:100%; }
+  .report-summary-grid { grid-template-columns:1fr; }
+}
+`;
+
+
+// ─── ANALYTICS ────────────────────────────────────────────────────────────────
+const track = (event, props = {}) => {
+  if (typeof window !== "undefined" && window.gtag) window.gtag("event", event, props);
+  console.log("[Analytics]", event, props);
 };
 
-// ─── Reports ──────────────────────────────────────────────────────────────────
+// ─── REPORTS ──────────────────────────────────────────────────────────────────
 const REPORTS = [
   {
-    id:"volledig", icon:"✦", color:"#2C3E50", tag:"Meest gekozen",
+    id:"volledig", icon:"✦", tag:"Meest gekozen",
     title:"Volledig Human Design Rapport",
-    price:"€75", sub:"Eenmalig · Direct als PDF",
-    tagline:"Jouw complete persoonlijke blauwdruk",
-    intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van jouw Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
-    includes:[
-      "Type, Strategie & Signature",
-      "Autoriteit — hoe jij beslissingen neemt",
-      "Profiel — het verhaal van jouw leven",
-      "Alle 9 centra geanalyseerd",
-      "Actieve kanalen & krachten",
-      "Poorten — jouw natuurlijke kwaliteiten",
-      "Inkarnatie-Kruis — jouw levensdoel",
-      "Relaties & werk vanuit jouw design",
-      "Praktische guidance 2025–2027",
-    ],
+    price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    tagline:"Uw complete persoonlijke blauwdruk",
+    intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van uw Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
+    includes:["Type, Strategie & Signature","Autoriteit — hoe u beslissingen neemt","Profiel — het verhaal van uw leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — uw natuurlijke kwaliteiten","Inkarnatie-Kruis — uw levensdoel","Relaties & werk vanuit uw design","Praktische guidance 2025–2027"],
     for:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.",
-    sections:12, pages:"30+",
-    img: null,
-    prompt_extra:"Schrijf een volledig Human Design rapport.\n### 1. Jouw Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Jouw Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2025–2027\n### 12. Slotanalyse",
+    sections:12, pages:"40+",
+    prompt_extra:"### 1. Uw Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Uw Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2025-2027\n### 12. Slotanalyse",
   },
   {
-    id:"relatie", icon:"◎", color:"#6B4F7A", tag:"",
+    id:"relatie", icon:"◎", tag:"",
     title:"Relatierapport",
-    price:"€95", sub:"Eenmalig · Direct als PDF",
+    price:"€95", priceNum:95, sub:"Eenmalig · Direct als PDF",
     tagline:"Twee designs naast elkaar geanalyseerd",
-    intro:"Een analyse van twee volledige Human Design charts. Hoe opereren jullie energetisch samen — waar vullen jullie elkaar aan en waar ontstaat wrijving?",
-    includes:[
-      "Beide charts volledig geanalyseerd",
-      "Elektromagnetische verbindingen",
-      "Compatibiliteit van Types & Strategieën",
-      "Communicatiepatronen per persoon",
-      "Conflictpatronen & hoe ze te doorbreken",
-      "Gezamenlijk levensdoel",
-      "Praktisch advies voor meer harmonie",
-    ],
-    for:"Voor koppels of zakenpartners die hun samenwerking beter willen begrijpen.",
-    sections:9, pages:"25+",
-    img: null,
-    needsPartner: true,
-    prompt_extra:"Schrijf een Human Design Relatierapport.\n### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse — Persoon 1\n### 3. Chart Analyse — Persoon 2\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit\n### 6. Communicatie & Conflictpatronen\n### 7. Groeigebieden\n### 8. Gezamenlijk Levensdoel\n### 9. Praktisch Advies",
+    intro:"Een analyse van twee volledige Human Design charts. Hoe opereren u en uw partner energetisch samen — waar vullen jullie elkaar aan en waar ontstaat wrijving?",
+    includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatiepatronen","Conflictpatronen & doorbraken","Gezamenlijk levensdoel","Praktisch advies voor harmonie"],
+    for:"Voor koppels of zakenpartners die hun samenwerking dieper willen begrijpen.",
+    sections:9, pages:"28+", needsPartner:true,
+    prompt_extra:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse Persoon 1\n### 3. Chart Analyse Persoon 2\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit\n### 6. Communicatie & Conflict\n### 7. Groeigebieden\n### 8. Gezamenlijk Levensdoel\n### 9. Praktisch Advies",
   },
   {
-    id:"jaar", icon:"◈", color:"#B5813A", tag:"",
+    id:"jaar", icon:"◈", tag:"",
     title:"Jaarrapport 2025",
-    price:"€55", sub:"Eenmalig · Direct als PDF",
-    tagline:"De energetische thema's van jouw jaar",
-    intro:"Gebaseerd op jouw Solar Return — de terugkeer van de zon naar haar exacte positie op jouw geboortedag. Wat zijn de dominante thema's en kansen van jouw nieuwe levensjaar?",
-    includes:[
-      "Solar Return analyse",
-      "Dominante thema's voor 2025",
-      "Kwartaal-voor-kwartaal overzicht",
-      "Planetaire invloeden op jouw chart",
-      "Kansen en aandachtspunten",
-      "Intentie & focus voor het jaar",
-    ],
+    price:"€55", priceNum:55, sub:"Eenmalig · Direct als PDF",
+    tagline:"De energetische thema's van uw jaar",
+    intro:"Gebaseerd op uw Solar Return — de posities van de planeten op uw verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
+    includes:["Solar Return analyse","Dominante thema's voor 2025","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op uw chart","Kansen en aandachtspunten","Intentie voor het jaar"],
     for:"Voor wie het jaar bewust en gericht wil ingaan.",
-    sections:9, pages:"20+",
-    img: null,
-    prompt_extra:"Schrijf een Human Design Jaarrapport 2025.\n### 1. Energie van Jouw Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Thema's\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
-  },
-  {
-    id:"kind", icon:"◇", color:"#4A7A5A", tag:"",
-    title:"Kinderrapport",
-    price:"€45", sub:"Eenmalig · Direct als PDF",
-    tagline:"Jouw kind begrijpen vanuit zijn of haar design",
-    intro:"Een rapport voor ouders. Hoe gebruikt jouw kind energie, hoe neemt het beslissingen en hoe leert het het beste? Geen projecties — wie is jouw kind werkelijk?",
-    includes:[
-      "Type & energiegebruik van jouw kind",
-      "Hoe jouw kind beslissingen neemt",
-      "Leerstijl & communicatie",
-      "Behoeften & grenzen",
-      "Opvoedtips op maat",
-      "Gaven & talenten",
-    ],
-    for:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.",
-    sections:10, pages:"22+",
-    img: null,
-    needsChild: true,
-    prompt_extra:"Schrijf een Human Design Kinderrapport.\n### 1. Het Unieke Design van Jouw Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Jouw Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
-  },
-  {
-    id:"loopbaan", icon:"◆", color:"#2A5F7A", tag:"",
-    title:"Loopbaan & Geld Rapport",
-    price:"€65", sub:"Eenmalig · Direct als PDF",
-    tagline:"Werk en financiën vanuit jouw design",
-    intro:"Hoe maak jij geld op een manier die bij jou past? Welke werkomgeving geeft jou energie? Dit rapport richt zich volledig op werk, business en financiën.",
-    includes:[
-      "Jouw ideale werkomgeving",
-      "Hoe jij geld aantrekt",
-      "Jouw professionele kracht",
-      "Samenwerking & leiderschap",
-      "Valkuilen op de werkvloer",
-      "Ondernemen vs. loondienst",
-      "Financiële strategie op maat",
-    ],
-    for:"Voor iedereen die wil werken en verdienen in lijn met wie zij zijn.",
     sections:9, pages:"22+",
-    img: null,
-    prompt_extra:"Schrijf een Human Design Loopbaan & Geld Rapport.\n### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe Jij Geld Aantrekt\n### 4. Jouw Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiële Strategie\n### 9. Volgende Stap",
+    prompt_extra:"### 1. Energie van Uw Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
   },
   {
-    id:"numerologie", icon:"∞", color:"#5A3E6B", tag:"",
+    id:"kind", icon:"◇", tag:"",
+    title:"Kinderrapport",
+    price:"€45", priceNum:45, sub:"Eenmalig · Direct als PDF",
+    tagline:"Uw kind begrijpen vanuit zijn of haar design",
+    intro:"Een rapport voor ouders. Hoe gebruikt uw kind energie en hoe leert het het beste?",
+    includes:["Type & energiegebruik","Hoe uw kind beslissingen neemt","Leerstijl & communicatie","Behoeften & grenzen","Opvoedtips op maat","Gaven & talenten"],
+    for:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.",
+    sections:10, pages:"24+", needsChild:true,
+    prompt_extra:"### 1. Het Unieke Design van Uw Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Uw Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
+  },
+  {
+    id:"loopbaan", icon:"◆", tag:"",
+    title:"Loopbaan & Geld Rapport",
+    price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
+    tagline:"Werk en financiën vanuit uw design",
+    intro:"Hoe maakt u geld op een manier die bij u past? Welke werkomgeving geeft u energie?",
+    includes:["Ideale werkomgeving","Hoe u geld aantrekt","Uw professionele kracht","Samenwerking & leiderschap","Valkuilen op de werkvloer","Ondernemen vs. loondienst","Financiële strategie op maat"],
+    for:"Voor iedereen die wil werken en verdienen in lijn met wie zij zijn.",
+    sections:9, pages:"24+",
+    prompt_extra:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe U Geld Aantrekt\n### 4. Uw Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
+  },
+  {
+    id:"numerologie", icon:"∞", tag:"",
     title:"Numerologie Rapport",
-    price:"€65", sub:"Eenmalig · Direct als PDF",
-    tagline:"De getallen achter jouw naam en geboortedag",
-    intro:"Op basis van jouw volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van jouw aard, gaven en levensdoel.",
-    includes:[
-      "Levenspadgetal — jouw hoofdthema",
-      "Uitdrukkingsgetal — jouw gaven",
-      "Zielsgetal — wat jij verlangt",
-      "Persoonlijkheidsgetal — hoe anderen jou zien",
-      "Verjaardagsgetal — jouw bijzondere gave",
-      "Persoonlijk jaar 2025",
-      "Rijpingsgetal — wie jij wordt",
-      "Mastergetallen indien aanwezig",
-    ],
+    price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
+    tagline:"De getallen achter uw naam en geboortedag",
+    intro:"Op basis van uw volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van uw aard en levensdoel.",
+    includes:["Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk jaar 2025","Rijpingsgetal","Mastergetallen indien aanwezig"],
     for:"Voor iedereen die de diepere betekenis van naam en geboortedag wil begrijpen.",
-    sections:12, pages:"28+",
-    img: null,
-    prompt_extra:"Schrijf een volledig Numerologie Rapport.\n### 1. Jouw Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2025\n### 8. Rijpingsgetal\n### 9. Mastergetallen & Bijzondere Patronen\n### 10. Hoe Jouw Getallen Samenwerken\n### 11. Praktische Guidance 2025–2027\n### 12. Slotanalyse",
-  },
-  {
-    id:"horoscoop", icon:"☽", color:"#2C4A6B", tag:"",
-    title:"Geboortehoroscoop",
-    price:"€75", sub:"Eenmalig · Direct als PDF",
-    tagline:"Jouw complete astrologische chart",
-    intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van jouw geboorte. Ascendant, huizen, planeetstanden en aspecten.",
-    includes:[
-      "Zonneteken — jouw kern",
-      "Ascendant — hoe jij overkomt",
-      "Maan — jouw emotionele wereld",
-      "Alle 10 planeten in teken & huis",
-      "12 huizen geanalyseerd",
-      "Belangrijkste aspecten",
-      "Midhemel — jouw roeping",
-      "Dominant element & modaliteit",
-    ],
-    for:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.",
     sections:12, pages:"30+",
-    img: null,
-    prompt_extra:"Schrijf een volledig geboortehoroscoop rapport.\n### 1. Jouw Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius, Venus & Mars\n### 6. Jupiter & Saturnus\n### 7. De Buitenste Planeten\n### 8. De Huizen\n### 9. Belangrijkste Aspecten\n### 10. Midhemel & Roeping\n### 11. Guidance 2025–2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Uw Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2025\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Uw Getallen Samenwerken\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
   },
   {
-    id:"maandelijks", icon:"◯", color:"#2C3E50", tag:"Abonnement",
+    id:"horoscoop", icon:"☽", tag:"",
+    title:"Geboortehoroscoop",
+    price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    tagline:"Uw complete astrologische chart",
+    intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van uw geboorte.",
+    includes:["Zonneteken","Ascendant","Maan — uw emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — uw roeping","Dominant element & modaliteit"],
+    for:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.",
+    sections:12, pages:"32+",
+    prompt_extra:"### 1. Uw Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
+  },
+  {
+    id:"maandelijks", icon:"◯", tag:"Abonnement",
     title:"Maandelijkse Guidance",
-    price:"€19/mnd", sub:"Maandelijks opzegbaar",
-    tagline:"Elke maand jouw persoonlijke energiegids",
-    intro:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, specifiek afgestemd op jouw Human Design chart.",
-    includes:[
-      "Energie & thema's van de maand",
-      "Planetaire invloeden op jouw chart",
-      "Kansen & aandachtspunten",
-      "Praktisch advies",
-      "Intentie voor de maand",
-    ],
+    price:"€19/mnd", priceNum:19, sub:"Maandelijks opzegbaar",
+    tagline:"Elke maand uw persoonlijke energiegids",
+    intro:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op uw Human Design chart.",
+    includes:["Energie & thema's van de maand","Planetaire invloeden","Kansen & aandachtspunten","Praktisch advies","Intentie voor de maand"],
     for:"Voor wie maandelijks bewust wil leven in lijn met hun design.",
-    sections:6, pages:"10+",
-    img: null,
-    prompt_extra:"Schrijf een Human Design Maandrapport.\n### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van Jou Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
+    sections:6, pages:"12+",
+    prompt_extra:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van U Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
   },
 ];
 
-// ─── Ephemeris ────────────────────────────────────────────────────────────────
+
+// ─── STRIPE PAYMENT LINKS ─────────────────────────────────────────────────────
+// Vervang test_ links met live_ links voor productie
+// Voeg toe aan elke Stripe Payment Link:
+//   success_url: https://faculty-of-human-design.vercel.app/?success=true
+//   cancel_url:  https://faculty-of-human-design.vercel.app/?cancelled=true
+const STRIPE = {
+  volledig:   "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00",
+  relatie:    "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  jaar:       "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  kind:       "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  loopbaan:   "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  numerologie:"https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  horoscoop:  "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  maandelijks:"https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: abonnement link
+};
+
+function goToStripe(rptId, chartData, formData) {
+  // Sla chart data op in sessionStorage zodat we na betaling verder kunnen
+  sessionStorage.setItem("fhd_chart", JSON.stringify(chartData));
+  sessionStorage.setItem("fhd_form", JSON.stringify(formData));
+  sessionStorage.setItem("fhd_rpt_id", rptId);
+  // Stuur naar Stripe
+  const url = STRIPE[rptId] || STRIPE.volledig;
+  window.location.href = url;
+}
+
+// ─── HD EPHEMERIS ─────────────────────────────────────────────────────────────
 function jday(y,m,d,h){if(m<=2){y--;m+=12;}const A=Math.floor(y/100),B=2-A+Math.floor(A/4);return Math.floor(365.25*(y+4716))+Math.floor(30.6001*(m+1))+d+h/24+B-1524.5;}
 function sunLon(jd){const T=(jd-2451545)/36525,L=280.46646+36000.76983*T,M=357.52911+35999.05029*T,Mr=M*Math.PI/180,C=(1.914602-0.004817*T)*Math.sin(Mr)+(0.019993-0.000101*T)*Math.sin(2*Mr)+0.000289*Math.sin(3*Mr);return((L+C)%360+360)%360;}
 function moonLon(jd){const T=(jd-2451545)/36525,L=218.3165+481267.8813*T,Mp=134.9634+477198.8676*T,D=297.8502+445267.1115*T,F=93.2721+483202.0175*T,Mpr=Mp*Math.PI/180,Dr=D*Math.PI/180,Fr=F*Math.PI/180;return((L+6.2888*Math.sin(Mpr)+1.274*Math.sin(2*Dr-Mpr)+0.6583*Math.sin(2*Dr)+0.2136*Math.sin(2*Mpr)-0.1143*Math.sin(2*Fr))%360+360)%360;}
 function plon(jd,p){const T=(jd-2451545)/36525,m={Mercury:[252.2509,149472.6674],Venus:[181.9798,58517.8156],Mars:[355.433,19140.2993],Jupiter:[34.3515,3034.9057],Saturn:[50.0774,1222.1138],Uranus:[314.055,428.4048],Neptune:[304.348,218.4862],Pluto:[238.929,145.2001]};const[a,b]=m[p]||[0,0];return((a+b*T)%360+360)%360;}
 function getPL(jd,p){if(p==="Sun")return sunLon(jd);if(p==="Moon")return moonLon(jd);return plon(jd,p);}
+function jd(y,m,d,h){return jday(y,m,d,h);}
 
-// ─── HD Engine ────────────────────────────────────────────────────────────────
 const GS=[41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,27,24,2,23,8,20,16,35,45,12,15,52,39,53,62,56,31,33,7,4,29,59,40,64,47,6,46,18,48,57,32,50,28,44,1,43,14,34,9,5,26,11,10,58,38,54,61,60];
 const PLANETS_HD=["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto"];
 const ALL_C=["Head","Ajna","Throat","G/Self","Heart/Ego","Sacral","Solar Plexus","Spleen","Root"];
@@ -209,7 +447,7 @@ function calcHD(y,m,d,h,min){
   let type,strat,sig,notSelf;
   if(hasSac&&hasThr){type="Manifesting Generator";strat="Informeer, reageer dan vanuit het sacraal";sig="Bevrediging & Vrede";notSelf="Frustratie & Woede";}
   else if(hasSac){type="Generator";strat="Wacht om te reageren";sig="Bevrediging";notSelf="Frustratie";}
-  else if(hasThr&&hasMotor){type="Manifestor";strat="Informeer voor je handelt";sig="Vrede";notSelf="Woede";}
+  else if(hasThr&&hasMotor){type="Manifestor";strat="Informeer voor u handelt";sig="Vrede";notSelf="Woede";}
   else if(defC.size===0){type="Reflector";strat="Wacht een maancyclus";sig="Verrassing";notSelf="Teleurstelling";}
   else{type="Projector";strat="Wacht op de uitnodiging";sig="Succes";notSelf="Bitterheid";}
   let auth="Mentaal";
@@ -220,11 +458,10 @@ function calcHD(y,m,d,h,min){
   return{type,strat,sig,notSelf,auth,profile,cross,definedCenters:[...defC],openCenters:openC,allGates:[...allG].sort((a,b)=>a-b),channels,pers,des};
 }
 
-// ─── Numerology Engine ────────────────────────────────────────────────────────
+// ─── NUMEROLOGY ───────────────────────────────────────────────────────────────
 const PYTH={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
 const VOWELS_SET=new Set(["A","E","I","O","U"]);
 const NUM_NAMES={1:"De Leider",2:"De Diplomaat",3:"De Creatieveling",4:"De Bouwer",5:"De Avonturier",6:"De Verzorger",7:"De Zoeker",8:"De Zakenman",9:"De Mensheid",11:"De Meester Intuïtief",22:"De Meester Bouwer",33:"De Meester Leraar"};
-const NUM_KW={1:"Leiderschap, onafhankelijkheid",2:"Diplomatie, samenwerking",3:"Creativiteit, expressie",4:"Discipline, structuur",5:"Vrijheid, avontuur",6:"Zorg, verantwoordelijkheid",7:"Spiritualiteit, analyse",8:"Succes, materialisme",9:"Humanitarisme, afsluiting",11:"Intuïtie, inspiratie",22:"Manifestatie, bouwen",33:"Liefde, healing"};
 function numReduce(n){while(n>9){if(n===11||n===22||n===33)break;n=[...String(n)].reduce((a,d)=>a+parseInt(d),0);}return n;}
 function nameSum(str){return[...str.toUpperCase()].reduce((a,c)=>a+(PYTH[c]||0),0);}
 function calcNumerology(fullName,day,month,year){
@@ -237,361 +474,187 @@ function calcNumerology(fullName,day,month,year){
   const bday=numReduce(day);
   const py=numReduce(numReduce(day)+numReduce(month)+numReduce(2025));
   const mat=numReduce(lp+exp);
-  const initials=fullName.split(" ").filter(Boolean).map(w=>w[0]||"").join("");
-  const bal=numReduce(nameSum(initials));
   const masters=[lp,exp,soul,pers,mat].filter(n=>n===11||n===22||n===33);
-  return{lp,exp,soul,pers,bday,py,mat,bal,masters,lpName:NUM_NAMES[lp]||"",expName:NUM_NAMES[exp]||"",soulName:NUM_NAMES[soul]||"",lpKw:NUM_KW[lp]||"",expKw:NUM_KW[exp]||"",soulKw:NUM_KW[soul]||""};
+  return{lp,exp,soul,pers,bday,py,mat,masters,lpName:NUM_NAMES[lp]||"",expName:NUM_NAMES[exp]||""};
 }
 
-// ─── Astrology Engine ─────────────────────────────────────────────────────────
+// ─── ASTROLOGY ────────────────────────────────────────────────────────────────
 const SIGNS_NL=["Ram","Stier","Tweelingen","Kreeft","Leeuw","Maagd","Weegschaal","Schorpioen","Boogschutter","Steenbok","Waterman","Vissen"];
-const SIGN_KW_A={"Ram":"initiatief, moed","Stier":"standvastigheid, genot","Tweelingen":"communicatie, nieuwsgierigheid","Kreeft":"gevoel, intuïtie","Leeuw":"drama, leiderschap","Maagd":"analyse, perfectie","Weegschaal":"harmonie, schoonheid","Schorpioen":"intensiteit, diepgang","Boogschutter":"vrijheid, avontuur","Steenbok":"discipline, ambitie","Waterman":"originaliteit, idealisme","Vissen":"intuïtie, mededogen"};
 const EL_MAP_A={"Ram":"Vuur","Stier":"Aarde","Tweelingen":"Lucht","Kreeft":"Water","Leeuw":"Vuur","Maagd":"Aarde","Weegschaal":"Lucht","Schorpioen":"Water","Boogschutter":"Vuur","Steenbok":"Aarde","Waterman":"Lucht","Vissen":"Water"};
-function lonToSign_A(lon){lon=((lon%360)+360)%360;const idx=Math.floor(lon/30)%12;return{sign:SIGNS_NL[idx],degree:Math.round((lon%30)*10)/10,keywords:SIGN_KW_A[SIGNS_NL[idx]]||""};}
+function lonToSign_A(lon){lon=((lon%360)+360)%360;const idx=Math.floor(lon/30)%12;return{sign:SIGNS_NL[idx],degree:Math.round((lon%30)*10)/10};}
 function calcHoroscoop(y,m,d,h,min){
   const jdP=jday(y,m,d,h+min/60);
   const pDefs={Zon:"Sun",Maan:"Moon",Mercurius:"Mercury",Venus:"Venus",Mars:"Mars",Jupiter:"Jupiter",Saturnus:"Saturn",Uranus:"Uranus",Neptunus:"Neptune",Pluto:"Pluto"};
   const planets={};
   for(const[nl,en]of Object.entries(pDefs)){const lon=getPL(jdP,en);const pos=lonToSign_A(lon);planets[nl]={...pos,house:Math.floor((lon%360)/30)%12+1,longitude:Math.round(lon*100)/100};}
-  const T=(jdP-2451545)/36525;
   const lst=((280.46061837+360.98564736629*(jdP-2451545))%360+360)%360;
   const asc=lonToSign_A((lst+90)%360);
   const mc=lonToSign_A(lst%360);
-  const elements={},modalities={};
-  const modMap={Ram:"Cardinaal",Stier:"Vast",Tweelingen:"Mutable",Kreeft:"Cardinaal",Leeuw:"Vast",Maagd:"Mutable",Weegschaal:"Cardinaal",Schorpioen:"Vast",Boogschutter:"Mutable",Steenbok:"Cardinaal",Waterman:"Vast",Vissen:"Mutable"};
-  for(const[p,d]of Object.entries(planets)){const el=EL_MAP_A[d.sign]||"";const mo=modMap[d.sign]||"";elements[el]=(elements[el]||0)+1;modalities[mo]=(modalities[mo]||0)+1;}
+  const elements={};
+  for(const[,d]of Object.entries(planets)){const el=EL_MAP_A[d.sign]||"";elements[el]=(elements[el]||0)+1;}
   const domEl=Object.entries(elements).sort((a,b)=>b[1]-a[1])[0]?.[0]||"";
-  const aspects=[];
-  const pList=Object.entries(planets);
-  const ASPECTS_DEF={0:["Conjunctie",8],60:["Sextiel",6],90:["Vierkant",7],120:["Driehoek",8],180:["Oppositie",8]};
-  for(let i=0;i<pList.length;i++)for(let j=i+1;j<pList.length;j++){const[p1,d1]=pList[i],[p2,d2]=pList[j];let diff=Math.abs(d1.longitude-d2.longitude);if(diff>180)diff=360-diff;for(const[angle,[name,orb]]of Object.entries(ASPECTS_DEF))if(Math.abs(diff-parseInt(angle))<=orb)aspects.push({p1,p2,aspect:name,orb:Math.round(Math.abs(diff-parseInt(angle))*10)/10});}
-  return{ascendant:asc,mc,sun_sign:planets["Zon"]?.sign||"",planets,aspects:aspects.sort((a,b)=>a.orb-b.orb).slice(0,12),elements,modalities,dom_element:domEl,isHoroscoop:true};
+  return{ascendant:asc,mc,sun_sign:planets["Zon"]?.sign||"",planets,dom_element:domEl,isHoroscoop:true};
 }
 
-// ─── Bodygraph ────────────────────────────────────────────────────────────────
+// ─── PROMPT BUILDER ───────────────────────────────────────────────────────────
+const MONTHS=["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
+const LSTEPS=["Inleiding schrijven","Type & Strategie","Autoriteit analyseren","Profiel uitwerken","Centra beschrijven","Conditionering","Poorten in detail","Inkarnatie-Kruis","Relaties","Werk & Financien","Guidance 2025-2027","Slotanalyse"];
+
+function buildPrompt(chart,form,rpt){
+  if(rpt.id==="numerologie"){
+    const num=calcNumerology(form.name,parseInt(form.day),parseInt(form.month),parseInt(form.year));
+    return["NUMEROLOGIE voor "+form.name,"Naam: "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2025: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",rpt.prompt_extra].join("\n");
+  }
+  if(rpt.id==="horoscoop"){
+    const h=calcHoroscoop(parseInt(form.year),parseInt(form.month),parseInt(form.day),parseInt(form.hour),parseInt(form.minute||"0"));
+    const pStr=Object.entries(h.planets).map(([p,d])=>p+": "+d.degree+"° "+d.sign+" H"+d.house).join(", ");
+    return["HOROSCOOP voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",rpt.prompt_extra].join("\n");
+  }
+  const pStr=Object.entries(chart.pers).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
+  const dStr=Object.entries(chart.des).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
+  return["HD CHART voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),"Plaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerd: "+(chart.definedCenters.join(", ")||"geen"),"Open: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",rpt.prompt_extra].join("\n");
+}
+
+
+// ─── BODYGRAPH ────────────────────────────────────────────────────────────────
 const CP={"Head":{cx:320,cy:58,sh:"td",lb:"HEAD"},"Ajna":{cx:320,cy:148,sh:"td",lb:"AJNA"},"Throat":{cx:320,cy:242,sh:"rc",lb:"THROAT"},"G/Self":{cx:320,cy:348,sh:"di",lb:"G"},"Heart/Ego":{cx:212,cy:302,sh:"tr",lb:"HART"},"Sacral":{cx:320,cy:450,sh:"rc",lb:"SACRAAL"},"Solar Plexus":{cx:455,cy:372,sh:"tl",lb:"SP"},"Spleen":{cx:178,cy:398,sh:"tr",lb:"MILT"},"Root":{cx:320,cy:540,sh:"rc",lb:"ROOT"}};
 const CPATHS={"Head-Ajna":"M320,84 L320,122","Ajna-Throat":"M320,178 L320,220","Throat-G/Self":"M320,268 L320,314","Throat-Sacral":"M320,268 L320,424","Throat-Solar Plexus":"M352,248 Q455,248 455,342","Throat-Spleen":"M288,248 Q178,248 178,368","Throat-Heart/Ego":"M288,248 Q212,248 212,274","G/Self-Sacral":"M320,386 L320,424","G/Self-Heart/Ego":"M284,348 L246,316","G/Self-Spleen":"M280,364 Q178,364 178,368","Heart/Ego-Spleen":"M186,312 Q178,370 178,368","Heart/Ego-Solar Plexus":"M238,308 Q348,308 432,358","Sacral-Root":"M320,476 L320,514","Sacral-Solar Plexus":"M352,450 Q455,450 455,400","Sacral-Spleen":"M288,450 Q178,450 178,428","Solar Plexus-Root":"M440,402 Q440,540 352,540","Spleen-Root":"M196,426 Q196,540 288,540"};
 function cpth(pos){const{cx:x,cy:y,sh}=pos;if(sh==="rc")return"M"+(x-44)+","+(y-22)+" h88 v44 h-88 Z";if(sh==="di")return"M"+x+","+(y-46)+" L"+(x+46)+","+y+" L"+x+","+(y+46)+" L"+(x-46)+","+y+" Z";if(sh==="td")return"M"+(x-46)+","+(y-26)+" L"+(x+46)+","+(y-26)+" L"+x+","+(y+26)+" Z";if(sh==="tr")return"M"+(x-26)+","+(y-36)+" L"+(x+26)+","+y+" L"+(x-26)+","+(y+36)+" Z";if(sh==="tl")return"M"+(x+26)+","+(y-36)+" L"+(x-26)+","+y+" L"+(x+26)+","+(y+36)+" Z";return"M"+(x-44)+","+(y-22)+" h88 v44 h-88 Z";}
 function Bodygraph({chart,name}){
   const def=new Set(chart?chart.definedCenters:[]);
   const ap=new Set();if(chart)for(const c of chart.channels){ap.add(c.c1+"-"+c.c2);ap.add(c.c2+"-"+c.c1);}
-  const COL="#1a2a3a";
+  const COL="#3D2C5E";
   return(
-    <svg viewBox="0 0 640 608" style={{width:"100%",maxWidth:420,display:"block",margin:"0 auto"}}>
-      <rect width="640" height="608" fill="#F8F8F6" rx="2"/>
-      {name&&<text x="320" y="598" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill="#9a9a8a" fontStyle="italic">{name}</text>}
-      {Object.entries(CPATHS).map(([key,path])=>{const active=ap.has(key)||ap.has(key.split("-").reverse().join("-"));return<path key={key} d={path} fill="none" stroke={active?COL:"#ddd"} strokeWidth={active?2:1.5} strokeLinecap="round"/>;  })}
-      {Object.entries(CP).map(([cn,pos])=>{const isDef=def.has(cn);return(<g key={cn}><path d={cpth(pos)} fill={isDef?COL:"none"} stroke={isDef?COL:"#ccc"} strokeWidth={1.5}/><text x={pos.cx} y={pos.cy} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="8" letterSpacing="0.8" fill={isDef?"#fff":"#ccc"}>{pos.lb}</text></g>);})}
+    <svg viewBox="0 0 640 608" style={{width:"100%",maxWidth:400,display:"block",margin:"0 auto"}}>
+      <rect width="640" height="608" fill="#F9F8F5" rx="8"/>
+      {name&&<text x="320" y="596" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill="#A8A29E" fontStyle="italic">{name}</text>}
+      {Object.entries(CPATHS).map(([key,path])=>{const active=ap.has(key)||ap.has(key.split("-").reverse().join("-"));return<path key={key} d={path} fill="none" stroke={active?COL:"#E0DDD6"} strokeWidth={active?2.5:1.5} strokeLinecap="round"/>;  })}
+      {Object.entries(CP).map(([cn,pos])=>{const isDef=def.has(cn);return(<g key={cn}><path d={cpth(pos)} fill={isDef?COL:"none"} stroke={isDef?COL:"#D6D0C8"} strokeWidth={1.5}/><text x={pos.cx} y={pos.cy} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="8" letterSpacing="0.8" fill={isDef?"#fff":"#C8C4BE"}>{pos.lb}</text></g>);})}
     </svg>
   );
 }
 
-// ─── Prompt builders ──────────────────────────────────────────────────────────
-const MONTHS=["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
-const LSTEPS=["Geboortedata verwerken","Berekeningen uitvoeren","Chart analyseren","Patronen identificeren","Rapport structureren","Tekst genereren","Kwaliteitscontrole","Rapport voltooien"];
-
-function buildPrompt(chart,form,rpt){
-  if(rpt.id==="numerologie"){
-    const num=calcNumerology(form.name,parseInt(form.day),parseInt(form.month),parseInt(form.year));
-    const masterStr=num.masters.length>0?"Mastergetallen aanwezig: "+num.masters.join(", ")+" — bijzonder zeldzaam.":"Geen mastergetallen.";
-    return["NUMEROLOGIE BEREKENING voor "+form.name,"Naam: "+form.name,"Geboortedatum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspadgetal: "+num.lp+" — "+num.lpName+" ("+num.lpKw+")","Uitdrukkingsgetal: "+num.exp+" — "+num.expName+" ("+num.expKw+")","Zielsgetal: "+num.soul+" — "+num.soulName+" ("+num.soulKw+")","Persoonlijkheidsgetal: "+num.pers,"Verjaardagsgetal: "+num.bday,"Persoonlijk Jaar 2025: "+num.py,"Rijpingsgetal: "+num.mat,"Balansgetal: "+num.bal,masterStr,"",rpt.prompt_extra].join("\n");
-  }
-  if(rpt.id==="horoscoop"){
-    const h=calcHoroscoop(parseInt(form.year),parseInt(form.month),parseInt(form.day),parseInt(form.hour),parseInt(form.minute||"0"));
-    const pStr=Object.entries(h.planets).map(([p,d])=>p+": "+d.degree+"° "+d.sign+" Huis "+d.house).join(", ");
-    const aspStr=h.aspects.slice(0,8).map(a=>a.p1+" "+a.aspect+" "+a.p2+" (orb "+a.orb+"°)").join(", ");
-    return["HOROSCOOP BEREKENING voor "+form.name,"Geboortedatum: "+form.day+"-"+form.month+"-"+form.year+" om "+form.hour+":"+String(form.minute||0).padStart(2,"0"),"Geboorteplaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"Midhemel: "+h.mc.degree+"° "+h.mc.sign,"Zonneteken: "+h.sun_sign,"Dominant element: "+h.dom_element,"Planeten: "+pStr,"Aspecten: "+aspStr,"",rpt.prompt_extra].join("\n");
-  }
-  const pStr=Object.entries(chart.pers).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
-  const dStr=Object.entries(chart.des).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
-  return["HUMAN DESIGN CHART voor "+form.name,"Geboortedatum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" om "+form.hour+":"+String(form.minute||0).padStart(2,"0"):""),"Geboorteplaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Signature: "+chart.sig,"Not-Self: "+chart.notSelf,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerde centra: "+(chart.definedCenters.join(", ")||"geen"),"Open centra: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",rpt.prompt_extra].join("\n");
+// ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
+function TrustStrip({light}){
+  const col=light?"rgba(255,255,255,.5)":"var(--text-muted)";
+  return(
+    <div className="trust-strip">
+      {[["🔒","Veilige betaling"],["📄","Persoonlijke PDF"],["⚡","Direct beschikbaar"],["✓","Geen generieke profielen"],["🇳🇱","Nederlandstalig"]].map(([ico,txt])=>(
+        <div key={txt} className="trust-item" style={{color:col}}><span>{ico}</span><span>{txt}</span></div>
+      ))}
+    </div>
+  );
 }
 
-// ─── CSS ──────────────────────────────────────────────────────────────────────
-const S=`
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#F7F6F2;--d:#1A1A16;--acc:#2C3E50;--gold:#9A8050;--line:#E0DDD6;--w:#fff;--txt:#4A4A40}
-body{font-family:'Jost',sans-serif;background:var(--bg);color:var(--d);overflow-x:hidden}
-img{display:block;max-width:100%}
-
-/* NAV */
-.nav{position:fixed;top:0;left:0;right:0;z-index:200;background:rgba(247,246,242,.97);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;padding:0 52px;height:64px}
-.logo{display:flex;flex-direction:column;cursor:pointer}
-.logo-main{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:400;color:var(--d);letter-spacing:2px;text-transform:uppercase}
-.logo-sub{font-size:.48rem;letter-spacing:5px;color:#9a9a8a;text-transform:uppercase;margin-top:1px}
-.nav-links{display:flex;align-items:center;gap:2px}
-.nl{font-size:.58rem;letter-spacing:1.5px;color:#7a7a6a;text-transform:uppercase;cursor:pointer;padding:8px 14px;transition:color .2s;white-space:nowrap}
-.nl:hover,.nl.act{color:var(--d)}
-.nav-cta{padding:9px 22px;background:var(--d);color:#fff;border:none;font-family:'Jost',sans-serif;font-size:.56rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity .3s;margin-left:8px}
-.nav-cta:hover{opacity:.8}
-
-/* HERO */
-.hero{min-height:100vh;position:relative;display:flex;align-items:flex-end;padding-bottom:80px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background-size:cover;background-position:center 40%;filter:brightness(.32)}
-.hero-ov{position:absolute;inset:0;background:linear-gradient(180deg,rgba(26,26,22,0) 30%,rgba(26,26,22,.85) 100%)}
-.hero-cnt{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:0 52px;width:100%}
-.hero-label{font-size:.52rem;letter-spacing:6px;color:rgba(154,128,80,.8);text-transform:uppercase;margin-bottom:20px}
-.hero-title{font-family:'Cormorant Garamond',serif;font-size:clamp(3rem,7vw,5.5rem);font-weight:300;color:#fff;line-height:1.05;margin-bottom:20px;max-width:800px}
-.hero-title em{font-style:italic;color:rgba(255,255,255,.65)}
-.hero-sub{font-size:.9rem;font-weight:300;color:rgba(255,255,255,.55);max-width:520px;line-height:1.8;margin-bottom:36px}
-.hero-btns{display:flex;gap:12px;flex-wrap:wrap}
-.btn-light{padding:13px 36px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all .3s;backdrop-filter:blur(4px)}
-.btn-light:hover{background:rgba(255,255,255,.18)}
-.btn-solid{padding:13px 36px;background:#fff;border:none;color:var(--d);font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity .3s}
-.btn-solid:hover{opacity:.88}
-.hero-scroll{position:absolute;bottom:32px;right:52px;z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px}
-.scroll-line{width:1px;height:40px;background:rgba(255,255,255,.2);animation:scrl 2s ease-in-out infinite}
-@keyframes scrl{0%,100%{transform:scaleY(1);opacity:.3}50%{transform:scaleY(1.4);opacity:.7}}
-
-/* LAYOUT */
-.pg{padding-top:64px;min-height:100vh}
-.sec{padding:80px 52px}
-.sec.wh{background:#fff}
-.sec.bg{background:var(--bg)}
-.sec.dk{background:var(--d)}
-.sec.img{position:relative;overflow:hidden}
-.sec-bg-img{position:absolute;inset:0;background-size:cover;background-position:center;filter:brightness(.28)}
-.sec-ov{position:absolute;inset:0;background:rgba(26,26,22,.55)}
-.sec-rel{position:relative;z-index:1}
-.cont{max-width:1100px;margin:0 auto}
-.cont.nw{max-width:760px;margin:0 auto}
-.cont.ctr{text-align:center}
-.divider{width:40px;height:1px;background:var(--gold);margin:0 auto 40px}
-.divider.left{margin:0 0 32px}
-
-/* TYPE */
-.label{font-size:.48rem;letter-spacing:6px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
-.label.lgt{color:rgba(154,128,80,.7)}
-.h1{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4.5vw,3.2rem);font-weight:300;color:var(--d);line-height:1.18;margin-bottom:18px}
-.h1 em{font-style:italic}
-.h1.lgt{color:#fff}
-.h2{font-family:'Cormorant Garamond',serif;font-size:clamp(1.5rem,3vw,2.2rem);font-weight:300;color:var(--d);line-height:1.2;margin-bottom:14px}
-.h2 em{font-style:italic}
-.h2.lgt{color:#fff}
-.p{font-size:.86rem;font-weight:300;line-height:1.95;color:var(--txt);margin-bottom:14px}
-.p.lgt{color:rgba(255,255,255,.6)}
-.p.sm{font-size:.78rem;color:#9a9a8a}
-.sig{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-style:italic;color:var(--gold);margin-top:14px}
-
-/* BUTTONS */
-.btn{display:inline-block;padding:12px 36px;background:var(--d);color:#fff;border:none;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity .3s}
-.btn:hover{opacity:.8}
-.btn.out{background:transparent;border:1px solid var(--d);color:var(--d)}
-.btn.out:hover{background:var(--d);color:#fff}
-.btn.out.lgt{border-color:rgba(255,255,255,.4);color:#fff}
-.btn.out.lgt:hover{background:rgba(255,255,255,.1)}
-.btn.gold{background:var(--gold)}
-
-/* GRID */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:40px}
-.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.g-align-center{align-items:center}
-
-/* CARDS */
-.card{background:#fff;padding:32px 28px;border:1px solid var(--line)}
-.card.nb{border:none;background:var(--bg);padding:28px}
-.rcard{background:#fff;border:1px solid var(--line);overflow:hidden;cursor:pointer;transition:border-color .25s,box-shadow .25s;display:flex;flex-direction:column}
-.rcard:hover{border-color:var(--acc);box-shadow:0 8px 32px rgba(0,0,0,.08)}
-.rcard-top{padding:28px 26px 0}
-.rcard-icon{font-size:1.1rem;margin-bottom:10px;color:var(--acc)}
-.rcard-tag{display:inline-block;font-size:.46rem;letter-spacing:3px;text-transform:uppercase;padding:3px 8px;background:var(--d);color:#fff;margin-bottom:10px}
-.rcard-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--d);margin-bottom:6px;line-height:1.3}
-.rcard-tagline{font-size:.76rem;font-weight:300;color:#7a7a6a;line-height:1.6;margin-bottom:18px}
-.rcard-div{height:1px;background:var(--line);margin:0 26px}
-.rcard-bot{padding:16px 26px 22px;display:flex;justify-content:space-between;align-items:center;margin-top:auto}
-.rcard-price{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--d)}
-.rcard-link{font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid rgba(154,128,80,.3)}
-
-/* REPORT DETAIL HERO */
-.rdh{background:var(--d);padding:72px 52px;border-bottom:1px solid rgba(255,255,255,.06)}
-.rdh-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 300px;gap:60px;align-items:start}
-.rdh-lbl{font-size:.46rem;letter-spacing:6px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:14px}
-.rdh-title{font-family:'Cormorant Garamond',serif;font-size:clamp(2rem,4vw,3rem);font-weight:300;color:#fff;margin-bottom:10px;line-height:1.1}
-.rdh-tagline{font-size:.9rem;font-weight:300;color:rgba(255,255,255,.5);margin-bottom:24px;line-height:1.7}
-.rdh-meta{display:flex;gap:20px;flex-wrap:wrap}
-.rdh-m{font-size:.54rem;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3)}
-.rdh-box{border:1px solid rgba(255,255,255,.1);padding:28px}
-.rdh-price{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:300;color:#fff}
-.rdh-sub{font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:4px;margin-bottom:20px}
-.rdh-btn{width:100%;padding:13px;background:#fff;color:var(--d);border:none;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity .3s}
-.rdh-btn:hover{opacity:.88}
-
-/* INCLUDES */
-.inc-list{list-style:none;display:flex;flex-direction:column;gap:10px}
-.inc-item{display:flex;gap:12px;align-items:flex-start;font-size:.83rem;font-weight:300;color:var(--txt);line-height:1.65}
-.inc-dot{width:4px;height:4px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:8px}
-.for-box{border-left:2px solid var(--gold);padding:16px 20px;margin-top:20px;background:rgba(154,128,80,.04)}
-.for-lbl{font-size:.46rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.for-txt{font-size:.82rem;font-weight:300;color:var(--txt);line-height:1.7}
-
-/* FORM */
-.form-wrap{background:#fff;border:1px solid var(--line);padding:40px}
-.form-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:300;color:var(--d);margin-bottom:4px}
-.form-sub{font-size:.76rem;font-weight:300;color:#9a9a8a;margin-bottom:24px;line-height:1.65}
-.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.fg{display:flex;flex-direction:column;gap:5px}
-.fg.full{grid-column:1/-1}
-.flbl{font-size:.46rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold)}
-.finp{border:1px solid var(--line);background:var(--bg);padding:10px 12px;font-family:'Jost',sans-serif;font-size:.84rem;font-weight:300;color:var(--d);outline:none;transition:border-color .25s;border-radius:0;width:100%}
-.finp:focus{border-color:var(--d)}
-.fsel{border:1px solid var(--line);background:var(--bg);padding:10px 12px;font-family:'Jost',sans-serif;font-size:.84rem;font-weight:300;color:var(--d);outline:none;border-radius:0;width:100%;cursor:pointer}
-.fsel:focus{border-color:var(--d)}
-.f2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.fbtn{width:100%;padding:13px;background:var(--d);color:#fff;border:none;font-family:'Jost',sans-serif;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;margin-top:18px;transition:opacity .3s}
-.fbtn:hover:not(:disabled){opacity:.82}
-.fbtn:disabled{opacity:.3;cursor:not-allowed}
-.fnote{font-size:.64rem;color:#9a9a8a;margin-top:8px;text-align:center;line-height:1.6}
-.sec-divider{height:1px;background:var(--line);margin:0 52px}
-
-/* CHART RESULT */
-.chart-wrap{background:#fff;border:1px solid var(--line);padding:32px}
-.chart-label{font-size:.46rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:4px}
-.chart-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:300;color:var(--d);margin-bottom:20px}
-.ctbl{width:100%;border-collapse:collapse}
-.ctbl tr{border-bottom:1px solid var(--line)}
-.ctbl td{padding:8px 0;font-size:.8rem;vertical-align:top}
-.ctbl td:first-child{font-size:.62rem;letter-spacing:1px;text-transform:uppercase;color:#9a9a8a;width:130px;padding-right:12px}
-.ctbl td:last-child{font-weight:300;color:var(--d)}
-.tags{display:flex;flex-wrap:wrap;gap:3px;margin-top:2px}
-.tag-def{font-size:.6rem;padding:2px 7px;background:var(--d);color:#fff}
-.tag-open{font-size:.6rem;padding:2px 7px;border:1px solid var(--line);color:#9a9a8a}
-.tag-gate{font-size:.6rem;padding:2px 6px;background:rgba(42,58,70,.06);color:var(--acc)}
-.order-bar{background:var(--d);padding:24px 28px;margin-top:0;border-top:1px solid rgba(255,255,255,.06)}
-.ob-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:300;color:#fff;margin-bottom:5px}
-.ob-sub{font-size:.74rem;font-weight:300;color:rgba(255,255,255,.45);margin-bottom:16px;line-height:1.6}
-.ob-btn{width:100%;padding:12px;background:#fff;color:var(--d);border:none;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:opacity .3s}
-.ob-btn:hover{opacity:.88}
-
-/* LOADING */
-.lo{position:fixed;inset:0;background:rgba(26,26,22,.97);z-index:300;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
-.lo-icon{font-family:'Cormorant Garamond',serif;font-size:3rem;font-weight:300;color:rgba(154,128,80,.5);margin-bottom:28px;animation:pulse 3s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.4}50%{opacity:.9}}
-.lo-title{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:300;color:#fff;margin-bottom:8px}
-.lo-step{font-size:.54rem;letter-spacing:3px;color:rgba(154,128,80,.7);text-transform:uppercase;min-height:18px}
-.lo-bar{width:180px;height:1px;background:rgba(154,128,80,.15);margin:14px auto 0;overflow:hidden}
-.lo-fill{height:100%;background:var(--gold);transition:width .5s}
-
-/* REPORT OUTPUT */
-.report-pg{background:var(--bg);min-height:100vh;padding:52px}
-.report-hd{max-width:760px;margin:0 auto 28px}
-.report-inst{font-size:.46rem;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
-.report-name{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:300;color:var(--d);margin-bottom:3px}
-.report-meta{font-size:.72rem;font-weight:300;color:#9a9a8a;margin-bottom:18px}
-.dl-btn{display:inline-block;padding:10px 32px;background:var(--d);color:#fff;font-family:'Jost',sans-serif;font-size:.58rem;letter-spacing:3px;text-transform:uppercase;cursor:pointer;border:none}
-.report-bar{max-width:760px;margin:0 auto 20px;background:#fff;border:1px solid var(--line);padding:20px 24px}
-.rbg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.rbl{font-size:.44rem;letter-spacing:3px;text-transform:uppercase;color:#9a9a8a;margin-bottom:3px}
-.rbv{font-size:.8rem;font-weight:300;color:var(--d);line-height:1.4}
-.report-body{max-width:760px;margin:0 auto;background:#fff;border:1px solid var(--line);padding:44px 48px}
-.rpt-hd{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--d);margin:28px 0 8px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-.rpt-body{font-size:.83rem;font-weight:300;line-height:1.95;color:#3a3a32;white-space:pre-wrap;margin-bottom:10px}
-
-/* STATS */
-.stats-row{display:flex;gap:40px;flex-wrap:wrap;margin-top:28px}
-.stat-n{font-family:'Cormorant Garamond',serif;font-size:2.2rem;font-weight:300;color:var(--d)}
-.stat-l{font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:#9a9a8a}
-
-/* SPLIT */
-.split{display:grid;grid-template-columns:1fr 1fr}
-.simg{background-size:cover;background-position:center;min-height:420px}
-.stxt{padding:64px 52px;display:flex;flex-direction:column;justify-content:center}
-.stxt.wh{background:#fff}
-.stxt.bg{background:var(--bg)}
-.stxt.dk{background:var(--d)}
-
-/* STRIP */
-.strip{display:grid;grid-template-columns:repeat(3,1fr);height:260px}
-.stripph{background-size:cover;background-position:center;position:relative;overflow:hidden}
-.stripph::after{content:'';position:absolute;inset:0;background:rgba(26,26,22,.45)}
-.striplb{position:absolute;bottom:16px;left:0;right:0;text-align:center;font-size:.46rem;letter-spacing:5px;color:rgba(255,255,255,.6);text-transform:uppercase;z-index:1}
-
-/* TESTIMONIALS */
-.tcard{border-top:1px solid var(--line);padding:28px 0}
-.tq{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--d);line-height:1.7;margin-bottom:10px}
-.tn{font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:#9a9a8a}
-.tr2{font-size:.48rem;letter-spacing:2px;color:rgba(154,128,80,.7);text-transform:uppercase;margin-top:2px}
-
-/* FAQ */
-.faq-item{border-bottom:1px solid var(--line);padding:16px 0}
-.faq-q{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;color:var(--d);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;line-height:1.4}
-.faq-q:hover{color:var(--gold)}
-.faq-a{font-size:.82rem;font-weight:300;line-height:1.9;color:var(--txt);margin-top:12px;max-width:640px}
-
-/* BLOG */
-.blog-card{border-top:1px solid var(--line);padding:28px 0;cursor:pointer;transition:border-color .2s}
-.blog-card:hover{border-color:var(--d)}
-.blog-tag{font-size:.46rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-.blog-title{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:var(--d);margin-bottom:6px;line-height:1.3}
-.blog-exc{font-size:.8rem;font-weight:300;color:var(--txt);line-height:1.75}
-
-/* CONTACT */
-.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start}
-.ci{margin-bottom:24px}
-.ci-lbl{font-size:.46rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:5px}
-.ci-val{font-size:.84rem;font-weight:300;color:var(--txt);line-height:1.65}
-.cf-area{border:1px solid var(--line);background:var(--bg);padding:10px 12px;font-family:'Jost',sans-serif;font-size:.84rem;font-weight:300;color:var(--d);outline:none;border-radius:0;width:100%;resize:vertical;min-height:110px;transition:border-color .25s}
-.cf-area:focus{border-color:var(--d)}
-
-/* FOOTER */
-.foot{background:var(--d);padding:52px;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end}
-.foot-logo-main{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:400;color:#fff;letter-spacing:2px;text-transform:uppercase}
-.foot-logo-sub{font-size:.46rem;letter-spacing:5px;color:rgba(255,255,255,.3);text-transform:uppercase;margin-top:2px}
-.foot-copy{font-size:.5rem;letter-spacing:2px;color:rgba(255,255,255,.2);margin-top:8px}
-.foot-links{display:flex;flex-direction:column;gap:10px;align-items:flex-end}
-.foot-lnk{font-size:.54rem;letter-spacing:2px;color:rgba(255,255,255,.3);text-transform:uppercase;cursor:pointer;transition:color .2s}
-.foot-lnk:hover{color:rgba(255,255,255,.7)}
-
-@media(max-width:900px){
-  .nav{padding:0 20px}.nav-links{display:none}
-  .hero-cnt{padding:0 24px}.hero-scroll{display:none}
-  .sec{padding:56px 24px}.sec-divider{margin:0 24px}
-  .split{grid-template-columns:1fr}.simg{min-height:220px}.stxt{padding:40px 24px}
-  .g2{grid-template-columns:1fr}.g3{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}
-  .rdh{padding:52px 24px}.rdh-inner{grid-template-columns:1fr}
-  .fgrid{grid-template-columns:1fr}.form-wrap{padding:28px 20px}
-  .chart-wrap{padding:22px 16px}.report-body{padding:28px 18px}.report-pg{padding:36px 20px}
-  .strip{grid-template-columns:1fr;height:auto}.stripph{height:160px}
-  .stats-row{gap:24px}
-  .contact-grid{grid-template-columns:1fr}
-  .foot{grid-template-columns:1fr;padding:36px 24px}.foot-links{align-items:flex-start}
-  .rbg{grid-template-columns:1fr 1fr}
+function ReportCard({rpt,onClick}){
+  return(
+    <div className="rcard" onClick={()=>{track("report_card_click",{report:rpt.id,price:rpt.priceNum});onClick();}}>
+      <div className="rcard-accent"/>
+      <div className="rcard-body">
+        {rpt.tag&&<span className="rcard-tag">{rpt.tag}</span>}
+        <div className="rcard-icon">{rpt.icon}</div>
+        <div className="rcard-title">{rpt.title}</div>
+        <div className="rcard-tagline">{rpt.tagline}</div>
+        <div className="rcard-footer">
+          <div className="rcard-price">{rpt.price}</div>
+          <div className="rcard-cta">Bekijken →</div>
+        </div>
+      </div>
+    </div>
+  );
 }
-`;
 
-// ─── Components ───────────────────────────────────────────────────────────────
-function Nav({page,go}){
+function StepCard({num,title,desc}){
+  return(
+    <div className="step-card">
+      <div className="step-num">{num}</div>
+      <div className="step-body"><h4>{title}</h4><p>{desc}</p></div>
+    </div>
+  );
+}
+
+function Nav({page,go,menuOpen,setMenuOpen}){
   const links=[["home","Home"],["wat","Wat is Human Design"],["rapporten","Rapporten"],["blog","Inzichten"],["over","Over ons"],["contact","Contact"]];
   return(
-    <nav className="nav">
-      <div className="logo" onClick={()=>go("home")}>
-        <div className="logo-main">Faculty of Human Design</div>
-        <div className="logo-sub">Ibiza — Est. 2014</div>
-      </div>
-      <div className="nav-links">
-        {links.map(([id,label])=><span key={id} className={"nl"+(page===id||page.startsWith("rapport-")&&id==="rapporten"?" act":"")} onClick={()=>go(id)}>{label}</span>)}
-      </div>
-      <button className="nav-cta" onClick={()=>go("rapporten")}>Rapporten</button>
-    </nav>
+    <>
+      <nav className="nav">
+        <div className="nav-inner">
+          <div className="nav-logo" onClick={()=>go("home")}>
+            <div className="nav-logo-main">Faculty of Human Design</div>
+            <div className="nav-logo-sub">Ibiza — Est. 2014</div>
+          </div>
+          <div className="nav-links">
+            {links.map(([id,label])=>(
+              <span key={id} className={"nav-link"+(page===id||page.startsWith("rapport-")&&id==="rapporten"?" active":"")} onClick={()=>go(id)}>{label}</span>
+            ))}
+          </div>
+          <div style={{display:"flex",gap:8,alignItems:"center"}} className="nav-cta-wrap">
+            <button className="btn btn-primary btn-sm" onClick={()=>{track("hero_cta_click",{location:"nav"});go("rapporten");}}>Rapporten</button>
+          </div>
+          <button className="menu-btn mobile-nav" style={{display:"flex",alignItems:"center"}} onClick={()=>setMenuOpen(!menuOpen)}>
+            <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect y="4" width="22" height="2" rx="1" fill="currentColor"/><rect y="10" width="22" height="2" rx="1" fill="currentColor"/><rect y="16" width="22" height="2" rx="1" fill="currentColor"/></svg>
+          </button>
+        </div>
+      </nav>
+      {menuOpen&&(
+        <div className="mobile-menu">
+          <button className="menu-btn" style={{position:"absolute",top:20,right:20}} onClick={()=>setMenuOpen(false)}>
+            <svg width="22" height="22" viewBox="0 0 22 22"><line x1="2" y1="2" x2="20" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/><line x1="20" y1="2" x2="2" y2="20" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/></svg>
+          </button>
+          {links.map(([id,label])=>(
+            <div key={id} className="mobile-menu-link" onClick={()=>{go(id);setMenuOpen(false);}}>{label}</div>
+          ))}
+          <div style={{marginTop:16}}>
+            <button className="btn btn-primary btn-full" onClick={()=>{go("rapporten");setMenuOpen(false);}}>Rapporten bekijken</button>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
 function Footer({go}){
   return(
-    <footer className="foot">
-      <div>
-        <div className="foot-logo-main">Faculty of Human Design</div>
-        <div className="foot-logo-sub">Ibiza, Spanje — Est. 2014</div>
-        <div className="foot-copy">© 2025 Faculty of Human Design. Alle rechten voorbehouden.<br/>Alle rapporten zijn strikt persoonlijk en vertrouwelijk.</div>
-      </div>
-      <div className="foot-links">
-        {[["home","Home"],["wat","Wat is Human Design"],["rapporten","Rapporten"],["blog","Inzichten"],["over","Over ons"],["contact","Contact"]].map(([id,l])=><span key={id} className="foot-lnk" onClick={()=>go(id)}>{l}</span>)}
+    <footer className="footer">
+      <div className="footer-inner">
+        <div className="footer-top">
+          <div>
+            <div className="footer-logo-main">Faculty of Human Design</div>
+            <div className="footer-logo-sub">Ibiza, Spanje — Est. 2014</div>
+            <p className="footer-desc">Persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie. Berekend op exacte astronomische data.</p>
+          </div>
+          <div>
+            <div className="footer-col-title">Rapporten</div>
+            {REPORTS.slice(0,4).map(r=><span key={r.id} className="footer-link" onClick={()=>go("rapport-"+r.id)}>{r.title}</span>)}
+          </div>
+          <div>
+            <div className="footer-col-title">Informatie</div>
+            {[["wat","Wat is Human Design"],["over","Over ons"],["blog","Inzichten"],["contact","Contact"]].map(([id,l])=>(
+              <span key={id} className="footer-link" onClick={()=>go(id)}>{l}</span>
+            ))}
+          </div>
+          <div>
+            <div className="footer-col-title">Vertrouwen</div>
+            <span className="footer-link">🔒 Veilige betaling</span>
+            <span className="footer-link">📄 Persoonlijke PDF</span>
+            <span className="footer-link">⚡ Direct beschikbaar</span>
+            <span className="footer-link">✉ info@facultyofhumandesign.com</span>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <div className="footer-copy">© 2025 Faculty of Human Design. Alle rechten voorbehouden.</div>
+          <div className="footer-trust">
+            <div className="footer-trust-item">🔒 SSL beveiligd</div>
+            <div className="footer-trust-item">🇳🇱 iDEAL beschikbaar</div>
+          </div>
+        </div>
       </div>
     </footer>
   );
 }
 
-// ─── Form component ───────────────────────────────────────────────────────────
+
+// ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone}){
   const[form,setForm]=useState({name:"",day:"",month:"",year:"",hour:"",minute:"",place:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:""});
   const[chart,setChart]=useState(null);
@@ -603,155 +666,170 @@ function ReportForm({rpt,onDone}){
   const isHoro=rpt.id==="horoscoop";
   const needsTime=!isNum;
   const ok=form.name&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour);
+  const sections=rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
 
   const doChart=()=>{
     const y=parseInt(form.year),m=parseInt(form.month),d=parseInt(form.day);
     if(!form.name||!d||!m||!y){alert("Vul alle verplichte velden in.");return;}
-    if(isNum){
-      const num=calcNumerology(form.name,d,m,y);
-      setChart({...num,isNumerology:true});
-    } else {
-      const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
-      const c=calcHD(y,m,d,h,min);
-      setChart(isHoro?{...calcHoroscoop(y,m,d,h,min),isHoroscoop:true}:c);
-    }
+    if(isNum){const num=calcNumerology(form.name,d,m,y);setChart({...num,isNumerology:true});}
+    else{const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
+      setChart(isHoro?{...calcHoroscoop(y,m,d,h,min),isHoroscoop:true}:calcHD(y,m,d,h,min));}
     setTimeout(()=>document.getElementById("chart-res")?.scrollIntoView({behavior:"smooth"}),80);
   };
 
   const doReport=async()=>{
     setLoading(true);setPr(0);setLs(0);
-    let s=0;
-    const iv=setInterval(()=>{s++;setLs(x=>Math.min(x+1,LSTEPS.length-1));setPr(Math.min(s/LSTEPS.length*90,90));},2200);
+    track("checkout_started",{report:rpt.id,price:rpt.priceNum});
+    const hdChart=(!isNum&&!isHoro)?chart:null;
+    const chartContext=buildPrompt(hdChart,form,rpt).split("\n\n")[0];
+    const SYSTEM="Je bent een senior analist van de Faculty of Human Design op Ibiza. Schrijf nauwkeurige, diepgaande rapporten in het Nederlands. Schrijf vanuit het instituut. Geen bulletpoints, geen headers in de tekst — alleen alineas. Minimaal 900 woorden per sectie.";
+    let allText="";
     try{
-      const hdChart=(!isNum&&!isHoro)?chart:null;
-      const prompt=buildPrompt(hdChart,form,rpt);
-      const res=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:4000,
-          system:"Je bent een senior analist van de Faculty of Human Design, gevestigd op Ibiza. Je schrijft nauwkeurige, diepgaande en professionele rapporten in het Nederlands op basis van exacte berekende data. Schrijf in de derde persoon vanuit het instituut, niet als individuele persoon. Minimaal 2500 woorden. Gebruik ### voor sectietitels.",
-          messages:[{role:"user",content:prompt}]})});
-      const data=await res.json();
-      clearInterval(iv);setPr(100);
-      const txt=data.content?.find(b=>b.type==="text")?.text||"Rapport kon niet worden gegenereerd.";
-      setTimeout(()=>{setLoading(false);onDone(chart,form,txt,rpt);},500);
-    }catch{clearInterval(iv);setLoading(false);onDone(chart,form,"Er is iets misgegaan.",rpt);}
+      for(let i=0;i<sections.length;i++){
+        const sec=sections[i];
+        setLs(Math.min(i,LSTEPS.length-1));setPr(Math.round((i/sections.length)*95));
+        const prompt=chartContext+"\n\nSchrijf uitsluitend sectie '"+sec+"' van het rapport voor "+form.name+". Minimaal 900 woorden, in alineas, persoonlijk en concreet.";
+        const res=await fetch("https://api.anthropic.com/v1/messages",{
+          method:"POST",headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:SYSTEM,
+            messages:[{role:"user",content:prompt}]})
+        });
+        const data=await res.json();
+        const txt=data.content?.find(b=>b.type==="text")?.text||"";
+        allText+="### "+sec+"\n\n"+txt+"\n\n";
+      }
+      setPr(100);
+      track("checkout_completed",{report:rpt.id,price:rpt.priceNum});
+      setTimeout(()=>{setLoading(false);onDone(chart,form,allText.trim(),rpt);},400);
+    }catch(e){setLoading(false);onDone(chart,form,"Er is iets misgegaan: "+e.message,rpt);}
   };
 
   if(loading)return(
-    <div className="lo">
-      <div className="lo-icon">✦</div>
-      <div className="lo-title">Rapport wordt opgemaakt</div>
-      <div className="lo-step">{LSTEPS[ls]}</div>
-      <div className="lo-bar"><div className="lo-fill" style={{width:pr+"%"}}/></div>
-      <p style={{marginTop:18,fontSize:".52rem",color:"rgba(255,255,255,.15)",letterSpacing:"2px"}}>Dit duurt 1–2 minuten</p>
+    <div className="loading-overlay">
+      <div className="loading-icon">✦</div>
+      <div className="loading-title">Rapport wordt opgemaakt</div>
+      <div className="loading-counter">Sectie {Math.min(ls+1,sections.length)} van {sections.length}</div>
+      <div className="loading-steps">
+        {sections.map((step,i)=>(
+          <div key={i} className="loading-step" style={{opacity:i<ls?.35:i===ls?1:.18}}>
+            <div className="loading-step-dot" style={{background:i<ls?"#9A8050":i===ls?"#fff":"#444"}}/>
+            <div className="loading-step-text" style={{color:i===ls?"#fff":"rgba(255,255,255,.4)"}}>{step}</div>
+            {i===ls&&<div className="loading-step-badge">bezig...</div>}
+            {i<ls&&<div className="loading-step-badge">✓</div>}
+          </div>
+        ))}
+      </div>
+      <div className="loading-bar-wrap"><div className="loading-bar-fill" style={{width:pr+"%"}}/></div>
+      <p style={{marginTop:18,fontSize:".72rem",color:"rgba(255,255,255,.15)",letterSpacing:".1em"}}>Dit duurt 3-4 minuten</p>
     </div>
   );
 
   return(
     <div>
-      <div className="sec bg" id="bestel">
-        <div className="cont nw">
-          <div className="label">Stap 1 — Gegevens invoeren</div>
-          <div className="h2">Vul de geboortegegevens in</div>
-          <p className="p" style={{marginBottom:28}}>Jouw chart wordt direct gratis berekend en getoond. Pas daarna genereer je het volledige rapport.</p>
+      <div className="section bg-muted" id="bestel">
+        <div className="container-sm">
+          <div className="label" style={{marginBottom:8}}>Stap 1 — Gegevens invoeren</div>
+          <h2 className="h2" style={{marginBottom:8}}>Vul uw geboortegegevens in</h2>
+          <p className="body-md" style={{marginBottom:32}}>Uw chart wordt direct gratis berekend. U betaalt pas na het bekijken van uw chart.</p>
           <div className="form-wrap">
-            <div className="form-title">{rpt.title}</div>
-            <div className="form-sub">{isNum?"Geen geboortetijd nodig — alleen naam en geboortedatum.":"Vul alle velden zo nauwkeurig mogelijk in voor de beste berekening."}</div>
-            <div className="fgrid">
-              <div className="fg full"><label className="flbl">Volledige naam</label><input className="finp" name="name" value={form.name} onChange={ch} placeholder="Voor- en achternaam"/></div>
-              <div className="fg"><label className="flbl">Dag</label><input className="finp" type="number" name="day" min="1" max="31" value={form.day} onChange={ch} placeholder="bijv. 15"/></div>
-              <div className="fg"><label className="flbl">Maand</label><select className="fsel" name="month" value={form.month} onChange={ch}><option value="">— maand —</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-              <div className="fg"><label className="flbl">Jaar</label><input className="finp" type="number" name="year" value={form.year} onChange={ch} placeholder="bijv. 1990"/></div>
-              {needsTime&&<div className="fg"><label className="flbl">Geboortetijd</label><div className="f2"><input className="finp" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} placeholder="uur"/><input className="finp" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} placeholder="min"/></div></div>}
-              <div className="fg full"><label className="flbl">Geboorteplaats</label><input className="finp" name="place" value={form.place} onChange={ch} placeholder="bijv. Amsterdam, Nederland"/></div>
+            <div style={{marginBottom:20}}>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:4}}>{rpt.title}</div>
+              <div style={{fontSize:".82rem",color:"var(--text-light)"}}>{isNum?"Geen geboortetijd nodig.":"Vul alle velden zo nauwkeurig mogelijk in."}</div>
+            </div>
+            <div className="form-grid">
+              <div className="form-group full"><label className="form-label">Volledige naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Voor- en achternaam"/></div>
+              <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="day" min="1" max="31" value={form.day} onChange={ch} placeholder="15"/></div>
+              <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
+              <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="year" value={form.year} onChange={ch} placeholder="1990"/></div>
+              {needsTime&&<div className="form-group"><label className="form-label">Geboortetijd</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} placeholder="min"/></div></div>}
+              <div className="form-group full"><label className="form-label">Geboorteplaats</label><input className="form-input" name="place" value={form.place} onChange={ch} placeholder="Amsterdam, Nederland"/></div>
             </div>
             {rpt.needsPartner&&<>
-              <div style={{height:1,background:"var(--line)",margin:"20px 0"}}/>
-              <div className="form-sub" style={{marginBottom:14}}>Gegevens tweede persoon</div>
-              <div className="fgrid">
-                <div className="fg full"><label className="flbl">Naam partner</label><input className="finp" name="pname" value={form.pname} onChange={ch} placeholder="Naam"/></div>
-                <div className="fg"><label className="flbl">Dag</label><input className="finp" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch}/></div>
-                <div className="fg"><label className="flbl">Maand</label><select className="fsel" name="pmonth" value={form.pmonth} onChange={ch}><option value="">— maand —</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="fg"><label className="flbl">Jaar</label><input className="finp" type="number" name="pyear" value={form.pyear} onChange={ch}/></div>
-                <div className="fg"><label className="flbl">Tijd</label><div className="f2"><input className="finp" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} placeholder="uur"/><input className="finp" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} placeholder="min"/></div></div>
-                <div className="fg full"><label className="flbl">Geboorteplaats</label><input className="finp" name="pplace" value={form.pplace||""} onChange={ch} placeholder="Stad, land"/></div>
+              <div className="form-divider"/>
+              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens partner</div>
+              <div className="form-grid">
+                <div className="form-group full"><label className="form-label">Naam partner</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder="Naam partner"/></div>
+                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch}/></div>
+                <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
+                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="pyear" value={form.pyear} onChange={ch}/></div>
+                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} placeholder="min"/></div></div>
+                <div className="form-group full"><label className="form-label">Geboorteplaats partner</label><input className="form-input" name="pplace" value={form.pplace||""} onChange={ch} placeholder="Stad, land"/></div>
               </div>
             </>}
             {rpt.needsChild&&<>
-              <div style={{height:1,background:"var(--line)",margin:"20px 0"}}/>
-              <div className="form-sub" style={{marginBottom:14}}>Gegevens kind</div>
-              <div className="fgrid">
-                <div className="fg full"><label className="flbl">Naam kind</label><input className="finp" name="cname" value={form.cname} onChange={ch} placeholder="Naam kind"/></div>
-                <div className="fg"><label className="flbl">Dag</label><input className="finp" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch}/></div>
-                <div className="fg"><label className="flbl">Maand</label><select className="fsel" name="cmonth" value={form.cmonth} onChange={ch}><option value="">— maand —</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="fg"><label className="flbl">Jaar</label><input className="finp" type="number" name="cyear" value={form.cyear} onChange={ch}/></div>
-                <div className="fg"><label className="flbl">Tijd</label><div className="f2"><input className="finp" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} placeholder="uur"/><input className="finp" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} placeholder="min"/></div></div>
-                <div className="fg full"><label className="flbl">Geboorteplaats</label><input className="finp" name="cplace" value={form.cplace||""} onChange={ch} placeholder="Stad, land"/></div>
+              <div className="form-divider"/>
+              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens kind</div>
+              <div className="form-grid">
+                <div className="form-group full"><label className="form-label">Naam kind</label><input className="form-input" name="cname" value={form.cname} onChange={ch} placeholder="Naam kind"/></div>
+                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch}/></div>
+                <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
+                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="cyear" value={form.cyear} onChange={ch}/></div>
+                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} placeholder="min"/></div></div>
+                <div className="form-group full"><label className="form-label">Geboorteplaats kind</label><input className="form-input" name="cplace" value={form.cplace||""} onChange={ch} placeholder="Stad, land"/></div>
               </div>
             </>}
-            <button className="fbtn" onClick={doChart} disabled={!ok}>Bereken chart</button>
-            <p className="fnote">Gratis berekening — geen betaling nodig om de chart te zien.</p>
+            <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={doChart} disabled={!ok}>Bereken mijn chart gratis</button>
+            <p className="form-note">Gratis berekening — geen betaling vereist om uw chart te zien.<br/>🔒 Uw gegevens worden vertrouwelijk behandeld.</p>
           </div>
         </div>
       </div>
 
       {chart&&(
-        <div className="sec wh" id="chart-res">
-          <div className="cont nw">
-            <div className="label">Stap 2 — Jouw chart</div>
-            <div className="h2" style={{marginBottom:24}}>{chart.isNumerology?"Kerngetallen":chart.isHoroscoop?"Planeetstanden":"Human Design Chart"}</div>
-            <div className="g2" style={{gap:24}}>
+        <div className="section bg-white" id="chart-res">
+          <div className="container-sm">
+            <div className="label" style={{marginBottom:8}}>Stap 2 — Uw chart</div>
+            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Uw kerngetallen":chart.isHoroscoop?"Uw planeetstanden":"Uw Human Design chart"}</h2>
+            <div className="grid-2" style={{gap:28}}>
               <div>
-                {chart.isNumerology?(
-                  <div className="chart-wrap">
-                    <div className="chart-label">Numerologie</div>
-                    <div className="chart-name">{form.name}</div>
-                    {[["Levenspadgetal",chart.lp+" — "+chart.lpName],["Uitdrukkingsgetal",chart.exp+" — "+chart.expName],["Zielsgetal",chart.soul+" — "+chart.soulName],["Persoonlijkheidsgetal",chart.pers],["Verjaardagsgetal",chart.bday],["Persoonlijk Jaar 2025",chart.py],["Rijpingsgetal",chart.mat],["Balansgetal",chart.bal]].map(([l,v])=>(
-                      <div key={l} style={{borderBottom:"1px solid var(--line)",padding:"8px 0"}}>
-                        <div style={{fontSize:".6rem",letterSpacing:"2px",textTransform:"uppercase",color:"#9a9a8a",marginBottom:2}}>{l}</div>
-                        <div style={{fontSize:".88rem",fontWeight:300,color:"var(--d)"}}>{v}{(parseInt(v)===11||parseInt(v)===22||parseInt(v)===33)&&<span style={{fontSize:".46rem",letterSpacing:"3px",color:"var(--gold)",marginLeft:8,textTransform:"uppercase"}}>Master</span>}</div>
-                      </div>
-                    ))}
-                    {chart.masters&&chart.masters.length>0&&<div style={{background:"rgba(154,128,80,.06)",border:"1px solid rgba(154,128,80,.2)",padding:"12px 16px",marginTop:16}}><div style={{fontSize:".46rem",letterSpacing:"4px",textTransform:"uppercase",color:"var(--gold)",marginBottom:4}}>Mastergetal aanwezig</div><div style={{fontSize:".8rem",fontWeight:300,color:"var(--d)"}}>Mastergetal {chart.masters.join(" & ")} — zeldzame energetische configuratie.</div></div>}
-                  </div>
-                ):chart.isHoroscoop?(
-                  <div className="chart-wrap">
-                    <div className="chart-label">Horoscoop</div>
-                    <div className="chart-name">{form.name}</div>
-                    <table className="ctbl"><tbody>
-                      <tr><td>Zonneteken</td><td>{chart.sun_sign}</td></tr>
-                      <tr><td>Ascendant</td><td>{chart.ascendant?.degree}° {chart.ascendant?.sign}</td></tr>
-                      <tr><td>Midhemel</td><td>{chart.mc?.degree}° {chart.mc?.sign}</td></tr>
-                      <tr><td>Dom. element</td><td>{chart.dom_element}</td></tr>
-                      <tr><td>Planeten</td><td><div className="tags">{Object.entries(chart.planets||{}).map(([p,d])=><span key={p} className="tag-gate">{p}: {d.sign}</span>)}</div></td></tr>
+                <div className="chart-result">
+                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>{chart.isNumerology?"Numerologie":chart.isHoroscoop?"Horoscoop":"Human Design"}</div>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{form.name}</div>
+                  {chart.isNumerology?(
+                    <table className="chart-table"><tbody>
+                      {[["Levenspad",chart.lp+" — "+chart.lpName],["Uitdrukking",chart.exp+" — "+chart.expName],["Ziel",chart.soul],["Persoonlijkheid",chart.pers],["Verjaardag",chart.bday],["Pers. Jaar 2025",chart.py],["Rijping",chart.mat]].map(([l,v])=>(
+                        <tr key={l}><td>{l}</td><td>{v}{(v===11||v===22||v===33)&&<span style={{fontSize:".6rem",color:"var(--gold)",marginLeft:6,textTransform:"uppercase"}}>MASTER</span>}</td></tr>
+                      ))}
                     </tbody></table>
-                  </div>
-                ):(
-                  <div className="chart-wrap">
-                    <div className="chart-label">Human Design</div>
-                    <div className="chart-name">{form.name}</div>
-                    <table className="ctbl"><tbody>
+                  ):chart.isHoroscoop?(
+                    <table className="chart-table"><tbody>
+                      <tr><td>Zonneteken</td><td>{chart.sun_sign}</td></tr>
+                      <tr><td>Ascendant</td><td>{chart.ascendant?.degree}deg {chart.ascendant?.sign}</td></tr>
+                      <tr><td>Midhemel</td><td>{chart.mc?.degree}deg {chart.mc?.sign}</td></tr>
+                      <tr><td>Dom. element</td><td>{chart.dom_element}</td></tr>
+                    </tbody></table>
+                  ):(
+                    <table className="chart-table"><tbody>
                       <tr><td>Type</td><td><strong>{chart.type}</strong></td></tr>
                       <tr><td>Strategie</td><td>{chart.strat}</td></tr>
                       <tr><td>Autoriteit</td><td>{chart.auth}</td></tr>
                       <tr><td>Profiel</td><td>{chart.profile}</td></tr>
                       <tr><td>Inkarnatie-Kruis</td><td>Poort {chart.cross}</td></tr>
-                      <tr><td>Gedefinieerd</td><td><div className="tags">{chart.definedCenters?.length>0?chart.definedCenters.map(c=><span key={c} className="tag-def">{c}</span>):<span style={{fontSize:".76rem",color:"#9a9a8a"}}>geen</span>}</div></td></tr>
+                      <tr><td>Gedefinieerd</td><td><div className="tags">{chart.definedCenters?.length>0?chart.definedCenters.map(c=><span key={c} className="tag-def">{c}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
                       <tr><td>Open</td><td><div className="tags">{chart.openCenters?.map(c=><span key={c} className="tag-open">{c}</span>)}</div></td></tr>
                       <tr><td>Poorten</td><td><div className="tags">{chart.allGates?.map(g=><span key={g} className="tag-gate">{g}</span>)}</div></td></tr>
                     </tbody></table>
+                  )}
+                </div>
+              </div>
+              <div>
+                {!chart.isNumerology&&!chart.isHoroscoop?(
+                  <div style={{background:"var(--muted)",borderRadius:"var(--radius-md)",border:"1px solid var(--border)",padding:12}}>
+                    <Bodygraph chart={chart} name={form.name}/>
+                  </div>
+                ):(
+                  <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",border:"1px solid var(--border)",padding:32,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,minHeight:200}}>
+                    <div style={{fontFamily:"var(--font-serif)",fontSize:"3rem",color:"rgba(61,44,94,.15)"}}>{chart.isNumerology?"∞":"☽"}</div>
+                    <div className="label">{chart.isNumerology?"Numerologische berekening":"Astrologische berekening"}</div>
+                    <p className="body-sm">Berekend op basis van uw exacte geboortedata.</p>
                   </div>
                 )}
               </div>
-              <div>
-                {!chart.isNumerology&&!chart.isHoroscoop&&<Bodygraph chart={chart} name={form.name}/>}
-                {chart.isNumerology&&<div style={{background:"var(--bg)",border:"1px solid var(--line)",padding:"28px",textAlign:"center"}}><div style={{fontFamily:"Cormorant Garamond,serif",fontSize:"4rem",fontWeight:300,color:"rgba(154,128,80,.15)",lineHeight:1}}>∞</div><div className="label" style={{marginTop:16}}>Numerologie</div><p className="p sm" style={{marginTop:8}}>Jouw kerngetallen zijn berekend op basis van de Pythagorische methode.</p></div>}
-                {chart.isHoroscoop&&<div style={{background:"var(--bg)",border:"1px solid var(--line)",padding:"28px",textAlign:"center"}}><div style={{fontFamily:"Cormorant Garamond,serif",fontSize:"4rem",fontWeight:300,color:"rgba(154,128,80,.15)",lineHeight:1}}>☽</div><div className="label" style={{marginTop:16}}>Geboortehoroscoop</div><p className="p sm" style={{marginTop:8}}>Planetaire posities berekend op basis van Meeus ephemeris.</p></div>}
-              </div>
             </div>
-            <div className="order-bar" style={{marginTop:24}}>
-              <div className="ob-title">Stap 3 — Rapport genereren</div>
-              <div className="ob-sub">Chart berekend. Het volledige rapport bevat een uitgebreide analyse van {rpt.pages} pagina's, direct als PDF beschikbaar.</div>
-              <button className="ob-btn" onClick={doReport}>Genereer volledig rapport — {rpt.price}</button>
+            <div className="order-block" style={{marginTop:24}}>
+              <div className="order-block-title">Stap 3 — Ontvang uw volledige rapport</div>
+              <div className="order-block-sub">Chart berekend. Het volledige rapport bevat {rpt.pages} paginas diepgaande persoonlijke analyse — direct als PDF.</div>
+              <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>Betalen en rapport ontvangen — {rpt.price}</button>
+              <div style={{marginTop:10}}><TrustStrip light/></div>
             </div>
           </div>
         </div>
@@ -760,156 +838,216 @@ function ReportForm({rpt,onDone}){
   );
 }
 
-// ─── Pages ────────────────────────────────────────────────────────────────────
+// ─── PAGES ────────────────────────────────────────────────────────────────────
 function HomePage({go}){
   return(
     <div className="pg">
       <section className="hero">
-        <div className="hero-bg" style={{backgroundImage:"url("+IMG.hero+")"}}/>
-        <div className="hero-ov"/>
-        <div className="hero-cnt">
-          <div className="hero-label">Faculty of Human Design — Ibiza, Spanje</div>
-          <h1 className="hero-title">Persoonlijke rapporten<br/>gebaseerd op <em>exacte<br/>astronomische berekeningen</em></h1>
-          <p className="hero-sub">Human Design, Numerologie en Astrologie. Geen generieke uitleg — uw persoonlijke blauwdruk, berekend op basis van uw exacte geboortedata.</p>
-          <div className="hero-btns">
-            <button className="btn-solid" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
-            <button className="btn-light" onClick={()=>go("wat")}>Wat is Human Design?</button>
+        <div className="hero-bg"/>
+        <div className="hero-pattern"/>
+        <div className="hero-glow"/>
+        <div className="hero-content">
+          <div>
+            <div className="hero-eyebrow">Faculty of Human Design — Ibiza, Spanje</div>
+            <h1 className="h1-hero hero-title">Uw persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
+            <p className="body-lg" style={{color:"rgba(255,255,255,.58)",maxWidth:500,marginTop:16}}>Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van uw exacte geboortedata.</p>
+            <div className="hero-actions">
+              <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>Ontvang mijn persoonlijke rapport</button>
+              <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+            </div>
+            <div className="hero-micro">
+              {["🔒 Veilige betaling","📄 Persoonlijke PDF","⚡ Direct beschikbaar"].map(t=>(
+                <div key={t} className="hero-micro-item">{t}</div>
+              ))}
+            </div>
+          </div>
+          <div className="hero-card">
+            <div className="hero-card-label">Faculty of Human Design</div>
+            {[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
+              <div key={l} className="hero-stat"><div className="hero-stat-n">{n}</div><div className="hero-stat-l">{l}</div></div>
+            ))}
+            <div className="hero-divider"/>
+            <p style={{fontSize:".8rem",fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>Berekend met Swiss Ephemeris algoritmen — geen generieke profielen.</p>
           </div>
         </div>
-        <div className="hero-scroll"><div className="scroll-line"/></div>
       </section>
-
-      <div className="sec-divider"/>
-
-      <section className="sec bg">
-        <div className="cont">
-          <div className="g4" style={{marginBottom:48}}>
-            {[["8","Verschillende rapporten"],["2.400+","Analyses uitgevoerd"],["4.9","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
-              <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
-            ))}
-          </div>
-          <div className="divider left"/>
-          <div className="g2" style={{alignItems:"start",gap:60}}>
+      <div style={{background:"white",padding:"20px 24px",borderBottom:"1px solid var(--border)"}}>
+        <div className="container"><TrustStrip/></div>
+      </div>
+      <section className="section bg-muted">
+        <div className="container">
+          <div className="grid-2" style={{gap:60,alignItems:"center"}}>
             <div>
-              <div className="label">Onze rapporten</div>
-              <h2 className="h1">Drie disciplines,<br/><em>één methodologie</em></h2>
-              <p className="p">De Faculty of Human Design biedt rapporten op basis van Human Design, Numerologie en Geboorteastrologie. Elk rapport wordt gegenereerd op basis van echte astronomische berekeningen — niet op basis van generieke profielen.</p>
-              <p className="p">U vult uw geboortegegevens in. Uw chart wordt direct berekend. Het rapport volgt als persoonlijke PDF.</p>
-              <div style={{marginTop:24}}><button className="btn" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button></div>
+              <div className="label" style={{marginBottom:12}}>Meest gekozen</div>
+              <h2 className="h2" style={{marginBottom:16}}>Volledig Human Design Rapport</h2>
+              <p className="body-lg" style={{marginBottom:20}}>Uw complete persoonlijke blauwdruk — van Type en Autoriteit tot Inkarnatie-Kruis. 40+ paginas, direct als PDF.</p>
+              <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
+                {REPORTS[0].includes.map((item,i)=>(
+                  <li key={i} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)"}}>
+                    <span style={{color:"var(--brand)",flexShrink:0}}>✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+              <div style={{display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}}>
+                <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>Rapport bestellen — 75 euro</button>
+                <div style={{fontSize:".82rem",color:"var(--text-light)"}}>40+ paginas · Direct als PDF</div>
+              </div>
             </div>
-            <div style={{display:"flex",flexDirection:"column",gap:1,background:"var(--line)"}}>
-              {REPORTS.slice(0,4).map(r=>(
-                <div key={r.id} style={{background:"#fff",padding:"20px 24px",cursor:"pointer",display:"flex",justifyContent:"space-between",alignItems:"center"}} onClick={()=>go("rapport-"+r.id)}>
-                  <div>
-                    <div style={{fontFamily:"Cormorant Garamond,serif",fontSize:"1rem",fontWeight:400,color:"var(--d)",marginBottom:2}}>{r.title}</div>
-                    <div style={{fontSize:".68rem",fontWeight:300,color:"#9a9a8a"}}>{r.tagline}</div>
+            <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",overflow:"hidden",boxShadow:"var(--shadow-lg)"}}>
+              <div style={{background:"var(--brand)",padding:"28px 32px"}}>
+                {[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching en Kabbalah","64 poorten en 9 centra"],["Persoonlijke analyse","Geen templates"]].map(([t,d])=>(
+                  <div key={t} style={{borderBottom:"1px solid rgba(255,255,255,.1)",padding:"10px 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                    <div style={{fontSize:".88rem",fontWeight:300,color:"white"}}>{t}</div>
+                    <div style={{fontSize:".72rem",color:"rgba(255,255,255,.4)"}}>{d}</div>
                   </div>
-                  <div style={{display:"flex",alignItems:"center",gap:16,flexShrink:0}}>
-                    <div style={{fontFamily:"Cormorant Garamond,serif",fontSize:"1.1rem",color:"var(--d)"}}>{r.price}</div>
-                    <div style={{fontSize:".52rem",letterSpacing:"2px",color:"var(--gold)",textTransform:"uppercase"}}>→</div>
-                  </div>
+                ))}
+              </div>
+              <div style={{padding:"24px 32px"}}>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+                  <div><div style={{fontFamily:"var(--font-serif)",fontSize:"2.2rem",fontWeight:300}}>75 euro</div><div style={{fontSize:".72rem",color:"var(--text-light)"}}>Eenmalig direct als PDF</div></div>
+                  <div style={{textAlign:"right"}}><div style={{fontSize:".7rem",fontWeight:600,color:"var(--brand)",textTransform:"uppercase"}}>40+ paginas</div><div style={{fontSize:".7rem",color:"var(--text-light)"}}>12 secties</div></div>
                 </div>
-              ))}
-              <div style={{background:"var(--bg)",padding:"14px 24px",textAlign:"center",cursor:"pointer"}} onClick={()=>go("rapporten")}>
-                <div style={{fontSize:".52rem",letterSpacing:"3px",textTransform:"uppercase",color:"var(--gold)"}}>Alle 8 rapporten bekijken</div>
+                <button className="btn btn-primary btn-full" onClick={()=>go("rapport-volledig")}>Bestel dit rapport</button>
               </div>
             </div>
           </div>
         </div>
       </section>
-
-      <div className="strip">
-        {[[IMG.cosmos,"Astronomische berekeningen"],[IMG.ibiza,"Ibiza, Spanje"],[IMG.journal,"Persoonlijke analyse"]].map(([u,l])=>(
-          <div key={l} className="stripph" style={{backgroundImage:"url("+u+")"}}><div className="striplb">{l}</div></div>
-        ))}
-      </div>
-
-      <section className="sec wh">
-        <div className="cont nw">
-          <div className="divider"/>
-          <div className="label" style={{textAlign:"center"}}>Ervaringen</div>
-          <h2 className="h1" style={{textAlign:"center",marginBottom:40}}>Wat onze klanten<br/><em>zeggen</em></h2>
-          {[["Het rapport heeft mij meer inzicht gegeven dan jaren van zelfonderzoek. De precisie van de analyse is indrukwekkend.","M. van den Berg — Amsterdam","Volledig Human Design Rapport"],["Als koppel hebben wij veel baat gehad bij het relatierapport. Eindelijk begrijpen wij de dynamieken tussen ons.","T. & E. Dubois — Antwerpen","Relatierapport"],["De combinatie van Human Design en Numerologie gaf een compleet beeld. Ik heb beide rapporten besteld en was diep geraakt door de overeenkomsten.","S. Müller — Utrecht","Volledig Rapport & Numerologie"]].map(([q,n,r])=>(
-            <div className="tcard" key={n}>
-              <p className="tq">{q}</p>
-              <div className="tn">{n}</div>
-              <div className="tr2">{r}</div>
+      <section className="section bg-white">
+        <div className="container">
+          <div className="text-center" style={{marginBottom:48}}>
+            <div className="label" style={{marginBottom:12}}>Alle rapporten</div>
+            <h2 className="h2">Kies uw rapport</h2>
+          </div>
+          <div className="grid-3">
+            {REPORTS.filter(r=>r.id!=="volledig").slice(0,3).map(r=>(
+              <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
+            ))}
+          </div>
+          <div style={{textAlign:"center",marginTop:32}}>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle 8 rapporten</button>
+          </div>
+        </div>
+      </section>
+      <section className="section bg-muted">
+        <div className="container-md">
+          <div className="text-center" style={{marginBottom:40}}>
+            <div className="label" style={{marginBottom:12}}>Hoe het werkt</div>
+            <h2 className="h2">In drie stappen uw rapport</h2>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:24,maxWidth:640,margin:"0 auto"}}>
+            <StepCard num="1" title="Voer uw geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Uw chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
+            <StepCard num="2" title="Bekijk uw chart" desc="Zie direct uw Type, Autoriteit, Profiel en gedefinieerde centra. Gratis en direct."/>
+            <StepCard num="3" title="Ontvang uw rapport" desc="Na betaling wordt uw rapport gegenereerd — 40+ paginas persoonlijke analyse, direct als PDF."/>
+          </div>
+        </div>
+      </section>
+      <section className="section bg-white">
+        <div className="container">
+          <div className="text-center" style={{marginBottom:40}}>
+            <div className="label" style={{marginBottom:12}}>Ervaringen</div>
+            <h2 className="h2">Wat onze klanten zeggen</h2>
+          </div>
+          <div className="grid-3">
+            {[["Het rapport heeft mij meer inzicht gegeven dan jaren van zelfonderzoek. De precisie van de analyse is indrukwekkend.","M. van den Berg, Amsterdam","Volledig Rapport"],["Als koppel hebben wij veel baat gehad bij het relatierapport. Eindelijk begrijpen wij de dynamieken tussen ons.","T. en E. Dubois, Antwerpen","Relatierapport"],["De combinatie van Human Design en Numerologie gaf een compleet beeld. Diep geraakt door de nauwkeurigheid.","S. Muller, Utrecht","Volledig Rapport en Numerologie"]].map(([q,n,r])=>(
+              <div className="tcard" key={n}>
+                <div className="stars">★★★★★</div>
+                <div className="tcard-quote">"{q}"</div>
+                <div className="tcard-author">{n}</div>
+                <div className="tcard-report">{r}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section bg-muted">
+        <div className="container-md">
+          <div className="sub-card">
+            <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:32}}>
+              <div>
+                <div style={{fontSize:".65rem",fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(154,128,80,.8)",marginBottom:12}}>Abonnement</div>
+                <h2 className="h2" style={{color:"white",marginBottom:12}}>Maandelijkse Guidance</h2>
+                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.75,maxWidth:480}}>Elke maand een persoonlijk rapport over de energetische themas van die maand, afgestemd op uw Human Design chart.</p>
+              </div>
+              <div style={{textAlign:"center",flexShrink:0}}>
+                <div className="sub-price">19 euro</div>
+                <div className="sub-price-period">per maand opzegbaar</div>
+                <div style={{height:12}}/>
+                <button className="btn btn-gold" onClick={()=>go("rapport-maandelijks")}>Start abonnement</button>
+              </div>
             </div>
-          ))}
+          </div>
         </div>
       </section>
-
-      <section className="sec img">
-        <div className="sec-bg-img" style={{backgroundImage:"url("+IMG.cosmos+")"}}/>
-        <div className="sec-ov"/>
-        <div className="sec-rel cont ctr">
-          <div className="label lgt">Het systeem</div>
-          <h2 className="h1 lgt" style={{marginBottom:16}}>Human Design werd ontvangen<br/>op het eiland Ibiza</h2>
-          <p className="p lgt" style={{maxWidth:540,margin:"0 auto 28px"}}>In januari 1987 ontving Ra Uru Hu het Human Design systeem op Ibiza. De Faculty of Human Design is opgericht op ditzelfde eiland, vanuit respect voor de oorsprong van het systeem.</p>
-          <button className="btn out lgt" onClick={()=>go("wat")}>Meer over het systeem</button>
+      <section className="section bg-dark">
+        <div className="container text-center">
+          <div className="divider divider-center" style={{marginBottom:28}}/>
+          <h2 className="h2" style={{color:"white",marginBottom:16}}>Klaar om uw design te ontdekken?</h2>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:480,margin:"0 auto 28px"}}>Uw chart wordt direct gratis berekend. U betaalt pas na het bekijken van uw chart.</p>
+          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
+            <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>Ontvang mijn persoonlijke rapport</button>
+            <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+          </div>
+          <div style={{height:28}}/>
+          <TrustStrip light/>
         </div>
       </section>
+      <div className="sticky-cta">
+        <button className="btn btn-primary btn-full" onClick={()=>go("rapport-volledig")}>Ontvang mijn persoonlijke rapport — 75 euro</button>
+      </div>
     </div>
   );
 }
 
 function WatPage({go}){
   const[faq,setFaq]=useState(null);
-  const faqs=[["Op basis waarvan wordt de chart berekend?","Alle charts worden berekend met behulp van de Meeus ephemeris — dezelfde astronomische algoritmen die ten grondslag liggen aan professionele astrologische en Human Design software. De berekening gebruikt uw exacte geboortedatum, -tijd en -plaats."],["Is dit hetzelfde als een horoscoop?","Nee. Een horoscoop werkt met uw zonneteken (1 van 12 mogelijkheden). Human Design combineert astronomische data met de I Ching (64 hexagrammen), Kabbalistische centra en kwantummechanische principes tot een individuele blauwdruk."],["Wat als ik mijn geboortetijd niet weet?","De geboortetijd is relevant voor de berekening van enkele centra en de ascendant. Als u de tijd niet weet, kunt u dit controleren via uw geboorteakte. Neem contact met ons op voor een alternatieve aanpak."],["Hoe lang duurt het om een rapport te ontvangen?","Na het invoeren van uw gegevens wordt de chart direct berekend. Het rapport wordt vervolgens gegenereerd en is binnen 1 tot 2 minuten beschikbaar als PDF."],["Kan ik een rapport als cadeau geven?","Ja. Vul bij de bestelling de gegevens in van de ontvanger. Het rapport wordt opgesteld op naam van de ontvanger."]];
+  const faqs=[["Op basis waarvan wordt de chart berekend?","Alle charts worden berekend met de Meeus ephemeris — dezelfde astronomische algoritmen als professionele Human Design software. De berekening vereist uw exacte geboortedatum, -tijd en -plaats."],["Is dit hetzelfde als een horoscoop?","Nee. Een horoscoop werkt met uw zonneteken. Human Design combineert astronomische data met de I Ching, Kabbalistische centra en kwantumfysische principes tot een individuele blauwdruk."],["Wat als ik mijn geboortetijd niet weet?","De geboortetijd is relevant voor sommige centra. Controleer uw geboorteakte voor de meest nauwkeurige berekening."],["Hoe lang duurt het om een rapport te ontvangen?","Na betaling wordt uw rapport gegenereerd — 40+ paginas binnen 3 tot 4 minuten beschikbaar als PDF."],["Is het rapport persoonlijk of een template?","Elk rapport wordt volledig gegenereerd op basis van uw specifieke chart. Geen twee rapporten zijn identiek."]];
   return(
     <div className="pg">
-      <section className="hero" style={{minHeight:"50vh",paddingBottom:60}}>
-        <div className="hero-bg" style={{backgroundImage:"url("+IMG.cosmos+")"}}/>
-        <div className="hero-ov"/>
-        <div className="hero-cnt">
-          <div className="hero-label">Faculty of Human Design</div>
-          <h1 className="hero-title" style={{fontSize:"clamp(2.5rem,6vw,4.5rem)"}}>Wat is<br/><em>Human Design?</em></h1>
+      <section style={{background:"var(--brand)",padding:"100px 24px 72px"}}>
+        <div className="container-sm">
+          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Het systeem</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16}}>Wat is Human Design?</h1>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.55)",maxWidth:520}}>Een synthese van vier oude wijsheidssystemen die samen een precieze kaart vormen van wie u bent.</p>
         </div>
       </section>
-      <section className="sec bg">
-        <div className="cont nw">
-          <div className="label">Het systeem</div>
-          <h2 className="h1">Een synthese van vier<br/><em>kennissystemen</em></h2>
-          <p className="p">Human Design werd in januari 1987 ontvangen door Ra Uru Hu op het eiland Ibiza. Het systeem combineert vier kennistradities tot één coherent model dat op het moment van uw geboorte een unieke persoonlijke blauwdruk berekent.</p>
-          <p className="p">Het resultaat is een nauwkeurige beschrijving van hoe uw energie werkt, hoe u het beste beslissingen neemt en wat uw diepere levensdoel is.</p>
-        </div>
-      </section>
-      <div className="sec-divider"/>
-      <section className="sec wh">
-        <div className="cont">
-          <div className="label">De vier pijlers</div>
-          <div className="g2" style={{marginTop:32,gap:2,background:"var(--line)"}}>
-            {[["I Ching","De 64 hexagrammen vormen de 64 poorten van de chart. Elk beschrijft een archetyp of kwaliteit die u van nature draagt."],["Kabbalah","De Boom des Levens ligt ten grondslag aan de 9 centra — de energiecentra in uw chart die gedefinieerd of open zijn."],["Astrologie","De planetaire posities op het moment van uw geboorte én 88 dagen daarvoor bepalen welke poorten actief zijn."],["Kwantumfysica","De 9 centra corresponderen met hormoonklieren. Uw design is verankerd in uw fysiologie."]].map(([t,d])=>(
-              <div key={t} style={{background:"#fff",padding:"32px 28px"}}>
-                <div style={{fontFamily:"Cormorant Garamond,serif",fontSize:"1.2rem",fontWeight:400,color:"var(--d)",marginBottom:10}}>{t}</div>
-                <p className="p" style={{marginBottom:0}}>{d}</p>
+      <section className="section bg-white">
+        <div className="container-sm">
+          <div className="label" style={{marginBottom:12}}>De vier pijlers</div>
+          <h2 className="h2" style={{marginBottom:32}}>Gebouwd op eeuwenoude wijsheid</h2>
+          <div className="grid-2">
+            {[["I Ching","De 64 hexagrammen worden de 64 poorten in uw design."],["Kabbalah","De Boom des Levens vormt de basis van de 9 centra."],["Astrologie","Planetaire posities activeren specifieke poorten."],["Kwantumfysica","De centra corresponderen met hormoonklieren."]].map(([t,d])=>(
+              <div key={t} style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8}}>{t}</div>
+                <p className="body-sm">{d}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
-      <div className="sec-divider"/>
-      <section className="sec bg">
-        <div className="cont nw">
-          <div className="label">De vijf types</div>
-          <h2 className="h1" style={{marginBottom:32}}>Hoe uw type<br/><em>wordt bepaald</em></h2>
-          {[["Generator","37% van de bevolking","Wacht om te reageren","De primaire energiebron. Opereert optimaal wanneer het reageert op externe impulsen."],["Manifesting Generator","33% van de bevolking","Informeer, reageer dan","Combinatie van generatieve energie en initiatief. Snel, veelzijdig en multidimensionaal."],["Projector","20% van de bevolking","Wacht op de uitnodiging","Gebaat bij begeleiding en erkenning. Heeft een natuurlijk vermogen om systemen en mensen te zien."],["Manifestor","9% van de bevolking","Informeer voor u handelt","Het enige type dat direct initiatief kan nemen. Invloed is hun primaire kracht."],["Reflector","1% van de bevolking","Wacht een maancyclus","Geen vaste centra. Spiegelt de energie van de omgeving en heeft tijd nodig voor beslissingen."]].map(([t,pct,s,d])=>(
-              <div key={t} style={{borderBottom:"1px solid var(--line)",padding:"20px 0",display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
-                <div><div style={{fontFamily:"Cormorant Garamond,serif",fontSize:"1.05rem",color:"var(--d)",marginBottom:3}}>{t}</div><div style={{fontSize:".54rem",letterSpacing:"2px",color:"var(--gold)",textTransform:"uppercase"}}>{pct} · {s}</div></div>
-                <p className="p sm" style={{marginBottom:0,alignSelf:"center"}}>{d}</p>
+      <section className="section bg-muted">
+        <div className="container-sm">
+          <div className="label" style={{marginBottom:12}}>De vijf types</div>
+          <h2 className="h2" style={{marginBottom:32}}>Welk type bent u?</h2>
+          {[["Generator","37%","Wacht om te reageren","De primaire energiebron. Opereert optimaal wanneer het reageert op externe impulsen."],["Manifesting Generator","33%","Informeer reageer dan","Snel, veelzijdig en multidimensionaal."],["Projector","20%","Wacht op de uitnodiging","Geboren om te leiden en begeleiden wanneer uitgenodigd."],["Manifestor","9%","Informeer voor u handelt","Het enige type dat direct initiatief kan nemen."],["Reflector","1%","Wacht een maancyclus","Spiegel van de gemeenschap."]].map(([t,pct,s,d])=>(
+            <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"20px 0",display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
+              <div>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",color:"var(--text)",marginBottom:3}}>{t}</div>
+                <div style={{fontSize:".65rem",fontWeight:600,color:"var(--gold)",letterSpacing:".08em",textTransform:"uppercase"}}>{pct} van de bevolking</div>
               </div>
-            ))}
-          <div style={{marginTop:32}}><button className="btn" onClick={()=>go("rapporten")}>Ontdek uw type</button></div>
+              <p className="body-sm" style={{alignSelf:"center"}}>{d}</p>
+            </div>
+          ))}
+          <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>Ontdek uw type</button></div>
         </div>
       </section>
-      <div className="sec-divider"/>
-      <section className="sec wh">
-        <div className="cont nw">
-          <div className="label">Veelgestelde vragen</div>
-          <h2 className="h1" style={{marginBottom:32}}>Vragen over<br/><em>het systeem</em></h2>
+      <section className="section bg-white">
+        <div className="container-sm">
+          <div className="label" style={{marginBottom:12}}>Veelgestelde vragen</div>
+          <h2 className="h2" style={{marginBottom:32}}>Vragen over het systeem</h2>
           {faqs.map(([q,a],i)=>(
             <div className="faq-item" key={i}>
-              <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span style={{fontSize:".7rem",color:"var(--gold)",transition:"transform .3s",transform:faq===i?"rotate(45deg)":"rotate(0deg)",display:"inline-block"}}>+</span></div>
+              <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span className={"faq-toggle"+(faq===i?" open":"")}>+</span></div>
               {faq===i&&<div className="faq-a">{a}</div>}
             </div>
           ))}
@@ -920,52 +1058,39 @@ function WatPage({go}){
 }
 
 function RapportenPage({go}){
-  const hd=REPORTS.filter(r=>!["numerologie","horoscoop"].includes(r.id));
+  const hd=REPORTS.filter(r=>!["numerologie","horoscoop","maandelijks"].includes(r.id));
   const other=REPORTS.filter(r=>["numerologie","horoscoop"].includes(r.id));
+  const sub=REPORTS.find(r=>r.id==="maandelijks");
   return(
     <div className="pg">
-      <section className="sec dk" style={{paddingTop:100}}>
-        <div className="cont">
-          <div className="label lgt">Onze diensten</div>
-          <h1 className="h1 lgt" style={{maxWidth:600}}>Alle rapporten van de<br/><em>Faculty of Human Design</em></h1>
-          <p className="p lgt" style={{maxWidth:520,marginTop:8}}>Elk rapport is gebaseerd op exacte astronomische berekeningen van uw geboortedata. Geen generieke profielen — uitsluitend persoonlijke analyse.</p>
+      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
+        <div className="container">
+          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Alle rapporten</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:600}}>Kies uw persoonlijke rapport</h1>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:520}}>Elk rapport is gebaseerd op exacte astronomische berekeningen. Geen generieke profielen.</p>
         </div>
       </section>
-      <section className="sec bg">
-        <div className="cont">
-          <div className="label">Human Design</div>
+      <section className="section bg-muted">
+        <div className="container">
+          <div className="label" style={{marginBottom:12}}>Human Design</div>
           <h2 className="h2" style={{marginBottom:32}}>Human Design rapporten</h2>
-          <div className="g3">
-            {hd.map(r=>(
-              <div className="rcard" key={r.id} onClick={()=>go("rapport-"+r.id)}>
-                <div className="rcard-top">
-                  {r.tag&&<div className="rcard-tag">{r.tag}</div>}
-                  <div className="rcard-icon">{r.icon}</div>
-                  <div className="rcard-title">{r.title}</div>
-                  <div className="rcard-tagline">{r.tagline}</div>
+          <div className="grid-3">{hd.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
+          <div style={{height:1,background:"var(--border)",margin:"48px 0"}}/>
+          <div className="label" style={{marginBottom:12}}>Numerologie en Astrologie</div>
+          <h2 className="h2" style={{marginBottom:32}}>Aanvullende disciplines</h2>
+          <div className="grid-2" style={{maxWidth:720}}>{other.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
+          {sub&&<>
+            <div style={{height:1,background:"var(--border)",margin:"48px 0"}}/>
+            <div style={{maxWidth:720}}>
+              <div className="label" style={{marginBottom:12}}>Abonnement</div>
+              <div className="sub-card" style={{cursor:"pointer"}} onClick={()=>go("rapport-maandelijks")}>
+                <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:24}}>
+                  <div><div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem",color:"white",marginBottom:8}}>{sub.tagline}</div><p style={{fontSize:".9rem",color:"rgba(255,255,255,.5)",maxWidth:400,lineHeight:1.7}}>{sub.intro}</p></div>
+                  <div style={{textAlign:"center"}}><div className="sub-price">19 euro</div><div className="sub-price-period">per maand</div><div style={{height:12}}/><div className="btn btn-gold btn-sm">Bekijken</div></div>
                 </div>
-                <div className="rcard-div"/>
-                <div className="rcard-bot"><div className="rcard-price">{r.price}</div><div className="rcard-link">Bekijken</div></div>
               </div>
-            ))}
-          </div>
-          <div style={{height:1,background:"var(--line)",margin:"56px 0 48px"}}/>
-          <div className="label">Overige disciplines</div>
-          <h2 className="h2" style={{marginBottom:32}}>Numerologie & Astrologie</h2>
-          <div className="g2" style={{maxWidth:760}}>
-            {other.map(r=>(
-              <div className="rcard" key={r.id} onClick={()=>go("rapport-"+r.id)}>
-                <div className="rcard-top">
-                  {r.tag&&<div className="rcard-tag">{r.tag}</div>}
-                  <div className="rcard-icon">{r.icon}</div>
-                  <div className="rcard-title">{r.title}</div>
-                  <div className="rcard-tagline">{r.tagline}</div>
-                </div>
-                <div className="rcard-div"/>
-                <div className="rcard-bot"><div className="rcard-price">{r.price}</div><div className="rcard-link">Bekijken</div></div>
-              </div>
-            ))}
-          </div>
+            </div>
+          </>}
         </div>
       </section>
     </div>
@@ -973,80 +1098,181 @@ function RapportenPage({go}){
 }
 
 function ReportDetailPage({rpt,go,onDone}){
+  const[faq,setFaq]=useState(null);
+  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software."],["Is het rapport persoonlijk?","Elk rapport wordt volledig op maat gegenereerd op basis van uw specifieke chart. Geen twee rapporten zijn identiek."],["In welk format ontvang ik het rapport?","Direct als PDF via de browser. Sla op via het printvenster."],["Kan ik het rapport meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate u er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die u heeft. Type en Autoriteit zijn meestal al correct."]];
   return(
     <div className="pg">
-      <div className="rdh">
-        <div className="rdh-inner">
+      <div className="detail-hero">
+        <div className="detail-hero-inner">
           <div>
-            <div className="rdh-lbl">Faculty of Human Design — {rpt.icon} Rapport</div>
-            <h1 className="rdh-title">{rpt.title}</h1>
-            <div className="rdh-tagline">{rpt.tagline}</div>
-            <div className="rdh-meta">
-              <span className="rdh-m">{rpt.pages} pagina's</span>
-              <span className="rdh-m">{rpt.sections} secties</span>
-              <span className="rdh-m">Direct als PDF</span>
-              <span className="rdh-m">{rpt.sub}</span>
+            <div className="detail-hero-badge">{rpt.icon} Faculty of Human Design</div>
+            <h1 className="detail-hero-title">{rpt.title}</h1>
+            <div className="detail-hero-tagline">{rpt.tagline}</div>
+            <div className="detail-hero-meta">
+              <span className="detail-hero-m">{rpt.pages} paginas</span>
+              <span className="detail-hero-m">{rpt.sections} secties</span>
+              <span className="detail-hero-m">Direct als PDF</span>
+              <span className="detail-hero-m">{rpt.sub}</span>
             </div>
           </div>
-          <div className="rdh-box">
-            <div className="rdh-price">{rpt.price}</div>
-            <div className="rdh-sub">{rpt.sub}</div>
-            <button className="rdh-btn" onClick={()=>document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"})}>Rapport bestellen</button>
+          <div className="price-box">
+            <div className="price-box-amount">{rpt.price}</div>
+            <div className="price-box-period">{rpt.sub}</div>
+            <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>Rapport bestellen</button>
+            <div style={{marginTop:12}}><TrustStrip light/></div>
           </div>
         </div>
       </div>
-      <section className="sec bg">
-        <div className="cont">
-          <div className="g2" style={{gap:60,alignItems:"start"}}>
+      <section className="section bg-muted">
+        <div className="container">
+          <div className="grid-2" style={{gap:56,alignItems:"start"}}>
             <div>
-              <div className="label">Over dit rapport</div>
-              <h2 className="h2">{rpt.title}</h2>
-              <p className="p" style={{fontSize:".9rem",lineHeight:2}}>{rpt.intro}</p>
-              <div className="for-box">
-                <div className="for-lbl">Voor wie</div>
-                <div className="for-txt">{rpt.for}</div>
+              <div className="label" style={{marginBottom:12}}>Over dit rapport</div>
+              <h2 className="h2" style={{marginBottom:16}}>{rpt.title}</h2>
+              <p className="body-lg" style={{marginBottom:20}}>{rpt.intro}</p>
+              <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"16px 20px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:24}}>
+                <div className="label" style={{marginBottom:6}}>Voor wie</div>
+                <p className="body-sm">{rpt.for}</p>
+              </div>
+              <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
+                <div className="label" style={{marginBottom:14}}>Wat u ontvangt</div>
+                <div className="grid-2" style={{gap:12}}>
+                  {[["Omvang",rpt.pages+" paginas"],["Levertijd","3-4 minuten"],["Format","PDF download"],["Taal","Nederlands"]].map(([l,v])=>(
+                    <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
+                  ))}
+                </div>
               </div>
             </div>
             <div>
-              <div className="label">Inhoud van het rapport</div>
+              <div className="label" style={{marginBottom:12}}>Inhoudsopgave</div>
               <h2 className="h2" style={{marginBottom:20}}>Dit staat erin</h2>
-              <ul className="inc-list">
+              <ul className="includes-list">
                 {rpt.includes.map((item,i)=>(
-                  <li className="inc-item" key={i}><div className="inc-dot"/>{item}</li>
+                  <li key={i} className="includes-item">
+                    <div className="includes-num">{i+1}</div>{item}
+                  </li>
                 ))}
               </ul>
-              <div style={{marginTop:24,padding:"16px 20px",background:"#fff",border:"1px solid var(--line)"}}>
-                <div style={{fontSize:".46rem",letterSpacing:"4px",textTransform:"uppercase",color:"var(--gold)",marginBottom:6}}>Levertijd</div>
-                <div style={{fontSize:".82rem",fontWeight:300,color:"var(--txt)"}}>Chart direct berekend · Rapport binnen 1–2 minuten beschikbaar als PDF</div>
-              </div>
             </div>
           </div>
         </div>
       </section>
-      <div className="sec-divider"/>
+      <section className="section bg-white">
+        <div className="container-sm">
+          <div className="label" style={{marginBottom:12}}>Ervaringen</div>
+          <h2 className="h2" style={{marginBottom:32}}>Wat klanten zeggen</h2>
+          <div className="grid-3">
+            {[["Niks was zo concreet en inzichtelijk. Eindelijk begrijp ik waarom ik zo in elkaar zit.","Marieke V., Amsterdam"],["Een feest van herkenning. Zoveel inzicht in wie ik ben en hoe ik het beste opereer.","Thomas D., Antwerpen"],["Ik lees het telkens opnieuw. Elke keer ontdek ik iets nieuws.","Sofie M., Utrecht"]].map(([q,n])=>(
+              <div className="tcard" key={n}><div className="stars">★★★★★</div><div className="tcard-quote">"{q}"</div><div className="tcard-author">{n}</div></div>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="section bg-muted">
+        <div className="container-sm">
+          <div className="label" style={{marginBottom:12}}>Veelgestelde vragen</div>
+          <h2 className="h2" style={{marginBottom:32}}>Vragen over dit rapport</h2>
+          {faqs.map(([q,a],i)=>(
+            <div className="faq-item" key={i}>
+              <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span className={"faq-toggle"+(faq===i?" open":"")}>+</span></div>
+              {faq===i&&<div className="faq-a">{a}</div>}
+            </div>
+          ))}
+        </div>
+      </section>
       <ReportForm rpt={rpt} onDone={onDone}/>
+      <div className="sticky-cta">
+        <button className="btn btn-primary btn-full" onClick={()=>{track("hero_cta_click",{location:"sticky",report:rpt.id});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
+          {rpt.title} bestellen — {rpt.price}
+        </button>
+      </div>
     </div>
   );
 }
 
-function BlogPage(){
-  const posts=[{tag:"Human Design",title:"Het verschil tussen Type en Strategie",exc:"Type en Strategie worden vaak als synoniem gebruikt, maar zijn fundamenteel verschillend. Type beschrijft uw energetische aard; Strategie beschrijft hoe u het beste opereert.",date:"12 april 2025"},{tag:"Autoriteit",title:"Innerlijke autoriteit: hoe u uw beste beslissingen neemt",exc:"Uw autoriteit in Human Design is het meest consequente instrument voor besluitvorming dat u bezit. Maar wat houdt elk type autoriteit precies in?",date:"28 maart 2025"},{tag:"Centra",title:"Open centra: conditionering versus wijsheid",exc:"Open centra absorberen de energie van de omgeving. Dit is tegelijkertijd uw grootste bron van conditionering én uw diepste bron van wijsheid.",date:"15 maart 2025"},{tag:"Numerologie",title:"De relatie tussen Human Design en Numerologie",exc:"Beide systemen gebruiken uw geboortedata als uitgangspunt. Maar wat zeggen de getallen die de numerologie berekent over uw Human Design chart?",date:"1 maart 2025"},{tag:"Geschiedenis",title:"De oorsprong van Human Design op Ibiza",exc:"In januari 1987 ontving Ra Uru Hu het Human Design systeem gedurende acht dagen op het eiland Ibiza. Wat is er precies overgeleverd, en hoe is het systeem sindsdien ontwikkeld?",date:"14 februari 2025"},{tag:"Astrologie",title:"Ascendant en Human Design: twee lenzen op hetzelfde moment",exc:"Zowel uw ascendant als uw Human Design chart worden berekend op het moment van uw geboorte. Wat zien deze twee systemen elk op hun eigen manier?",date:"2 februari 2025"}];
+function BlogPage({go}){
+  const[activePost,setActivePost]=useState(null);
+  const[articles,setArticles]=useState([]);
+  const[loading,setLoading]=useState(true);
+  const STATIC=[
+    {id:"s1",tag:"Human Design Basics",title:"Het verschil tussen Type en Strategie",date:"12 april 2025",readtime:"6 min",excerpt:"Type en Strategie zijn twee van de meest gebruikte begrippen in Human Design, maar beschrijven fundamenteel verschillende aspecten van uw design.",body:"Type en Strategie worden vaak als synoniem gebruikt, maar zijn fundamenteel verschillend.\n\nUw Type is uw energetische aard. Het beschrijft hoe uw energiesysteem is geconfigureerd. Er zijn vijf Types: Generator, Manifesting Generator, Projector, Manifestor en Reflector. Dit Type verandert nooit.\n\nUw Strategie is de optimale manier van handelen die bij uw Type hoort. Generators wachten om te reageren. Projectors wachten op de uitnodiging. Manifestors informeren voor zij handelen.\n\nType beschrijft wie u bent; Strategie beschrijft hoe u het beste opereert. De Faculty of Human Design behandelt beide dimensies uitgebreid in elk rapport."},
+    {id:"s2",tag:"Autoriteit",title:"Innerlijke autoriteit: hoe u uw beste beslissingen neemt",date:"28 maart 2025",readtime:"7 min",excerpt:"Uw innerlijke autoriteit in Human Design is het meest consistente instrument voor besluitvorming dat u bezit.",body:"Beslissingen nemen is een van de meest fundamentele capaciteiten van een menselijk wezen. Human Design stelt voor: neem beslissingen op basis van uw innerlijke autoriteit.\n\nEr zijn zeven vormen van innerlijke autoriteit, elk gekoppeld aan een gedefinieerd centrum.\n\nEmotionele autoriteit: wacht op emotionele helderheid voor u beslist. Sacraal autoriteit is exclusief voor Generators. Splenische autoriteit spreekt eenmalig in het moment.\n\nElk type autoriteit vraagt een andere aanpak, maar alle leiden tot beslissingen die echt van u zijn."},
+    {id:"s3",tag:"Geschiedenis",title:"De oorsprong van Human Design op Ibiza",date:"14 februari 2025",readtime:"5 min",excerpt:"In januari 1987 ontving Ra Uru Hu het Human Design systeem gedurende acht dagen op Ibiza.",body:"Het verhaal begint in januari 1987, op het Spaanse eiland Ibiza. Ra Uru Hu woonde op dat moment op het eiland en leefde een teruggetrokken leven.\n\nIn de nacht van 3 januari 1987 begon een ervaring die hij later zou omschrijven als het ontvangen van een Stem. Gedurende acht dagen ontving hij een continue stroom van informatie.\n\nWat hij ontving was een synthese: de 64 hexagrammen van de Chinese I Ching, de Sefirot van de Kabbala, de astrologie van het Westen, en principes uit de kwantumfysica.\n\nDe Faculty of Human Design is opgericht op ditzelfde eiland, vanuit diep respect voor de oorsprong van het systeem."},
+  ];
+  useEffect(()=>{
+    const load=async()=>{
+      try{
+        const url=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_URL:"";
+        const key=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_ANON_KEY:"";
+        if(!url||!key){setArticles(STATIC);setLoading(false);return;}
+        const res=await fetch(url+"/rest/v1/articles?select=*&order=published_at.desc&limit=20",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
+        const data=await res.json();
+        setArticles(data&&data.length>0?data:STATIC);
+      }catch{setArticles(STATIC);}
+      setLoading(false);
+    };
+    load();
+  },[]);
+
+  if(activePost){
+    const post=articles.find(a=>String(a.id)===String(activePost));
+    if(!post)return null;
+    return(
+      <div className="pg">
+        <section style={{background:"var(--dark)",padding:"100px 24px 56px"}}>
+          <div className="container-sm">
+            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>Terug naar inzichten</div>
+            <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:8}}>{post.tag}</div>
+            <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{post.title}</h1>
+            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} - {post.readtime} leestijd</div>
+          </div>
+        </section>
+        <section className="section bg-white">
+          <div className="container-sm">
+            {(post.body||"").trim().split("\n\n").map((p,i)=>(
+              <p key={i} className="body-lg" style={{marginBottom:22,fontSize:"1rem",lineHeight:2}}>{p.trim()}</p>
+            ))}
+            <div style={{marginTop:40,paddingTop:28,borderTop:"1px solid var(--border)"}}>
+              <div className="label" style={{marginBottom:16}}>Meer lezen</div>
+              <div className="grid-2">
+                {articles.filter(a=>String(a.id)!==String(activePost)).slice(0,2).map(a=>(
+                  <div key={a.id} className="blog-card" onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
+                    <div className="blog-tag">{a.tag}</div>
+                    <div className="blog-title" style={{fontSize:"1rem"}}>{a.title}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>Bestel een rapport</button></div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   return(
     <div className="pg">
-      <section className="sec dk" style={{paddingTop:100}}>
-        <div className="cont"><div className="label lgt">Kennis</div><h1 className="h1 lgt">Inzichten &<br/><em>Achtergronden</em></h1></div>
+      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
+        <div className="container">
+          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Kennis</div>
+          <h1 className="h1" style={{color:"white",marginBottom:12}}>Inzichten en Achtergronden</h1>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:480}}>Artikelen over Human Design, Numerologie en Astrologie. Elke twee weken een nieuw artikel.</p>
+        </div>
       </section>
-      <section className="sec bg">
-        <div className="cont nw">
-          {posts.map((p,i)=>(
-            <div className="blog-card" key={i}>
-              <div style={{display:"grid",gridTemplateColumns:"1fr auto",gap:24,alignItems:"start"}}>
+      <section className="section bg-white">
+        <div className="container-sm">
+          {loading?(
+            <div style={{textAlign:"center",padding:"60px 0",color:"var(--text-light)",fontSize:".8rem",letterSpacing:".08em",textTransform:"uppercase"}}>Artikelen laden...</div>
+          ):articles.map((p,i)=>(
+            <div className="blog-card" key={i} onClick={()=>{setActivePost(String(p.id));window.scrollTo(0,0);}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"start",gap:16}}>
                 <div>
                   <div className="blog-tag">{p.tag}</div>
                   <div className="blog-title">{p.title}</div>
-                  <div className="blog-exc">{p.exc}</div>
+                  <div className="blog-excerpt">{p.excerpt}</div>
+                  <div className="blog-more">Lees artikel</div>
                 </div>
-                <div style={{fontSize:".5rem",letterSpacing:"2px",color:"#9a9a8a",textTransform:"uppercase",whiteSpace:"nowrap",marginTop:4}}>{p.date}</div>
+                <div style={{fontSize:".65rem",letterSpacing:".06em",color:"var(--text-light)",textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{p.date}<br/>{p.readtime}</div>
               </div>
             </div>
           ))}
@@ -1059,46 +1285,40 @@ function BlogPage(){
 function OverPage({go}){
   return(
     <div className="pg">
-      <section className="sec dk" style={{paddingTop:100}}>
-        <div className="cont"><div className="label lgt">Over ons</div><h1 className="h1 lgt">Faculty of<br/><em>Human Design</em></h1></div>
+      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
+        <div className="container">
+          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Over ons</div>
+          <h1 className="h1" style={{color:"white"}}>Faculty of Human Design</h1>
+        </div>
       </section>
-      <section className="sec bg">
-        <div className="cont">
-          <div className="g2" style={{gap:60,alignItems:"start"}}>
+      <section className="section bg-white">
+        <div className="container">
+          <div className="grid-2" style={{gap:60,alignItems:"start"}}>
             <div>
-              <div className="label">Het instituut</div>
-              <h2 className="h2">Opgericht op het eiland<br/><em>waar het begon</em></h2>
-              <p className="p">De Faculty of Human Design is in 2014 opgericht op het eiland Ibiza — hetzelfde eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Dat is geen toeval.</p>
-              <p className="p">Wij zijn gespecialiseerd in de productie van persoonlijke rapporten op basis van Human Design, Numerologie en Geboorteastrologie. Alle rapporten worden gegenereerd op basis van exacte astronomische berekeningen van uw geboortedata.</p>
-              <p className="p">Onze focus is smal en bewust: wij bieden geen cursussen, coachingstrajecten of live readings. Uitsluitend diepgaande, nauwkeurige geschreven analyse.</p>
-              <div className="stats-row">
+              <div className="label" style={{marginBottom:12}}>Het instituut</div>
+              <h2 className="h2" style={{marginBottom:20}}>Opgericht op het eiland waar het begon</h2>
+              <p className="body-lg" style={{marginBottom:16}}>De Faculty of Human Design is in 2014 opgericht op Ibiza, het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving.</p>
+              <p className="body-md" style={{marginBottom:16}}>Wij zijn gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Geboorteastrologie. Alle rapporten worden gegenereerd op basis van exacte astronomische berekeningen.</p>
+              <p className="body-md">Onze focus is smal en bewust: uitsluitend diepgaande, nauwkeurige geschreven analyse. Geen cursussen, geen coachingstrajecten.</p>
+              <div style={{display:"flex",gap:32,flexWrap:"wrap",marginTop:32}}>
                 {[["2014","Opgericht"],["2.400+","Rapporten"],["8","Rapport soorten"],["4.9","Beoordeling"]].map(([n,l])=>(
                   <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
                 ))}
               </div>
             </div>
             <div>
-              <div style={{background:"#fff",border:"1px solid var(--line)",padding:"32px"}}>
-                <div className="label" style={{marginBottom:12}}>Onze aanpak</div>
-                {[["Exacte berekeningen","Alle charts worden berekend op basis van de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software."],["Persoonlijke analyse","Geen templates of generieke teksten. Elk rapport is gegenereerd op basis van uw specifieke chart."],["Drie disciplines","Human Design, Numerologie en Astrologie — elk vanuit hun eigen methodologie toegepast."],["Directe levering","Rapport beschikbaar als PDF binnen 1–2 minuten na invoer van uw gegevens."]].map(([t,d])=>(
-                  <div key={t} style={{borderBottom:"1px solid var(--line)",padding:"14px 0"}}>
-                    <div style={{fontSize:".78rem",fontWeight:400,color:"var(--d)",marginBottom:4}}>{t}</div>
-                    <div style={{fontSize:".76rem",fontWeight:300,color:"var(--txt)",lineHeight:1.65}}>{d}</div>
+              <div style={{background:"var(--muted)",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"32px"}}>
+                <div className="label" style={{marginBottom:16}}>Onze aanpak</div>
+                {[["Exacte berekeningen","Meeus ephemeris, dezelfde algoritmen als professionele astronomische software."],["Persoonlijke analyse","Geen templates. Elk rapport gegenereerd op basis van uw specifieke chart."],["Drie disciplines","Human Design, Numerologie en Astrologie, elk vanuit eigen methodologie."],["Directe levering","PDF beschikbaar binnen 3-4 minuten na invoer van uw gegevens."]].map(([t,d])=>(
+                  <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"14px 0"}}>
+                    <div style={{fontSize:".9rem",fontWeight:500,color:"var(--text)",marginBottom:4}}>{t}</div>
+                    <p className="body-sm">{d}</p>
                   </div>
                 ))}
               </div>
-              <div style={{marginTop:20}}><button className="btn" style={{width:"100%"}} onClick={()=>go("rapporten")}>Bekijk alle rapporten</button></div>
+              <div style={{marginTop:20}}><button className="btn btn-primary btn-full" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button></div>
             </div>
           </div>
-        </div>
-      </section>
-      <section className="sec img">
-        <div className="sec-bg-img" style={{backgroundImage:"url("+IMG.ibiza+")"}}/>
-        <div className="sec-ov"/>
-        <div className="sec-rel cont">
-          <div className="label lgt">Ibiza, Spanje</div>
-          <h2 className="h1 lgt" style={{maxWidth:500}}>Het eiland waar<br/><em>het systeem werd ontvangen</em></h2>
-          <p className="p lgt" style={{maxWidth:440}}>In januari 1987 ontving Ra Uru Hu het Human Design systeem gedurende acht dagen op Ibiza. Wij zijn gevestigd op ditzelfde eiland, vanuit respect voor de oorsprong.</p>
         </div>
       </section>
     </div>
@@ -1110,34 +1330,27 @@ function ContactPage(){
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   return(
     <div className="pg">
-      <section className="sec dk" style={{paddingTop:100}}>
-        <div className="cont"><div className="label lgt">Contact</div><h1 className="h1 lgt">Neem<br/><em>contact op</em></h1></div>
+      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
+        <div className="container"><div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Contact</div><h1 className="h1" style={{color:"white"}}>Neem contact op</h1></div>
       </section>
-      <section className="sec bg">
-        <div className="cont nw">
-          <div className="contact-grid">
+      <section className="section bg-white">
+        <div className="container-sm">
+          <div className="grid-2" style={{gap:56,alignItems:"start"}}>
             <div>
-              <div className="label">Contactgegevens</div>
-              <h2 className="h2" style={{marginBottom:28}}>Faculty of<br/><em>Human Design</em></h2>
+              <div className="label" style={{marginBottom:12}}>Contactgegevens</div>
+              <h2 className="h2" style={{marginBottom:28}}>Faculty of Human Design</h2>
               {[["Locatie","Ibiza, Spanje"],["E-mail","info@facultyofhumandesign.com"],["Reactietijd","Binnen 1 werkdag"],["Rapporten","Direct beschikbaar na bestelling"]].map(([l,v])=>(
-                <div className="ci" key={l}><div className="ci-lbl">{l}</div><div className="ci-val">{v}</div></div>
+                <div key={l} style={{marginBottom:20}}><div className="label" style={{marginBottom:5}}>{l}</div><div className="body-md">{v}</div></div>
               ))}
-              <div style={{borderTop:"1px solid var(--line)",paddingTop:20,marginTop:4}}>
-                <div className="label" style={{marginBottom:8}}>Veelgestelde vragen</div>
-                <p className="p sm">Voor vragen over geboortegegevens, levertijden of inhoud van rapporten verwijzen wij u graag naar de <span style={{color:"var(--gold)",cursor:"pointer"}}>FAQ op de pagina Wat is Human Design</span>.</p>
-              </div>
             </div>
-            <div>
-              <div className="form-wrap">
-                <div className="form-title">Stuur een bericht</div>
-                <div className="form-sub" style={{marginBottom:20}}>Voor vragen die niet in onze FAQ staan beantwoord.</div>
-                <div style={{display:"flex",flexDirection:"column",gap:12}}>
-                  <div className="fg"><label className="flbl">Naam</label><input className="finp" name="name" value={form.name} onChange={ch} placeholder="Uw naam"/></div>
-                  <div className="fg"><label className="flbl">E-mailadres</label><input className="finp" name="email" type="email" value={form.email} onChange={ch} placeholder="uw@email.nl"/></div>
-                  <div className="fg"><label className="flbl">Onderwerp</label><input className="finp" name="subject" value={form.subject} onChange={ch} placeholder="Onderwerp van uw vraag"/></div>
-                  <div className="fg"><label className="flbl">Bericht</label><textarea className="cf-area" name="msg" value={form.msg} onChange={ch} placeholder="Uw vraag of opmerking"/></div>
-                  <button className="btn" onClick={()=>alert("Bedankt voor uw bericht. Wij reageren binnen 1 werkdag.")}>Verstuur bericht</button>
-                </div>
+            <div className="form-wrap">
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:20}}>Stuur een bericht</div>
+              <div style={{display:"flex",flexDirection:"column",gap:14}}>
+                <div className="form-group"><label className="form-label">Naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Uw naam"/></div>
+                <div className="form-group"><label className="form-label">E-mailadres</label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder="uw@email.nl"/></div>
+                <div className="form-group"><label className="form-label">Onderwerp</label><input className="form-input" name="subject" value={form.subject} onChange={ch} placeholder="Onderwerp"/></div>
+                <div className="form-group"><label className="form-label">Bericht</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder="Uw vraag of opmerking" style={{resize:"vertical",minHeight:110}}/></div>
+                <button className="btn btn-primary" onClick={()=>alert("Bedankt voor uw bericht. Wij reageren binnen 1 werkdag.")}>Verstuur bericht</button>
               </div>
             </div>
           </div>
@@ -1147,63 +1360,168 @@ function ContactPage(){
   );
 }
 
-function ReportResultPage({chart,form,report,rpt,go}){
-  const secs=report.split(/###\s+/).filter(Boolean).map(s=>{const l=s.trim().split("\n");return{t:l[0],b:l.slice(1).join("\n").trim()};});
+function ThankYouPage({result,go}){
+  const{chart,form,rpt,report}=result;
+  const secs=(report||"").split(/###\s+/).filter(Boolean).map(s=>{const l=s.trim().split("\n");return{t:l[0],b:l.slice(1).join("\n").trim()};});
+  const nextRpt=REPORTS.find(r=>r.id!==rpt.id&&r.id!=="maandelijks"&&r.id!=="volledig")||REPORTS[1];
+  useEffect(()=>{track("checkout_completed",{report:rpt.id,price:rpt.priceNum});},[]);
+
   const dlPDF=()=>{
     const btn=document.getElementById("dlb");
     if(btn){btn.textContent="PDF wordt voorbereid...";btn.disabled=true;}
     const win=window.open("","_blank");
     const bh=secs.map(s=>"<h2>"+s.t+"</h2>"+s.b.split("\n").map(x=>x?"<p>"+x+"</p>":"").join("")).join("");
-    const meta=chart?Object.entries(chart.isNumerology?{Levenspad:chart.lp,Uitdrukking:chart.exp,Ziel:chart.soul,Persoonlijkheid:chart.pers,"Pers. Jaar":chart.py,Rijping:chart.mat}:chart.isHoroscoop?{Zonneteken:chart.sun_sign,Ascendant:chart.ascendant?.sign,Midhemel:chart.mc?.sign,"Dom. element":chart.dom_element}:{Type:chart.type,Strategie:chart.strat,Autoriteit:chart.auth,Profiel:chart.profile,"Inkarnatie-Kruis":"Poort "+chart.cross,Gedefinieerd:(chart.definedCenters||[]).join(", ")||"geen"}).map(([k,v])=>"<tr><td>"+k+"</td><td>"+v+"</td></tr>").join(""):"";
-    win.document.write("<!DOCTYPE html><html><head><meta charset=UTF-8><title>"+rpt.title+" — "+form.name+"</title><link href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap' rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Jost,sans-serif;font-weight:300;background:#fff;color:#1a1a16}.cover{min-height:100vh;background:#1a1a16;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:72px;page-break-after:always;position:relative}.cv-inst{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:24px}.cv-title{font-family:Cormorant Garamond,serif;font-size:52px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}.cv-name{font-family:Cormorant Garamond,serif;font-size:28px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:32px}.cv-meta{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;line-height:2.2}.cv-foot{position:absolute;top:40px;right:52px;font-size:9px;letter-spacing:3px;color:rgba(255,255,255,.18);text-transform:uppercase}.content{max-width:720px;margin:0 auto;padding:56px 52px}.mbox{border-left:2px solid rgba(154,128,80,.4);padding:18px 22px;margin:0 0 40px;background:#fafaf8}table{width:100%;border-collapse:collapse}td{padding:6px 12px 6px 0;font-size:12px;color:#444;border-bottom:1px solid #f0ede8}td:first-child{font-weight:500;color:#9a8050;width:160px}h2{font-family:Cormorant Garamond,serif;font-size:21px;font-weight:400;color:#1a1a16;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid #e8e5e0;page-break-after:avoid}p{font-size:13px;line-height:2;color:#3a3a32;margin-bottom:12px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class=cover><div class=cv-inst>Faculty of Human Design — Ibiza</div><div class=cv-title>"+rpt.title+"</div><div class=cv-name>"+form.name+"</div><div class=cv-meta>Geboren "+form.day+"-"+form.month+"-"+form.year+(form.place?" — "+form.place:"")+"<br><br>Opgesteld door Faculty of Human Design<br>Ibiza, Spanje</div><div class=cv-foot>Strikt persoonlijk & vertrouwelijk</div></div><div class=content><div class=mbox><table>"+meta+"</table></div>"+bh+"</div><script>window.onload=function(){window.print();}<\/script></body></html>");
+    const metaObj=chart?.isNumerology?{Levenspad:chart.lp,Uitdrukking:chart.exp}:chart?.isHoroscoop?{Zonneteken:chart.sun_sign,Ascendant:chart.ascendant?.sign}:{Type:chart?.type,Strategie:chart?.strat,Autoriteit:chart?.auth,Profiel:chart?.profile};
+    const meta=Object.entries(metaObj||{}).map(([k,v])=>"<tr><td>"+k+"</td><td>"+v+"</td></tr>").join("");
+    win.document.write("<!DOCTYPE html><html><head><meta charset=UTF-8><title>"+rpt.title+" - "+form.name+"</title><link href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap' rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Jost,sans-serif;font-weight:300;background:#fff;color:#1C1917}.cover{min-height:100vh;background:#1C1917;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:72px;page-break-after:always}.ci{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:24px}.ct{font-family:Cormorant Garamond,serif;font-size:48px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}.cn{font-family:Cormorant Garamond,serif;font-size:26px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:32px}.cm{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;line-height:2.2}.content{max-width:720px;margin:0 auto;padding:56px}.mb{border-left:2px solid rgba(154,128,80,.35);padding:18px 22px;margin:0 0 40px;background:#f9f8f6}table{width:100%;border-collapse:collapse}td{padding:6px 12px 6px 0;font-size:12px;color:#444;border-bottom:1px solid #f0ede8}td:first-child{font-weight:600;color:#3D2C5E;width:160px}h2{font-family:Cormorant Garamond,serif;font-size:20px;font-weight:400;color:#1C1917;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid #e8e5e0;page-break-after:avoid}p{font-size:13px;line-height:2;color:#3a3a32;margin-bottom:12px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class=cover><div class=ci>Faculty of Human Design - Ibiza</div><div class=ct>"+rpt.title+"</div><div class=cn>"+form.name+"</div><div class=cm>Geboren "+form.day+"-"+form.month+"-"+form.year+"</div></div><div class=content><div class=mb><table>"+meta+"</table></div>"+bh+"</div><script>window.onload=function(){window.print();}<\/script></body></html>");
     win.document.close();
     if(btn){btn.textContent="Download PDF";btn.disabled=false;}
   };
 
-  const barData=chart?.isNumerology?[["Levenspad",chart.lp+" — "+chart.lpName],["Uitdrukking",chart.exp+" — "+chart.expName],["Ziel",chart.soul+" — "+chart.soulName],["Pers. Jaar",chart.py],["Rijping",chart.mat],["Masters",chart.masters?.length>0?chart.masters.join(", "):"geen"]]:chart?.isHoroscoop?[["Zonneteken",chart.sun_sign],["Ascendant",chart.ascendant?.degree+"° "+chart.ascendant?.sign],["Midhemel",chart.mc?.degree+"° "+chart.mc?.sign],["Dom. element",chart.dom_element],["Dom. modaliteit",chart.dom_modality||"—"],["Aspecten",(chart.aspects||[]).length+" gevonden"]]:[["Type",chart?.type],["Strategie",chart?.strat],["Autoriteit",chart?.auth],["Profiel",chart?.profile],["Inkarnatie-Kruis","Poort "+(chart?.cross||"")],["Gedefinieerd",(chart?.definedCenters||[]).join(", ")||"geen"]];
+  const barData=chart?.isNumerology?[["Levenspad",chart.lp],["Uitdrukking",chart.exp],["Ziel",chart.soul],["Pers. Jaar",chart.py],["Rijping",chart.mat],["Masters",chart.masters?.length>0?chart.masters.join(", "):"geen"]]:chart?.isHoroscoop?[["Zonneteken",chart.sun_sign],["Ascendant",chart.ascendant?.degree+"deg "+chart.ascendant?.sign],["Dom. element",chart.dom_element],["Midhemel",chart.mc?.sign],["Planeten","10 berekend"],["Aspecten","gevonden"]]:[["Type",chart?.type],["Strategie",chart?.strat],["Autoriteit",chart?.auth],["Profiel",chart?.profile],["Inkarnatie-Kruis","Poort "+(chart?.cross||"")],["Gedefinieerd",(chart?.definedCenters||[]).slice(0,2).join(", ")]];
 
   return(
-    <div className="report-pg">
-      <div className="report-hd">
-        <div className="report-inst">Faculty of Human Design — Ibiza</div>
-        <div className="report-name">{rpt.title}</div>
-        <div className="report-meta">{form.name} — {form.day}-{form.month}-{form.year}{form.place?" — "+form.place:""}</div>
-        <button id="dlb" className="dl-btn" onClick={dlPDF}>Download PDF</button>
-        <p style={{fontSize:".58rem",color:"#9a9a8a",marginTop:6}}>Opent printvenster — kies "Opslaan als PDF"</p>
+    <div>
+      <div className="thankyou-hero">
+        <div className="thankyou-icon">✓</div>
+        <div className="thankyou-title">Uw rapport is klaar</div>
+        <div className="thankyou-sub">Uw persoonlijke analyse staat hieronder. Download het als PDF voor uw archief.</div>
       </div>
-      {chart&&<div className="report-bar">
-        <div className="rbg">{barData.map(([l,v])=><div key={l}><div className="rbl">{l}</div><div className="rbv">{v}</div></div>)}</div>
-      </div>}
-      <div className="report-body">
-        {secs.map((s,i)=><div key={i}><div className="rpt-hd">{s.t}</div><div className="rpt-body">{s.b}</div></div>)}
-      </div>
-      <div style={{textAlign:"center",padding:"32px 0"}}>
-        <button className="btn out" onClick={()=>go("rapporten")}>Nog een rapport bestellen</button>
+      <div className="report-pg" style={{paddingTop:32}}>
+        <div className="report-header">
+          <div className="report-inst-label">Faculty of Human Design — Ibiza</div>
+          <div className="report-title">{rpt.title}</div>
+          <div className="report-meta">{form.name} — {form.day}-{form.month}-{form.year}{form.place?" — "+form.place:""}</div>
+          <button id="dlb" className="btn btn-primary" onClick={dlPDF}>Download als PDF</button>
+          <p style={{fontSize:".75rem",color:"var(--text-light)",marginTop:8}}>Opent printvenster — kies Opslaan als PDF</p>
+        </div>
+        {chart&&<div className="report-summary"><div className="report-summary-grid">{barData.map(([l,v])=><div key={l}><div className="rsg-label">{l}</div><div className="rsg-value">{v}</div></div>)}</div></div>}
+        <div className="report-body">
+          {secs.map((s,i)=><div key={i}><div className="report-section-title">{s.t}</div><div className="report-section-body">{s.b}</div></div>)}
+        </div>
+        <div style={{maxWidth:760,margin:"28px auto 0"}}>
+          <div className="upsell-card">
+            <div className="upsell-label">Aanbevolen voor u</div>
+            <div className="upsell-title">Verdiep uw inzicht met {nextRpt.title}</div>
+            <div className="upsell-sub">Klanten die {rpt.title} bestellen kiezen daarna vaak voor dit rapport.</div>
+            <div className="upsell-grid">
+              {nextRpt.includes.slice(0,4).map((item,i)=>(
+                <div key={i} className="upsell-item"><span style={{color:"rgba(154,128,80,.8)",flexShrink:0}}>✓</span>{item}</div>
+              ))}
+            </div>
+            <button className="btn btn-gold" onClick={()=>{track("upsell_accepted",{from:rpt.id,to:nextRpt.id,price:nextRpt.priceNum});go("rapport-"+nextRpt.id);}}>
+              {nextRpt.title} bestellen — {nextRpt.price}
+            </button>
+          </div>
+          <div style={{marginTop:16,background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px 28px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:20}}>
+            <div><div className="label" style={{marginBottom:4}}>Maandelijkse Guidance</div><p className="body-sm">Elke maand een persoonlijk rapport — opzegbaar wanneer u wilt.</p></div>
+            <div style={{display:"flex",gap:12,alignItems:"center",flexShrink:0}}>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem"}}>19 euro per maand</div>
+              <button className="btn btn-secondary btn-sm" onClick={()=>{track("subscription_offer_viewed",{source:"thankyou"});go("rapport-maandelijks");}}>Bekijken</button>
+            </div>
+          </div>
+          <div style={{textAlign:"center",padding:"24px 0"}}>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-// ─── Router ───────────────────────────────────────────────────────────────────
+// ─── ROUTER ───────────────────────────────────────────────────────────────────
 export default function App(){
   const[page,setPage]=useState("home");
   const[result,setResult]=useState(null);
-  const go=p=>{setPage(p);window.scrollTo(0,0);};
+  const[menuOpen,setMenuOpen]=useState(false);
+  const[generating,setGenerating]=useState(false);
+  const go=p=>{setPage(p);setMenuOpen(false);window.scrollTo(0,0);};
   const onDone=(chart,form,report,rpt)=>{setResult({chart,form,report,rpt});setPage("result");window.scrollTo(0,0);};
   const currentRpt=page.startsWith("rapport-")?REPORTS.find(r=>r.id===page.replace("rapport-","")):null;
 
+  // Handle return from Stripe payment
+  useEffect(()=>{
+    const params=new URLSearchParams(window.location.search);
+    const success=params.get("success");
+    const cancelled=params.get("cancelled");
+    if(cancelled){
+      // Remove query string and stay on page
+      window.history.replaceState({},"",window.location.pathname);
+      return;
+    }
+    if(success){
+      window.history.replaceState({},"",window.location.pathname);
+      const savedChart=sessionStorage.getItem("fhd_chart");
+      const savedForm=sessionStorage.getItem("fhd_form");
+      const savedRptId=sessionStorage.getItem("fhd_rpt_id");
+      if(savedChart&&savedForm&&savedRptId){
+        const chart=JSON.parse(savedChart);
+        const form=JSON.parse(savedForm);
+        const rpt=REPORTS.find(r=>r.id===savedRptId);
+        if(rpt){
+          sessionStorage.removeItem("fhd_chart");
+          sessionStorage.removeItem("fhd_form");
+          sessionStorage.removeItem("fhd_rpt_id");
+          setGenerating(true);
+          generateReport(chart,form,rpt).then(report=>{
+            setGenerating(false);
+            onDone(chart,form,report,rpt);
+          });
+        }
+      }
+    }
+  },[]);
+
+  async function generateReport(chart,form,rpt){
+    const isNum=rpt.id==="numerologie";
+    const isHoro=rpt.id==="horoscoop";
+    const hdChart=(!isNum&&!isHoro)?chart:null;
+    const fullPrompt=buildPrompt(hdChart,form,rpt);
+    const sections=rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
+    const SYSTEM="Je bent een senior analist van de Faculty of Human Design op Ibiza. Schrijf nauwkeurige, diepgaande rapporten in het Nederlands. Schrijf vanuit het instituut. Geen bulletpoints — alleen alineas. Minimaal 800 woorden per sectie.";
+    let allText="";
+    for(let i=0;i<sections.length;i++){
+      const sec=sections[i];
+      const prompt=fullPrompt+"\n\nSchrijf nu uitsluitend sectie '"+sec+"'. Minimaal 800 woorden, in alineas, persoonlijk en concreet. Geen sectietitel in de tekst.";
+      let retries=2;
+      while(retries>=0){
+        try{
+          const res=await fetch("https://api.anthropic.com/v1/messages",{
+            method:"POST",headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:SYSTEM,
+              messages:[{role:"user",content:prompt}]})
+          });
+          if(!res.ok){const err=await res.text();console.error("API error:",res.status,err);retries--;continue;}
+          const data=await res.json();
+          const txt=data.content?.find(b=>b.type==="text")?.text||"";
+          if(txt.length>50){allText+="### "+sec+"\n\n"+txt+"\n\n";break;}
+          retries--;
+        }catch(e){console.error("Fetch error:",e);retries--;}
+      }
+      if(!allText.includes("### "+sec)){allText+="### "+sec+"\n\n[Deze sectie kon niet worden gegenereerd. Neem contact op via info@facultyofhumandesign.com]\n\n";}
+    }
+    return allText.trim()||"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyofhumandesign.com";
+  }
   return(
     <div>
-      <style>{F}{S}</style>
-      {page!=="result"&&<Nav page={page} go={go}/>}
+      <style>{FONTS}{CSS}</style>
+      {generating&&(
+        <div className="loading-overlay">
+          <div className="loading-icon">✦</div>
+          <div className="loading-title">Betaling ontvangen — rapport wordt opgemaakt</div>
+          <div className="loading-counter">Dit duurt 3-4 minuten</div>
+          <div className="loading-bar-wrap"><div className="loading-bar-fill" style={{width:"60%"}}/></div>
+        </div>
+      )}
+      {page!=="result"&&<Nav page={page} go={go} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>}
       {page==="home"&&<HomePage go={go}/>}
       {page==="wat"&&<WatPage go={go}/>}
       {page==="rapporten"&&<RapportenPage go={go}/>}
       {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
-      {page==="blog"&&<BlogPage/>}
+      {page==="blog"&&<BlogPage go={go}/>}
       {page==="over"&&<OverPage go={go}/>}
       {page==="contact"&&<ContactPage/>}
-      {page==="result"&&result&&<ReportResultPage {...result} go={go}/>}
+      {page==="result"&&result&&<ThankYouPage result={result} go={go}/>}
       {page!=="result"&&<Footer go={go}/>}
     </div>
   );
