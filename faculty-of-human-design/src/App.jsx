@@ -409,14 +409,31 @@ const STRIPE = {
   maandelijks:"https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: abonnement link
 };
 
-function goToStripe(rptId, chartData, formData) {
-  // Sla chart data op in sessionStorage zodat we na betaling verder kunnen
+async function goToStripe(rptId, chartData, formData) {
   sessionStorage.setItem("fhd_chart", JSON.stringify(chartData));
   sessionStorage.setItem("fhd_form", JSON.stringify(formData));
   sessionStorage.setItem("fhd_rpt_id", rptId);
-  // Stuur naar Stripe
-  const url = STRIPE[rptId] || STRIPE.volledig;
-  window.location.href = url;
+  const rpt = REPORTS.find(r => r.id === rptId);
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        rptId,
+        title: rpt?.title || rptId,
+        price: rpt?.priceNum || 75,
+        isSubscription: rptId === "maandelijks",
+      }),
+    });
+    const data = await res.json();
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      alert("Betaling kon niet worden gestart: " + (data.error || "onbekende fout"));
+    }
+  } catch (e) {
+    alert("Betaling kon niet worden gestart. Probeer opnieuw.");
+  }
 }
 
 // ─── HD EPHEMERIS ─────────────────────────────────────────────────────────────
