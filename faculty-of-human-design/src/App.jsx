@@ -516,8 +516,8 @@ function calcHD(y,m,d,h,min){
 }
 
 // ─── NUMEROLOGY ───────────────────────────────────────────────────────────────
-const PYTH={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,Je:3,V:4,W:5,X:6,Y:7,Z:8};
-const VOWELS_SET=new Set(["A","E","I","O","Je"]);
+const PYTH={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
+const VOWELS_SET=new Set(["A","E","I","O","U"]);
 const NUM_NAMES={1:"De Leider",2:"De Diplomaat",3:"De Creatieveling",4:"De Bouwer",5:"De Avonturier",6:"De Verzorger",7:"De Zoeker",8:"De Zakenman",9:"De Mensheid",11:"De Meester Intuïtief",22:"De Meester Bouwer",33:"De Meester Leraar"};
 function numReduce(n){while(n>9){if(n===11||n===22||n===33)break;n=[...String(n)].reduce((a,d)=>a+parseInt(d),0);}return n;}
 function nameSum(str){return[...str.toUpperCase()].reduce((a,c)=>a+(PYTH[c]||0),0);}
@@ -529,7 +529,7 @@ function calcNumerology(fullName,day,month,year){
   const soul=numReduce(nameSum(vowels));
   const pers=numReduce(nameSum(cons));
   const bday=numReduce(day);
-  const py=numReduce(numReduce(day)+numReduce(month)+numReduce(2025));
+  const py=numReduce(numReduce(day)+numReduce(month)+numReduce(2026));
   const mat=numReduce(lp+exp);
   const masters=[lp,exp,soul,pers,mat].filter(n=>n===11||n===22||n===33);
   return{lp,exp,soul,pers,bday,py,mat,masters,lpName:NUM_NAMES[lp]||"",expName:NUM_NAMES[exp]||""};
@@ -560,7 +560,7 @@ const LSTEPS=["Inleiding schrijven","Type & Strategie","Autoriteit analyseren","
 function buildPrompt(chart,form,rpt){
   if(rpt.id==="numerologie"){
     const num=calcNumerology(form.name,parseInt(form.day),parseInt(form.month),parseInt(form.year));
-    return["NUMEROLOGIE voor "+form.name,"Naam: "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2025: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",rpt.prompt_extra].join("\n");
+    return["NUMEROLOGIE voor "+form.name,"Naam: "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2026: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",rpt.prompt_extra].join("\n");
   }
   if(rpt.id==="horoscoop"){
     const h=calcHoroscoop(parseInt(form.year),parseInt(form.month),parseInt(form.day),parseInt(form.hour),parseInt(form.minute||"0"));
@@ -574,19 +574,148 @@ function buildPrompt(chart,form,rpt){
 
 
 // ─── BODYGRAPH ────────────────────────────────────────────────────────────────
-const CP={"Head":{cx:320,cy:58,sh:"td",lb:"HEAD"},"Ajna":{cx:320,cy:148,sh:"td",lb:"AJNA"},"Throat":{cx:320,cy:242,sh:"rc",lb:"THROAT"},"G/Self":{cx:320,cy:348,sh:"di",lb:"G"},"Heart/Ego":{cx:212,cy:302,sh:"tr",lb:"HART"},"Sacral":{cx:320,cy:450,sh:"rc",lb:"SACRAAL"},"Solar Plexus":{cx:455,cy:372,sh:"tl",lb:"SP"},"Spleen":{cx:178,cy:398,sh:"tr",lb:"MILT"},"Root":{cx:320,cy:540,sh:"rc",lb:"ROOT"}};
-const CPATHS={"Head-Ajna":"M320,84 L320,122","Ajna-Throat":"M320,178 L320,220","Throat-G/Self":"M320,268 L320,314","Throat-Sacral":"M320,268 L320,424","Throat-Solar Plexus":"M352,248 Q455,248 455,342","Throat-Spleen":"M288,248 Q178,248 178,368","Throat-Heart/Ego":"M288,248 Q212,248 212,274","G/Self-Sacral":"M320,386 L320,424","G/Self-Heart/Ego":"M284,348 L246,316","G/Self-Spleen":"M280,364 Q178,364 178,368","Heart/Ego-Spleen":"M186,312 Q178,370 178,368","Heart/Ego-Solar Plexus":"M238,308 Q348,308 432,358","Sacral-Root":"M320,476 L320,514","Sacral-Solar Plexus":"M352,450 Q455,450 455,400","Sacral-Spleen":"M288,450 Q178,450 178,428","Solar Plexus-Root":"M440,402 Q440,540 352,540","Spleen-Root":"M196,426 Q196,540 288,540"};
-function cpth(pos){const{cx:x,cy:y,sh}=pos;if(sh==="rc")return"M"+(x-44)+","+(y-22)+" h88 v44 h-88 Z";if(sh==="di")return"M"+x+","+(y-46)+" L"+(x+46)+","+y+" L"+x+","+(y+46)+" L"+(x-46)+","+y+" Z";if(sh==="td")return"M"+(x-46)+","+(y-26)+" L"+(x+46)+","+(y-26)+" L"+x+","+(y+26)+" Z";if(sh==="tr")return"M"+(x-26)+","+(y-36)+" L"+(x+26)+","+y+" L"+(x-26)+","+(y+36)+" Z";if(sh==="tl")return"M"+(x+26)+","+(y-36)+" L"+(x-26)+","+y+" L"+(x+26)+","+(y+36)+" Z";return"M"+(x-44)+","+(y-22)+" h88 v44 h-88 Z";}
+const CP={
+  "Head":        {cx:320,cy:60, sh:"td",lb:"HOOFD"},
+  "Ajna":        {cx:320,cy:152,sh:"td",lb:"AJNA"},
+  "Throat":      {cx:320,cy:248,sh:"rc",lb:"KEEL"},
+  "G/Self":      {cx:320,cy:354,sh:"di",lb:"G"},
+  "Heart/Ego":   {cx:210,cy:306,sh:"tr",lb:"HART"},
+  "Sacral":      {cx:320,cy:456,sh:"rc",lb:"SACRAAL"},
+  "Solar Plexus":{cx:458,cy:376,sh:"tl",lb:"SP"},
+  "Spleen":      {cx:176,cy:402,sh:"tr",lb:"MILT"},
+  "Root":        {cx:320,cy:544,sh:"rc",lb:"WORTEL"},
+};
+const CPATHS={
+  "Head-Ajna":            "M320,88 L320,124",
+  "Ajna-Throat":          "M320,182 L320,226",
+  "Throat-G/Self":        "M320,270 L320,318",
+  "Throat-Sacral":        "M320,270 L320,430",
+  "Throat-Solar Plexus":  "M354,252 Q458,252 458,346",
+  "Throat-Spleen":        "M286,252 Q176,252 176,372",
+  "Throat-Heart/Ego":     "M286,252 Q210,252 210,278",
+  "G/Self-Sacral":        "M320,392 L320,430",
+  "G/Self-Heart/Ego":     "M282,350 L244,318",
+  "G/Self-Spleen":        "M278,368 Q176,368 176,372",
+  "Heart/Ego-Spleen":     "M184,316 Q176,374 176,372",
+  "Heart/Ego-Solar Plexus":"M236,314 Q350,314 434,362",
+  "Sacral-Root":          "M320,482 L320,518",
+  "Sacral-Solar Plexus":  "M354,456 Q458,456 458,404",
+  "Sacral-Spleen":        "M286,456 Q176,456 176,432",
+  "Solar Plexus-Root":    "M442,406 Q442,544 354,544",
+  "Spleen-Root":          "M194,430 Q194,544 286,544",
+};
+const CENTER_NL={"Head":"Hoofd","Ajna":"Ajna","Throat":"Keel","G/Self":"G / Zelf","Heart/Ego":"Hart","Sacral":"Sacraal","Solar Plexus":"Sol. Plexus","Spleen":"Milt","Root":"Wortel"};
+
+function cpth(pos){
+  const{cx:x,cy:y,sh}=pos;
+  if(sh==="rc")return`M${x-46},${y-24} h92 v48 h-92 Z`;
+  if(sh==="di")return`M${x},${y-48} L${x+48},${y} L${x},${y+48} L${x-48},${y} Z`;
+  if(sh==="td")return`M${x-48},${y-28} L${x+48},${y-28} L${x},${y+28} Z`;
+  if(sh==="tr")return`M${x-28},${y-38} L${x+28},${y} L${x-28},${y+38} Z`;
+  if(sh==="tl")return`M${x+28},${y-38} L${x-28},${y} L${x+28},${y+38} Z`;
+  return`M${x-46},${y-24} h92 v48 h-92 Z`;
+}
+
 function Bodygraph({chart,name}){
-  const def=new Set(chart?chart.definedCenters:[]);
-  const ap=new Set();if(chart)for(const c of chart.channels){ap.add(c.c1+"-"+c.c2);ap.add(c.c2+"-"+c.c1);}
-  const COL="#3D2C5E";
+  const[hov,setHov]=useState(null);
+  const def=new Set(chart?.definedCenters||[]);
+  const activeCh=chart?.channels||[];
+  const ap=new Set();
+  for(const c of activeCh){ap.add(c.c1+"-"+c.c2);ap.add(c.c2+"-"+c.c1);}
+  const isAct=k=>ap.has(k)||ap.has(k.split("-").reverse().join("-"));
+  const B="#3D2C5E",BL="#5a4288",G="#9A8050";
+
   return(
-    <svg viewBox="0 0 640 608" style={{width:"100%",maxWidth:400,display:"block",margin:"0 auto"}}>
-      <rect width="640" height="608" fill="#F9F8F5" rx="8"/>
-      {name&&<text x="320" y="596" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill="#A8A29E" fontStyle="italic">{name}</text>}
-      {Object.entries(CPATHS).map(([key,path])=>{const active=ap.has(key)||ap.has(key.split("-").reverse().join("-"));return<path key={key} d={path} fill="none" stroke={active?COL:"#E0DDD6"} strokeWidth={active?2.5:1.5} strokeLinecap="round"/>;  })}
-      {Object.entries(CP).map(([cn,pos])=>{const isDef=def.has(cn);return(<g key={cn}><path d={cpth(pos)} fill={isDef?COL:"none"} stroke={isDef?COL:"#D6D0C8"} strokeWidth={1.5}/><text x={pos.cx} y={pos.cy} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="8" letterSpacing="0.8" fill={isDef?"#fff":"#C8C4BE"}>{pos.lb}</text></g>);})}
+    <svg viewBox="0 0 640 620" style={{width:"100%",maxWidth:440,display:"block",margin:"0 auto",borderRadius:12}}>
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#F6F3EE"/>
+          <stop offset="100%" stopColor="#EDE8E0"/>
+        </linearGradient>
+        <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor={BL}/>
+          <stop offset="100%" stopColor={B}/>
+        </linearGradient>
+        <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor={B} stopOpacity="0.35"/>
+          <stop offset="100%" stopColor={B} stopOpacity="0"/>
+        </radialGradient>
+        <filter id="ds" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor={B} floodOpacity="0.25"/>
+        </filter>
+      </defs>
+
+      {/* Background */}
+      <rect width="640" height="620" fill="url(#bg)" rx="12"/>
+      <line x1="0" y1="580" x2="640" y2="580" stroke="#DDD8CF" strokeWidth="1"/>
+
+      {/* Inactive channels — dashed subtle */}
+      {Object.entries(CPATHS).filter(([k])=>!isAct(k)).map(([k,p])=>(
+        <path key={k} d={p} fill="none" stroke="#CEC8BF" strokeWidth="1.5" strokeDasharray="3,6" strokeLinecap="round" opacity="0.45"/>
+      ))}
+
+      {/* Active channels — layered glow + solid */}
+      {Object.entries(CPATHS).filter(([k])=>isAct(k)).map(([k,p])=>(
+        <g key={k}>
+          <path d={p} fill="none" stroke={B} strokeWidth="9" strokeLinecap="round" opacity="0.1"/>
+          <path d={p} fill="none" stroke={B} strokeWidth="3.5" strokeLinecap="round" opacity="0.85"/>
+        </g>
+      ))}
+
+      {/* Gate numbers on active channels */}
+      {activeCh.map((ch,i)=>{
+        const p1=CP[ch.c1],p2=CP[ch.c2];
+        if(!p1||!p2)return null;
+        const dx=p2.cx-p1.cx,dy=p2.cy-p1.cy,dist=Math.sqrt(dx*dx+dy*dy)||1;
+        const off=Math.min(58,dist*0.38);
+        const g1x=p1.cx+dx/dist*off,g1y=p1.cy+dy/dist*off;
+        const g2x=p2.cx-dx/dist*off,g2y=p2.cy-dy/dist*off;
+        return(
+          <g key={i}>
+            <circle cx={g1x} cy={g1y} r="9" fill={B} opacity="0.88"/>
+            <text x={g1x} y={g1y} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="7.5" fontWeight="600" fill="white">{ch.g1}</text>
+            <circle cx={g2x} cy={g2y} r="9" fill={B} opacity="0.88"/>
+            <text x={g2x} y={g2y} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="7.5" fontWeight="600" fill="white">{ch.g2}</text>
+          </g>
+        );
+      })}
+
+      {/* Center glow for defined */}
+      {Object.entries(CP).filter(([cn])=>def.has(cn)).map(([cn,pos])=>(
+        <ellipse key={cn+"gl"} cx={pos.cx} cy={pos.cy} rx="58" ry="46" fill="url(#glow)"/>
+      ))}
+
+      {/* Centers */}
+      {Object.entries(CP).map(([cn,pos])=>{
+        const d=def.has(cn),h=hov===cn;
+        return(
+          <g key={cn} onMouseEnter={()=>setHov(cn)} onMouseLeave={()=>setHov(null)} style={{cursor:"default"}}>
+            {/* Hover highlight ring */}
+            {h&&<path d={cpth({...pos,cx:pos.cx,cy:pos.cy})} fill="none" stroke={d?G:"#A8A29E"} strokeWidth="2.5" opacity="0.6" transform={`translate(0,0)`}/>}
+            <path d={cpth(pos)} fill={d?"url(#cg)":"white"} stroke={d?B:"#D0C8BE"} strokeWidth={d?2:1.5} filter={d?"url(#ds)":undefined} opacity={d?1:0.92}/>
+            <text x={pos.cx} y={pos.cy} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize={d?"8.5":"7.5"} fontWeight={d?"600":"400"} letterSpacing="0.7" fill={d?"#fff":"#B8B0A6"}>{pos.lb}</text>
+          </g>
+        );
+      })}
+
+      {/* Hover tooltip */}
+      {hov&&(()=>{
+        const pos=CP[hov],d=def.has(hov);
+        const label=CENTER_NL[hov]+(d?" — gedefinieerd":" — open");
+        const tw=label.length*6+16;
+        const tx=Math.min(Math.max(pos.cx-tw/2,8),632-tw);
+        const ty=pos.cy>300?pos.cy-64:pos.cy+56;
+        return(
+          <g pointerEvents="none">
+            <rect x={tx} y={ty} width={tw} height={26} rx="5" fill={d?B:"#555"} opacity="0.93"/>
+            <text x={tx+tw/2} y={ty+14} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="10.5" fill="white">{label}</text>
+          </g>
+        );
+      })()}
+
+      {/* Footer */}
+      {name&&<text x="320" y="598" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="14" fill={G} fontStyle="italic">{name}</text>}
+      {chart?.type&&<text x="320" y="614" textAnchor="middle" fontFamily="Jost,sans-serif" fontSize="8" letterSpacing="1.8" fill="#B0A89E">{chart.type.toUpperCase()}</text>}
     </svg>
   );
 }
