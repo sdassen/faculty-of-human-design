@@ -2,84 +2,164 @@ import { useState, useEffect } from "react";
 
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');`;
 
+const IMGS = {
+  hero:      "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1800&auto=format&q=80",
+  ibiza:     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&q=80",
+  cosmos:    "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=1200&auto=format&q=80",
+  origin:    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&auto=format&q=80",
+  cta:       "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=1600&auto=format&q=80",
+  r_volledig:"https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=600&auto=format&q=75",
+  r_relatie: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&auto=format&q=75",
+  r_jaar:    "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=600&auto=format&q=75",
+  r_kind:    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&q=75",
+  r_loopbaan:"https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&auto=format&q=75",
+  r_numerologie:"https://images.unsplash.com/photo-1530360458055-f1cd9f56b3a6?w=600&auto=format&q=75",
+  r_horoscoop:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&auto=format&q=75",
+  r_maandelijks:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&q=75",
+};
+
 const CSS = `
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
 :root {
-  --bg: #F8F6F1; --card: #FFFFFF; --dark: #1C1917; --muted: #F1EEE8;
-  --text: #1C1917; --text-muted: #78716C; --text-light: #A8A29E;
-  --brand: #3D2C5E; --gold: #9A8050; --border: #E7E3DC;
-  --white: #FFFFFF; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,.06);
-  --shadow-md: 0 4px 16px rgba(0,0,0,.07);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,.09);
+  --bg: #F7F5F0; --card: #FFFFFF; --dark: #1A1715; --cosmos: #0C0A17; --muted: #F0EDE6;
+  --text: #1A1715; --text-muted: #78716C; --text-light: #A8A29E;
+  --brand: #3D2C5E; --brand-deep: #241649; --brand-light: #5a4288;
+  --gold: #9A8050; --gold-warm: #C9A85C; --gold-pale: rgba(154,128,80,.1);
+  --border: #E5E0D8; --white: #FFFFFF;
+  --ov-cosmos: rgba(12,10,23,.80); --ov-brand: rgba(36,22,73,.72); --ov-warm: rgba(40,24,8,.52);
+  --radius-sm: 6px; --radius-md: 12px; --radius-lg: 18px; --radius-xl: 26px;
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.05);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.07);
+  --shadow-lg: 0 16px 48px rgba(0,0,0,.1);
+  --shadow-xl: 0 28px 90px rgba(0,0,0,.13);
+  --shadow-gold: 0 4px 20px rgba(154,128,80,.22);
+  --shadow-brand: 0 4px 20px rgba(61,44,94,.28);
   --font-serif: 'Cormorant Garamond', Georgia, serif;
   --font-sans: 'Jost', system-ui, sans-serif;
+  --ease: cubic-bezier(0.23,1,0.32,1); --dur: 300ms;
 }
-html { scroll-behavior: smooth; }
-body { font-family: var(--font-sans); background: var(--bg); color: var(--text);
-  font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-img { display: block; max-width: 100%; }
-button { cursor: pointer; font-family: var(--font-sans); }
+html { scroll-behavior:smooth; }
+body { font-family:var(--font-sans); background:var(--bg); color:var(--text);
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+img { display:block; max-width:100%; }
+button { cursor:pointer; font-family:var(--font-sans); }
+
+/* IMAGE UTILITIES */
+.ph { position:relative; overflow:hidden; }
+.ph>img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform 7s var(--ease); }
+.ph:hover>img { transform:scale(1.04); }
+.ov { position:absolute; inset:0; pointer-events:none; }
+.ov-cosmos { background:var(--ov-cosmos); }
+.ov-brand { background:var(--ov-brand); }
+.ov-grad-r { background:linear-gradient(to right, rgba(12,10,23,.92) 0%, rgba(12,10,23,.45) 55%, transparent 100%); }
+.ov-grad-t { background:linear-gradient(to top, rgba(12,10,23,.90) 0%, rgba(12,10,23,.15) 65%, transparent 100%); }
+.img-frame { border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow-xl); }
+.img-landscape { aspect-ratio:16/9; }
+.img-portrait { aspect-ratio:3/4; }
 
 /* TYPOGRAPHY */
-.h1 { font-family: var(--font-serif); font-size: clamp(2.2rem,5vw,3.8rem); font-weight: 300; line-height: 1.1; }
-.h1-hero { font-family: var(--font-serif); font-size: clamp(2.5rem,6vw,4.2rem); font-weight: 300; line-height: 1.05; color: white; }
-.h2 { font-family: var(--font-serif); font-size: clamp(1.8rem,3.5vw,2.8rem); font-weight: 300; line-height: 1.15; }
-.h3 { font-family: var(--font-serif); font-size: clamp(1.3rem,2.5vw,1.8rem); font-weight: 400; line-height: 1.2; }
-.label { font-size:.65rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); }
-.body-lg { font-size:1.1rem; font-weight:300; line-height:1.8; color:var(--text-muted); }
-.body-md { font-size:1rem; font-weight:300; line-height:1.75; color:var(--text-muted); }
-.body-sm { font-size:.875rem; font-weight:300; line-height:1.7; color:var(--text-muted); }
+.h1 { font-family:var(--font-serif); font-size:clamp(2.4rem,5.5vw,4rem); font-weight:300; line-height:1.08; }
+.h1-hero { font-family:var(--font-serif); font-size:clamp(2.8rem,6.5vw,5rem); font-weight:300; line-height:1.02; color:white; letter-spacing:-.01em; }
+.h2 { font-family:var(--font-serif); font-size:clamp(1.9rem,3.8vw,2.95rem); font-weight:300; line-height:1.12; }
+.h3 { font-family:var(--font-serif); font-size:clamp(1.35rem,2.5vw,1.9rem); font-weight:400; line-height:1.2; }
+.label { font-size:.6rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase; color:var(--gold); }
+.label-light { font-size:.6rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase; color:rgba(201,168,92,.75); }
+.body-lg { font-size:1.1rem; font-weight:300; line-height:1.84; color:var(--text-muted); }
+.body-md { font-size:1rem; font-weight:300; line-height:1.78; color:var(--text-muted); }
+.body-sm { font-size:.875rem; font-weight:300; line-height:1.72; color:var(--text-muted); }
 
 /* LAYOUT */
 .pg { padding-top:72px; min-height:100vh; }
-.section { padding:96px 24px; }
-.section-sm { padding:64px 24px; }
+.section { padding:112px 32px; }
+.section-md { padding:88px 32px; }
+.section-sm { padding:64px 32px; }
 .section.bg-white { background:var(--white); }
 .section.bg-muted { background:var(--muted); }
 .section.bg-dark { background:var(--dark); }
+.section.bg-cosmos { background:var(--cosmos); }
 .container { max-width:1240px; margin:0 auto; width:100%; }
 .container-sm { max-width:760px; margin:0 auto; width:100%; }
 .container-md { max-width:960px; margin:0 auto; width:100%; }
 .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
-.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:24px; }
+.grid-3 { display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
 .grid-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:20px; }
 .text-center { text-align:center; }
-.divider { width:40px; height:2px; background:var(--gold); }
+.divider { width:36px; height:1px; background:var(--gold); opacity:.7; }
 .divider-center { margin:0 auto; }
+
+/* STAT ROW */
+.stat-row { background:white; border-bottom:1px solid var(--border); }
+.stat-row-inner { max-width:1240px; margin:0 auto; display:flex; align-items:stretch; }
+.stat-row-item { flex:1; padding:28px 32px; border-right:1px solid var(--border); display:flex; flex-direction:column; align-items:center; text-align:center; gap:4px; }
+.stat-row-item:last-child { border-right:none; }
+.stat-row-n { font-family:var(--font-serif); font-size:1.9rem; font-weight:300; color:var(--text); line-height:1; }
+.stat-row-l { font-size:.58rem; font-weight:500; letter-spacing:.11em; text-transform:uppercase; color:var(--text-light); }
+
+/* FEATURE SPLIT */
+.feature-split { display:grid; grid-template-columns:1fr 1fr; min-height:560px; }
+.feature-content { padding:80px 72px; display:flex; flex-direction:column; justify-content:center; background:var(--muted); }
+.feature-image-wrap { position:relative; overflow:hidden; }
+.feature-image-wrap>img { width:100%; height:100%; object-fit:cover; object-position:center 40%; transition:transform 7s var(--ease); }
+.feature-image-wrap:hover>img { transform:scale(1.04); }
+.feature-price-card { position:absolute; bottom:32px; right:32px; left:32px; background:rgba(12,10,23,.82); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-lg); padding:28px; }
+
+/* ORIGIN SECTION */
+.origin-section { position:relative; min-height:500px; display:flex; align-items:center; overflow:hidden; }
+.origin-section-bg { position:absolute; inset:0; }
+.origin-section-bg>img { width:100%; height:100%; object-fit:cover; object-position:center 45%; }
+.origin-section-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(105deg,rgba(12,10,23,.94) 0%,rgba(36,22,73,.7) 55%,rgba(12,10,23,.5) 100%); }
+.origin-content { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:96px 32px; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.origin-stat { border-top:1px solid rgba(255,255,255,.12); padding-top:16px; margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.origin-stat-n { font-family:var(--font-serif); font-size:2rem; font-weight:300; color:white; line-height:1; }
+.origin-stat-l { font-size:.55rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-top:3px; }
+
+/* PHOTO CTA */
+.photo-cta-section { position:relative; overflow:hidden; }
+.photo-cta-bg { position:absolute; inset:0; }
+.photo-cta-bg>img { width:100%; height:100%; object-fit:cover; object-position:center 60%; filter:saturate(.8); }
+.photo-cta-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(12,10,23,.93) 0%,rgba(36,22,73,.88) 50%,rgba(12,10,23,.78) 100%); }
+.photo-cta-content { position:relative; z-index:1; padding:120px 32px; text-align:center; }
 
 /* BUTTONS */
 .btn { display:inline-flex; align-items:center; justify-content:center; gap:8px;
   border:none; border-radius:var(--radius-md); font-family:var(--font-sans);
-  font-weight:500; letter-spacing:.04em; transition:all 200ms ease; white-space:nowrap; }
-.btn-primary { background:var(--brand); color:white; padding:14px 32px; font-size:.95rem; box-shadow:0 2px 8px rgba(61,44,94,.25); }
-.btn-primary:hover { background:#2e2147; transform:translateY(-1px); box-shadow:0 4px 16px rgba(61,44,94,.35); }
-.btn-secondary { background:transparent; color:var(--brand); padding:13px 30px; font-size:.95rem; border:1.5px solid var(--brand); }
-.btn-secondary:hover { background:var(--brand); color:white; }
-.btn-white { background:white; color:var(--brand); padding:14px 32px; font-size:.95rem; box-shadow:var(--shadow-md); }
-.btn-white:hover { box-shadow:var(--shadow-lg); transform:translateY(-1px); }
-.btn-ghost { background:rgba(255,255,255,.12); color:white; padding:13px 30px; font-size:.95rem; border:1.5px solid rgba(255,255,255,.25); }
-.btn-ghost:hover { background:rgba(255,255,255,.2); }
-.btn-gold { background:var(--gold); color:white; padding:14px 32px; font-size:.95rem; }
-.btn-gold:hover { background:#876e43; transform:translateY(-1px); }
-.btn-lg { padding:17px 40px; font-size:1.05rem; }
-.btn-sm { padding:10px 22px; font-size:.85rem; }
+  font-weight:500; letter-spacing:.05em; transition:all var(--dur) var(--ease); white-space:nowrap; }
+.btn-primary { background:var(--brand); color:white; padding:15px 36px; font-size:.92rem; box-shadow:var(--shadow-brand); }
+.btn-primary:hover { background:var(--brand-deep); transform:translateY(-2px); box-shadow:0 8px 28px rgba(61,44,94,.42); }
+.btn-secondary { background:transparent; color:var(--brand); padding:14px 34px; font-size:.92rem; border:1.5px solid var(--brand); }
+.btn-secondary:hover { background:var(--brand); color:white; box-shadow:var(--shadow-brand); }
+.btn-white { background:white; color:var(--brand); padding:15px 36px; font-size:.92rem; box-shadow:var(--shadow-md); }
+.btn-white:hover { box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+.btn-ghost { background:rgba(255,255,255,.1); color:white; padding:14px 34px; font-size:.92rem; border:1px solid rgba(255,255,255,.22); backdrop-filter:blur(8px); }
+.btn-ghost:hover { background:rgba(255,255,255,.18); border-color:rgba(255,255,255,.38); }
+.btn-gold { background:var(--gold); color:white; padding:15px 36px; font-size:.92rem; }
+.btn-gold:hover { background:#876e43; transform:translateY(-2px); box-shadow:var(--shadow-gold); }
+.btn-lg { padding:18px 44px; font-size:1rem; }
+.btn-sm { padding:10px 22px; font-size:.82rem; }
 .btn-full { width:100%; }
 .btn:disabled { opacity:.4; cursor:not-allowed; transform:none !important; }
 
 /* CARDS */
 .card { background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow-sm); overflow:hidden; }
-.rcard { background:var(--card); border-radius:var(--radius-lg); border:1px solid var(--border); cursor:pointer; transition:all 200ms; display:flex; flex-direction:column; overflow:hidden; }
-.rcard:hover { transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:var(--brand); }
-.rcard-accent { height:4px; background:var(--brand); }
-.rcard-body { padding:24px; flex:1; display:flex; flex-direction:column; }
-.rcard-tag { display:inline-block; background:rgba(61,44,94,.08); color:var(--brand); font-size:.6rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; padding:4px 10px; border-radius:100px; margin-bottom:12px; }
-.rcard-icon { font-size:1.4rem; margin-bottom:8px; }
-.rcard-title { font-family:var(--font-serif); font-size:1.2rem; font-weight:400; color:var(--text); margin-bottom:6px; line-height:1.3; }
-.rcard-tagline { font-size:.85rem; font-weight:300; color:var(--text-muted); line-height:1.6; flex:1; margin-bottom:20px; }
-.rcard-footer { display:flex; justify-content:space-between; align-items:center; padding-top:16px; border-top:1px solid var(--border); margin-top:auto; }
-.rcard-price { font-family:var(--font-serif); font-size:1.6rem; font-weight:300; color:var(--text); }
-.rcard-cta { font-size:.72rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--brand); }
+
+/* REPORT CARDS */
+.rcard { background:var(--card); border-radius:var(--radius-xl); border:1px solid var(--border);
+  cursor:pointer; transition:all var(--dur) var(--ease); display:flex; flex-direction:column; overflow:hidden;
+  box-shadow:var(--shadow-sm); }
+.rcard:hover { transform:translateY(-5px); box-shadow:var(--shadow-xl); border-color:transparent; }
+.rcard:hover .rcard-img>img { transform:scale(1.07); }
+.rcard-img { height:210px; position:relative; overflow:hidden; flex-shrink:0; }
+.rcard-img>img { width:100%; height:100%; object-fit:cover; transition:transform 5s var(--ease); }
+.rcard-img-ov { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(12,10,23,.08) 0%, rgba(12,10,23,.6) 100%); }
+.rcard-img-badge { position:absolute; top:14px; left:14px; background:rgba(12,10,23,.72); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,.12); border-radius:100px; padding:4px 12px; font-size:.56rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.82); }
+.rcard-img-price { position:absolute; bottom:14px; right:16px; font-family:var(--font-serif); font-size:1.55rem; font-weight:300; color:white; line-height:1; text-shadow:0 1px 10px rgba(0,0,0,.5); }
+.rcard-body { padding:26px 28px; flex:1; display:flex; flex-direction:column; }
+.rcard-icon { font-size:.95rem; margin-bottom:6px; opacity:.45; }
+.rcard-title { font-family:var(--font-serif); font-size:1.28rem; font-weight:400; color:var(--text); margin-bottom:8px; line-height:1.22; }
+.rcard-tagline { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.68; flex:1; margin-bottom:18px; }
+.rcard-footer { display:flex; justify-content:space-between; align-items:center; padding-top:14px; border-top:1px solid var(--border); margin-top:auto; }
+.rcard-meta { font-size:.62rem; font-weight:400; color:var(--text-light); }
+.rcard-cta { font-size:.68rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--brand); display:flex; align-items:center; gap:4px; }
 
 /* TRUST */
 .trust-strip { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 24px; }
@@ -92,11 +172,13 @@ button { cursor: pointer; font-family: var(--font-sans); }
 .step-body p { font-size:.9rem; font-weight:300; color:var(--text-muted); line-height:1.65; }
 
 /* TESTIMONIAL */
-.tcard { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); padding:28px; }
-.tcard-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; color:var(--text); line-height:1.75; margin-bottom:16px; }
-.tcard-author { font-size:.75rem; font-weight:500; letter-spacing:.06em; text-transform:uppercase; color:var(--text-light); }
-.tcard-report { font-size:.7rem; color:var(--gold); margin-top:2px; }
-.stars { color:#F59E0B; font-size:.85rem; margin-bottom:10px; }
+.tcard { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); padding:34px; position:relative; overflow:hidden; transition:box-shadow var(--dur) var(--ease); }
+.tcard:hover { box-shadow:var(--shadow-lg); }
+.tcard::before { content:'"'; position:absolute; top:16px; left:26px; font-family:var(--font-serif); font-size:6rem; line-height:1; color:var(--gold); opacity:.09; font-style:italic; pointer-events:none; }
+.tcard-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; color:var(--text); line-height:1.82; margin-bottom:20px; }
+.tcard-author { font-size:.7rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--text-light); }
+.tcard-report { font-size:.65rem; color:var(--gold); margin-top:3px; }
+.stars { color:#D4A017; font-size:.82rem; margin-bottom:14px; letter-spacing:2px; }
 
 /* STAT */
 .stat-n { font-family:var(--font-serif); font-size:2.6rem; font-weight:300; color:var(--text); line-height:1; }
@@ -118,21 +200,34 @@ button { cursor: pointer; font-family: var(--font-sans); }
 
 /* HERO */
 .hero { min-height:100vh; position:relative; display:flex; align-items:center; overflow:hidden; }
-.hero-bg { position:absolute; inset:0; background:linear-gradient(135deg,#1C1917 0%,#2d1f4a 55%,#3D2C5E 100%); }
-.hero-pattern { position:absolute; inset:0; opacity:.04; background-image:radial-gradient(circle at 25% 25%, white 1px, transparent 1px), radial-gradient(circle at 75% 75%, white 1px, transparent 1px); background-size:48px 48px; }
-.hero-glow { position:absolute; top:-100px; right:-100px; width:600px; height:600px; border-radius:50%; background:radial-gradient(circle, rgba(154,128,80,.15), transparent 65%); }
-.hero-content { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:0 32px; width:100%; display:grid; grid-template-columns:1fr 400px; gap:80px; align-items:center; }
-.hero-eyebrow { font-size:.65rem; font-weight:500; letter-spacing:.15em; text-transform:uppercase; color:rgba(154,128,80,.85); margin-bottom:20px; }
-.hero-title em { color:rgba(255,255,255,.6); font-style:italic; }
-.hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-bottom:28px; margin-top:28px; }
-.hero-micro { display:flex; gap:20px; flex-wrap:wrap; }
-.hero-micro-item { font-size:.78rem; font-weight:300; color:rgba(255,255,255,.45); }
-.hero-card { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-lg); padding:32px; backdrop-filter:blur(12px); }
-.hero-card-label { font-size:.6rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:rgba(154,128,80,.7); margin-bottom:16px; }
-.hero-stat { margin-bottom:20px; }
-.hero-stat-n { font-family:var(--font-serif); font-size:2.2rem; font-weight:300; color:white; line-height:1; }
-.hero-stat-l { font-size:.7rem; color:rgba(255,255,255,.4); margin-top:3px; }
-.hero-divider { height:1px; background:rgba(255,255,255,.1); margin:20px 0; }
+.hero-bg { position:absolute; inset:0; }
+.hero-bg>img { width:100%; height:100%; object-fit:cover; object-position:center 30%; }
+.hero-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(135deg,rgba(12,10,23,.94) 0%,rgba(36,22,73,.8) 50%,rgba(12,10,23,.65) 100%); }
+.hero-fallback { position:absolute; inset:0; background:linear-gradient(135deg,var(--cosmos) 0%,var(--brand-deep) 55%,var(--brand) 100%); }
+.hero-stars { position:absolute; inset:0; opacity:.22; pointer-events:none;
+  background-image:radial-gradient(circle at 15% 25%, white 1px, transparent 1px),
+    radial-gradient(circle at 72% 12%, white 1px, transparent 1px),
+    radial-gradient(circle at 38% 55%, white 1px, transparent 1px),
+    radial-gradient(circle at 88% 42%, white 1px, transparent 1px),
+    radial-gradient(circle at 10% 78%, white 1px, transparent 1px),
+    radial-gradient(circle at 52% 88%, white 1px, transparent 1px),
+    radial-gradient(circle at 65% 65%, white 1px, transparent 1px);
+  background-size:420px 420px,510px 510px,360px 360px,460px 460px,390px 390px,430px 430px,380px 380px; }
+.hero-glow { position:absolute; top:-10%; right:-8%; width:60%; height:85%; border-radius:50%; background:radial-gradient(ellipse, rgba(154,128,80,.07) 0%, transparent 60%); pointer-events:none; }
+.hero-content { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:0 32px; width:100%; }
+.hero-text { max-width:660px; }
+.hero-eyebrow { font-size:.58rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:rgba(201,168,92,.8); margin-bottom:26px; display:flex; align-items:center; gap:14px; }
+.hero-eyebrow::before { content:""; display:block; width:28px; height:1px; background:rgba(201,168,92,.45); flex-shrink:0; }
+.hero-title em { color:rgba(255,255,255,.42); font-style:italic; }
+.hero-subtitle { font-size:1.05rem; font-weight:300; color:rgba(255,255,255,.5); line-height:1.84; margin:20px 0 36px; max-width:520px; }
+.hero-actions { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
+.hero-trust { display:flex; gap:24px; flex-wrap:wrap; }
+.hero-trust-item { font-size:.7rem; font-weight:300; color:rgba(255,255,255,.36); display:flex; align-items:center; gap:6px; }
+.hero-trust-item::before { content:"✦"; font-size:.48rem; color:rgba(201,168,92,.45); }
+.hero-scroll { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; opacity:.4; }
+.hero-scroll-line { width:1px; height:36px; background:linear-gradient(to bottom, transparent, white); animation:scrollline 2.2s ease-in-out infinite; }
+@keyframes scrollline { 0%,100%{opacity:0;transform:scaleY(0);transform-origin:top} 40%,60%{opacity:1;transform:scaleY(1);transform-origin:top} 80%{transform:scaleY(1);transform-origin:bottom;opacity:0} }
+.hero-scroll-label { font-size:.5rem; letter-spacing:.18em; text-transform:uppercase; color:white; }
 
 /* FORM */
 .form-wrap { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow-md); padding:36px; }
@@ -207,18 +302,6 @@ button { cursor: pointer; font-family: var(--font-sans); }
 .blog-excerpt { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.7; margin-bottom:14px; }
 .blog-more { font-size:.68rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:var(--brand); }
 
-/* DETAIL HERO */
-.detail-hero { background:var(--dark); padding:80px 24px 56px; }
-.detail-hero-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1fr 280px; gap:60px; align-items:start; }
-.detail-hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(154,128,80,.15); border:1px solid rgba(154,128,80,.25); padding:5px 12px; border-radius:100px; font-size:.65rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:rgba(154,128,80,.9); margin-bottom:20px; }
-.detail-hero-title { font-family:var(--font-serif); font-size:clamp(2rem,4vw,3rem); font-weight:300; color:white; margin-bottom:12px; line-height:1.1; }
-.detail-hero-tagline { font-size:.95rem; font-weight:300; color:rgba(255,255,255,.5); margin-bottom:24px; line-height:1.7; }
-.detail-hero-meta { display:flex; gap:20px; flex-wrap:wrap; }
-.detail-hero-m { font-size:.65rem; font-weight:500; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.3); }
-.price-box { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.12); border-radius:var(--radius-lg); padding:28px; text-align:center; }
-.price-box-amount { font-family:var(--font-serif); font-size:3rem; font-weight:300; color:white; line-height:1; }
-.price-box-period { font-size:.7rem; color:rgba(255,255,255,.4); margin-top:4px; margin-bottom:20px; }
-
 /* INCLUDES */
 .includes-list { list-style:none; display:flex; flex-direction:column; gap:11px; }
 .includes-item { display:flex; gap:10px; align-items:flex-start; font-size:.9rem; font-weight:300; color:var(--text-muted); line-height:1.6; }
@@ -236,19 +319,19 @@ button { cursor: pointer; font-family: var(--font-sans); }
 .sticky-cta { display:none; position:fixed; bottom:0; left:0; right:0; z-index:150; padding:12px 16px; background:rgba(248,246,241,.97); backdrop-filter:blur(12px); border-top:1px solid var(--border); }
 
 /* FOOTER */
-.footer { background:var(--dark); padding:56px 32px 32px; }
+.footer { background:var(--cosmos); padding:68px 32px 36px; }
 .footer-inner { max-width:1240px; margin:0 auto; }
-.footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; padding-bottom:40px; border-bottom:1px solid rgba(255,255,255,.07); }
-.footer-logo-main { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; color:white; letter-spacing:.08em; text-transform:uppercase; }
-.footer-logo-sub { font-size:.6rem; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:2px; }
-.footer-desc { font-size:.82rem; font-weight:300; color:rgba(255,255,255,.4); line-height:1.7; margin-top:12px; max-width:260px; }
-.footer-col-title { font-size:.65rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:rgba(255,255,255,.4); margin-bottom:14px; }
-.footer-link { display:block; font-size:.85rem; font-weight:300; color:rgba(255,255,255,.5); margin-bottom:9px; cursor:pointer; transition:color 150ms; }
-.footer-link:hover { color:rgba(255,255,255,.85); }
-.footer-bottom { padding-top:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
-.footer-copy { font-size:.75rem; font-weight:300; color:rgba(255,255,255,.25); }
+.footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; padding-bottom:44px; border-bottom:1px solid rgba(255,255,255,.06); }
+.footer-logo-main { font-family:var(--font-serif); font-size:1.05rem; font-weight:400; color:white; letter-spacing:.09em; text-transform:uppercase; }
+.footer-logo-sub { font-size:.54rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.28); margin-top:2px; }
+.footer-desc { font-size:.82rem; font-weight:300; color:rgba(255,255,255,.35); line-height:1.74; margin-top:14px; max-width:256px; }
+.footer-col-title { font-size:.6rem; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-bottom:16px; }
+.footer-link { display:block; font-size:.85rem; font-weight:300; color:rgba(255,255,255,.42); margin-bottom:10px; cursor:pointer; transition:color 150ms; }
+.footer-link:hover { color:rgba(255,255,255,.8); }
+.footer-bottom { padding-top:28px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; }
+.footer-copy { font-size:.72rem; font-weight:300; color:rgba(255,255,255,.2); }
 .footer-trust { display:flex; gap:16px; }
-.footer-trust-item { font-size:.7rem; color:rgba(255,255,255,.25); }
+.footer-trust-item { font-size:.68rem; color:rgba(255,255,255,.2); }
 
 /* THANK YOU */
 .thankyou-hero { background:linear-gradient(135deg,#1a3a2e 0%,#1C1917 100%); padding:80px 24px; text-align:center; }
@@ -257,39 +340,67 @@ button { cursor: pointer; font-family: var(--font-sans); }
 .thankyou-sub { font-size:1rem; font-weight:300; color:rgba(255,255,255,.55); max-width:480px; margin:0 auto; line-height:1.7; }
 
 /* SUB CARD */
-.sub-card { background:linear-gradient(135deg,var(--brand) 0%,#2e1f4e 100%); border-radius:var(--radius-lg); padding:40px; color:white; position:relative; overflow:hidden; }
+.sub-card { background:linear-gradient(135deg,var(--brand) 0%,var(--brand-deep) 100%); border-radius:var(--radius-xl); padding:48px; color:white; position:relative; overflow:hidden; }
+.sub-card::before { content:""; position:absolute; top:-40%; right:-8%; width:65%; height:170%; background:radial-gradient(ellipse, rgba(201,168,92,.05) 0%, transparent 60%); pointer-events:none; }
 .sub-price { font-family:var(--font-serif); font-size:3rem; font-weight:300; color:white; line-height:1; }
-.sub-price-period { font-size:.8rem; color:rgba(255,255,255,.5); margin-top:4px; }
+.sub-price-period { font-size:.78rem; color:rgba(255,255,255,.45); margin-top:5px; }
+
+/* DETAIL HERO */
+.detail-hero { background:var(--dark); padding:96px 32px 68px; position:relative; overflow:hidden; }
+.detail-hero-bg { position:absolute; inset:0; opacity:.2; }
+.detail-hero-bg>img { width:100%; height:100%; object-fit:cover; }
+.detail-hero-bg::after { content:""; position:absolute; inset:0; background:var(--dark); opacity:.65; }
+.detail-hero-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; position:relative; z-index:1; }
+.detail-hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(154,128,80,.12); border:1px solid rgba(154,128,80,.22); padding:5px 14px; border-radius:100px; font-size:.6rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:rgba(201,168,92,.9); margin-bottom:22px; }
+.detail-hero-title { font-family:var(--font-serif); font-size:clamp(2rem,4.5vw,3.2rem); font-weight:300; color:white; margin-bottom:14px; line-height:1.07; }
+.detail-hero-tagline { font-size:.95rem; font-weight:300; color:rgba(255,255,255,.46); margin-bottom:26px; line-height:1.72; }
+.detail-hero-meta { display:flex; gap:20px; flex-wrap:wrap; }
+.detail-hero-m { font-size:.6rem; font-weight:500; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.26); }
+.price-box { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.1); border-radius:var(--radius-xl); padding:32px; text-align:center; backdrop-filter:blur(12px); }
+.price-box-amount { font-family:var(--font-serif); font-size:3.2rem; font-weight:300; color:white; line-height:1; }
+.price-box-period { font-size:.66rem; color:rgba(255,255,255,.36); margin-top:5px; margin-bottom:22px; }
 
 /* RESPONSIVE */
+@media (max-width:1100px) {
+  .feature-split { grid-template-columns:1fr; }
+  .feature-image-wrap { min-height:400px; order:-1; }
+  .feature-content { padding:56px 40px; }
+  .origin-content { grid-template-columns:1fr; gap:40px; }
+  .origin-stat { grid-template-columns:repeat(3,1fr); }
+}
 @media (max-width:1024px) {
-  .hero-content { grid-template-columns:1fr; gap:48px; }
   .detail-hero-inner { grid-template-columns:1fr; }
   .footer-top { grid-template-columns:1fr 1fr; gap:32px; }
+  .stat-row-item { padding:20px 18px; }
 }
 @media (max-width:768px) {
   .nav { padding:0 16px; }
   .nav-links, .nav-cta-wrap { display:none; }
   .mobile-nav { display:flex; }
-  .section { padding:64px 20px; }
-  .section-sm { padding:48px 20px; }
+  .section, .section-md { padding:72px 20px; }
+  .section-sm { padding:52px 20px; }
   .grid-2, .grid-3 { grid-template-columns:1fr; }
   .grid-4 { grid-template-columns:1fr 1fr; }
   .form-grid { grid-template-columns:1fr; }
   .form-group.full { grid-column:1; }
   .report-body { padding:28px 20px; }
   .sticky-cta { display:block; }
-  .detail-hero { padding:64px 20px 44px; }
+  .detail-hero { padding:72px 20px 52px; }
   .loading-steps { width:100%; }
   .upsell-grid { grid-template-columns:1fr; }
   .report-summary-grid { grid-template-columns:1fr 1fr; }
   .footer-top { grid-template-columns:1fr; gap:28px; }
   .footer-bottom { flex-direction:column; align-items:flex-start; }
+  .stat-row-inner { flex-wrap:wrap; }
+  .stat-row-item { flex:none; width:50%; border-bottom:1px solid var(--border); }
+  .hero-content { padding:0 20px; }
+  .photo-cta-content { padding:80px 20px; }
 }
 @media (max-width:480px) {
   .hero-actions { flex-direction:column; }
   .hero-actions .btn { width:100%; }
   .report-summary-grid { grid-template-columns:1fr; }
+  .stat-row-item { width:100%; }
 }
 `;
 
@@ -733,17 +844,23 @@ function TrustStrip({light}){
 }
 
 function ReportCard({rpt,onClick}){
+  const imgKey="r_"+rpt.id;
+  const imgSrc=IMGS[imgKey]||IMGS.hero;
   return(
     <div className="rcard" onClick={()=>{track("report_card_click",{report:rpt.id,price:rpt.priceNum});onClick();}}>
-      <div className="rcard-accent"/>
+      <div className="rcard-img">
+        <img src={imgSrc} alt={rpt.title} loading="lazy"/>
+        <div className="rcard-img-ov"/>
+        {rpt.tag&&<div className="rcard-img-badge">{rpt.tag}</div>}
+        <div className="rcard-img-price">{rpt.price}</div>
+      </div>
       <div className="rcard-body">
-        {rpt.tag&&<span className="rcard-tag">{rpt.tag}</span>}
         <div className="rcard-icon">{rpt.icon}</div>
         <div className="rcard-title">{rpt.title}</div>
         <div className="rcard-tagline">{rpt.tagline}</div>
         <div className="rcard-footer">
-          <div className="rcard-price">{rpt.price}</div>
-          <div className="rcard-cta">Bekijken →</div>
+          <div className="rcard-meta">{rpt.pages} pag. · {rpt.sections} secties</div>
+          <div className="rcard-cta">Ontdekken →</div>
         </div>
       </div>
     </div>
@@ -1028,117 +1145,172 @@ function ReportForm({rpt,onDone,postPayment}){
 function HomePage({go}){
   return(
     <div className="pg">
+
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="hero">
-        <div className="hero-bg"/>
-        <div className="hero-pattern"/>
+        <div className="hero-bg">
+          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza" loading="eager"/>
+        </div>
+        <div className="hero-stars"/>
         <div className="hero-glow"/>
         <div className="hero-content">
-          <div>
+          <div className="hero-text">
             <div className="hero-eyebrow">Faculty of Human Design — Ibiza, Spanje</div>
-            <h1 className="h1-hero hero-title">Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
-            <p className="body-lg" style={{color:"rgba(255,255,255,.58)",maxWidth:500,marginTop:16}}>Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata.</p>
+            <h1 className="h1-hero">Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
+            <p className="hero-subtitle">Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata.</p>
             <div className="hero-actions">
-              <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>Ontvang mijn persoonlijke rapport</button>
-              <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+              <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
+                Ontvang mijn persoonlijke rapport
+              </button>
+              <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>Alle rapporten</button>
             </div>
-            <div className="hero-micro">
-              {["🔒 Veilige betaling","📄 Persoonlijke PDF","⚡ Direct beschikbaar"].map(t=>(
-                <div key={t} className="hero-micro-item">{t}</div>
+            <div className="hero-trust">
+              {["Veilige betaling","Persoonlijke PDF","Direct beschikbaar","Swiss Ephemeris berekend"].map(t=>(
+                <div key={t} className="hero-trust-item">{t}</div>
               ))}
             </div>
           </div>
-          <div className="hero-card">
-            <div className="hero-card-label">Faculty of Human Design</div>
-            {[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
-              <div key={l} className="hero-stat"><div className="hero-stat-n">{n}</div><div className="hero-stat-l">{l}</div></div>
-            ))}
-            <div className="hero-divider"/>
-            <p style={{fontSize:".8rem",fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>Berekend met Swiss Ephemeris algoritmen — geen generieke profielen.</p>
-          </div>
+        </div>
+        <div className="hero-scroll">
+          <div className="hero-scroll-line"/>
+          <div className="hero-scroll-label">Scroll</div>
         </div>
       </section>
-      <div style={{background:"white",padding:"20px 24px",borderBottom:"1px solid var(--border)"}}>
-        <div className="container"><TrustStrip/></div>
+
+      {/* ── STAT ROW ─────────────────────────────────────────────────────── */}
+      <div className="stat-row">
+        <div className="stat-row-inner">
+          {[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"],["Swiss Ephemeris","Astronomische precisie"]].map(([n,l])=>(
+            <div key={l} className="stat-row-item">
+              <div className="stat-row-n">{n}</div>
+              <div className="stat-row-l">{l}</div>
+            </div>
+          ))}
+        </div>
       </div>
-      <section className="section bg-muted">
-        <div className="container">
-          <div className="grid-2" style={{gap:60,alignItems:"center"}}>
-            <div>
-              <div className="label" style={{marginBottom:12}}>Meest gekozen</div>
-              <h2 className="h2" style={{marginBottom:16}}>Volledig Human Design Rapport</h2>
-              <p className="body-lg" style={{marginBottom:20}}>Je complete persoonlijke blauwdruk — van Type en Autoriteit tot Inkarnatie-Kruis. 40+ paginas, direct als PDF.</p>
-              <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
-                {REPORTS[0].includes.map((item,i)=>(
-                  <li key={i} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)"}}>
-                    <span style={{color:"var(--brand)",flexShrink:0}}>✓</span>{item}
-                  </li>
-                ))}
-              </ul>
-              <div style={{display:"flex",gap:16,alignItems:"center",flexWrap:"wrap"}}>
-                <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>Rapport bestellen — 75 euro</button>
-                <div style={{fontSize:".82rem",color:"var(--text-light)"}}>40+ paginas · Direct als PDF</div>
-              </div>
-            </div>
-            <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",overflow:"hidden",boxShadow:"var(--shadow-lg)"}}>
-              <div style={{background:"var(--brand)",padding:"28px 32px"}}>
-                {[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching en Kabbalah","64 poorten en 9 centra"],["Persoonlijke analyse","Geen templates"]].map(([t,d])=>(
-                  <div key={t} style={{borderBottom:"1px solid rgba(255,255,255,.1)",padding:"10px 0",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                    <div style={{fontSize:".88rem",fontWeight:300,color:"white"}}>{t}</div>
-                    <div style={{fontSize:".72rem",color:"rgba(255,255,255,.4)"}}>{d}</div>
-                  </div>
-                ))}
-              </div>
-              <div style={{padding:"24px 32px"}}>
-                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-                  <div><div style={{fontFamily:"var(--font-serif)",fontSize:"2.2rem",fontWeight:300}}>75 euro</div><div style={{fontSize:".72rem",color:"var(--text-light)"}}>Eenmalig direct als PDF</div></div>
-                  <div style={{textAlign:"right"}}><div style={{fontSize:".7rem",fontWeight:600,color:"var(--brand)",textTransform:"uppercase"}}>40+ paginas</div><div style={{fontSize:".7rem",color:"var(--text-light)"}}>12 secties</div></div>
-                </div>
-                <button className="btn btn-primary btn-full" onClick={()=>go("rapport-volledig")}>Bestel dit rapport</button>
-              </div>
-            </div>
+
+      {/* ── MEEST GEKOZEN — feature split ───────────────────────────────── */}
+      <div className="feature-split">
+        <div className="feature-content">
+          <div className="label" style={{marginBottom:14}}>Meest gekozen rapport</div>
+          <h2 className="h2" style={{marginBottom:18}}>Volledig Human Design Rapport</h2>
+          <p className="body-lg" style={{marginBottom:24}}>Je complete persoonlijke blauwdruk — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance voor 2026–2028.</p>
+          <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:10,marginBottom:32}}>
+            {REPORTS[0].includes.slice(0,6).map((item,i)=>(
+              <li key={i} style={{display:"flex",gap:12,alignItems:"flex-start",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)"}}>
+                <span style={{color:"var(--gold)",flexShrink:0,marginTop:1}}>✦</span>{item}
+              </li>
+            ))}
+          </ul>
+          <div style={{display:"flex",gap:14,flexWrap:"wrap",alignItems:"center"}}>
+            <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
+              Rapport bestellen — €75
+            </button>
+            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>40+ paginas · Direct als PDF</span>
           </div>
         </div>
-      </section>
+        <div className="feature-image-wrap ph">
+          <img src={IMGS.ibiza} alt="Ibiza golden hour" loading="lazy"/>
+          <div className="ov" style={{background:"linear-gradient(to bottom,rgba(12,10,23,.1) 0%,rgba(36,22,73,.2) 50%,rgba(12,10,23,.55) 100%)"}}/>
+          <div className="feature-price-card">
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
+              <div>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"2.4rem",fontWeight:300,color:"white",lineHeight:1}}>€75</div>
+                <div style={{fontSize:".62rem",color:"rgba(255,255,255,.4)",marginTop:4,textTransform:"uppercase",letterSpacing:".08em"}}>Eenmalig · Direct als PDF</div>
+              </div>
+              <div style={{textAlign:"right"}}>
+                <div style={{fontSize:".6rem",fontWeight:600,color:"rgba(201,168,92,.8)",textTransform:"uppercase",letterSpacing:".1em"}}>40+ paginas</div>
+                <div style={{fontSize:".6rem",color:"rgba(255,255,255,.35)",marginTop:2}}>12 secties</div>
+              </div>
+            </div>
+            {[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching & Kabbalah","64 poorten · 9 centra"]].map(([t,d])=>(
+              <div key={t} style={{borderTop:"1px solid rgba(255,255,255,.08)",padding:"10px 0",display:"flex",justifyContent:"space-between"}}>
+                <span style={{fontSize:".82rem",fontWeight:300,color:"rgba(255,255,255,.82)"}}>{t}</span>
+                <span style={{fontSize:".72rem",color:"rgba(255,255,255,.38)"}}>{d}</span>
+              </div>
+            ))}
+            <button className="btn btn-white btn-full" style={{marginTop:16}} onClick={()=>go("rapport-volledig")}>
+              Bekijk dit rapport
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* ── ALLE RAPPORTEN ───────────────────────────────────────────────── */}
       <section className="section bg-white">
         <div className="container">
-          <div className="text-center" style={{marginBottom:48}}>
-            <div className="label" style={{marginBottom:12}}>Alle rapporten</div>
-            <h2 className="h2">Kies je rapport</h2>
+          <div className="text-center" style={{marginBottom:56}}>
+            <div className="label" style={{marginBottom:14}}>Alle rapporten</div>
+            <h2 className="h2" style={{marginBottom:16}}>Kies je persoonlijke rapport</h2>
+            <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen.</p>
           </div>
           <div className="grid-3">
-            {REPORTS.filter(r=>r.id!=="volledig").slice(0,3).map(r=>(
+            {REPORTS.filter(r=>!["volledig","maandelijks"].includes(r.id)).slice(0,3).map(r=>(
               <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
             ))}
           </div>
-          <div style={{textAlign:"center",marginTop:32}}>
+          <div style={{display:"flex",gap:28,justifyContent:"center",alignItems:"center",marginTop:40,flexWrap:"wrap"}}>
             <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle 8 rapporten</button>
+            <span style={{fontSize:".78rem",color:"var(--text-light)"}}>Numerologie, Astrologie, Relatierapport en meer</span>
           </div>
         </div>
       </section>
-      <section className="section bg-muted">
+
+      {/* ── ORIGINE — Ibiza origin section ───────────────────────────────── */}
+      <div className="origin-section">
+        <div className="origin-section-bg">
+          <img src={IMGS.origin} alt="Ibiza landschap" loading="lazy"/>
+        </div>
+        <div className="origin-content">
+          <div>
+            <div className="label-light" style={{marginBottom:16}}>Het instituut</div>
+            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>Opgericht op het eiland<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.45)"}}>waar het begon</em></h2>
+            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,maxWidth:460,marginBottom:28}}>De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse.</p>
+            <button className="btn btn-ghost" onClick={()=>go("over")}>Over ons instituut</button>
+            <div className="origin-stat">
+              {[["2014","Opgericht"],["2.400+","Rapporten"],["4.9","Beoordeling"]].map(([n,l])=>(
+                <div key={l}>
+                  <div className="origin-stat-n">{n}</div>
+                  <div className="origin-stat-l">{l}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div/>
+        </div>
+      </div>
+
+      {/* ── HOE HET WERKT ────────────────────────────────────────────────── */}
+      <section className="section-md bg-muted">
         <div className="container-md">
-          <div className="text-center" style={{marginBottom:40}}>
-            <div className="label" style={{marginBottom:12}}>Hoe het werkt</div>
+          <div className="text-center" style={{marginBottom:56}}>
+            <div className="label" style={{marginBottom:14}}>Hoe het werkt</div>
             <h2 className="h2">In drie stappen je rapport</h2>
           </div>
-          <div style={{display:"flex",flexDirection:"column",gap:24,maxWidth:640,margin:"0 auto"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:28,maxWidth:620,margin:"0 auto"}}>
             <StepCard num="1" title="Voer je geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Je chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
-            <StepCard num="2" title="Bekijk je chart" desc="Zie direct je Type, Autoriteit, Profiel en gedefinieerde centra. Gratis en direct."/>
-            <StepCard num="3" title="Ontvang je rapport" desc="Na betaling wordt je rapport gegenereerd — 40+ paginas persoonlijke analyse, direct als PDF."/>
+            <StepCard num="2" title="Bekijk je chart gratis" desc="Zie direct je Type, Autoriteit, Profiel en gedefinieerde centra. Volledig gratis, zonder betaling."/>
+            <StepCard num="3" title="Ontvang je persoonlijk rapport" desc="Na betaling wordt je rapport sectie voor sectie gegenereerd — 40+ paginas persoonlijke analyse, direct als PDF."/>
           </div>
         </div>
       </section>
+
+      {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
       <section className="section bg-white">
         <div className="container">
-          <div className="text-center" style={{marginBottom:40}}>
-            <div className="label" style={{marginBottom:12}}>Ervaringen</div>
+          <div className="text-center" style={{marginBottom:56}}>
+            <div className="label" style={{marginBottom:14}}>Ervaringen</div>
             <h2 className="h2">Wat onze klanten zeggen</h2>
           </div>
           <div className="grid-3">
-            {[["Het rapport heeft mij meer inzicht gegeven dan jaren van zelfonderzoek. De precisie van de analyse is indrukwekkend.","M. van den Berg, Amsterdam","Volledig Rapport"],["Als koppel hebben wij veel baat gehad bij het relatierapport. Eindelijk begrijpen wij de dynamieken tussen ons.","T. en E. Dubois, Antwerpen","Relatierapport"],["De combinatie van Human Design en Numerologie gaf een compleet beeld. Diep geraakt door de nauwkeurigheid.","S. Muller, Utrecht","Volledig Rapport en Numerologie"]].map(([q,n,r])=>(
+            {[
+              ["Het rapport heeft mij meer inzicht gegeven dan jaren van zelfonderzoek. De precisie van de analyse is indrukwekkend. De sectie over mijn open centra was confronterend en bevrijdend tegelijk.","M. van den Berg, Amsterdam","Volledig Rapport"],
+              ["Als koppel hebben wij veel baat gehad bij het relatierapport. Eindelijk begrijpen wij de dynamieken tussen ons — waarom sommige dingen zo makkelijk gaan en andere zo stroef verlopen.","T. en E. Dubois, Antwerpen","Relatierapport"],
+              ["De combinatie van Human Design en Numerologie gaf een compleet beeld. Twee invalshoeken die elkaar sterk aanvullen. Diep geraakt door de nauwkeurigheid van de analyse.","S. Muller, Utrecht","Volledig & Numerologie"],
+            ].map(([q,n,r])=>(
               <div className="tcard" key={n}>
                 <div className="stars">★★★★★</div>
-                <div className="tcard-quote">"{q}"</div>
+                <div className="tcard-quote">{q}</div>
                 <div className="tcard-author">{n}</div>
                 <div className="tcard-report">{r}</div>
               </div>
@@ -1146,40 +1318,49 @@ function HomePage({go}){
           </div>
         </div>
       </section>
-      <section className="section bg-muted">
+
+      {/* ── SUBSCRIPTION BANNER ──────────────────────────────────────────── */}
+      <section className="section-md bg-muted">
         <div className="container-md">
           <div className="sub-card">
-            <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:32}}>
-              <div>
-                <div style={{fontSize:".65rem",fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(154,128,80,.8)",marginBottom:12}}>Abonnement</div>
-                <h2 className="h2" style={{color:"white",marginBottom:12}}>Maandelijkse Guidance</h2>
-                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.75,maxWidth:480}}>Elke maand een persoonlijk rapport over de energetische themas van die maand, afgestemd op je Human Design chart.</p>
+            <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:36}}>
+              <div style={{maxWidth:520}}>
+                <div className="label-light" style={{marginBottom:14}}>Maandabonnement</div>
+                <h2 className="h2" style={{color:"white",marginBottom:14}}>Maandelijkse Guidance</h2>
+                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.78}}>Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart. Maandelijks opzegbaar.</p>
               </div>
               <div style={{textAlign:"center",flexShrink:0}}>
-                <div className="sub-price">19 euro</div>
-                <div className="sub-price-period">per maand opzegbaar</div>
-                <div style={{height:12}}/>
-                <button className="btn btn-gold" onClick={()=>go("rapport-maandelijks")}>Start abonnement</button>
+                <div className="sub-price">€19</div>
+                <div className="sub-price-period">per maand · opzegbaar</div>
+                <div style={{height:16}}/>
+                <button className="btn btn-gold btn-lg" onClick={()=>go("rapport-maandelijks")}>Start abonnement</button>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section className="section bg-dark">
-        <div className="container text-center">
-          <div className="divider divider-center" style={{marginBottom:28}}/>
-          <h2 className="h2" style={{color:"white",marginBottom:16}}>Klaar om je design te ontdekken?</h2>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:480,margin:"0 auto 28px"}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
-          <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
-            <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>Ontvang mijn persoonlijke rapport</button>
+
+      {/* ── PHOTO CTA ────────────────────────────────────────────────────── */}
+      <div className="photo-cta-section">
+        <div className="photo-cta-bg">
+          <img src={IMGS.cta} alt="Kosmische sterrenhemel" loading="lazy"/>
+        </div>
+        <div className="photo-cta-content">
+          <div className="divider divider-center" style={{marginBottom:32}}/>
+          <h2 className="h2" style={{color:"white",marginBottom:18,maxWidth:600,margin:"0 auto 18px"}}>Klaar om je design te ontdekken?</h2>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.48)",maxWidth:460,margin:"0 auto 36px"}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
+          <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",marginBottom:36}}>
+            <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>
+              Ontvang mijn persoonlijke rapport
+            </button>
             <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
           </div>
-          <div style={{height:28}}/>
           <TrustStrip light/>
         </div>
-      </section>
+      </div>
+
       <div className="sticky-cta">
-        <button className="btn btn-primary btn-full" onClick={()=>go("rapport-volledig")}>Ontvang mijn persoonlijke rapport — 75 euro</button>
+        <button className="btn btn-primary btn-full" onClick={()=>go("rapport-volledig")}>Ontvang mijn persoonlijke rapport — €75</button>
       </div>
     </div>
   );
@@ -1190,13 +1371,16 @@ function WatPage({go}){
   const faqs=[["Op basis waarvan wordt de chart berekend?","Alle charts worden berekend met de Meeus ephemeris — dezelfde astronomische algoritmen als professionele Human Design software. De berekening vereist je exacte geboortedatum, -tijd en -plaats."],["Is dit hetzelfde als een horoscoop?","Nee. Een horoscoop werkt met je zonneteken. Human Design combineert astronomische data met de I Ching, Kabbalistische centra en kwantumfysische principes tot een individuele blauwdruk."],["Wat als ik mijn geboortetijd niet weet?","De geboortetijd is relevant voor sommige centra. Controleer je geboorteakte voor de meest nauwkeurige berekening."],["Hoe lang duurt het om een rapport te ontvangen?","Na betaling wordt je rapport gegenereerd — 40+ paginas binnen 3 tot 4 minuten beschikbaar als PDF."],["Is het rapport persoonlijk of een template?","Elk rapport wordt volledig gegenereerd op basis van je specifieke chart. Geen twee rapporten zijn identiek."]];
   return(
     <div className="pg">
-      <section style={{background:"var(--brand)",padding:"100px 24px 72px"}}>
-        <div className="container-sm">
-          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Het systeem</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16}}>Wat is Human Design?</h1>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.55)",maxWidth:520}}>Een synthese van vier oude wijsheidssystemen die samen een precieze kaart vormen van wie je bent.</p>
+      <div className="origin-section" style={{minHeight:360}}>
+        <div className="origin-section-bg">
+          <img src={IMGS.hero} alt="Sterrenhemel" loading="eager"/>
         </div>
-      </section>
+        <div style={{position:"relative",zIndex:2,maxWidth:760,margin:"0 auto",padding:"100px 32px 72px",width:"100%"}}>
+          <div className="label-light" style={{marginBottom:14}}>Het systeem</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16}}>Wat is Human Design?</h1>
+          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:520,lineHeight:1.8}}>Een synthese van vier oude wijsheidssystemen die samen een precieze kaart vormen van wie je bent.</p>
+        </div>
+      </div>
       <section className="section bg-white">
         <div className="container-sm">
           <div className="label" style={{marginBottom:12}}>De vier pijlers</div>
@@ -1249,30 +1433,41 @@ function RapportenPage({go}){
   const sub=REPORTS.find(r=>r.id==="maandelijks");
   return(
     <div className="pg">
-      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
-        <div className="container">
-          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Alle rapporten</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:600}}>Kies je persoonlijke rapport</h1>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:520}}>Elk rapport is gebaseerd op exacte astronomische berekeningen. Geen generieke profielen.</p>
+      <div className="origin-section" style={{minHeight:360}}>
+        <div className="origin-section-bg">
+          <img src={IMGS.cosmos} alt="Kosmos" loading="eager"/>
         </div>
-      </section>
+        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"100px 32px 72px",width:"100%"}}>
+          <div className="label-light" style={{marginBottom:14}}>Alle rapporten</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:580}}>Kies je persoonlijke rapport</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen.</p>
+        </div>
+      </div>
       <section className="section bg-muted">
         <div className="container">
           <div className="label" style={{marginBottom:12}}>Human Design</div>
-          <h2 className="h2" style={{marginBottom:32}}>Human Design rapporten</h2>
+          <h2 className="h2" style={{marginBottom:36}}>Human Design rapporten</h2>
           <div className="grid-3">{hd.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
-          <div style={{height:1,background:"var(--border)",margin:"48px 0"}}/>
+          <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
           <div className="label" style={{marginBottom:12}}>Numerologie en Astrologie</div>
-          <h2 className="h2" style={{marginBottom:32}}>Aanvullende disciplines</h2>
-          <div className="grid-2" style={{maxWidth:720}}>{other.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
+          <h2 className="h2" style={{marginBottom:36}}>Aanvullende disciplines</h2>
+          <div className="grid-2" style={{maxWidth:780}}>{other.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
           {sub&&<>
-            <div style={{height:1,background:"var(--border)",margin:"48px 0"}}/>
-            <div style={{maxWidth:720}}>
+            <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
+            <div style={{maxWidth:760}}>
               <div className="label" style={{marginBottom:12}}>Abonnement</div>
               <div className="sub-card" style={{cursor:"pointer"}} onClick={()=>go("rapport-maandelijks")}>
-                <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:24}}>
-                  <div><div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem",color:"white",marginBottom:8}}>{sub.tagline}</div><p style={{fontSize:".9rem",color:"rgba(255,255,255,.5)",maxWidth:400,lineHeight:1.7}}>{sub.intro}</p></div>
-                  <div style={{textAlign:"center"}}><div className="sub-price">19 euro</div><div className="sub-price-period">per maand</div><div style={{height:12}}/><div className="btn btn-gold btn-sm">Bekijken</div></div>
+                <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:28}}>
+                  <div>
+                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",color:"white",marginBottom:10}}>{sub.tagline}</div>
+                    <p style={{fontSize:".92rem",color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{sub.intro}</p>
+                  </div>
+                  <div style={{textAlign:"center"}}>
+                    <div className="sub-price">€19</div>
+                    <div className="sub-price-period">per maand</div>
+                    <div style={{height:14}}/>
+                    <div className="btn btn-gold btn-sm">Bekijken</div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1289,6 +1484,9 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
   return(
     <div className="pg">
       <div className="detail-hero">
+        <div className="detail-hero-bg">
+          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rpt.title} loading="eager"/>
+        </div>
         <div className="detail-hero-inner">
           <div>
             <div className="detail-hero-badge">{rpt.icon} Faculty of Human Design</div>
@@ -1471,13 +1669,16 @@ function BlogPage({go}){
 
   return(
     <div className="pg">
-      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
-        <div className="container">
-          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Kennis</div>
-          <h1 className="h1" style={{color:"white",marginBottom:12}}>Inzichten en Achtergronden</h1>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:480}}>Artikelen over Human Design, Numerologie en Astrologie. Elke twee weken een nieuw artikel.</p>
+      <div className="origin-section" style={{minHeight:340}}>
+        <div className="origin-section-bg">
+          <img src={IMGS.cosmos} alt="Kosmische sfeer" loading="eager"/>
         </div>
-      </section>
+        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"100px 32px 72px",width:"100%"}}>
+          <div className="label-light" style={{marginBottom:14}}>Kennis</div>
+          <h1 className="h1" style={{color:"white",marginBottom:14}}>Inzichten en Achtergronden</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Artikelen over Human Design, Numerologie en Astrologie. Elke twee weken een nieuw artikel.</p>
+        </div>
+      </div>
       <section className="section bg-white">
         <div className="container-sm">
           {loading?(
@@ -1504,29 +1705,40 @@ function BlogPage({go}){
 function OverPage({go}){
   return(
     <div className="pg">
-      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
-        <div className="container">
-          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Over ons</div>
-          <h1 className="h1" style={{color:"white"}}>Faculty of Human Design</h1>
+      <div className="origin-section" style={{minHeight:420}}>
+        <div className="origin-section-bg">
+          <img src={IMGS.ibiza} alt="Ibiza zonsondergang" loading="eager"/>
         </div>
-      </section>
+        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"108px 32px 80px",width:"100%"}}>
+          <div className="label-light" style={{marginBottom:14}}>Over ons</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>Faculty of Human Design</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Opgericht op Ibiza in 2014. Diepgaande rapporten op basis van exacte astronomische berekening.</p>
+        </div>
+      </div>
       <section className="section bg-white">
         <div className="container">
-          <div className="grid-2" style={{gap:60,alignItems:"start"}}>
+          <div className="grid-2" style={{gap:64,alignItems:"start"}}>
             <div>
-              <div className="label" style={{marginBottom:12}}>Het instituut</div>
-              <h2 className="h2" style={{marginBottom:20}}>Opgericht op het eiland waar het begon</h2>
-              <p className="body-lg" style={{marginBottom:16}}>De Faculty of Human Design is in 2014 opgericht op Ibiza, het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving.</p>
-              <p className="body-md" style={{marginBottom:16}}>Wij zijn gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Geboorteastrologie. Alle rapporten worden gegenereerd op basis van exacte astronomische berekeningen.</p>
+              <div className="label" style={{marginBottom:14}}>Het instituut</div>
+              <h2 className="h2" style={{marginBottom:22}}>Opgericht op het eiland waar het begon</h2>
+              <p className="body-lg" style={{marginBottom:18}}>De Faculty of Human Design is in 2014 opgericht op Ibiza, het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving.</p>
+              <p className="body-md" style={{marginBottom:18}}>Wij zijn gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Geboorteastrologie. Alle rapporten worden gegenereerd op basis van exacte astronomische berekeningen.</p>
               <p className="body-md">Onze focus is smal en bewust: uitsluitend diepgaande, nauwkeurige geschreven analyse. Geen cursussen, geen coachingstrajecten.</p>
-              <div style={{display:"flex",gap:32,flexWrap:"wrap",marginTop:32}}>
+              <div style={{display:"flex",gap:36,flexWrap:"wrap",marginTop:36}}>
                 {[["2014","Opgericht"],["2.400+","Rapporten"],["8","Rapport soorten"],["4.9","Beoordeling"]].map(([n,l])=>(
                   <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
                 ))}
               </div>
             </div>
             <div>
-              <div style={{background:"var(--muted)",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"32px"}}>
+              <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-lg)",marginBottom:24,aspectRatio:"4/3",position:"relative"}}>
+                <img src={IMGS.origin} alt="Ibiza natuur" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(12,10,23,.6) 100%)"}}/>
+                <div style={{position:"absolute",bottom:20,left:20,right:20}}>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.75)",lineHeight:1.6}}>"Elk rapport is een weerspiegeling van de kosmos op het moment van jouw geboorte."</div>
+                </div>
+              </div>
+              <div style={{background:"var(--muted)",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"28px"}}>
                 <div className="label" style={{marginBottom:16}}>Onze aanpak</div>
                 {[["Exacte berekeningen","Meeus ephemeris, dezelfde algoritmen als professionele astronomische software."],["Persoonlijke analyse","Geen templates. Elk rapport gegenereerd op basis van je specifieke chart."],["Drie disciplines","Human Design, Numerologie en Astrologie, elk vanuit eigen methodologie."],["Directe levering","PDF beschikbaar binnen 3-4 minuten na invoer van je gegevens."]].map(([t,d])=>(
                   <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"14px 0"}}>
@@ -1534,8 +1746,8 @@ function OverPage({go}){
                     <p className="body-sm">{d}</p>
                   </div>
                 ))}
+                <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
               </div>
-              <div style={{marginTop:20}}><button className="btn btn-primary btn-full" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button></div>
             </div>
           </div>
         </div>
