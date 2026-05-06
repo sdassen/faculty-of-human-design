@@ -312,6 +312,11 @@ const REPORTS = [
     for:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.",
     sections:12, pages:"40+",
     prompt_extra:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2026-2028\n### 12. Slotanalyse",
+    reviews:[
+      ["Ik had al eerder iets gelezen over Human Design maar dit rapport bracht het echt tot leven. De sectie over mijn open centra was confronterend en bevrijdend tegelijk — ik herkende zo veel conditionering die ik als 'mezelf' had aangenomen. Drie maanden later lees ik het nog steeds.","Marieke V., Amsterdam"],
+      ["Precies wat ik zocht. Geen vage spirituele teksten maar concrete analyse van wie ik ben en hoe ik het beste functioneer.","Thomas D., Antwerpen"],
+      ["Het stuk over mijn Inkarnatie-Kruis heeft me echt geraakt. Ik begrijp nu waarom bepaalde dingen in mijn leven steeds terugkomen. De schrijfstijl is ook prettig — persoonlijk, niet droog of technisch.","Sofie M., Utrecht"],
+    ],
   },
   {
     id:"relatie", icon:"◎", tag:"",
@@ -323,6 +328,11 @@ const REPORTS = [
     for:"Voor koppels of zakenpartners die hun samenwerking dieper willen begrijpen.",
     sections:9, pages:"28+", needsPartner:true,
     prompt_extra:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse Persoon 1\n### 3. Chart Analyse Persoon 2\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit\n### 6. Communicatie & Conflict\n### 7. Groeigebieden\n### 8. Gezamenlijk Levensdoel\n### 9. Praktisch Advies",
+    reviews:[
+      ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom — onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
+      ["Ik had dit ook als zakenpartners met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
+      ["Verrassend diepgaand. Niet alleen 'jullie vullen elkaar aan' maar echt concrete patronen en waar de wrijving vandaan komt.","Nathalie D., Brugge"],
+    ],
   },
   {
     id:"jaar", icon:"◈", tag:"",
@@ -334,6 +344,11 @@ const REPORTS = [
     for:"Voor wie het jaar bewust en gericht wil ingaan.",
     sections:9, pages:"22+",
     prompt_extra:"### 1. Energie van Je Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
+    reviews:[
+      ["Ik bestel dit elk jaar rond mijn verjaardag. Het kwartaaloverzicht gebruik ik echt als leidraad — niet als agenda maar als bewustzijn van wat er op me afkomt. Dit jaar klopte het weer opvallend goed.","Roos B., Utrecht"],
+      ["Het rapport beschreef een thema van 'loslaten en vertrouwen' voor het derde kwartaal. Ik was sceptisch, maar er gebeurde inderdaad iets in die periode wat ik niet had zien aankomen. Achteraf paste het precies in dat verhaal.","Joost V., Den Haag"],
+      ["Fijn dat het niet alleen over 'kansen' gaat maar ook eerlijk is over uitdagingen. Dat maakt het geloofwaardiger.","Anke S., Leiden"],
+    ],
   },
   {
     id:"kind", icon:"◇", tag:"",
@@ -345,6 +360,11 @@ const REPORTS = [
     for:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.",
     sections:10, pages:"24+", needsChild:true,
     prompt_extra:"### 1. Het Unieke Design van Je Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Je Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
+    reviews:[
+      ["Mijn dochter van 9 werd altijd gezien als 'druk' of 'moeilijk'. Het rapport legde uit dat zij een Manifestor is en dat haar behoefte om dingen zelf te initiëren volkomen logisch is. Sindsdien botsen we veel minder.","Sandra P., Haarlem"],
+      ["Ik was aanvankelijk sceptisch — mijn kind is nog maar 6. Maar de beschrijving van zijn leerstijl klopte zo precies dat mijn man en ik allebei stil werden.","Femke J., Eindhoven"],
+      ["De opvoedtips zijn niet vaag maar heel concreet: hoe reageer je wanneer je kind iets weigert, hoe geef je grenzen aan op een manier die bij zijn type past. Dat is echt bruikbaar.","David C., Maastricht"],
+    ],
   },
   {
     id:"loopbaan", icon:"◆", tag:"",
@@ -356,6 +376,11 @@ const REPORTS = [
     for:"Voor iedereen die wil werken en verdienen in lijn met wie zij zijn.",
     sections:9, pages:"24+",
     prompt_extra:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe Je Geld Aantrekt\n### 4. Je Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
+    reviews:[
+      ["Na twaalf jaar in loondienst twijfelde ik of ik voor mezelf moest beginnen. Het rapport was heel helder: mijn type en profiel passen beter bij zelfstandig werken, en het legde ook uit waarom ik me in teamverband altijd een beetje gevangen voel. Twee maanden later had ik mijn eerste eigen klant.","Laura M., Amsterdam"],
+      ["Het stuk over 'hoe ik geld aantrek' klonk in eerste instantie zweverig maar de uitleg was verrassend praktisch — het gaat over hoe je je werk aanbiedt en op welk moment je ja of nee zegt.","Kevin T., Antwerpen"],
+      ["Ik gebruik het rapport nog steeds als naslagwerk bij carrièrebeslissingen. Het geeft me een referentiepunt.","Isabel R., Utrecht"],
+    ],
   },
   {
     id:"numerologie", icon:"∞", tag:"",
@@ -367,6 +392,11 @@ const REPORTS = [
     for:"Voor iedereen die de diepere betekenis van naam en geboortedag wil begrijpen.",
     sections:12, pages:"30+",
     prompt_extra:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2026\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
+    reviews:[
+      ["Ik heb een levenspadgetal 11 en had altijd het gevoel anders te zijn. Voor het eerst las ik een uitleg die dat niet pathologiseerde maar als een gave behandelde. Dat deed iets met me.","Vera N., Nijmegen"],
+      ["Ik was benieuwd of numerologie iets zou toevoegen naast mijn Human Design rapport. Het bleek een andere invalshoek die elkaar goed aanvult — het ene gaat over energie, het andere over levenslessen en patronen.","Frank O., Den Bosch"],
+      ["De sectie over mijn persoonlijk jaar was opvallend accuraat voor wat er dit jaar speelt.","Mirjam H., Groningen"],
+    ],
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
@@ -378,6 +408,11 @@ const REPORTS = [
     for:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.",
     sections:12, pages:"32+",
     prompt_extra:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
+    reviews:[
+      ["Ik heb veel horoscopen gelezen maar dit was de eerste die écht inging op de spanning tussen mijn Maan en Ascendant. Dat is precies waar ik mijn leven lang mee worstel. Het voelde alsof iemand mij eindelijk begreep.","Charlotte B., Leiden"],
+      ["Diepgaander dan ik had verwacht. Niet alleen de zonnetekens maar alle huizen, aspecten, de Midhemel — een volledig portret. Ik heb het met mijn therapeut gedeeld als extra context.","Bart V., Gent"],
+      ["Goed geschreven en toegankelijk, ook als je niet veel weet van astrologie. De kern kwam meteen over.","Yasmine K., Rotterdam"],
+    ],
   },
   {
     id:"maandelijks", icon:"◯", tag:"Abonnement",
@@ -389,6 +424,11 @@ const REPORTS = [
     for:"Voor wie maandelijks bewust wil leven in lijn met hun design.",
     sections:6, pages:"12+",
     prompt_extra:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van jou Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
+    reviews:[
+      ["Ik ben nu acht maanden abonnee. Elke maand lees ik het rapport in de eerste week en gebruik ik de intentie als anker. Het is bescheiden in omvang maar precies genoeg.","Noor A., Amsterdam"],
+      ["Wat ik fijn vind is dat het niet overlaadt met informatie. Eén duidelijke intentie voor de maand, een paar aandachtspunten — dat is genoeg om bewust mee te leven.","Tom S., Breda"],
+      ["Vorige maand beschreef het rapport een thema van 'terugkeer naar jezelf'. Ik had net een zware periode achter de rug en het voelde alsof het precies op het juiste moment kwam.","Lisa V., Utrecht"],
+    ],
   },
 ];
 
@@ -1179,7 +1219,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           <div className="label" style={{marginBottom:12}}>Ervaringen</div>
           <h2 className="h2" style={{marginBottom:32}}>Wat klanten zeggen</h2>
           <div className="grid-3">
-            {[["Niks was zo concreet en inzichtelijk. Eindelijk begrijp ik waarom ik zo in elkaar zit.","Marieke V., Amsterdam"],["Een feest van herkenning. Zoveel inzicht in wie ik ben en hoe ik het beste opereer.","Thomas D., Antwerpen"],["Ik lees het telkens opnieuw. Elke keer ontdek ik iets nieuws.","Sofie M., Utrecht"]].map(([q,n])=>(
+            {(rpt.reviews||[]).map(([q,n])=>(
               <div className="tcard" key={n}><div className="stars">★★★★★</div><div className="tcard-quote">"{q}"</div><div className="tcard-author">{n}</div></div>
             ))}
           </div>
