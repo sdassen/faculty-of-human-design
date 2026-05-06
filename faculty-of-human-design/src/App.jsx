@@ -1486,7 +1486,7 @@ export default function App(){
       let retries=2;
       while(retries>=0){
         try{
-          const res=await fetch("https://api.anthropic.com/v1/messages",{
+          const res=await fetch("/api/generate-report",{
             method:"POST",headers:{"Content-Type":"application/json"},
             body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:SYSTEM,
               messages:[{role:"user",content:prompt}]})
