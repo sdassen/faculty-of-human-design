@@ -655,12 +655,12 @@ function Footer({go}){
 
 
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
-function ReportForm({rpt,onDone}){
+function ReportForm({rpt,onDone,postPayment}){
   const[form,setForm]=useState({name:"",day:"",month:"",year:"",hour:"",minute:"",place:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:""});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
-  const[loading,setLoading]=useState(false);
+  const[loading,setLoading]=useState(false);const[autoTrigger,setAutoTrigger]=useState(false);useEffect(()=>{if(!postPayment)return;setChart(postPayment.chart);setForm(f=>({...f,...postPayment.form}));setAutoTrigger(true);},[postPayment]);useEffect(()=>{if(autoTrigger&&chart){setAutoTrigger(false);doReport();}},[autoTrigger,chart]);
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   const isNum=rpt.id==="numerologie";
   const isHoro=rpt.id==="horoscoop";
@@ -1097,7 +1097,7 @@ function RapportenPage({go}){
   );
 }
 
-function ReportDetailPage({rpt,go,onDone}){
+function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
   const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software."],["Is het rapport persoonlijk?","Elk rapport wordt volledig op maat gegenereerd op basis van uw specifieke chart. Geen twee rapporten zijn identiek."],["In welk format ontvang ik het rapport?","Direct als PDF via de browser. Sla op via het printvenster."],["Kan ik het rapport meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate u er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die u heeft. Type en Autoriteit zijn meestal al correct."]];
   return(
@@ -1180,7 +1180,7 @@ function ReportDetailPage({rpt,go,onDone}){
           ))}
         </div>
       </section>
-      <ReportForm rpt={rpt} onDone={onDone}/>
+      <ReportForm rpt={rpt} onDone={onDone} postPayment={postPayment}/>
       <div className="sticky-cta">
         <button className="btn btn-primary btn-full" onClick={()=>{track("hero_cta_click",{location:"sticky",report:rpt.id});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
           {rpt.title} bestellen — {rpt.price}
