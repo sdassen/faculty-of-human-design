@@ -689,7 +689,7 @@ function ReportForm({rpt,onDone,postPayment}){
         const sec=sections[i];
         setLs(Math.min(i,LSTEPS.length-1));setPr(Math.round((i/sections.length)*95));
         const prompt=chartContext+"\n\nSchrijf uitsluitend sectie '"+sec+"' van het rapport voor "+form.name+". Minimaal 900 woorden, in alineas, persoonlijk en concreet.";
-        const res=await fetch("https://api.anthropic.com/v1/messages",{
+        const res=await fetch("/api/generate-report",{
           method:"POST",headers:{"Content-Type":"application/json"},
           body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:SYSTEM,
             messages:[{role:"user",content:prompt}]})
