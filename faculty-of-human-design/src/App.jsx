@@ -308,10 +308,10 @@ const REPORTS = [
     price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
     tagline:"Je complete persoonlijke blauwdruk",
     intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
-    includes:["Type, Strategie & Signature","Autoriteit — hoe je beslissingen neemt","Profiel — het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — je natuurlijke kwaliteiten","Inkarnatie-Kruis — je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2025–2027"],
+    includes:["Type, Strategie & Signature","Autoriteit — hoe je beslissingen neemt","Profiel — het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — je natuurlijke kwaliteiten","Inkarnatie-Kruis — je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2026–2028"],
     for:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.",
     sections:12, pages:"40+",
-    prompt_extra:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2025-2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2026-2028\n### 12. Slotanalyse",
   },
   {
     id:"relatie", icon:"◎", tag:"",
@@ -326,11 +326,11 @@ const REPORTS = [
   },
   {
     id:"jaar", icon:"◈", tag:"",
-    title:"Jaarrapport 2025",
+    title:"Jaarrapport 2026",
     price:"€55", priceNum:55, sub:"Eenmalig · Direct als PDF",
     tagline:"De energetische thema's van je jaar",
     intro:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
-    includes:["Solar Return analyse","Dominante thema's voor 2025","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op je chart","Kansen en aandachtspunten","Intentie voor het jaar"],
+    includes:["Solar Return analyse","Dominante thema's voor 2026","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op je chart","Kansen en aandachtspunten","Intentie voor het jaar"],
     for:"Voor wie het jaar bewust en gericht wil ingaan.",
     sections:9, pages:"22+",
     prompt_extra:"### 1. Energie van Je Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
@@ -363,10 +363,10 @@ const REPORTS = [
     price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
     tagline:"De getallen achter je naam en geboortedag",
     intro:"Op basis van je volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van je aard en levensdoel.",
-    includes:["Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk jaar 2025","Rijpingsgetal","Mastergetallen indien aanwezig"],
+    includes:["Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk jaar 2026","Rijpingsgetal","Mastergetallen indien aanwezig"],
     for:"Voor iedereen die de diepere betekenis van naam en geboortedag wil begrijpen.",
     sections:12, pages:"30+",
-    prompt_extra:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2025\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2026\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
@@ -377,7 +377,7 @@ const REPORTS = [
     includes:["Zonneteken","Ascendant","Maan — je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — je roeping","Dominant element & modaliteit"],
     for:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.",
     sections:12, pages:"32+",
-    prompt_extra:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
   },
   {
     id:"maandelijks", icon:"◯", tag:"Abonnement",
@@ -515,7 +515,7 @@ function calcHoroscoop(y,m,d,h,min){
 
 // ─── PROMPT BUILDER ───────────────────────────────────────────────────────────
 const MONTHS=["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
-const LSTEPS=["Inleiding schrijven","Type & Strategie","Autoriteit analyseren","Profiel uitwerken","Centra beschrijven","Conditionering","Poorten in detail","Inkarnatie-Kruis","Relaties","Werk & Financien","Guidance 2025-2027","Slotanalyse"];
+const LSTEPS=["Inleiding schrijven","Type & Strategie","Autoriteit analyseren","Profiel uitwerken","Centra beschrijven","Conditionering","Poorten in detail","Inkarnatie-Kruis","Relaties","Werk & Financien","Guidance 2026-2028","Slotanalyse"];
 
 function buildPrompt(chart,form,rpt){
   if(rpt.id==="numerologie"){
@@ -659,7 +659,7 @@ function Footer({go}){
           </div>
         </div>
         <div className="footer-bottom">
-          <div className="footer-copy">© 2025 Faculty of Human Design. Alle rechten voorbehouden.</div>
+          <div className="footer-copy">© 2026 Faculty of Human Design. Alle rechten voorbehouden.</div>
           <div className="footer-trust">
             <div className="footer-trust-item">🔒 SSL beveiligd</div>
             <div className="footer-trust-item">🇳🇱 iDEAL beschikbaar</div>
