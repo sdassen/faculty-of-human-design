@@ -306,19 +306,19 @@ const REPORTS = [
     id:"volledig", icon:"✦", tag:"Meest gekozen",
     title:"Volledig Human Design Rapport",
     price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
-    tagline:"Uw complete persoonlijke blauwdruk",
-    intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van uw Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
-    includes:["Type, Strategie & Signature","Autoriteit — hoe u beslissingen neemt","Profiel — het verhaal van uw leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — uw natuurlijke kwaliteiten","Inkarnatie-Kruis — uw levensdoel","Relaties & werk vanuit uw design","Praktische guidance 2025–2027"],
+    tagline:"Je complete persoonlijke blauwdruk",
+    intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
+    includes:["Type, Strategie & Signature","Autoriteit — hoe je beslissingen neemt","Profiel — het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — je natuurlijke kwaliteiten","Inkarnatie-Kruis — je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2025–2027"],
     for:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.",
     sections:12, pages:"40+",
-    prompt_extra:"### 1. Uw Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Uw Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2025-2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2025-2027\n### 12. Slotanalyse",
   },
   {
     id:"relatie", icon:"◎", tag:"",
     title:"Relatierapport",
     price:"€95", priceNum:95, sub:"Eenmalig · Direct als PDF",
     tagline:"Twee designs naast elkaar geanalyseerd",
-    intro:"Een analyse van twee volledige Human Design charts. Hoe opereren u en uw partner energetisch samen — waar vullen jullie elkaar aan en waar ontstaat wrijving?",
+    intro:"Een analyse van twee volledige Human Design charts. Hoe opereren je en je partner energetisch samen — waar vullen jullie elkaar aan en waar ontstaat wrijving?",
     includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatiepatronen","Conflictpatronen & doorbraken","Gezamenlijk levensdoel","Praktisch advies voor harmonie"],
     for:"Voor koppels of zakenpartners die hun samenwerking dieper willen begrijpen.",
     sections:9, pages:"28+", needsPartner:true,
@@ -328,67 +328,67 @@ const REPORTS = [
     id:"jaar", icon:"◈", tag:"",
     title:"Jaarrapport 2025",
     price:"€55", priceNum:55, sub:"Eenmalig · Direct als PDF",
-    tagline:"De energetische thema's van uw jaar",
-    intro:"Gebaseerd op uw Solar Return — de posities van de planeten op uw verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
-    includes:["Solar Return analyse","Dominante thema's voor 2025","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op uw chart","Kansen en aandachtspunten","Intentie voor het jaar"],
+    tagline:"De energetische thema's van je jaar",
+    intro:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
+    includes:["Solar Return analyse","Dominante thema's voor 2025","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op je chart","Kansen en aandachtspunten","Intentie voor het jaar"],
     for:"Voor wie het jaar bewust en gericht wil ingaan.",
     sections:9, pages:"22+",
-    prompt_extra:"### 1. Energie van Uw Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
+    prompt_extra:"### 1. Energie van Je Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
   },
   {
     id:"kind", icon:"◇", tag:"",
     title:"Kinderrapport",
     price:"€45", priceNum:45, sub:"Eenmalig · Direct als PDF",
-    tagline:"Uw kind begrijpen vanuit zijn of haar design",
-    intro:"Een rapport voor ouders. Hoe gebruikt uw kind energie en hoe leert het het beste?",
-    includes:["Type & energiegebruik","Hoe uw kind beslissingen neemt","Leerstijl & communicatie","Behoeften & grenzen","Opvoedtips op maat","Gaven & talenten"],
+    tagline:"Je kind begrijpen vanuit zijn of haar design",
+    intro:"Een rapport voor ouders. Hoe gebruik je kind energie en hoe leert het het beste?",
+    includes:["Type & energiegebruik","Hoe je kind beslissingen neemt","Leerstijl & communicatie","Behoeften & grenzen","Opvoedtips op maat","Gaven & talenten"],
     for:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.",
     sections:10, pages:"24+", needsChild:true,
-    prompt_extra:"### 1. Het Unieke Design van Uw Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Uw Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
+    prompt_extra:"### 1. Het Unieke Design van Je Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Je Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
   },
   {
     id:"loopbaan", icon:"◆", tag:"",
     title:"Loopbaan & Geld Rapport",
     price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
-    tagline:"Werk en financiën vanuit uw design",
-    intro:"Hoe maakt u geld op een manier die bij u past? Welke werkomgeving geeft u energie?",
-    includes:["Ideale werkomgeving","Hoe u geld aantrekt","Uw professionele kracht","Samenwerking & leiderschap","Valkuilen op de werkvloer","Ondernemen vs. loondienst","Financiële strategie op maat"],
+    tagline:"Werk en financiën vanuit je design",
+    intro:"Hoe maakt je geld op een manier die bij jou past? Welke werkomgeving geeft je energie?",
+    includes:["Ideale werkomgeving","Hoe je geld aantrekt","Je professionele kracht","Samenwerking & leiderschap","Valkuilen op de werkvloer","Ondernemen vs. loondienst","Financiële strategie op maat"],
     for:"Voor iedereen die wil werken en verdienen in lijn met wie zij zijn.",
     sections:9, pages:"24+",
-    prompt_extra:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe U Geld Aantrekt\n### 4. Uw Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
+    prompt_extra:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe Je Geld Aantrekt\n### 4. Je Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
   },
   {
     id:"numerologie", icon:"∞", tag:"",
     title:"Numerologie Rapport",
     price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
-    tagline:"De getallen achter uw naam en geboortedag",
-    intro:"Op basis van uw volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van uw aard en levensdoel.",
+    tagline:"De getallen achter je naam en geboortedag",
+    intro:"Op basis van je volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van je aard en levensdoel.",
     includes:["Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk jaar 2025","Rijpingsgetal","Mastergetallen indien aanwezig"],
     for:"Voor iedereen die de diepere betekenis van naam en geboortedag wil begrijpen.",
     sections:12, pages:"30+",
-    prompt_extra:"### 1. Uw Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2025\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Uw Getallen Samenwerken\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2025\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
     title:"Geboortehoroscoop",
     price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
-    tagline:"Uw complete astrologische chart",
-    intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van uw geboorte.",
-    includes:["Zonneteken","Ascendant","Maan — uw emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — uw roeping","Dominant element & modaliteit"],
+    tagline:"Je complete astrologische chart",
+    intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.",
+    includes:["Zonneteken","Ascendant","Maan — je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — je roeping","Dominant element & modaliteit"],
     for:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.",
     sections:12, pages:"32+",
-    prompt_extra:"### 1. Uw Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
+    prompt_extra:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2025-2027\n### 12. Slotanalyse",
   },
   {
     id:"maandelijks", icon:"◯", tag:"Abonnement",
     title:"Maandelijkse Guidance",
     price:"€19/mnd", priceNum:19, sub:"Maandelijks opzegbaar",
-    tagline:"Elke maand uw persoonlijke energiegids",
-    intro:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op uw Human Design chart.",
+    tagline:"Elke maand je persoonlijke energiegids",
+    intro:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart.",
     includes:["Energie & thema's van de maand","Planetaire invloeden","Kansen & aandachtspunten","Praktisch advies","Intentie voor de maand"],
     for:"Voor wie maandelijks bewust wil leven in lijn met hun design.",
     sections:6, pages:"12+",
-    prompt_extra:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van U Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
+    prompt_extra:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van jou Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
   },
 ];
 
@@ -464,7 +464,7 @@ function calcHD(y,m,d,h,min){
   let type,strat,sig,notSelf;
   if(hasSac&&hasThr){type="Manifesting Generator";strat="Informeer, reageer dan vanuit het sacraal";sig="Bevrediging & Vrede";notSelf="Frustratie & Woede";}
   else if(hasSac){type="Generator";strat="Wacht om te reageren";sig="Bevrediging";notSelf="Frustratie";}
-  else if(hasThr&&hasMotor){type="Manifestor";strat="Informeer voor u handelt";sig="Vrede";notSelf="Woede";}
+  else if(hasThr&&hasMotor){type="Manifestor";strat="Informeer voor jou handelt";sig="Vrede";notSelf="Woede";}
   else if(defC.size===0){type="Reflector";strat="Wacht een maancyclus";sig="Verrassing";notSelf="Teleurstelling";}
   else{type="Projector";strat="Wacht op de uitnodiging";sig="Succes";notSelf="Bitterheid";}
   let auth="Mentaal";
@@ -476,8 +476,8 @@ function calcHD(y,m,d,h,min){
 }
 
 // ─── NUMEROLOGY ───────────────────────────────────────────────────────────────
-const PYTH={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
-const VOWELS_SET=new Set(["A","E","I","O","U"]);
+const PYTH={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,Je:3,V:4,W:5,X:6,Y:7,Z:8};
+const VOWELS_SET=new Set(["A","E","I","O","Je"]);
 const NUM_NAMES={1:"De Leider",2:"De Diplomaat",3:"De Creatieveling",4:"De Bouwer",5:"De Avonturier",6:"De Verzorger",7:"De Zoeker",8:"De Zakenman",9:"De Mensheid",11:"De Meester Intuïtief",22:"De Meester Bouwer",33:"De Meester Leraar"};
 function numReduce(n){while(n>9){if(n===11||n===22||n===33)break;n=[...String(n)].reduce((a,d)=>a+parseInt(d),0);}return n;}
 function nameSum(str){return[...str.toUpperCase()].reduce((a,c)=>a+(PYTH[c]||0),0);}
@@ -746,8 +746,8 @@ function ReportForm({rpt,onDone,postPayment}){
       <div className="section bg-muted" id="bestel">
         <div className="container-sm">
           <div className="label" style={{marginBottom:8}}>Stap 1 — Gegevens invoeren</div>
-          <h2 className="h2" style={{marginBottom:8}}>Vul uw geboortegegevens in</h2>
-          <p className="body-md" style={{marginBottom:32}}>Uw chart wordt direct gratis berekend. U betaalt pas na het bekijken van uw chart.</p>
+          <h2 className="h2" style={{marginBottom:8}}>Vul je geboortegegevens in</h2>
+          <p className="body-md" style={{marginBottom:32}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
           <div className="form-wrap">
             <div style={{marginBottom:20}}>
               <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:4}}>{rpt.title}</div>
@@ -786,7 +786,7 @@ function ReportForm({rpt,onDone,postPayment}){
               </div>
             </>}
             <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={doChart} disabled={!ok}>Bereken mijn chart gratis</button>
-            <p className="form-note">Gratis berekening — geen betaling vereist om uw chart te zien.<br/>🔒 Uw gegevens worden vertrouwelijk behandeld.</p>
+            <p className="form-note">Gratis berekening — geen betaling vereist om je chart te zien.<br/>🔒 Je gegevens worden vertrouwelijk behandeld.</p>
           </div>
         </div>
       </div>
@@ -794,8 +794,8 @@ function ReportForm({rpt,onDone,postPayment}){
       {chart&&(
         <div className="section bg-white" id="chart-res">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:8}}>Stap 2 — Uw chart</div>
-            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Uw kerngetallen":chart.isHoroscoop?"Uw planeetstanden":"Uw Human Design chart"}</h2>
+            <div className="label" style={{marginBottom:8}}>Stap 2 — Je chart</div>
+            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Je kerngetallen":chart.isHoroscoop?"Je planeetstanden":"Je Human Design chart"}</h2>
             <div className="grid-2" style={{gap:28}}>
               <div>
                 <div className="chart-result">
@@ -837,13 +837,13 @@ function ReportForm({rpt,onDone,postPayment}){
                   <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",border:"1px solid var(--border)",padding:32,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,minHeight:200}}>
                     <div style={{fontFamily:"var(--font-serif)",fontSize:"3rem",color:"rgba(61,44,94,.15)"}}>{chart.isNumerology?"∞":"☽"}</div>
                     <div className="label">{chart.isNumerology?"Numerologische berekening":"Astrologische berekening"}</div>
-                    <p className="body-sm">Berekend op basis van uw exacte geboortedata.</p>
+                    <p className="body-sm">Berekend op basis van je exacte geboortedata.</p>
                   </div>
                 )}
               </div>
             </div>
             <div className="order-block" style={{marginTop:24}}>
-              <div className="order-block-title">Stap 3 — Ontvang uw volledige rapport</div>
+              <div className="order-block-title">Stap 3 — Ontvang je volledige rapport</div>
               <div className="order-block-sub">Chart berekend. Het volledige rapport bevat {rpt.pages} paginas diepgaande persoonlijke analyse — direct als PDF.</div>
               <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>Betalen en rapport ontvangen — {rpt.price}</button>
               <div style={{marginTop:10}}><TrustStrip light/></div>
@@ -866,8 +866,8 @@ function HomePage({go}){
         <div className="hero-content">
           <div>
             <div className="hero-eyebrow">Faculty of Human Design — Ibiza, Spanje</div>
-            <h1 className="h1-hero hero-title">Uw persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
-            <p className="body-lg" style={{color:"rgba(255,255,255,.58)",maxWidth:500,marginTop:16}}>Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van uw exacte geboortedata.</p>
+            <h1 className="h1-hero hero-title">Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
+            <p className="body-lg" style={{color:"rgba(255,255,255,.58)",maxWidth:500,marginTop:16}}>Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata.</p>
             <div className="hero-actions">
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>Ontvang mijn persoonlijke rapport</button>
               <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
@@ -897,7 +897,7 @@ function HomePage({go}){
             <div>
               <div className="label" style={{marginBottom:12}}>Meest gekozen</div>
               <h2 className="h2" style={{marginBottom:16}}>Volledig Human Design Rapport</h2>
-              <p className="body-lg" style={{marginBottom:20}}>Uw complete persoonlijke blauwdruk — van Type en Autoriteit tot Inkarnatie-Kruis. 40+ paginas, direct als PDF.</p>
+              <p className="body-lg" style={{marginBottom:20}}>Je complete persoonlijke blauwdruk — van Type en Autoriteit tot Inkarnatie-Kruis. 40+ paginas, direct als PDF.</p>
               <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:10,marginBottom:24}}>
                 {REPORTS[0].includes.map((item,i)=>(
                   <li key={i} style={{display:"flex",gap:10,alignItems:"flex-start",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)"}}>
@@ -934,7 +934,7 @@ function HomePage({go}){
         <div className="container">
           <div className="text-center" style={{marginBottom:48}}>
             <div className="label" style={{marginBottom:12}}>Alle rapporten</div>
-            <h2 className="h2">Kies uw rapport</h2>
+            <h2 className="h2">Kies je rapport</h2>
           </div>
           <div className="grid-3">
             {REPORTS.filter(r=>r.id!=="volledig").slice(0,3).map(r=>(
@@ -950,12 +950,12 @@ function HomePage({go}){
         <div className="container-md">
           <div className="text-center" style={{marginBottom:40}}>
             <div className="label" style={{marginBottom:12}}>Hoe het werkt</div>
-            <h2 className="h2">In drie stappen uw rapport</h2>
+            <h2 className="h2">In drie stappen je rapport</h2>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:24,maxWidth:640,margin:"0 auto"}}>
-            <StepCard num="1" title="Voer uw geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Uw chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
-            <StepCard num="2" title="Bekijk uw chart" desc="Zie direct uw Type, Autoriteit, Profiel en gedefinieerde centra. Gratis en direct."/>
-            <StepCard num="3" title="Ontvang uw rapport" desc="Na betaling wordt uw rapport gegenereerd — 40+ paginas persoonlijke analyse, direct als PDF."/>
+            <StepCard num="1" title="Voer je geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Je chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
+            <StepCard num="2" title="Bekijk je chart" desc="Zie direct je Type, Autoriteit, Profiel en gedefinieerde centra. Gratis en direct."/>
+            <StepCard num="3" title="Ontvang je rapport" desc="Na betaling wordt je rapport gegenereerd — 40+ paginas persoonlijke analyse, direct als PDF."/>
           </div>
         </div>
       </section>
@@ -984,7 +984,7 @@ function HomePage({go}){
               <div>
                 <div style={{fontSize:".65rem",fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(154,128,80,.8)",marginBottom:12}}>Abonnement</div>
                 <h2 className="h2" style={{color:"white",marginBottom:12}}>Maandelijkse Guidance</h2>
-                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.75,maxWidth:480}}>Elke maand een persoonlijk rapport over de energetische themas van die maand, afgestemd op uw Human Design chart.</p>
+                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.75,maxWidth:480}}>Elke maand een persoonlijk rapport over de energetische themas van die maand, afgestemd op je Human Design chart.</p>
               </div>
               <div style={{textAlign:"center",flexShrink:0}}>
                 <div className="sub-price">19 euro</div>
@@ -999,8 +999,8 @@ function HomePage({go}){
       <section className="section bg-dark">
         <div className="container text-center">
           <div className="divider divider-center" style={{marginBottom:28}}/>
-          <h2 className="h2" style={{color:"white",marginBottom:16}}>Klaar om uw design te ontdekken?</h2>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:480,margin:"0 auto 28px"}}>Uw chart wordt direct gratis berekend. U betaalt pas na het bekijken van uw chart.</p>
+          <h2 className="h2" style={{color:"white",marginBottom:16}}>Klaar om je design te ontdekken?</h2>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:480,margin:"0 auto 28px"}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
           <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
             <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>Ontvang mijn persoonlijke rapport</button>
             <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
@@ -1018,14 +1018,14 @@ function HomePage({go}){
 
 function WatPage({go}){
   const[faq,setFaq]=useState(null);
-  const faqs=[["Op basis waarvan wordt de chart berekend?","Alle charts worden berekend met de Meeus ephemeris — dezelfde astronomische algoritmen als professionele Human Design software. De berekening vereist uw exacte geboortedatum, -tijd en -plaats."],["Is dit hetzelfde als een horoscoop?","Nee. Een horoscoop werkt met uw zonneteken. Human Design combineert astronomische data met de I Ching, Kabbalistische centra en kwantumfysische principes tot een individuele blauwdruk."],["Wat als ik mijn geboortetijd niet weet?","De geboortetijd is relevant voor sommige centra. Controleer uw geboorteakte voor de meest nauwkeurige berekening."],["Hoe lang duurt het om een rapport te ontvangen?","Na betaling wordt uw rapport gegenereerd — 40+ paginas binnen 3 tot 4 minuten beschikbaar als PDF."],["Is het rapport persoonlijk of een template?","Elk rapport wordt volledig gegenereerd op basis van uw specifieke chart. Geen twee rapporten zijn identiek."]];
+  const faqs=[["Op basis waarvan wordt de chart berekend?","Alle charts worden berekend met de Meeus ephemeris — dezelfde astronomische algoritmen als professionele Human Design software. De berekening vereist je exacte geboortedatum, -tijd en -plaats."],["Is dit hetzelfde als een horoscoop?","Nee. Een horoscoop werkt met je zonneteken. Human Design combineert astronomische data met de I Ching, Kabbalistische centra en kwantumfysische principes tot een individuele blauwdruk."],["Wat als ik mijn geboortetijd niet weet?","De geboortetijd is relevant voor sommige centra. Controleer je geboorteakte voor de meest nauwkeurige berekening."],["Hoe lang duurt het om een rapport te ontvangen?","Na betaling wordt je rapport gegenereerd — 40+ paginas binnen 3 tot 4 minuten beschikbaar als PDF."],["Is het rapport persoonlijk of een template?","Elk rapport wordt volledig gegenereerd op basis van je specifieke chart. Geen twee rapporten zijn identiek."]];
   return(
     <div className="pg">
       <section style={{background:"var(--brand)",padding:"100px 24px 72px"}}>
         <div className="container-sm">
           <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Het systeem</div>
           <h1 className="h1" style={{color:"white",marginBottom:16}}>Wat is Human Design?</h1>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.55)",maxWidth:520}}>Een synthese van vier oude wijsheidssystemen die samen een precieze kaart vormen van wie u bent.</p>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.55)",maxWidth:520}}>Een synthese van vier oude wijsheidssystemen die samen een precieze kaart vormen van wie je bent.</p>
         </div>
       </section>
       <section className="section bg-white">
@@ -1033,7 +1033,7 @@ function WatPage({go}){
           <div className="label" style={{marginBottom:12}}>De vier pijlers</div>
           <h2 className="h2" style={{marginBottom:32}}>Gebouwd op eeuwenoude wijsheid</h2>
           <div className="grid-2">
-            {[["I Ching","De 64 hexagrammen worden de 64 poorten in uw design."],["Kabbalah","De Boom des Levens vormt de basis van de 9 centra."],["Astrologie","Planetaire posities activeren specifieke poorten."],["Kwantumfysica","De centra corresponderen met hormoonklieren."]].map(([t,d])=>(
+            {[["I Ching","De 64 hexagrammen worden de 64 poorten in je design."],["Kabbalah","De Boom des Levens vormt de basis van de 9 centra."],["Astrologie","Planetaire posities activeren specifieke poorten."],["Kwantumfysica","De centra corresponderen met hormoonklieren."]].map(([t,d])=>(
               <div key={t} style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8}}>{t}</div>
                 <p className="body-sm">{d}</p>
@@ -1045,8 +1045,8 @@ function WatPage({go}){
       <section className="section bg-muted">
         <div className="container-sm">
           <div className="label" style={{marginBottom:12}}>De vijf types</div>
-          <h2 className="h2" style={{marginBottom:32}}>Welk type bent u?</h2>
-          {[["Generator","37%","Wacht om te reageren","De primaire energiebron. Opereert optimaal wanneer het reageert op externe impulsen."],["Manifesting Generator","33%","Informeer reageer dan","Snel, veelzijdig en multidimensionaal."],["Projector","20%","Wacht op de uitnodiging","Geboren om te leiden en begeleiden wanneer uitgenodigd."],["Manifestor","9%","Informeer voor u handelt","Het enige type dat direct initiatief kan nemen."],["Reflector","1%","Wacht een maancyclus","Spiegel van de gemeenschap."]].map(([t,pct,s,d])=>(
+          <h2 className="h2" style={{marginBottom:32}}>Welk type ben je?</h2>
+          {[["Generator","37%","Wacht om te reageren","De primaire energiebron. Opereert optimaal wanneer het reageert op externe impulsen."],["Manifesting Generator","33%","Informeer reageer dan","Snel, veelzijdig en multidimensionaal."],["Projector","20%","Wacht op de uitnodiging","Geboren om te leiden en begeleiden wanneer uitgenodigd."],["Manifestor","9%","Informeer voor jou handelt","Het enige type dat direct initiatief kan nemen."],["Reflector","1%","Wacht een maancyclus","Spiegel van de gemeenschap."]].map(([t,pct,s,d])=>(
             <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"20px 0",display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
               <div>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",color:"var(--text)",marginBottom:3}}>{t}</div>
@@ -1055,7 +1055,7 @@ function WatPage({go}){
               <p className="body-sm" style={{alignSelf:"center"}}>{d}</p>
             </div>
           ))}
-          <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>Ontdek uw type</button></div>
+          <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>Ontdek je type</button></div>
         </div>
       </section>
       <section className="section bg-white">
@@ -1083,7 +1083,7 @@ function RapportenPage({go}){
       <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
         <div className="container">
           <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Alle rapporten</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:600}}>Kies uw persoonlijke rapport</h1>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:600}}>Kies je persoonlijke rapport</h1>
           <p className="body-lg" style={{color:"rgba(255,255,255,.5)",maxWidth:520}}>Elk rapport is gebaseerd op exacte astronomische berekeningen. Geen generieke profielen.</p>
         </div>
       </section>
@@ -1116,7 +1116,7 @@ function RapportenPage({go}){
 
 function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
-  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software."],["Is het rapport persoonlijk?","Elk rapport wordt volledig op maat gegenereerd op basis van uw specifieke chart. Geen twee rapporten zijn identiek."],["In welk format ontvang ik het rapport?","Direct als PDF via de browser. Sla op via het printvenster."],["Kan ik het rapport meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate u er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die u heeft. Type en Autoriteit zijn meestal al correct."]];
+  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software."],["Is het rapport persoonlijk?","Elk rapport wordt volledig op maat gegenereerd op basis van je specifieke chart. Geen twee rapporten zijn identiek."],["In welk format ontvang ik het rapport?","Direct als PDF via de browser. Sla op via het printvenster."],["Kan ik het rapport meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
   return(
     <div className="pg">
       <div className="detail-hero">
@@ -1152,7 +1152,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
                 <p className="body-sm">{rpt.for}</p>
               </div>
               <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
-                <div className="label" style={{marginBottom:14}}>Wat u ontvangt</div>
+                <div className="label" style={{marginBottom:14}}>Wat je ontvangt</div>
                 <div className="grid-2" style={{gap:12}}>
                   {[["Omvang",rpt.pages+" paginas"],["Levertijd","3-4 minuten"],["Format","PDF download"],["Taal","Nederlands"]].map(([l,v])=>(
                     <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
@@ -1212,8 +1212,8 @@ function BlogPage({go}){
   const[articles,setArticles]=useState([]);
   const[loading,setLoading]=useState(true);
   const STATIC=[
-    {id:"s1",tag:"Human Design Basics",title:"Het verschil tussen Type en Strategie",date:"12 april 2025",readtime:"6 min",excerpt:"Type en Strategie zijn twee van de meest gebruikte begrippen in Human Design, maar beschrijven fundamenteel verschillende aspecten van uw design.",body:"Type en Strategie worden vaak als synoniem gebruikt, maar zijn fundamenteel verschillend.\n\nUw Type is uw energetische aard. Het beschrijft hoe uw energiesysteem is geconfigureerd. Er zijn vijf Types: Generator, Manifesting Generator, Projector, Manifestor en Reflector. Dit Type verandert nooit.\n\nUw Strategie is de optimale manier van handelen die bij uw Type hoort. Generators wachten om te reageren. Projectors wachten op de uitnodiging. Manifestors informeren voor zij handelen.\n\nType beschrijft wie u bent; Strategie beschrijft hoe u het beste opereert. De Faculty of Human Design behandelt beide dimensies uitgebreid in elk rapport."},
-    {id:"s2",tag:"Autoriteit",title:"Innerlijke autoriteit: hoe u uw beste beslissingen neemt",date:"28 maart 2025",readtime:"7 min",excerpt:"Uw innerlijke autoriteit in Human Design is het meest consistente instrument voor besluitvorming dat u bezit.",body:"Beslissingen nemen is een van de meest fundamentele capaciteiten van een menselijk wezen. Human Design stelt voor: neem beslissingen op basis van uw innerlijke autoriteit.\n\nEr zijn zeven vormen van innerlijke autoriteit, elk gekoppeld aan een gedefinieerd centrum.\n\nEmotionele autoriteit: wacht op emotionele helderheid voor u beslist. Sacraal autoriteit is exclusief voor Generators. Splenische autoriteit spreekt eenmalig in het moment.\n\nElk type autoriteit vraagt een andere aanpak, maar alle leiden tot beslissingen die echt van u zijn."},
+    {id:"s1",tag:"Human Design Basics",title:"Het verschil tussen Type en Strategie",date:"12 april 2025",readtime:"6 min",excerpt:"Type en Strategie zijn twee van de meest gebruikte begrippen in Human Design, maar beschrijven fundamenteel verschillende aspecten van je design.",body:"Type en Strategie worden vaak als synoniem gebruikt, maar zijn fundamenteel verschillend.\n\nUw Type is je energetische aard. Het beschrijft hoe je energiesysteem is geconfigureerd. Er zijn vijf Types: Generator, Manifesting Generator, Projector, Manifestor en Reflector. Dit Type verandert nooit.\n\nUw Strategie is de optimale manier van handelen die bij je Type hoort. Generators wachten om te reageren. Projectors wachten op de uitnodiging. Manifestors informeren voor zij handelen.\n\nType beschrijft wie je bent; Strategie beschrijft hoe je het beste opereert. De Faculty of Human Design behandelt beide dimensies uitgebreid in elk rapport."},
+    {id:"s2",tag:"Autoriteit",title:"Innerlijke autoriteit: hoe je je beste beslissingen neemt",date:"28 maart 2025",readtime:"7 min",excerpt:"Je innerlijke autoriteit in Human Design is het meest consistente instrument voor besluitvorming dat je bezit.",body:"Beslissingen nemen is een van de meest fundamentele capaciteiten van een menselijk wezen. Human Design stelt voor: neem beslissingen op basis van je innerlijke autoriteit.\n\nEr zijn zeven vormen van innerlijke autoriteit, elk gekoppeld aan een gedefinieerd centrum.\n\nEmotionele autoriteit: wacht op emotionele helderheid voor jou beslist. Sacraal autoriteit is exclusief voor Generators. Splenische autoriteit spreekt eenmalig in het moment.\n\nElk type autoriteit vraagt een andere aanpak, maar alle leiden tot beslissingen die echt van jou zijn."},
     {id:"s3",tag:"Geschiedenis",title:"De oorsprong van Human Design op Ibiza",date:"14 februari 2025",readtime:"5 min",excerpt:"In januari 1987 ontving Ra Uru Hu het Human Design systeem gedurende acht dagen op Ibiza.",body:"Het verhaal begint in januari 1987, op het Spaanse eiland Ibiza. Ra Uru Hu woonde op dat moment op het eiland en leefde een teruggetrokken leven.\n\nIn de nacht van 3 januari 1987 begon een ervaring die hij later zou omschrijven als het ontvangen van een Stem. Gedurende acht dagen ontving hij een continue stroom van informatie.\n\nWat hij ontving was een synthese: de 64 hexagrammen van de Chinese I Ching, de Sefirot van de Kabbala, de astrologie van het Westen, en principes uit de kwantumfysica.\n\nDe Faculty of Human Design is opgericht op ditzelfde eiland, vanuit diep respect voor de oorsprong van het systeem."},
   ];
   useEffect(()=>{
@@ -1326,7 +1326,7 @@ function OverPage({go}){
             <div>
               <div style={{background:"var(--muted)",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"32px"}}>
                 <div className="label" style={{marginBottom:16}}>Onze aanpak</div>
-                {[["Exacte berekeningen","Meeus ephemeris, dezelfde algoritmen als professionele astronomische software."],["Persoonlijke analyse","Geen templates. Elk rapport gegenereerd op basis van uw specifieke chart."],["Drie disciplines","Human Design, Numerologie en Astrologie, elk vanuit eigen methodologie."],["Directe levering","PDF beschikbaar binnen 3-4 minuten na invoer van uw gegevens."]].map(([t,d])=>(
+                {[["Exacte berekeningen","Meeus ephemeris, dezelfde algoritmen als professionele astronomische software."],["Persoonlijke analyse","Geen templates. Elk rapport gegenereerd op basis van je specifieke chart."],["Drie disciplines","Human Design, Numerologie en Astrologie, elk vanuit eigen methodologie."],["Directe levering","PDF beschikbaar binnen 3-4 minuten na invoer van je gegevens."]].map(([t,d])=>(
                   <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"14px 0"}}>
                     <div style={{fontSize:".9rem",fontWeight:500,color:"var(--text)",marginBottom:4}}>{t}</div>
                     <p className="body-sm">{d}</p>
@@ -1363,11 +1363,11 @@ function ContactPage(){
             <div className="form-wrap">
               <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:20}}>Stuur een bericht</div>
               <div style={{display:"flex",flexDirection:"column",gap:14}}>
-                <div className="form-group"><label className="form-label">Naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Uw naam"/></div>
+                <div className="form-group"><label className="form-label">Naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Je naam"/></div>
                 <div className="form-group"><label className="form-label">E-mailadres</label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder="uw@email.nl"/></div>
                 <div className="form-group"><label className="form-label">Onderwerp</label><input className="form-input" name="subject" value={form.subject} onChange={ch} placeholder="Onderwerp"/></div>
-                <div className="form-group"><label className="form-label">Bericht</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder="Uw vraag of opmerking" style={{resize:"vertical",minHeight:110}}/></div>
-                <button className="btn btn-primary" onClick={()=>alert("Bedankt voor uw bericht. Wij reageren binnen 1 werkdag.")}>Verstuur bericht</button>
+                <div className="form-group"><label className="form-label">Bericht</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder="Je vraag of opmerking" style={{resize:"vertical",minHeight:110}}/></div>
+                <button className="btn btn-primary" onClick={()=>alert("Bedankt voor je bericht. Wij reageren binnen 1 werkdag.")}>Verstuur bericht</button>
               </div>
             </div>
           </div>
@@ -1401,8 +1401,8 @@ function ThankYouPage({result,go}){
     <div>
       <div className="thankyou-hero">
         <div className="thankyou-icon">✓</div>
-        <div className="thankyou-title">Uw rapport is klaar</div>
-        <div className="thankyou-sub">Uw persoonlijke analyse staat hieronder. Download het als PDF voor uw archief.</div>
+        <div className="thankyou-title">Je rapport is klaar</div>
+        <div className="thankyou-sub">Je persoonlijke analyse staat hieronder. Download het als PDF voor je archief.</div>
       </div>
       <div className="report-pg" style={{paddingTop:32}}>
         <div className="report-header">
@@ -1418,8 +1418,8 @@ function ThankYouPage({result,go}){
         </div>
         <div style={{maxWidth:760,margin:"28px auto 0"}}>
           <div className="upsell-card">
-            <div className="upsell-label">Aanbevolen voor u</div>
-            <div className="upsell-title">Verdiep uw inzicht met {nextRpt.title}</div>
+            <div className="upsell-label">Aanbevolen voor jou</div>
+            <div className="upsell-title">Verdiep je inzicht met {nextRpt.title}</div>
             <div className="upsell-sub">Klanten die {rpt.title} bestellen kiezen daarna vaak voor dit rapport.</div>
             <div className="upsell-grid">
               {nextRpt.includes.slice(0,4).map((item,i)=>(
@@ -1431,7 +1431,7 @@ function ThankYouPage({result,go}){
             </button>
           </div>
           <div style={{marginTop:16,background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px 28px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:20}}>
-            <div><div className="label" style={{marginBottom:4}}>Maandelijkse Guidance</div><p className="body-sm">Elke maand een persoonlijk rapport — opzegbaar wanneer u wilt.</p></div>
+            <div><div className="label" style={{marginBottom:4}}>Maandelijkse Guidance</div><p className="body-sm">Elke maand een persoonlijk rapport — opzegbaar wanneer je wilt.</p></div>
             <div style={{display:"flex",gap:12,alignItems:"center",flexShrink:0}}>
               <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem"}}>19 euro per maand</div>
               <button className="btn btn-secondary btn-sm" onClick={()=>{track("subscription_offer_viewed",{source:"thankyou"});go("rapport-maandelijks");}}>Bekijken</button>
