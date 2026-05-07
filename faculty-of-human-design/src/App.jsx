@@ -13,10 +13,19 @@ const IMGS = {
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
   w_depth:       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
-  w_ibiza:       "https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=1200&auto=format&fit=crop&q=80",
+  // Ibiza: witte architectuur, Middellandse Zee licht
+  w_ibiza:       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&auto=format&fit=crop&q=80",
 
   // ── Subscription moon backdrop ──────────────────────────────────────
   sub_moon:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
+
+  // ── Art-directed section backgrounds ───────────────────────────────
+  // Melkweg boven oceaan — voor testimonials sectie
+  milkyway:      "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=2400&auto=format&fit=crop&q=80",
+  // Rijke kosmische nevelvlek — voor rapport-cards sectie
+  cosmos_rich:   "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2400&auto=format&fit=crop&q=80",
+  // Mediterrane gouden oever — voor 'Hoe het werkt' sectie
+  ibiza_white:   "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
   r_volledig:        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&auto=format&fit=crop&q=80",
@@ -193,7 +202,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 
 /* SUB CARD MOON */
 .sub-card-moon { position:absolute; inset:0; overflow:hidden; border-radius:var(--radius-xl); }
-.sub-card-moon img { width:100%; height:100%; object-fit:cover; object-position:center 30%; opacity:.14; filter:saturate(.3) brightness(.7); }
+.sub-card-moon img { width:100%; height:100%; object-fit:cover; object-position:center 30%; opacity:.22; filter:saturate(.5) brightness(.65); }
 
 /* TRUST */
 .trust-strip { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 24px; }
@@ -1501,23 +1510,32 @@ function HomePage({go}){
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="hero" aria-label="Hoofdbanner">
         <div className="hero-bg">
-          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza — Faculty of Human Design persoonlijke rapporten" loading="eager"/>
+          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza — Faculty of Human Design persoonlijke blauwdrukken" loading="eager" fetchPriority="high"/>
+          {/* Second atmospheric layer: Melkweg gloed voor extra diepte */}
+          <img src={IMGS.milkyway} alt="" aria-hidden="true" loading="eager" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 40%",opacity:.28,mixBlendMode:"screen"}}/>
         </div>
         <div className="hero-stars"/>
         <div className="hero-glow"/>
+        {/* Subtle gold vignette bottom */}
+        <div style={{position:"absolute",bottom:0,left:0,right:0,height:"35%",background:"linear-gradient(to top, rgba(12,10,23,.65) 0%, transparent 100%)",pointerEvents:"none",zIndex:1}}/>
         <div className="hero-content">
           <div className="hero-text">
             <div className="hero-eyebrow">Faculty of Human Design — Ibiza, Spanje</div>
             <h1 className="h1-hero">Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
             <p className="hero-subtitle">Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata.</p>
-            <div className="hero-actions">
+            <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 Ontvang mijn persoonlijke rapport
               </button>
-              <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>Alle rapporten</button>
+              <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button>
             </div>
             <div className="hero-trust">
-              {["Veilige betaling","Persoonlijke PDF","Direct beschikbaar","Swiss Ephemeris berekend"].map(t=>(
+              {[
+                "🔒 Veilige betaling",
+                "Persoonlijke PDF · direct beschikbaar",
+                "Swiss Ephemeris — planeetposities tot op de graad",
+                "Opgericht 2014 · Ibiza",
+              ].map(t=>(
                 <div key={t} className="hero-trust-item">{t}</div>
               ))}
             </div>
@@ -1540,8 +1558,8 @@ function HomePage({go}){
           ))}
           <div className="stat-row-item" style={{position:"relative"}}>
             <div className="stat-row-n" style={{fontSize:"1.2rem",letterSpacing:".04em"}}>Swiss Ephemeris</div>
-            <div className="stat-row-l">Astronomische precisie</div>
-            <div style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:160,lineHeight:1.5}}>Exacte planeetposities tot op de graad — dezelfde standaard als professionele astronomische software</div>
+            <div className="stat-row-l">Professionele standaard</div>
+            <div style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:172,lineHeight:1.55}}>Planeetposities tot op de graad nauwkeurig — dezelfde software die astronomen en astrologen wereldwijd gebruiken</div>
           </div>
         </div>
       </div>
@@ -1555,13 +1573,13 @@ function HomePage({go}){
           </div>
           <div className="grid-3">
             {[
-              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
+              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — de professionele standaard voor exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
               [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide alinea's afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
-              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het systeem ontving. Elk rapport draagt de rust en helderheid van die oorsprong."],
+              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Elk rapport draagt de helderheid van die oorsprong."],
             ].map(([img,title,badge,desc])=>(
               <div className="waarom-card" key={title}>
                 <div className="waarom-card-img">
-                  <img src={img} alt={title} loading="lazy"/>
+                  <img src={img} alt={`Faculty of Human Design — ${title}`} loading="lazy"/>
                   <div className="ov-grad-t"/>
                   <div className="waarom-card-badge">{badge}</div>
                 </div>
@@ -1615,20 +1633,25 @@ function HomePage({go}){
                 <span style={{fontSize:".72rem",color:"rgba(255,255,255,.38)"}}>{d}</span>
               </div>
             ))}
-            <button className="btn btn-white btn-full" style={{marginTop:16}} onClick={()=>go("rapport-volledig")}>
-              Bekijk dit rapport
+            <button className="btn btn-white btn-full" style={{marginTop:16}} onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"feature_card"});go("rapport-volledig");}}>
+              Ontvang mijn persoonlijke rapport
             </button>
           </div>
         </div>
       </div>
 
       {/* ── ALLE RAPPORTEN ───────────────────────────────────────────────── */}
-      <section className="section bg-white">
-        <div className="container">
+      <section className="section bg-white" style={{position:"relative",overflow:"hidden"}}>
+        {/* Subtiele cosmos achtergrond voor diepte */}
+        <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
+          <img src={IMGS.cosmos_rich} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.04,filter:"saturate(.4) hue-rotate(20deg)"}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(247,245,240,0) 0%,rgba(247,245,240,.6) 60%,rgba(247,245,240,1) 100%)"}}/>
+        </div>
+        <div className="container" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
             <div className="label" style={{marginBottom:14}}>Alle rapporten</div>
             <h2 className="h2" style={{marginBottom:16}}>Kies je persoonlijke rapport</h2>
-            <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen.</p>
+            <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen — elk document uniek samengesteld op jouw chart.</p>
           </div>
           <div className="grid-3">
             {REPORTS.filter(r=>["relatie_liefde","jaar","loopbaan"].includes(r.id)).map(r=>(
@@ -1636,8 +1659,8 @@ function HomePage({go}){
             ))}
           </div>
           <div style={{display:"flex",gap:28,justifyContent:"center",alignItems:"center",marginTop:40,flexWrap:"wrap"}}>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle 8 rapporten</button>
-            <span style={{fontSize:".78rem",color:"var(--text-light)"}}>Numerologie, Astrologie, Relatierapport en meer</span>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button>
+            <span style={{fontSize:".78rem",color:"var(--text-light)"}}>Numerologie · Astrologie · Relatierapport · en meer</span>
           </div>
         </div>
       </section>
@@ -1669,7 +1692,8 @@ function HomePage({go}){
       {/* ── HOE HET WERKT ────────────────────────────────────────────────── */}
       <section className="section-md bg-muted" style={{position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
-          <img src={IMGS.ibiza} alt="" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.04,filter:"saturate(.5)"}}/>
+          <img src={IMGS.ibiza_white} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 55%",opacity:.07,filter:"saturate(.6) brightness(.9)"}}/>
+          <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 40%, rgba(61,44,94,.04) 0%, transparent 65%)"}}/>
         </div>
         <div className="container-md" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
@@ -1687,7 +1711,8 @@ function HomePage({go}){
       {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
       <section className="section bg-white" style={{position:"relative"}}>
         <div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none"}}>
-          <img src={IMGS.cosmos} alt="" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.05,filter:"grayscale(80%)"}}/>
+          <img src={IMGS.milkyway} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%",opacity:.07,filter:"grayscale(40%) saturate(1.4)"}}/>
+          <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%, rgba(247,245,240,0) 30%, rgba(247,245,240,.85) 100%)"}}/>
         </div>
         <div className="container" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
@@ -1730,12 +1755,16 @@ function HomePage({go}){
               </div>
               <div style={{textAlign:"center",flexShrink:0}}>
                 <div className="sub-price">€19</div>
-                <div className="sub-price-period">per maand · opzegbaar</div>
+                <div className="sub-price-period">per maand</div>
                 <div style={{display:"flex",flexDirection:"column",gap:6,margin:"14px 0 18px",textAlign:"left"}}>
+                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.65)",display:"flex",alignItems:"flex-start",gap:7}}>
+                    <span style={{color:"var(--gold-warm)",flexShrink:0,marginTop:1}}>✦</span>
+                    <span>Binnen 1 werkdag na betaling ontvang je je maandrapport als PDF</span>
+                  </div>
                   <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>Gemiddeld 11 maanden actief</div>
-                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>Elk moment opzegbaar — geen verplichting</div>
                 </div>
                 <button className="btn btn-gold btn-lg" onClick={()=>go("rapport-maandelijks")}>Start abonnement</button>
+                <div style={{fontSize:".66rem",color:"rgba(255,255,255,.32)",marginTop:10,lineHeight:1.5}}>Elk moment opzegbaar · geen verplichting</div>
               </div>
             </div>
           </div>
@@ -1751,11 +1780,11 @@ function HomePage({go}){
           <div className="divider divider-center" style={{marginBottom:32}}/>
           <h2 className="h2" style={{color:"white",marginBottom:18,maxWidth:600,margin:"0 auto 18px"}}>Klaar om je design te ontdekken?</h2>
           <p className="body-lg" style={{color:"rgba(255,255,255,.48)",maxWidth:460,margin:"0 auto 36px"}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
-          <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",marginBottom:36}}>
+          <div style={{display:"flex",gap:16,justifyContent:"center",flexWrap:"wrap",marginBottom:36}}>
             <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>
               Ontvang mijn persoonlijke rapport
             </button>
-            <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+            <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button>
           </div>
           <TrustStrip light/>
         </div>
