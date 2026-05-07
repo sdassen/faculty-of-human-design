@@ -169,7 +169,9 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .rcard-body { padding:26px 28px; flex:1; display:flex; flex-direction:column; }
 .rcard-icon { font-size:.95rem; margin-bottom:6px; opacity:.45; }
 .rcard-title { font-family:var(--font-serif); font-size:1.28rem; font-weight:400; color:var(--text); margin-bottom:8px; line-height:1.22; }
-.rcard-tagline { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.68; flex:1; margin-bottom:18px; }
+.rcard-outcome { font-size:.78rem; font-weight:500; color:var(--brand); line-height:1.5; margin-bottom:7px; display:flex; align-items:flex-start; gap:6px; }
+.rcard-outcome::before { content:"→"; font-size:.7rem; flex-shrink:0; margin-top:1px; }
+.rcard-tagline { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.72; flex:1; margin-bottom:18px; }
 .rcard-footer { display:flex; justify-content:space-between; align-items:center; padding-top:14px; border-top:1px solid var(--border); margin-top:auto; }
 .rcard-meta { font-size:.62rem; font-weight:400; color:var(--text-light); }
 .rcard-cta { font-size:.68rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--brand); display:flex; align-items:center; gap:4px; }
@@ -450,6 +452,7 @@ const REPORTS = [
     id:"volledig", icon:"✦", tag:"Meest gekozen",
     title:"Volledig Human Design Rapport",
     price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    outcome:"Begrijp eindelijk wie je werkelijk bent",
     tagline:"Je complete persoonlijke blauwdruk",
     intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
     includes:["Type, Strategie & Signature","Autoriteit — hoe je beslissingen neemt","Profiel — het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — je natuurlijke kwaliteiten","Inkarnatie-Kruis — je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2026–2028"],
@@ -466,6 +469,7 @@ const REPORTS = [
     id:"relatie_liefde", icon:"◎", tag:"",
     title:"Relatierapport — Liefde",
     price:"€95", priceNum:95, sub:"Eenmalig · Direct als PDF",
+    outcome:"Meer rust en begrip in je romantische verbinding",
     tagline:"Twee designs in romantische verbinding",
     intro:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel — waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?",
     includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatie & intimiteitsstijl","Seksuele energie & aantrekking","Beslissingen nemen als stel","Conflictpatronen & doorbraken","Gezamenlijk groeipad","Praktisch advies voor harmonie"],
@@ -482,6 +486,7 @@ const REPORTS = [
     id:"relatie_business", icon:"◈", tag:"",
     title:"Relatierapport — Business",
     price:"€85", priceNum:85, sub:"Eenmalig · Direct als PDF",
+    outcome:"Samenwerking die werkt voor jullie allebei",
     tagline:"Twee designs in zakelijke samenwerking",
     intro:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten — en hoe bouwen jullie een samenwerking die werkt voor beiden?",
     includes:["Beide charts volledig geanalyseerd","Besluitvormingsdynamieken","Complementariteit van Types","Leiderschapsstijl per chart","Werkenergieën & ritmes","Communicatiepatronen op de werkvloer","Conflictpatronen & oplossingen","Rolverdeling & verantwoordelijkheden","Praktisch advies voor optimale samenwerking"],
@@ -498,6 +503,7 @@ const REPORTS = [
     id:"relatie_familie", icon:"◇", tag:"",
     title:"Relatierapport — Familie",
     price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    outcome:"Meer begrip en verbinding in het gezin",
     tagline:"Twee designs in familieverband",
     intro:"Een analyse van twee familieleden — ouder en kind, broer en zus, of een andere gezinsrelatie. Hoe opereren jullie designs samen en hoe creëer je meer begrip, verbinding en ruimte?",
     includes:["Beider charts geanalyseerd","Energetische dynamieken in het gezin","Communicatiestijlen per type","Groeimogelijkheden voor beiden","Patronen van conflict en verbinding","Rolverdeling binnen de familie","Opvoedings- en begeleidingstips","Praktische guidance voor meer begrip","Slotanalyse"],
@@ -514,6 +520,7 @@ const REPORTS = [
     id:"jaar", icon:"◈", tag:"",
     title:"Jaarrapport 2026",
     price:"€55", priceNum:55, sub:"Eenmalig · Direct als PDF",
+    outcome:"Weet wat er dit jaar van je gevraagd wordt",
     tagline:"De energetische thema's van je jaar",
     intro:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
     includes:["Solar Return analyse","Dominante thema's voor 2026","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op je chart","Kansen en aandachtspunten","Intentie voor het jaar"],
@@ -530,6 +537,7 @@ const REPORTS = [
     id:"kind", icon:"◇", tag:"",
     title:"Kinderrapport",
     price:"€45", priceNum:45, sub:"Eenmalig · Direct als PDF",
+    outcome:"Begeleid je kind vanuit wie het werkelijk is",
     tagline:"Je kind begrijpen vanuit zijn of haar design",
     intro:"Een rapport voor ouders. Hoe gebruik je kind energie en hoe leert het het beste?",
     includes:["Type & energiegebruik","Hoe je kind beslissingen neemt","Leerstijl & communicatie","Behoeften & grenzen","Opvoedtips op maat","Gaven & talenten"],
@@ -546,6 +554,7 @@ const REPORTS = [
     id:"loopbaan", icon:"◆", tag:"",
     title:"Loopbaan & Geld Rapport",
     price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
+    outcome:"Verdien geld op een manier die bij je past",
     tagline:"Werk en financiën vanuit je design",
     intro:"Hoe maakt je geld op een manier die bij jou past? Welke werkomgeving geeft je energie?",
     includes:["Ideale werkomgeving","Hoe je geld aantrekt","Je professionele kracht","Samenwerking & leiderschap","Valkuilen op de werkvloer","Ondernemen vs. loondienst","Financiële strategie op maat"],
@@ -562,6 +571,7 @@ const REPORTS = [
     id:"numerologie", icon:"∞", tag:"",
     title:"Numerologie Rapport",
     price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
+    outcome:"Begrijp de patronen achter je levensverhaal",
     tagline:"De getallen achter je naam en geboortedag",
     intro:"Op basis van je volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van je aard en levensdoel.",
     includes:["Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk jaar 2026","Rijpingsgetal","Mastergetallen indien aanwezig"],
@@ -578,6 +588,7 @@ const REPORTS = [
     id:"horoscoop", icon:"☽", tag:"",
     title:"Geboortehoroscoop",
     price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    outcome:"Je planeetstanden als persoonlijk kompas",
     tagline:"Je complete astrologische chart",
     intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.",
     includes:["Zonneteken","Ascendant","Maan — je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — je roeping","Dominant element & modaliteit"],
@@ -594,6 +605,7 @@ const REPORTS = [
     id:"maandelijks", icon:"◯", tag:"Abonnement",
     title:"Maandelijkse Guidance",
     price:"€19/mnd", priceNum:19, sub:"Maandelijks opzegbaar",
+    outcome:"Elke maand bewust leven vanuit je design",
     tagline:"Elke maand je persoonlijke energiegids",
     intro:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart.",
     includes:["Energie & thema's van de maand","Planetaire invloeden","Kansen & aandachtspunten","Praktisch advies","Intentie voor de maand"],
@@ -940,8 +952,8 @@ function TrustStrip({light}){
   const col=light?"rgba(255,255,255,.5)":"var(--text-muted)";
   return(
     <div className="trust-strip">
-      {[["🔒","Veilige betaling"],["📄","Persoonlijke PDF"],["⚡","Direct beschikbaar"],["✓","Geen generieke profielen"],["🇳🇱","Nederlandstalig"]].map(([ico,txt])=>(
-        <div key={txt} className="trust-item" style={{color:col}}><span>{ico}</span><span>{txt}</span></div>
+      {[["Veilige betaling"],["Persoonlijke PDF"],["Direct beschikbaar"],["Geen generieke profielen"],["Nederlandstalig"]].map(([txt])=>(
+        <div key={txt} className="trust-item" style={{color:col}}><span style={{color:light?"rgba(201,168,92,.55)":"var(--gold)",fontSize:".55rem"}}>✦</span><span>{txt}</span></div>
       ))}
     </div>
   );
@@ -961,10 +973,11 @@ function ReportCard({rpt,onClick}){
       <div className="rcard-body">
         <div className="rcard-icon">{rpt.icon}</div>
         <div className="rcard-title">{rpt.title}</div>
+        {rpt.outcome&&<div className="rcard-outcome">{rpt.outcome}</div>}
         <div className="rcard-tagline">{rpt.tagline}</div>
         <div className="rcard-footer">
           <div className="rcard-meta">{rpt.pages} pag. · {rpt.sections} secties</div>
-          <div className="rcard-cta">Ontdekken →</div>
+          <div className="rcard-cta">Start met dit rapport</div>
         </div>
       </div>
     </div>
@@ -1326,12 +1339,17 @@ function HomePage({go}){
       {/* ── STAT ROW ─────────────────────────────────────────────────────── */}
       <div className="stat-row">
         <div className="stat-row-inner">
-          {[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"],["Swiss Ephemeris","Astronomische precisie"]].map(([n,l])=>(
+          {[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
             <div key={l} className="stat-row-item">
               <div className="stat-row-n">{n}</div>
               <div className="stat-row-l">{l}</div>
             </div>
           ))}
+          <div className="stat-row-item" style={{position:"relative"}}>
+            <div className="stat-row-n" style={{fontSize:"1.2rem",letterSpacing:".04em"}}>Swiss Ephemeris</div>
+            <div className="stat-row-l">Astronomische precisie</div>
+            <div style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:160,lineHeight:1.5}}>Exacte planeetposities tot op de graad — dezelfde standaard als professionele astronomische software</div>
+          </div>
         </div>
       </div>
 
@@ -1456,8 +1474,11 @@ function HomePage({go}){
       </div>
 
       {/* ── HOE HET WERKT ────────────────────────────────────────────────── */}
-      <section className="section-md bg-muted">
-        <div className="container-md">
+      <section className="section-md bg-muted" style={{position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
+          <img src={IMGS.ibiza} alt="" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.04,filter:"saturate(.5)"}}/>
+        </div>
+        <div className="container-md" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
             <div className="label" style={{marginBottom:14}}>Hoe het werkt</div>
             <h2 className="h2">In drie stappen je rapport</h2>
@@ -1482,12 +1503,16 @@ function HomePage({go}){
           </div>
           <div className="grid-3">
             {[
-              ["Het rapport heeft mij meer inzicht gegeven dan jaren van zelfonderzoek. De precisie van de analyse is indrukwekkend. De sectie over mijn open centra was confronterend en bevrijdend tegelijk.","M. van den Berg, Amsterdam","Volledig Rapport"],
-              ["Als koppel hebben wij veel baat gehad bij het relatierapport. Eindelijk begrijpen wij de dynamieken tussen ons — waarom sommige dingen zo makkelijk gaan en andere zo stroef verlopen.","T. en E. Dubois, Antwerpen","Relatierapport"],
-              ["De combinatie van Human Design en Numerologie gaf een compleet beeld. Twee invalshoeken die elkaar sterk aanvullen. Diep geraakt door de nauwkeurigheid van de analyse.","S. Muller, Utrecht","Volledig & Numerologie"],
-            ].map(([q,n,r])=>(
+              ["De sectie over mijn open centra was confronterend en bevrijdend tegelijk. Drie maanden later lees ik het nog steeds.","M. van den Berg, Amsterdam","Volledig Rapport","Meer zelfinzicht in 48 uur"],
+              ["Eindelijk begrijpen wij de dynamieken tussen ons. Niet alleen 'jullie vullen elkaar aan' maar concrete patronen — inclusief waar de wrijving vandaan komt.","T. en E. Dubois, Antwerpen","Relatierapport","Communicatie direct verbeterd"],
+              ["De combinatie van HD en Numerologie gaf een compleet beeld dat ik nergens anders vond. Twee disciplines die elkaar perfect aanvullen.","S. Muller, Utrecht","Volledig & Numerologie","Bevestiging van een levenskeuze"],
+            ].map(([q,n,r,result])=>(
               <div className="tcard" key={n}>
                 <div className="stars">★★★★★</div>
+                <div style={{display:"inline-flex",alignItems:"center",gap:5,background:"rgba(61,44,94,.06)",border:"1px solid rgba(61,44,94,.1)",borderRadius:100,padding:"3px 10px",marginBottom:14}}>
+                  <span style={{color:"var(--gold)",fontSize:".5rem"}}>✦</span>
+                  <span style={{fontSize:".6rem",fontWeight:600,letterSpacing:".06em",textTransform:"uppercase",color:"var(--brand)"}}>{result}</span>
+                </div>
                 <div className="tcard-quote">{q}</div>
                 <div className="tcard-author">{n}</div>
                 <div className="tcard-report">{r}</div>
@@ -1513,7 +1538,10 @@ function HomePage({go}){
               <div style={{textAlign:"center",flexShrink:0}}>
                 <div className="sub-price">€19</div>
                 <div className="sub-price-period">per maand · opzegbaar</div>
-                <div style={{height:16}}/>
+                <div style={{display:"flex",flexDirection:"column",gap:6,margin:"14px 0 18px",textAlign:"left"}}>
+                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>Gemiddeld 11 maanden actief</div>
+                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>Elk moment opzegbaar — geen verplichting</div>
+                </div>
                 <button className="btn btn-gold btn-lg" onClick={()=>go("rapport-maandelijks")}>Start abonnement</button>
               </div>
             </div>
@@ -1541,7 +1569,13 @@ function HomePage({go}){
       </div>
 
       <div className="sticky-cta">
-        <button className="btn btn-primary btn-full" onClick={()=>go("rapport-volledig")}>Ontvang mijn persoonlijke rapport — €75</button>
+        <div style={{display:"flex",gap:10,alignItems:"center",justifyContent:"space-between"}}>
+          <div>
+            <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>Ontdek je Human Design</div>
+            <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>Vanaf €45 · Direct als PDF</div>
+          </div>
+          <button className="btn btn-primary" style={{flexShrink:0,whiteSpace:"nowrap"}} onClick={()=>{track("sticky_cta_click",{});go("rapporten");}}>Start nu →</button>
+        </div>
       </div>
     </div>
   );
