@@ -13,8 +13,8 @@ const IMGS = {
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
   w_depth:       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
-  // Ibiza: witte architectuur, Middellandse Zee licht
-  w_ibiza:       "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&auto=format&fit=crop&q=80",
+  // Ibiza: wit Mediterraan dorp van boven, turquoise zee — Oia/Ibiza sfeer
+  w_ibiza:       "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&auto=format&fit=crop&q=80",
 
   // ── Subscription moon backdrop ──────────────────────────────────────
   sub_moon:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
@@ -24,8 +24,8 @@ const IMGS = {
   milkyway:      "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=2400&auto=format&fit=crop&q=80",
   // Rijke kosmische nevelvlek — voor rapport-cards sectie
   cosmos_rich:   "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2400&auto=format&fit=crop&q=80",
-  // Mediterrane gouden oever — voor 'Hoe het werkt' sectie
-  ibiza_white:   "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  // Mediterrane gouden kustlijn / avondlicht — voor 'Hoe het werkt' sectie
+  ibiza_white:   "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=2000&auto=format&fit=crop&q=80",
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
   r_volledig:        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&auto=format&fit=crop&q=80",
