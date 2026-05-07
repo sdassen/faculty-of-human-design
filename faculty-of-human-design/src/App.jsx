@@ -1242,17 +1242,17 @@ function Footer({go}){
           </div>
           <div>
             <div className="footer-col-title">Vertrouwen</div>
-            <span className="footer-link">🔒 Veilige betaling</span>
-            <span className="footer-link">📄 Persoonlijke PDF</span>
-            <span className="footer-link">⚡ Direct beschikbaar</span>
-            <span className="footer-link">✉ info@facultyofhumandesign.com</span>
+            <span className="footer-link">Veilige betaling</span>
+            <span className="footer-link">Persoonlijke PDF</span>
+            <span className="footer-link">Direct beschikbaar</span>
+            <span className="footer-link">info@facultyofhumandesign.com</span>
           </div>
         </div>
         <div className="footer-bottom">
           <div className="footer-copy">© 2026 Faculty of Human Design. Alle rechten voorbehouden.</div>
           <div className="footer-trust">
-            <div className="footer-trust-item">🔒 SSL beveiligd</div>
-            <div className="footer-trust-item">🇳🇱 iDEAL beschikbaar</div>
+            <div className="footer-trust-item">SSL beveiligd</div>
+            <div className="footer-trust-item">iDEAL beschikbaar</div>
           </div>
         </div>
       </div>
@@ -1378,7 +1378,7 @@ function ReportForm({rpt,onDone,postPayment}){
               </div>
             </>}
             <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={doChart} disabled={!ok}>Bereken mijn chart gratis</button>
-            <p className="form-note">Gratis berekening — geen betaling vereist om je chart te zien.<br/>🔒 Je gegevens worden vertrouwelijk behandeld.</p>
+            <p className="form-note">Gratis berekening — geen betaling vereist om je chart te zien.<br/>Je gegevens worden vertrouwelijk behandeld.</p>
           </div>
         </div>
       </div>
@@ -1531,7 +1531,7 @@ function HomePage({go}){
             </div>
             <div className="hero-trust">
               {[
-                "🔒 Veilige betaling",
+                "Veilige betaling",
                 "Persoonlijke PDF · direct beschikbaar",
                 "Swiss Ephemeris — planeetposities tot op de graad",
                 "Opgericht 2014 · Ibiza",
