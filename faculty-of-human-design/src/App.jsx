@@ -51,9 +51,9 @@ const CSS = `
   --font-sans: 'Jost', system-ui, sans-serif;
   --ease: cubic-bezier(0.23,1,0.32,1); --dur: 300ms;
 }
-html { scroll-behavior:smooth; }
+html { scroll-behavior:smooth; overflow-x:hidden; }
 body { font-family:var(--font-sans); background:var(--bg); color:var(--text);
-  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; overflow-x:hidden; }
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased; }
 img { display:block; max-width:100%; }
 button { cursor:pointer; font-family:var(--font-sans); }
 
@@ -373,6 +373,23 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .thankyou-title { font-family:var(--font-serif); font-size:2.5rem; font-weight:300; color:white; margin-bottom:12px; }
 .thankyou-sub { font-size:1rem; font-weight:300; color:rgba(255,255,255,.55); max-width:480px; margin:0 auto; line-height:1.7; }
 
+/* RESPONSIVE UTILITIES — page hero inner, two-col, split-row patterns */
+.page-hero-pad { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:108px 32px 80px; width:100%; }
+.two-col-lg { display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:start; }
+.split-row { display:grid; grid-template-columns:200px 1fr; gap:24px; padding:22px 0; border-bottom:1px solid var(--border); align-items:start; }
+.split-row-lg { display:grid; grid-template-columns:220px 1fr; gap:28px; align-items:start; }
+.tab-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; touch-action:pan-x; width:100%; }
+.tab-scroll::-webkit-scrollbar { display:none; }
+/* Portrait image utility — 3/4 desktop, 16/9 capped on mobile */
+.portrait-img { aspect-ratio:3/4; position:relative; border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow-xl); margin-bottom:24px; }
+.portrait-img>img { width:100%; height:100%; object-fit:cover; }
+/* Method step row */
+.method-step { display:flex; gap:32px; padding:36px 0; align-items:flex-start; }
+.method-step-num { font-family:var(--font-serif); font-size:2.2rem; font-weight:300; color:var(--brand); opacity:.2; line-height:1; flex-shrink:0; width:52px; text-align:right; padding-top:2px; }
+.method-step-body h3 { font-family:var(--font-serif); font-size:1.2rem; font-weight:400; color:var(--text); margin-bottom:10px; line-height:1.2; }
+/* Stats grid in dark section */
+.stats-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+
 /* SUB CARD */
 .sub-card { background:linear-gradient(135deg,var(--brand) 0%,var(--brand-deep) 100%); border-radius:var(--radius-xl); padding:48px; color:white; position:relative; overflow:hidden; }
 .sub-card::before { content:""; position:absolute; top:-40%; right:-8%; width:65%; height:170%; background:radial-gradient(ellipse, rgba(201,168,92,.05) 0%, transparent 60%); pointer-events:none; }
@@ -429,6 +446,26 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .stat-row-item { flex:none; width:50%; border-bottom:1px solid var(--border); }
   .hero-content { padding:0 20px; }
   .photo-cta-content { padding:80px 20px; }
+  /* Responsive utilities */
+  .page-hero-pad { padding:96px 20px 60px; }
+  .two-col-lg { grid-template-columns:1fr; gap:40px; }
+  .split-row { grid-template-columns:1fr; gap:6px; }
+  .split-row-lg { grid-template-columns:1fr; gap:8px; }
+  .tab-scroll { padding:0 16px; }
+  /* Feature content mobile padding */
+  .feature-content { padding:48px 24px; }
+  /* Origin content */
+  .origin-content { padding:72px 20px; }
+  /* Sub-card stacking */
+  .sub-card { padding:36px 24px; }
+  /* Portrait image collapses to landscape on mobile */
+  .portrait-img { aspect-ratio:16/9; max-height:320px; }
+  /* Method steps tighter gap */
+  .method-step { gap:20px; padding:28px 0; }
+  .method-step-num { font-size:1.6rem; width:36px; }
+  /* Stats 2x2 stays as-is on mobile (2 cols at ~150px is fine) */
+  /* Price box in detail hero is full-width when inner collapses at 1024px — add breathing room */
+  .price-box { padding:24px 20px; }
 }
 @media (max-width:480px) {
   .hero-actions { flex-direction:column; }
@@ -436,15 +473,156 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .report-summary-grid { grid-template-columns:1fr; }
   .stat-row-item { width:100%; }
   .waarom-card-img { height:180px; }
+  /* Extra-small screens */
+  .section, .section-md { padding:56px 16px; }
+  .section-sm { padding:44px 16px; }
+  .page-hero-pad { padding:84px 16px 48px; }
+  .origin-content { padding:56px 16px; }
+  .detail-hero { padding:60px 16px 40px; }
+  .sub-card { padding:28px 18px; }
+  .two-col-lg { gap:28px; }
+  .method-step { gap:16px; padding:22px 0; }
+  .stats-2x2 { grid-template-columns:1fr; gap:12px; }
+  .price-box { padding:20px 16px; }
+  .price-box-amount { font-size:2.6rem; }
+  /* Reduce heading sizes on very small phones so long titles don't become 4-liners */
+  .h1 { font-size:clamp(1.85rem,6.5vw,2.4rem); }
+  .h2 { font-size:clamp(1.6rem,5.5vw,2rem); }
 }
 `;
 
 
 // ─── ANALYTICS ────────────────────────────────────────────────────────────────
 const track = (event, props = {}) => {
-  if (typeof window !== "undefined" && window.gtag) window.gtag("event", event, props);
+  if (typeof window === "undefined") return;
+  // GA4 / Google Ads gtag
+  if (window.gtag) {
+    window.gtag("event", event, props);
+    // Fire Google Ads purchase conversion on checkout_completed
+    if (event === "checkout_completed" && props.price) {
+      window.gtag("event", "conversion", {
+        send_to: "AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX", // replace with real label
+        value: props.price,
+        currency: "EUR",
+        transaction_id: Date.now().toString()
+      });
+    }
+    // Fire begin_checkout event for ads funnel
+    if (event === "checkout_started") {
+      window.gtag("event", "begin_checkout", {
+        currency: "EUR",
+        value: props.price || 0,
+        items: [{ item_id: props.report, item_name: props.report, price: props.price || 0, quantity: 1 }]
+      });
+    }
+    // Fire view_item on report card click
+    if (event === "report_card_click") {
+      window.gtag("event", "view_item", {
+        currency: "EUR",
+        value: props.price || 0,
+        items: [{ item_id: props.report, price: props.price || 0, quantity: 1 }]
+      });
+    }
+  }
   console.log("[Analytics]", event, props);
 };
+
+// ─── SEO HELPERS ──────────────────────────────────────────────────────────────
+const SITE = "https://www.facultyofhumandesign.com";
+
+function useSEO({ title, description, canonical, jsonLd }) {
+  useEffect(() => {
+    // Title
+    document.title = title + " | Faculty of Human Design";
+    // Description
+    let meta = document.querySelector('meta[name="description"]');
+    if (!meta) { meta = document.createElement("meta"); meta.name = "description"; document.head.appendChild(meta); }
+    meta.content = description;
+    // OG title
+    let ogT = document.querySelector('meta[property="og:title"]');
+    if (!ogT) { ogT = document.createElement("meta"); ogT.setAttribute("property","og:title"); document.head.appendChild(ogT); }
+    ogT.content = title + " | Faculty of Human Design";
+    // OG description
+    let ogD = document.querySelector('meta[property="og:description"]');
+    if (!ogD) { ogD = document.createElement("meta"); ogD.setAttribute("property","og:description"); document.head.appendChild(ogD); }
+    ogD.content = description;
+    // Canonical
+    let can = document.querySelector('link[rel="canonical"]');
+    if (!can) { can = document.createElement("link"); can.rel = "canonical"; document.head.appendChild(can); }
+    can.href = canonical || SITE + "/";
+    // JSON-LD
+    const prev = document.getElementById("__page_jsonld");
+    if (prev) prev.remove();
+    if (jsonLd) {
+      const s = document.createElement("script");
+      s.type = "application/ld+json";
+      s.id = "__page_jsonld";
+      s.textContent = JSON.stringify(jsonLd);
+      document.head.appendChild(s);
+    }
+    return () => {
+      const el = document.getElementById("__page_jsonld");
+      if (el) el.remove();
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [title, description, canonical]);
+}
+
+// JSON-LD builders
+function productLD(rpt) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": rpt.title,
+    "description": rpt.intro,
+    "brand": { "@type": "Brand", "name": "Faculty of Human Design" },
+    "offers": {
+      "@type": "Offer",
+      "price": rpt.priceNum,
+      "priceCurrency": "EUR",
+      "availability": "https://schema.org/InStock",
+      "seller": { "@type": "Organization", "name": "Faculty of Human Design" },
+      "deliveryLeadTime": { "@type": "QuantitativeValue", "minValue": 3, "maxValue": 5, "unitCode": "MIN" }
+    },
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.9",
+      "reviewCount": "2400",
+      "bestRating": "5"
+    },
+    "review": (rpt.reviews || []).slice(0, 3).map(([body, author]) => ({
+      "@type": "Review",
+      "reviewBody": body,
+      "author": { "@type": "Person", "name": author },
+      "reviewRating": { "@type": "Rating", "ratingValue": "5", "bestRating": "5" }
+    }))
+  };
+}
+
+function faqLD(faqs) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map(([q, a]) => ({
+      "@type": "Question",
+      "name": q,
+      "acceptedAnswer": { "@type": "Answer", "text": a }
+    }))
+  };
+}
+
+function breadcrumbLD(items) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map(([name, url], i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "name": name,
+      "item": SITE + url
+    }))
+  };
+}
 
 // ─── REPORTS ──────────────────────────────────────────────────────────────────
 const REPORTS = [
@@ -1302,13 +1480,28 @@ function ReportForm({rpt,onDone,postPayment}){
 
 // ─── PAGES ────────────────────────────────────────────────────────────────────
 function HomePage({go}){
+  useSEO({
+    title:"Human Design Rapport — Persoonlijk & Diepgaand",
+    description:"Ontvang een diepgaand, persoonlijk Human Design rapport op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, direct als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
+    canonical:SITE+"/",
+    jsonLd:{
+      "@context":"https://schema.org","@type":"ItemList",
+      "name":"Human Design Rapporten — Faculty of Human Design",
+      "description":"Diepgaande persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "itemListElement": REPORTS.slice(0,4).map((r,i)=>({
+        "@type":"ListItem","position":i+1,
+        "name":r.title,"description":r.tagline,
+        "url":SITE+"/#rapport-"+r.id
+      }))
+    }
+  });
   return(
     <div className="pg">
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <section className="hero">
+      <section className="hero" aria-label="Hoofdbanner">
         <div className="hero-bg">
-          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza" loading="eager"/>
+          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza — Faculty of Human Design persoonlijke rapporten" loading="eager"/>
         </div>
         <div className="hero-stars"/>
         <div className="hero-glow"/>
@@ -1639,14 +1832,22 @@ function WatPage({go}){
 
   const TabBtn=({id,label})=>(
     <button onClick={()=>setTab(id)} style={{
-      padding:"11px 26px",border:"none",cursor:"pointer",fontFamily:"var(--font-sans)",
+      padding:"11px 22px",border:"none",cursor:"pointer",fontFamily:"var(--font-sans)",
       fontSize:".78rem",fontWeight:tab===id?500:300,letterSpacing:".06em",textTransform:"uppercase",
+      whiteSpace:"nowrap",flexShrink:0,
       color:tab===id?"var(--brand)":"var(--text-muted)",
       background:tab===id?"white":"transparent",
       borderBottom:tab===id?"2px solid var(--brand)":"2px solid transparent",
       transition:"all 200ms",
     }}>{label}</button>
   );
+
+  useSEO({
+    title:"Wat is Human Design? — Uitleg Typen, Autoriteit & Numerologie",
+    description:"Alles over Human Design, Numerologie en Astrologie. Leer de vijf typen, innerlijke autoriteit, de negen centra en hoe de drie disciplines samenhangen. Met diepgaande achtergrondinformatie.",
+    canonical:SITE+"/#wat",
+    jsonLd: faqLD(faqs)
+  });
 
   return(
     <div className="pg">
@@ -1656,25 +1857,27 @@ function WatPage({go}){
         <div className="origin-section-bg">
           <img src={IMGS.hero} alt="Sterrenhemel" loading="eager"/>
         </div>
-        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"108px 32px 80px",width:"100%"}}>
+        <div className="page-hero-pad">
           <div className="label-light" style={{marginBottom:14}}>Het kennissysteem</div>
           <h1 className="h1" style={{color:"white",marginBottom:18,maxWidth:620}}>Human Design,<br/>Numerologie & Astrologie</h1>
           <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:540,lineHeight:1.82,marginBottom:32}}>Drie disciplines. Elk met een eigen methodologie, eigen oorsprong en eigen inzichten. Samen vormen ze een compleet portret van wie je bent.</p>
-          <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-            <button className="btn btn-ghost" onClick={()=>setTab("hd")}>Human Design</button>
-            <button className="btn btn-ghost" onClick={()=>setTab("num")}>Numerologie</button>
-            <button className="btn btn-ghost" onClick={()=>setTab("astro")}>Astrologie</button>
+          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("hd")}>Human Design</button>
+            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("num")}>Numerologie</button>
+            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("astro")}>Astrologie</button>
           </div>
         </div>
       </div>
 
       {/* ── TAB NAVIGATION ───────────────────────────────────────────────── */}
       <div style={{background:"white",borderBottom:"1px solid var(--border)",position:"sticky",top:72,zIndex:100}}>
-        <div style={{maxWidth:1240,margin:"0 auto",padding:"0 32px",display:"flex",gap:0}}>
-          <TabBtn id="hd" label="Human Design"/>
-          <TabBtn id="num" label="Numerologie"/>
-          <TabBtn id="astro" label="Astrologie"/>
-          <TabBtn id="combo" label="Hoe ze samenhangen"/>
+        <div className="tab-scroll">
+          <div style={{maxWidth:1240,margin:"0 auto",display:"flex",gap:0,minWidth:"max-content"}}>
+            <TabBtn id="hd" label="Human Design"/>
+            <TabBtn id="num" label="Numerologie"/>
+            <TabBtn id="astro" label="Astrologie"/>
+            <TabBtn id="combo" label="Hoe ze samenhangen"/>
+          </div>
         </div>
       </div>
 
@@ -1714,7 +1917,7 @@ function WatPage({go}){
             <p className="body-md" style={{marginBottom:36}}>Je Type is je energetische aard — niet wat je doet, maar hoe je systeem van nature functioneert. Het staat vast vanaf je geboorte.</p>
             {TYPES.map(([t,pct,strat,sig,notSelf,desc])=>(
               <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"28px 0"}}>
-                <div style={{display:"grid",gridTemplateColumns:"220px 1fr",gap:28,alignItems:"start"}}>
+                <div className="split-row-lg">
                   <div>
                     <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:5}}>{t}</div>
                     <div style={{fontSize:".62rem",fontWeight:600,color:"var(--gold)",letterSpacing:".1em",textTransform:"uppercase",marginBottom:10}}>{pct} van de bevolking</div>
@@ -1743,7 +1946,7 @@ function WatPage({go}){
             <p className="body-lg" style={{marginBottom:36}}>Je innerlijke autoriteit is het centrum of mechanisme van waaruit jij het betrouwbaarst beslissingen neemt. Het hoofd is in Human Design geen beslisser — het is een uitstekend instrument om informatie te verzamelen, maar niet om de keuze te maken.</p>
             <div style={{display:"flex",flexDirection:"column",gap:0}}>
               {AUTHORITIES.map(([name,condition,desc],i)=>(
-                <div key={name} style={{display:"grid",gridTemplateColumns:"200px 1fr",gap:24,padding:"22px 0",borderBottom:"1px solid var(--border)",alignItems:"start"}}>
+                <div key={name} className="split-row">
                   <div>
                     <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:4}}>{name}</div>
                     <div style={{fontSize:".6rem",fontWeight:500,color:"var(--gold)",letterSpacing:".08em",textTransform:"uppercase",lineHeight:1.5}}>{condition}</div>
@@ -1761,7 +1964,7 @@ function WatPage({go}){
             <div className="label" style={{marginBottom:14}}>De negen centra</div>
             <h2 className="h2" style={{marginBottom:12}}>Gedefinieerd of open?</h2>
             <p className="body-lg" style={{marginBottom:28}}>Je chart heeft negen energiecentra. Gedefinieerde centra (gekleurd) produceren een consistente, betrouwbare energie. Open centra (wit) absorberen de energie van anderen — ze zijn niet zwak, maar ze zijn gevoelig voor conditionering.</p>
-            <div className="grid-3" style={{gap:16}}>
+            <div className="grid-4" style={{gap:16}}>
               {[["Hoofd","Inspiratie en mentale druk"],["Ajna","Conceptualisering en zekerheid"],["Keel","Communicatie en manifestatie"],["G/Zelf","Identiteit, liefde en richting"],["Hart/Ego","Wil, ego en materieel succes"],["Sacraal","Levensenergie en voortplanting"],["Solar Plexus","Emoties en spirituele golf"],["Milt","Instinct, gezondheid en welzijn"],["Wortel","Adrenalinerush en druk"]].map(([c,d])=>(
                 <div key={c} style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-md)",padding:"18px 20px"}}>
                   <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:4}}>{c}</div>
@@ -1781,7 +1984,7 @@ function WatPage({go}){
 
         <section className="section bg-white">
           <div className="container">
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:72,alignItems:"start"}}>
+            <div className="two-col-lg">
               <div>
                 <div className="label" style={{marginBottom:14}}>Wat is Numerologie?</div>
                 <h2 className="h2" style={{marginBottom:22}}>De taal van getallen achter je naam en geboortedatum</h2>
@@ -1820,7 +2023,7 @@ function WatPage({go}){
             <p className="body-md" style={{marginBottom:36}}>Een volledig numerologisch rapport berekent niet één getal maar acht. Elk beschrijft een andere laag van je persoonlijkheid, je leven en je timing.</p>
             <div style={{display:"flex",flexDirection:"column",gap:0}}>
               {NUM_KERNGETALLEN.map(([naam,bron,desc])=>(
-                <div key={naam} style={{display:"grid",gridTemplateColumns:"200px 1fr",gap:24,padding:"22px 0",borderBottom:"1px solid var(--border)",alignItems:"start"}}>
+                <div key={naam} className="split-row">
                   <div>
                     <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:4}}>{naam}</div>
                     <div style={{fontSize:".6rem",fontWeight:500,color:"var(--gold)",letterSpacing:".08em",textTransform:"uppercase",lineHeight:1.5}}>{bron}</div>
@@ -1844,7 +2047,7 @@ function WatPage({go}){
 
         <section className="section bg-white">
           <div className="container">
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:72,alignItems:"start"}}>
+            <div className="two-col-lg">
               <div>
                 <div className="label" style={{marginBottom:14}}>Wat is Astrologie?</div>
                 <h2 className="h2" style={{marginBottom:22}}>De planeten als spiegel van je karakter</h2>
@@ -1883,7 +2086,7 @@ function WatPage({go}){
             <p className="body-md" style={{marginBottom:36}}>De meeste mensen kennen hun zonneteken. Maar een geboortehoroscoop heeft tien planeten, elk in een teken en een huis. Elk van die planeten beschrijft een ander aspect van wie je bent.</p>
             <div style={{display:"flex",flexDirection:"column",gap:0}}>
               {ASTRO_LAGEN.map(([naam,desc])=>(
-                <div key={naam} style={{display:"grid",gridTemplateColumns:"220px 1fr",gap:24,padding:"22px 0",borderBottom:"1px solid var(--border)",alignItems:"start"}}>
+                <div key={naam} className="split-row">
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",lineHeight:1.3}}>{naam}</div>
                   <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
                 </div>
@@ -1971,13 +2174,28 @@ function RapportenPage({go}){
   const relatie=REPORTS.filter(r=>r.id.startsWith("relatie_"));
   const other=REPORTS.filter(r=>["numerologie","horoscoop"].includes(r.id));
   const sub=REPORTS.find(r=>r.id==="maandelijks");
+  useSEO({
+    title:"Human Design Rapporten — Kies je persoonlijke analyse",
+    description:"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk, directe PDF. Vanaf €45.",
+    canonical:SITE+"/#rapporten",
+    jsonLd:{
+      "@context":"https://schema.org","@type":"ItemList",
+      "name":"Human Design Rapporten",
+      "itemListElement":REPORTS.map((r,i)=>({
+        "@type":"ListItem","position":i+1,
+        "name":r.title,
+        "url":SITE+"/#rapport-"+r.id,
+        "offers":{"@type":"Offer","price":r.priceNum,"priceCurrency":"EUR"}
+      }))
+    }
+  });
   return(
     <div className="pg">
       <div className="origin-section" style={{minHeight:360}}>
         <div className="origin-section-bg">
           <img src={IMGS.cosmos} alt="Kosmos" loading="eager"/>
         </div>
-        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"100px 32px 72px",width:"100%"}}>
+        <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:72}}>
           <div className="label-light" style={{marginBottom:14}}>Alle rapporten</div>
           <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:580}}>Kies je persoonlijke rapport</h1>
           <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen.</p>
@@ -2039,32 +2257,71 @@ function RapportenPage({go}){
 function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
   const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software. De blauwdruk is gebaseerd op je exacte geboortedata."],["Is de blauwdruk echt persoonlijk?","Je gepersonaliseerde digitale blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],["In welk format ontvang ik mijn blauwdruk?","Direct als PDF via de browser — druk op of sla op voor je archief. De digitale blauwdruk is meteen beschikbaar."],["Kan ik de blauwdruk meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
+  useSEO({
+    title:rpt.title+" — "+rpt.outcome,
+    description:rpt.title+" van Faculty of Human Design. "+rpt.intro.slice(0,160)+" "+rpt.pages+" pagina's. Direct als PDF. "+rpt.price+".",
+    canonical:SITE+"/#rapport-"+rpt.id,
+    jsonLd:{
+      "@graph":[
+        productLD(rpt),
+        faqLD(faqs),
+        breadcrumbLD([["Home","/"],["Rapporten","/#rapporten"],[rpt.title,"/#rapport-"+rpt.id]])
+      ]
+    }
+  });
   return(
     <div className="pg">
-      <div className="detail-hero">
+      <div className="detail-hero" role="banner" aria-label={rpt.title}>
         <div className="detail-hero-bg">
-          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rpt.title} loading="eager"/>
+          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rpt.title+" — Faculty of Human Design persoonlijk rapport"} loading="eager"/>
         </div>
         <div className="detail-hero-inner">
           <div>
-            <div className="detail-hero-badge">{rpt.icon} Faculty of Human Design</div>
+            <div className="detail-hero-badge">{rpt.icon} Faculty of Human Design — Est. 2014, Ibiza</div>
             <h1 className="detail-hero-title">{rpt.title}</h1>
-            <div className="detail-hero-tagline">{rpt.tagline}</div>
+            <div className="detail-hero-tagline">{rpt.outcome || rpt.tagline}</div>
             <div className="detail-hero-meta">
-              <span className="detail-hero-m">{rpt.pages} paginas</span>
+              <span className="detail-hero-m">{rpt.pages} pagina's</span>
               <span className="detail-hero-m">{rpt.sections} secties</span>
               <span className="detail-hero-m">Gepersonaliseerde Digitale Blauwdruk</span>
               <span className="detail-hero-m">{rpt.sub}</span>
             </div>
           </div>
           <div className="price-box">
+            {rpt.outcome&&<div style={{fontSize:".68rem",fontWeight:500,color:"rgba(201,168,92,.85)",letterSpacing:".06em",marginBottom:14,lineHeight:1.5,borderBottom:"1px solid rgba(255,255,255,.08)",paddingBottom:14}}>→ {rpt.outcome}</div>}
             <div className="price-box-amount">{rpt.price}</div>
             <div className="price-box-period">{rpt.sub}</div>
-            <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>Blauwdruk bestellen</button>
+            <div style={{display:"flex",flexDirection:"column",gap:7,margin:"14px 0 20px",textAlign:"left"}}>
+              {[["Chart gratis berekend","Betaal pas na het zien van je chart"],["Direct als PDF","Klaar in 3-4 minuten"],["Persoonlijk","Geen generieke profielen"]].map(([t,d])=>(
+                <div key={t} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+                  <span style={{color:"rgba(201,168,92,.7)",fontSize:".55rem",flexShrink:0,marginTop:3}}>✦</span>
+                  <div>
+                    <span style={{fontSize:".72rem",fontWeight:500,color:"rgba(255,255,255,.8)"}}>{t}</span>
+                    <span style={{fontSize:".72rem",fontWeight:300,color:"rgba(255,255,255,.38)"}}> — {d}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
+              Blauwdruk bestellen — {rpt.price}
+            </button>
             <div style={{marginTop:12}}><TrustStrip light/></div>
           </div>
         </div>
       </div>
+
+      {/* ── SOCIAL PROOF BAR ─ immediately below hero, above the fold on mobile ── */}
+      <div className="stat-row" role="region" aria-label="Betrouwbaarheidsindicatoren">
+        <div className="stat-row-inner">
+          {[["2.400+","Blauwdrukken uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["3–4 min","Klaar als PDF"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
+            <div key={l} className="stat-row-item">
+              <div className="stat-row-n" style={{fontSize:"1.5rem"}}>{n}</div>
+              <div className="stat-row-l">{l}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       <section className="section bg-muted">
         <div className="container">
           <div className="grid-2" style={{gap:56,alignItems:"start"}}>
@@ -2180,17 +2437,45 @@ function BlogPage({go}){
     load();
   },[]);
 
+  const activeArticle = activePost ? articles.find(a=>String(a.id)===String(activePost)) : null;
+
+  // SEO for list view or single article
+  useSEO(activeArticle ? {
+    title: activeArticle.title,
+    description: activeArticle.excerpt || activeArticle.title + " — Lees het volledige artikel op Faculty of Human Design.",
+    canonical: SITE + "/#blog",
+    jsonLd: {
+      "@context":"https://schema.org","@type":"Article",
+      "headline": activeArticle.title,
+      "description": activeArticle.excerpt,
+      "author": {"@type":"Organization","name":"Faculty of Human Design"},
+      "publisher": {"@type":"Organization","name":"Faculty of Human Design"},
+      "datePublished": activeArticle.date,
+      "image": (activeArticle.images||[])[0]
+    }
+  } : {
+    title: "Inzichten over Human Design, Numerologie & Astrologie",
+    description: "Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
+    canonical: SITE + "/#blog",
+    jsonLd: {
+      "@context":"https://schema.org","@type":"Blog",
+      "name":"Faculty of Human Design — Inzichten",
+      "description":"Artikelen over Human Design, Numerologie en Astrologie.",
+      "publisher":{"@type":"Organization","name":"Faculty of Human Design"}
+    }
+  });
+
   if(activePost){
     const post=articles.find(a=>String(a.id)===String(activePost));
     if(!post)return null;
     return(
       <div className="pg">
-        <section style={{background:"var(--dark)",padding:"100px 24px 56px"}}>
-          <div className="container-sm">
-            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>Terug naar inzichten</div>
+        <section style={{background:"var(--dark)"}}>
+          <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:56}}>
+            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>← Terug naar inzichten</div>
             <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:8}}>{post.tag}</div>
             <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{post.title}</h1>
-            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} - {post.readtime} leestijd</div>
+            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} leestijd</div>
           </div>
         </section>
         <section className="section bg-white">
@@ -2231,7 +2516,7 @@ function BlogPage({go}){
         <div className="origin-section-bg">
           <img src={IMGS.cosmos} alt="Kosmische sfeer" loading="eager"/>
         </div>
-        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"100px 32px 72px",width:"100%"}}>
+        <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:72}}>
           <div className="label-light" style={{marginBottom:14}}>Kennis</div>
           <h1 className="h1" style={{color:"white",marginBottom:14}}>Inzichten en Achtergronden</h1>
           <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Artikelen over Human Design, Numerologie en Astrologie. Elke twee weken een nieuw artikel.</p>
@@ -2261,6 +2546,18 @@ function BlogPage({go}){
 }
 
 function OverPage({go}){
+  useSEO({
+    title:"Over ons — Faculty of Human Design, Ibiza",
+    description:"Faculty of Human Design is opgericht op Ibiza in 2014. Gespecialiseerd in diepgaande persoonlijke analyses op basis van Human Design, Numerologie en Astrologie. 2.400+ blauwdrukken. 4.9/5 beoordeling.",
+    canonical:SITE+"/#over",
+    jsonLd:{
+      "@context":"https://schema.org","@type":"AboutPage",
+      "name":"Over Faculty of Human Design",
+      "description":"Opgericht op Ibiza in 2014. Gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "url":SITE+"/#over",
+      "author":{"@type":"Organization","name":"Faculty of Human Design","foundingDate":"2014","foundingLocation":"Ibiza, Spanje"}
+    }
+  });
   return(
     <div className="pg">
 
@@ -2269,7 +2566,7 @@ function OverPage({go}){
         <div className="origin-section-bg">
           <img src={IMGS.ibiza} alt="Ibiza zonsondergang" loading="eager"/>
         </div>
-        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"120px 32px 96px",width:"100%"}}>
+        <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:96}}>
           <div className="label-light" style={{marginBottom:14}}>Over ons — Est. 2014, Ibiza</div>
           <h1 className="h1" style={{color:"white",marginBottom:20,maxWidth:620,lineHeight:1.06}}>De geschreven analyse<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>als eerste stap naar jezelf</em></h1>
           <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:520,lineHeight:1.84}}>Wij zijn gespecialiseerd in één ding: diepgaande, persoonlijke analyse van jouw chart. Geen cursussen, geen coaching — uitsluitend de geschreven blauwdruk die het begin vormt van bewuster leven.</p>
@@ -2296,8 +2593,8 @@ function OverPage({go}){
               </div>
             </div>
             <div>
-              <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-xl)",aspectRatio:"3/4",position:"relative",marginBottom:24}}>
-                <img src={IMGS.origin} alt="Ibiza landschap" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+              <div className="portrait-img">
+                <img src={IMGS.origin} alt="Ibiza landschap" loading="lazy"/>
                 <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 45%,rgba(12,10,23,.72) 100%)"}}/>
                 <div style={{position:"absolute",bottom:24,left:24,right:24}}>
                   <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(201,168,92,.8)",marginBottom:8}}>Ibiza — 1987</div>
@@ -2351,8 +2648,8 @@ function OverPage({go}){
               ["03","Diepgaande analyse","Elke sectie van de blauwdruk wordt op maat samengesteld op basis van jouw specifieke combinatie. De analyse gaat verder dan definities: het beschrijft hoe jouw design in het dagelijks leven werkt, waar conditionering zit, en waar jouw authentieke kracht ligt."],
               ["04","Je gepersonaliseerde blauwdruk","Het resultaat is een document van 24 tot 40+ pagina's dat je teruggeeft wat altijd al in jou aanwezig was — nu helder beschreven, herkenbaar en direct toepasbaar. De eerste stap in een proces dat een leven lang kan duren."],
             ].map(([num,title,desc],i,arr)=>(
-              <div key={num} style={{display:"flex",gap:32,padding:"36px 0",borderBottom:i<arr.length-1?"1px solid var(--border)":"none",alignItems:"flex-start"}}>
-                <div style={{fontFamily:"var(--font-serif)",fontSize:"2.2rem",fontWeight:300,color:"var(--brand)",opacity:.2,lineHeight:1,flexShrink:0,width:52,textAlign:"right",paddingTop:2}}>{num}</div>
+              <div key={num} className="method-step" style={{borderBottom:i<arr.length-1?"1px solid var(--border)":"none"}}>
+                <div className="method-step-num">{num}</div>
                 <div style={{flex:1}}>
                   <h3 style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",fontWeight:400,color:"var(--text)",marginBottom:10,lineHeight:1.2}}>{title}</h3>
                   <p className="body-md" style={{lineHeight:1.82}}>{desc}</p>
@@ -2374,7 +2671,7 @@ function OverPage({go}){
             <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>Opgericht op het eiland<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>waar het begon</em></h2>
             <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.84,maxWidth:440}}>De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Die oorsprong bepaalt onze focus: geen oppervlakkige profielen, maar diepgaande analyse die recht doet aan de rijkheid van het systeem.</p>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
+          <div className="stats-2x2">
             {[["2014","Jaar van oprichting"],["Ibiza","Thuisbasis"],["2.400+","Blauwdrukken"],["3","Disciplines"]].map(([n,l])=>(
               <div key={l} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:"var(--radius-lg)",padding:"24px 20px"}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.7rem",fontWeight:300,color:"white",lineHeight:1,marginBottom:5}}>{n}</div>
@@ -2406,10 +2703,28 @@ function OverPage({go}){
 function ContactPage(){
   const[form,setForm]=useState({name:"",email:"",subject:"",msg:""});
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
+  useSEO({
+    title:"Contact — Faculty of Human Design",
+    description:"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyofhumandesign.com",
+    canonical:SITE+"/#contact",
+    jsonLd:{
+      "@context":"https://schema.org","@type":"ContactPage",
+      "name":"Contact — Faculty of Human Design",
+      "url":SITE+"/#contact",
+      "mainEntity":{
+        "@type":"Organization","name":"Faculty of Human Design",
+        "email":"info@facultyofhumandesign.com",
+        "address":{"@type":"PostalAddress","addressLocality":"Ibiza","addressCountry":"ES"}
+      }
+    }
+  });
   return(
     <div className="pg">
-      <section style={{background:"var(--dark)",padding:"100px 24px 72px"}}>
-        <div className="container"><div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Contact</div><h1 className="h1" style={{color:"white"}}>Neem contact op</h1></div>
+      <section style={{background:"var(--dark)"}}>
+        <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:72}}>
+          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Contact</div>
+          <h1 className="h1" style={{color:"white"}}>Neem contact op</h1>
+        </div>
       </section>
       <section className="section bg-white">
         <div className="container-sm">
