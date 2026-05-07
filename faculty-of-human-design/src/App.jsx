@@ -2263,53 +2263,142 @@ function BlogPage({go}){
 function OverPage({go}){
   return(
     <div className="pg">
-      <div className="origin-section" style={{minHeight:420}}>
+
+      {/* ── HERO ── */}
+      <div className="origin-section" style={{minHeight:480}}>
         <div className="origin-section-bg">
           <img src={IMGS.ibiza} alt="Ibiza zonsondergang" loading="eager"/>
         </div>
-        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"108px 32px 80px",width:"100%"}}>
-          <div className="label-light" style={{marginBottom:14}}>Over ons</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>Faculty of Human Design</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Opgericht op Ibiza in 2014. Diepgaande rapporten op basis van exacte astronomische berekening.</p>
+        <div style={{position:"relative",zIndex:2,maxWidth:1240,margin:"0 auto",padding:"120px 32px 96px",width:"100%"}}>
+          <div className="label-light" style={{marginBottom:14}}>Over ons — Est. 2014, Ibiza</div>
+          <h1 className="h1" style={{color:"white",marginBottom:20,maxWidth:620,lineHeight:1.06}}>De geschreven analyse<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>als eerste stap naar jezelf</em></h1>
+          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:520,lineHeight:1.84}}>Wij zijn gespecialiseerd in één ding: diepgaande, persoonlijke analyse van jouw chart. Geen cursussen, geen coaching — uitsluitend de geschreven blauwdruk die het begin vormt van bewuster leven.</p>
         </div>
       </div>
+
+      {/* ── DE EERSTE STAP ── */}
       <section className="section bg-white">
         <div className="container">
-          <div className="grid-2" style={{gap:64,alignItems:"start"}}>
+          <div className="grid-2" style={{gap:72,alignItems:"center"}}>
             <div>
-              <div className="label" style={{marginBottom:14}}>Het instituut</div>
-              <h2 className="h2" style={{marginBottom:22}}>Opgericht op het eiland waar het begon</h2>
-              <p className="body-lg" style={{marginBottom:18}}>De Faculty of Human Design is in 2014 opgericht op Ibiza, het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving.</p>
-              <p className="body-md" style={{marginBottom:18}}>Wij zijn gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Geboorteastrologie. Alle rapporten worden gegenereerd op basis van exacte astronomische berekeningen.</p>
-              <p className="body-md">Onze focus is smal en bewust: uitsluitend diepgaande, nauwkeurige geschreven analyse. Geen cursussen, geen coachingstrajecten.</p>
-              <div style={{display:"flex",gap:36,flexWrap:"wrap",marginTop:36}}>
-                {[["2014","Opgericht"],["2.400+","Rapporten"],["8","Rapport soorten"],["4.9","Beoordeling"]].map(([n,l])=>(
+              <div className="label" style={{marginBottom:14}}>Waarom een blauwdruk</div>
+              <h2 className="h2" style={{marginBottom:22}}>Je kunt jezelf niet veranderen<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>zonder jezelf te kennen</em></h2>
+              <p className="body-lg" style={{marginBottom:18}}>De meeste mensen leven jarenlang vanuit aangeleerd gedrag, verwachtingen van anderen en aannames over wie ze zijn. Een gepersonaliseerde blauwdruk doorbreekt dat patroon — niet met adviezen van buitenaf, maar door te laten zien hoe jij van nature werkt.</p>
+              <p className="body-md" style={{marginBottom:18}}>Dat is de reden waarom wij ons uitsluitend richten op de geschreven analyse. De blauwdruk is geen eindpunt — het is het begin. Een document dat je terugpakt als je een beslissing moet nemen, een relatie begrijpen wilt, of simpelweg jezelf in het oog verliest.</p>
+              <p className="body-md" style={{marginBottom:32}}>Voor veel van onze klanten is de blauwdruk de eerste keer dat ze zichzelf echt herkend voelen — niet in wat ze doen, maar in wie ze zijn.</p>
+              <div style={{borderLeft:"3px solid var(--gold)",paddingLeft:20,marginBottom:32}}>
+                <p style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"var(--text)",lineHeight:1.78}}>"Je ontvangt geen profiel. Je ontvangt een spiegel — nauwkeurig berekend op het moment dat jij ter wereld kwam."</p>
+              </div>
+              <div style={{display:"flex",gap:40,flexWrap:"wrap"}}>
+                {[["2014","Opgericht op Ibiza"],["2.400+","Blauwdrukken samengesteld"],["4.9 / 5","Gemiddelde beoordeling"]].map(([n,l])=>(
                   <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
                 ))}
               </div>
             </div>
             <div>
-              <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-lg)",marginBottom:24,aspectRatio:"4/3",position:"relative"}}>
-                <img src={IMGS.origin} alt="Ibiza natuur" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(12,10,23,.6) 100%)"}}/>
-                <div style={{position:"absolute",bottom:20,left:20,right:20}}>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.75)",lineHeight:1.6}}>"Elk rapport is een weerspiegeling van de kosmos op het moment van jouw geboorte."</div>
+              <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-xl)",aspectRatio:"3/4",position:"relative",marginBottom:24}}>
+                <img src={IMGS.origin} alt="Ibiza landschap" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 45%,rgba(12,10,23,.72) 100%)"}}/>
+                <div style={{position:"absolute",bottom:24,left:24,right:24}}>
+                  <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(201,168,92,.8)",marginBottom:8}}>Ibiza — 1987</div>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.65}}>Op dit eiland ontving Ra Uru Hu het Human Design systeem. Hier begon alles.</div>
                 </div>
-              </div>
-              <div style={{background:"var(--muted)",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"28px"}}>
-                <div className="label" style={{marginBottom:16}}>Onze aanpak</div>
-                {[["Exacte berekeningen","Meeus ephemeris, dezelfde algoritmen als professionele astronomische software."],["Persoonlijke analyse","Geen templates. Elk rapport gegenereerd op basis van je specifieke chart."],["Drie disciplines","Human Design, Numerologie en Astrologie, elk vanuit eigen methodologie."],["Directe levering","PDF beschikbaar binnen 3-4 minuten na invoer van je gegevens."]].map(([t,d])=>(
-                  <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"14px 0"}}>
-                    <div style={{fontSize:".9rem",fontWeight:500,color:"var(--text)",marginBottom:4}}>{t}</div>
-                    <p className="body-sm">{d}</p>
-                  </div>
-                ))}
-                <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ── ONZE SPECIALISATIE ── */}
+      <section className="section bg-muted" style={{position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
+          <img src={IMGS.cosmos} alt="" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.04,filter:"grayscale(60%)"}}/>
+        </div>
+        <div className="container" style={{position:"relative",zIndex:1}}>
+          <div className="text-center" style={{marginBottom:56}}>
+            <div className="label" style={{marginBottom:14}}>Onze specialisatie</div>
+            <h2 className="h2" style={{marginBottom:16}}>Eén focus. Uitgediept.</h2>
+            <p className="body-md" style={{maxWidth:520,margin:"0 auto"}}>Wij doen uitsluitend geschreven analyse. Dat maakt het mogelijk om elke discipline volledig te beheersen en elke blauwdruk op het hoogste niveau samen te stellen.</p>
+          </div>
+          <div className="grid-3">
+            {[
+              ["✦","Astronomische precisie","Swiss Ephemeris berekening","Elke blauwdruk is gebaseerd op de exacte posities van de planeten op jouw geboortemoment — tot op de graad nauwkeurig. Dezelfde standaard als professionele astronomische software. Geen afgeronde tabellen, geen generieke benaderingen."],
+              ["◎","Drie disciplines, één portret","Human Design · Numerologie · Astrologie","We analyseren vanuit drie volledig zelfstandige methodologieën: Human Design (energetisch mechanisme), Numerologie (levenspatronen en -lessen) en Geboorteastrologie (planetaire kwaliteiten). Elk systeem verlicht een andere laag van dezelfde persoon."],
+              ["∞","Diepgaande geschreven analyse","Geen templates. Geen generiek.","Elke blauwdruk wordt volledig op maat samengesteld op basis van jouw unieke combinatie van Type, Autoriteit, Profiel en actieve poorten. Geen twee blauwdrukken zijn identiek. De analyse is persoonlijk, concreet en direct toepasbaar."],
+            ].map(([ico,title,sub,desc])=>(
+              <div key={title} style={{background:"white",borderRadius:"var(--radius-xl)",border:"1px solid var(--border)",padding:"36px 32px",display:"flex",flexDirection:"column",gap:0}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",color:"var(--brand)",opacity:.5,marginBottom:16,lineHeight:1}}>{ico}</div>
+                <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:8}}>{sub}</div>
+                <h3 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:14,lineHeight:1.22}}>{title}</h3>
+                <p className="body-sm" style={{lineHeight:1.78}}>{desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── DE METHODE ── */}
+      <section className="section bg-white">
+        <div className="container-md">
+          <div className="text-center" style={{marginBottom:56}}>
+            <div className="label" style={{marginBottom:14}}>De methode</div>
+            <h2 className="h2" style={{marginBottom:16}}>Van geboortemoment<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>naar persoonlijke blauwdruk</em></h2>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:0}}>
+            {[
+              ["01","Astronomische berekening","Op basis van je exacte geboortedatum, -tijd en -plaats berekenen wij de posities van alle relevante planeten en hemellichamen. Dit vormt de astronomische basis van je blauwdruk — objectief, nauwkeurig en uniek voor jou."],
+              ["02","Chart samenstelling","De berekening levert je persoonlijke chart: je Human Design type, autoriteit, profiel, gedefinieerde centra, actieve kanalen en poorten — of, bij Numerologie en Astrologie, je kern- en planeetgetallen. Dit is de ruwe data waarop de analyse is gebaseerd."],
+              ["03","Diepgaande analyse","Elke sectie van de blauwdruk wordt op maat samengesteld op basis van jouw specifieke combinatie. De analyse gaat verder dan definities: het beschrijft hoe jouw design in het dagelijks leven werkt, waar conditionering zit, en waar jouw authentieke kracht ligt."],
+              ["04","Je gepersonaliseerde blauwdruk","Het resultaat is een document van 24 tot 40+ pagina's dat je teruggeeft wat altijd al in jou aanwezig was — nu helder beschreven, herkenbaar en direct toepasbaar. De eerste stap in een proces dat een leven lang kan duren."],
+            ].map(([num,title,desc],i,arr)=>(
+              <div key={num} style={{display:"flex",gap:32,padding:"36px 0",borderBottom:i<arr.length-1?"1px solid var(--border)":"none",alignItems:"flex-start"}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"2.2rem",fontWeight:300,color:"var(--brand)",opacity:.2,lineHeight:1,flexShrink:0,width:52,textAlign:"right",paddingTop:2}}>{num}</div>
+                <div style={{flex:1}}>
+                  <h3 style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",fontWeight:400,color:"var(--text)",marginBottom:10,lineHeight:1.2}}>{title}</h3>
+                  <p className="body-md" style={{lineHeight:1.82}}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── IBIZA ORIGINE ── */}
+      <div className="origin-section" style={{minHeight:360}}>
+        <div className="origin-section-bg">
+          <img src={IMGS.cta} alt="Sterrenhemel Ibiza" loading="lazy"/>
+        </div>
+        <div className="origin-content">
+          <div>
+            <div className="label-light" style={{marginBottom:16}}>Het instituut</div>
+            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>Opgericht op het eiland<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>waar het begon</em></h2>
+            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.84,maxWidth:440}}>De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Die oorsprong bepaalt onze focus: geen oppervlakkige profielen, maar diepgaande analyse die recht doet aan de rijkheid van het systeem.</p>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:20}}>
+            {[["2014","Jaar van oprichting"],["Ibiza","Thuisbasis"],["2.400+","Blauwdrukken"],["3","Disciplines"]].map(([n,l])=>(
+              <div key={l} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:"var(--radius-lg)",padding:"24px 20px"}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.7rem",fontWeight:300,color:"white",lineHeight:1,marginBottom:5}}>{n}</div>
+                <div style={{fontSize:".58rem",fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.3)"}}>{l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── CTA ── */}
+      <section className="section-md bg-muted">
+        <div className="container-sm text-center">
+          <div className="label" style={{marginBottom:14}}>Begin hier</div>
+          <h2 className="h2" style={{marginBottom:18}}>De eerste stap begint<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>met jouw chart</em></h2>
+          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>Je chart wordt direct gratis berekend. Je blauwdruk is daarna binnen enkele minuten beschikbaar — persoonlijk, diepgaand en direct als PDF.</p>
+          <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",marginBottom:28}}>
+            <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>Start met mijn blauwdruk</button>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+          </div>
+          <TrustStrip/>
+        </div>
+      </section>
+
     </div>
   );
 }
