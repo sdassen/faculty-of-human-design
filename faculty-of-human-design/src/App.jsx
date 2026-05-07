@@ -3,19 +3,32 @@ import { useState, useEffect } from "react";
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');`;
 
 const IMGS = {
-  hero:      "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1800&auto=format&q=80",
-  ibiza:     "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1200&auto=format&q=80",
-  cosmos:    "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=1200&auto=format&q=80",
-  origin:    "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=1200&auto=format&q=80",
-  cta:       "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=1600&auto=format&q=80",
-  r_volledig:"https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=600&auto=format&q=75",
-  r_relatie: "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=600&auto=format&q=75",
-  r_jaar:    "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=600&auto=format&q=75",
-  r_kind:    "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&auto=format&q=75",
-  r_loopbaan:"https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&auto=format&q=75",
-  r_numerologie:"https://images.unsplash.com/photo-1530360458055-f1cd9f56b3a6?w=600&auto=format&q=75",
-  r_horoscoop:"https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=600&auto=format&q=75",
-  r_maandelijks:"https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&auto=format&q=75",
+  // ── Full-bleed section backgrounds ─────────────────────────────────
+  hero:          "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=2400&auto=format&fit=crop&q=82",
+  ibiza:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  cosmos:        "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=2000&auto=format&fit=crop&q=82",
+  origin:        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=2000&auto=format&fit=crop&q=82",
+  cta:           "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=2000&auto=format&fit=crop&q=82",
+
+  // ── Waarom-anders 3-up visual pillars ──────────────────────────────
+  w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
+  w_depth:       "https://images.unsplash.com/photo-1530360458055-f1cd9f56b3a6?w=1200&auto=format&fit=crop&q=80",
+  w_ibiza:       "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=1200&auto=format&fit=crop&q=80",
+
+  // ── Subscription moon backdrop ──────────────────────────────────────
+  sub_moon:      "https://images.unsplash.com/photo-1446776858070-70c3d4f67820?w=1200&auto=format&fit=crop&q=80",
+
+  // ── Report cards (center-safe, 900w) ───────────────────────────────
+  r_volledig:        "https://images.unsplash.com/photo-1534796636912-3b417148efca?w=900&auto=format&fit=crop&q=80",
+  r_relatie_liefde:  "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=900&auto=format&fit=crop&q=80",
+  r_relatie_business:"https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=900&auto=format&fit=crop&q=80",
+  r_relatie_familie: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop&q=80",
+  r_jaar:        "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
+  r_kind:        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&auto=format&fit=crop&q=80",
+  r_loopbaan:    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80",
+  r_numerologie: "https://images.unsplash.com/photo-1530360458055-f1cd9f56b3a6?w=900&auto=format&fit=crop&q=80",
+  r_horoscoop:   "https://images.unsplash.com/photo-1446776858070-70c3d4f67820?w=900&auto=format&fit=crop&q=80",
+  r_maandelijks: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=900&auto=format&fit=crop&q=80",
 };
 
 const CSS = `
@@ -160,6 +173,25 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .rcard-footer { display:flex; justify-content:space-between; align-items:center; padding-top:14px; border-top:1px solid var(--border); margin-top:auto; }
 .rcard-meta { font-size:.62rem; font-weight:400; color:var(--text-light); }
 .rcard-cta { font-size:.68rem; font-weight:600; letter-spacing:.09em; text-transform:uppercase; color:var(--brand); display:flex; align-items:center; gap:4px; }
+
+/* WAAROM CARD */
+.waarom-card { border-radius:var(--radius-lg); overflow:hidden; background:var(--card); border:1px solid var(--border); transition:all var(--dur) var(--ease); }
+.waarom-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-xl); border-color:transparent; }
+.waarom-card:hover .waarom-card-img img { transform:scale(1.06); }
+.waarom-card-img { position:relative; height:220px; overflow:hidden; }
+.waarom-card-img img { width:100%; height:100%; object-fit:cover; transition:transform 6s var(--ease); }
+.waarom-card-badge { position:absolute; bottom:14px; left:18px; font-size:.58rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--gold-warm); z-index:2; }
+.waarom-card-body { padding:24px 26px 28px; }
+.waarom-card-title { font-family:var(--font-serif); font-size:1.1rem; font-weight:400; color:var(--text); margin-bottom:10px; line-height:1.2; }
+
+/* OVERLAY HELPERS */
+.ov { position:absolute; inset:0; pointer-events:none; }
+.ov-grad-t { position:absolute; inset:0; background:linear-gradient(to top,rgba(12,10,23,.58) 0%,transparent 52%); pointer-events:none; }
+.ov-grad-r { position:absolute; inset:0; background:linear-gradient(to right,rgba(12,10,23,.7) 0%,transparent 60%); pointer-events:none; }
+
+/* SUB CARD MOON */
+.sub-card-moon { position:absolute; inset:0; overflow:hidden; border-radius:var(--radius-xl); }
+.sub-card-moon img { width:100%; height:100%; object-fit:cover; object-position:center 30%; opacity:.14; filter:saturate(.3) brightness(.7); }
 
 /* TRUST */
 .trust-strip { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:8px 24px; }
@@ -401,6 +433,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .hero-actions .btn { width:100%; }
   .report-summary-grid { grid-template-columns:1fr; }
   .stat-row-item { width:100%; }
+  .waarom-card-img { height:180px; }
 }
 `;
 
@@ -430,19 +463,51 @@ const REPORTS = [
     ],
   },
   {
-    id:"relatie", icon:"◎", tag:"",
-    title:"Relatierapport",
+    id:"relatie_liefde", icon:"◎", tag:"",
+    title:"Relatierapport — Liefde",
     price:"€95", priceNum:95, sub:"Eenmalig · Direct als PDF",
-    tagline:"Twee designs naast elkaar geanalyseerd",
-    intro:"Een analyse van twee volledige Human Design charts. Hoe opereren je en je partner energetisch samen — waar vullen jullie elkaar aan en waar ontstaat wrijving?",
-    includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatiepatronen","Conflictpatronen & doorbraken","Gezamenlijk levensdoel","Praktisch advies voor harmonie"],
-    for:"Voor koppels of zakenpartners die hun samenwerking dieper willen begrijpen.",
-    sections:9, pages:"28+", needsPartner:true,
-    prompt_extra:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse Persoon 1\n### 3. Chart Analyse Persoon 2\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit\n### 6. Communicatie & Conflict\n### 7. Groeigebieden\n### 8. Gezamenlijk Levensdoel\n### 9. Praktisch Advies",
+    tagline:"Twee designs in romantische verbinding",
+    intro:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel — waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?",
+    includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatie & intimiteitsstijl","Seksuele energie & aantrekking","Beslissingen nemen als stel","Conflictpatronen & doorbraken","Gezamenlijk groeipad","Praktisch advies voor harmonie"],
+    for:"Voor koppels die hun romantische verbinding dieper willen begrijpen en versterken.",
+    sections:9, pages:"28+", needsPartner:true, partnerLabel:"Partner",
+    prompt_extra:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Partners Design\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit & Aantrekking\n### 6. Communicatie & Intimiteit\n### 7. Spanningsvelden & Doorbraken\n### 8. Gezamenlijk Groeipad\n### 9. Praktisch Advies voor Harmonie",
     reviews:[
       ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom — onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
-      ["Ik had dit ook als zakenpartners met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
+      ["Ik had dit als verrassing voor mijn partner besteld. We hebben het samen gelezen en waren allebei stil bij hoe accuraat de beschrijving van onze dynamiek was.","Roos & Tim, Amsterdam"],
       ["Verrassend diepgaand. Niet alleen 'jullie vullen elkaar aan' maar echt concrete patronen en waar de wrijving vandaan komt.","Nathalie D., Brugge"],
+    ],
+  },
+  {
+    id:"relatie_business", icon:"◈", tag:"",
+    title:"Relatierapport — Business",
+    price:"€85", priceNum:85, sub:"Eenmalig · Direct als PDF",
+    tagline:"Twee designs in zakelijke samenwerking",
+    intro:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten — en hoe bouwen jullie een samenwerking die werkt voor beiden?",
+    includes:["Beide charts volledig geanalyseerd","Besluitvormingsdynamieken","Complementariteit van Types","Leiderschapsstijl per chart","Werkenergieën & ritmes","Communicatiepatronen op de werkvloer","Conflictpatronen & oplossingen","Rolverdeling & verantwoordelijkheden","Praktisch advies voor optimale samenwerking"],
+    for:"Voor zakenpartners, compagnons of collega's die hun samenwerking bewust willen verbeteren.",
+    sections:9, pages:"24+", needsPartner:true, partnerLabel:"Zakenpartner",
+    prompt_extra:"### 1. De Energie van Jullie Samenwerking\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Zakenpartner Design\n### 4. Besluitvormingsdynamieken\n### 5. Complementariteit & Sterktes\n### 6. Leiderschapsstijl & Rolverdeling\n### 7. Communicatie & Conflictpatronen\n### 8. Gezamenlijke Visie & Richting\n### 9. Praktisch Advies voor Samenwerking",
+    reviews:[
+      ["Ik had dit met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
+      ["Het rapport liet zien dat mijn partner een Manifestor is en ik een Generator. Dat verklaarde zoveel van onze samenwerking — nu gaan we er bewust mee om.","Lars M., Utrecht"],
+      ["Als twee oprichters van een startup is het rapport ons leidraad geworden voor taakverdeling. Concreet, praktisch en verrassend nauwkeurig.","Sara & Joris, Gent"],
+    ],
+  },
+  {
+    id:"relatie_familie", icon:"◇", tag:"",
+    title:"Relatierapport — Familie",
+    price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    tagline:"Twee designs in familieverband",
+    intro:"Een analyse van twee familieleden — ouder en kind, broer en zus, of een andere gezinsrelatie. Hoe opereren jullie designs samen en hoe creëer je meer begrip, verbinding en ruimte?",
+    includes:["Beider charts geanalyseerd","Energetische dynamieken in het gezin","Communicatiestijlen per type","Groeimogelijkheden voor beiden","Patronen van conflict en verbinding","Rolverdeling binnen de familie","Opvoedings- en begeleidingstips","Praktische guidance voor meer begrip","Slotanalyse"],
+    for:"Voor ouders met kinderen, broers en zussen of andere gezinsleden die meer inzicht willen in hun dynamiek.",
+    sections:9, pages:"24+", needsPartner:true, partnerLabel:"Familielid",
+    prompt_extra:"### 1. De Energie van Jullie Familiebinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Familielid\n### 4. Familiedynamieken & Patronen\n### 5. Communicatiestijlen & Begrip\n### 6. Groeimogelijkheden voor Beiden\n### 7. Spanningsvelden & Oplossingen\n### 8. Guidance voor Meer Verbinding\n### 9. Slotanalyse",
+    reviews:[
+      ["Mijn dochter en ik hebben het rapport samen besproken. Voor het eerst begreep ik écht waarom zij reageert zoals ze reageert — dat heeft onze verhouding veranderd.","Karin V., Den Haag"],
+      ["Het inzicht in hoe mijn moeder en ik anders communiceren was een openbaring. Niet alleen voor mijn begrip van haar, maar ook voor hoe ik mezelf in die relatie gedraag.","Thomas B., Antwerpen"],
+      ["Voor broer en zus is dit ook bijzonder waardevol. Veel patronen die we altijd 'gewoon zo' noemden kregen eindelijk een verklaring.","Femke O., Leiden"],
     ],
   },
   {
@@ -550,14 +615,16 @@ const REPORTS = [
 //   success_url: https://faculty-of-human-design.vercel.app/?success=true
 //   cancel_url:  https://faculty-of-human-design.vercel.app/?cancelled=true
 const STRIPE = {
-  volledig:   "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00",
-  relatie:    "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
-  jaar:       "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
-  kind:       "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
-  loopbaan:   "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
-  numerologie:"https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
-  horoscoop:  "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
-  maandelijks:"https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: abonnement link
+  volledig:        "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00",
+  relatie_liefde:  "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  relatie_business:"https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  relatie_familie: "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  jaar:            "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  kind:            "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  loopbaan:        "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  numerologie:     "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  horoscoop:       "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: eigen link
+  maandelijks:     "https://buy.stripe.com/test_14A7sE4Nq6ipaF3cu2eQM00", // TODO: abonnement link
 };
 
 async function goToStripe(rptId, chartData, formData) {
@@ -678,6 +745,43 @@ function buildPrompt(chart,form,rpt){
     const pStr=Object.entries(h.planets).map(([p,d])=>p+": "+d.degree+"° "+d.sign+" H"+d.house).join(", ");
     return["HOROSCOOP voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",rpt.prompt_extra].join("\n");
   }
+  // Relatie rapporten — twee volledige HD charts berekenen en naast elkaar zetten
+  if(rpt.id.startsWith("relatie_")){
+    const lbl=rpt.partnerLabel||"Partner";
+    const c1=chart;
+    const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
+    const chartLine=(c,name)=>c?[
+      "Type: "+c.type,"Strategie: "+c.strat,"Autoriteit: "+c.auth,"Profiel: "+c.profile,
+      "Inkarnatie-Kruis: Poort "+c.cross,
+      "Gedefinieerd: "+(c.definedCenters.join(", ")||"geen"),
+      "Open: "+c.openCenters.join(", "),
+      "Kanalen: "+(c.channels.map(ch=>ch.g1+"-"+ch.g2).join(", ")||"geen"),
+      "Bewust: "+Object.entries(c.pers).map(e=>e[0]+": "+e[1].gate+"."+e[1].line).join(", "),
+      "Onbewust: "+Object.entries(c.des).map(e=>e[0]+": "+e[1].gate+"."+e[1].line).join(", "),
+    ].join("\n"):("Geen chartdata beschikbaar voor "+name);
+    const gedeeld=c1&&c2?c1.allGates.filter(g=>c2.allGates.includes(g)):[];
+    const emcKanalen=c1&&c2?c1.channels.filter(ch=>c2.channels.some(ch2=>ch2.g1===ch.g1&&ch2.g2===ch.g2)).map(c=>c.g1+"-"+c.g2):[];
+    return[
+      "RELATIERAPPORT — "+rpt.title,
+      "",
+      "PERSOON 1: "+form.name,
+      "Geboortedatum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),
+      "Geboorteplaats: "+form.place,
+      chartLine(c1,form.name),
+      "",
+      lbl.toUpperCase()+": "+(form.pname||lbl),
+      "Geboortedatum: "+form.pday+"-"+form.pmonth+"-"+form.pyear+(form.phour?" "+form.phour+":"+(form.pminute||"00"):""),
+      "Geboorteplaats: "+(form.pplace||""),
+      chartLine(c2,form.pname||lbl),
+      "",
+      "ELEKTROMAGNETISCHE VERBINDINGEN:",
+      "Gedeelde poorten: "+(gedeeld.length?gedeeld.join(", "):"geen"),
+      "Gedeelde kanalen: "+(emcKanalen.length?emcKanalen.join(", "):"geen"),
+      "",
+      rpt.prompt_extra,
+    ].join("\n");
+  }
+  // Standaard HD chart
   const pStr=Object.entries(chart.pers).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
   const dStr=Object.entries(chart.des).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
   return["HD CHART voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),"Plaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerd: "+(chart.definedCenters.join(", ")||"geen"),"Open: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",rpt.prompt_extra].join("\n");
@@ -968,7 +1072,9 @@ function ReportForm({rpt,onDone,postPayment}){
   const isNum=rpt.id==="numerologie";
   const isHoro=rpt.id==="horoscoop";
   const needsTime=!isNum;
-  const ok=form.name&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour);
+  const isRelatie=rpt.id.startsWith("relatie_");
+  const partnerOk=!isRelatie||(form.pname&&form.pday&&form.pmonth&&form.pyear);
+  const ok=form.name&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
   const sections=rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
 
   const doChart=()=>{
@@ -1049,14 +1155,14 @@ function ReportForm({rpt,onDone,postPayment}){
             </div>
             {rpt.needsPartner&&<>
               <div className="form-divider"/>
-              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens partner</div>
+              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens {rpt.partnerLabel||"partner"}</div>
               <div className="form-grid">
-                <div className="form-group full"><label className="form-label">Naam partner</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder="Naam partner"/></div>
+                <div className="form-group full"><label className="form-label">Naam {rpt.partnerLabel||"partner"}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={"Naam "+(rpt.partnerLabel||"partner")}/></div>
                 <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch}/></div>
                 <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="pyear" value={form.pyear} onChange={ch}/></div>
                 <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} placeholder="min"/></div></div>
-                <div className="form-group full"><label className="form-label">Geboorteplaats partner</label><input className="form-input" name="pplace" value={form.pplace||""} onChange={ch} placeholder="Stad, land"/></div>
+                <div className="form-group full"><label className="form-label">Geboorteplaats {rpt.partnerLabel||"partner"}</label><input className="form-input" name="pplace" value={form.pplace||""} onChange={ch} placeholder="Stad, land"/></div>
               </div>
             </>}
             {rpt.needsChild&&<>
@@ -1081,7 +1187,46 @@ function ReportForm({rpt,onDone,postPayment}){
         <div className="section bg-white" id="chart-res">
           <div className="container-sm">
             <div className="label" style={{marginBottom:8}}>Stap 2 — Je chart</div>
-            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Je kerngetallen":chart.isHoroscoop?"Je planeetstanden":"Je Human Design chart"}</h2>
+            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Je kerngetallen":chart.isHoroscoop?"Je planeetstanden":rpt.id.startsWith("relatie_")?"Twee Human Design charts":"Je Human Design chart"}</h2>
+            {/* ── Relatie: twee charts naast elkaar ── */}
+            {rpt.id.startsWith("relatie_")&&(()=>{
+              const lbl=rpt.partnerLabel||"Partner";
+              const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
+              const gedeeld=c2?chart.allGates.filter(g=>c2.allGates.includes(g)):[];
+              const HDRow=({c,name})=>(
+                <div className="chart-result">
+                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>Human Design</div>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{name}</div>
+                  <table className="chart-table"><tbody>
+                    <tr><td>Type</td><td><strong>{c.type}</strong></td></tr>
+                    <tr><td>Strategie</td><td>{c.strat}</td></tr>
+                    <tr><td>Autoriteit</td><td>{c.auth}</td></tr>
+                    <tr><td>Profiel</td><td>{c.profile}</td></tr>
+                    <tr><td>Gedefinieerd</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(c2=><span key={c2} className="tag-def">{c2}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
+                    <tr><td>Poorten</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
+                  </tbody></table>
+                </div>
+              );
+              return(
+                <>
+                  <div className="grid-2" style={{gap:20,marginBottom:16}}>
+                    <HDRow c={chart} name={form.name}/>
+                    {c2?<HDRow c={c2} name={form.pname||lbl}/>:
+                      <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
+                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>Vul de gegevens van de {lbl.toLowerCase()} in</p>
+                      </div>}
+                  </div>
+                  {c2&&gedeeld.length>0&&(
+                    <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"14px 18px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:16}}>
+                      <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:6}}>Gedeelde poorten — elektromagnetische verbindingen</div>
+                      <div className="tags">{gedeeld.map(g=><span key={g} className="tag-def">{g}</span>)}</div>
+                    </div>
+                  )}
+                </>
+              );
+            })()}
+            {/* ── Standaard: 1 chart + bodygraph ── */}
+            {!rpt.id.startsWith("relatie_")&&(
             <div className="grid-2" style={{gap:28}}>
               <div>
                 <div className="chart-result">
@@ -1089,7 +1234,7 @@ function ReportForm({rpt,onDone,postPayment}){
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{form.name}</div>
                   {chart.isNumerology?(
                     <table className="chart-table"><tbody>
-                      {[["Levenspad",chart.lp+" — "+chart.lpName],["Uitdrukking",chart.exp+" — "+chart.expName],["Ziel",chart.soul],["Persoonlijkheid",chart.pers],["Verjaardag",chart.bday],["Pers. Jaar 2025",chart.py],["Rijping",chart.mat]].map(([l,v])=>(
+                      {[["Levenspad",chart.lp+" — "+chart.lpName],["Uitdrukking",chart.exp+" — "+chart.expName],["Ziel",chart.soul],["Persoonlijkheid",chart.pers],["Verjaardag",chart.bday],["Pers. Jaar 2026",chart.py],["Rijping",chart.mat]].map(([l,v])=>(
                         <tr key={l}><td>{l}</td><td>{v}{(v===11||v===22||v===33)&&<span style={{fontSize:".6rem",color:"var(--gold)",marginLeft:6,textTransform:"uppercase"}}>MASTER</span>}</td></tr>
                       ))}
                     </tbody></table>
@@ -1128,6 +1273,7 @@ function ReportForm({rpt,onDone,postPayment}){
                 )}
               </div>
             </div>
+            )}
             <div className="order-block" style={{marginTop:24}}>
               <div className="order-block-title">Stap 3 — Ontvang je volledige rapport</div>
               <div className="order-block-sub">Chart berekend. Het volledige rapport bevat {rpt.pages} paginas diepgaande persoonlijke analyse — direct als PDF.</div>
@@ -1189,6 +1335,35 @@ function HomePage({go}){
         </div>
       </div>
 
+      {/* ── WAAROM ANDERS — 3 visual pillars ─────────────────────────────── */}
+      <section className="section-md bg-white">
+        <div className="container">
+          <div className="text-center" style={{marginBottom:52}}>
+            <div className="label" style={{marginBottom:14}}>Waarom Faculty of Human Design</div>
+            <h2 className="h2" style={{marginBottom:0}}>Niet generiek. Niet vaag.<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>Precies jouw chart.</em></h2>
+          </div>
+          <div className="grid-3">
+            {[
+              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
+              [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide alinea's afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
+              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het systeem ontving. Elk rapport draagt de rust en helderheid van die oorsprong."],
+            ].map(([img,title,badge,desc])=>(
+              <div className="waarom-card" key={title}>
+                <div className="waarom-card-img">
+                  <img src={img} alt={title} loading="lazy"/>
+                  <div className="ov-grad-t"/>
+                  <div className="waarom-card-badge">{badge}</div>
+                </div>
+                <div className="waarom-card-body">
+                  <h4 className="waarom-card-title">{title}</h4>
+                  <p className="body-sm">{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── MEEST GEKOZEN — feature split ───────────────────────────────── */}
       <div className="feature-split">
         <div className="feature-content">
@@ -1245,7 +1420,7 @@ function HomePage({go}){
             <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen.</p>
           </div>
           <div className="grid-3">
-            {REPORTS.filter(r=>!["volledig","maandelijks"].includes(r.id)).slice(0,3).map(r=>(
+            {REPORTS.filter(r=>["relatie_liefde","jaar","loopbaan"].includes(r.id)).map(r=>(
               <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
             ))}
           </div>
@@ -1296,8 +1471,11 @@ function HomePage({go}){
       </section>
 
       {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
-      <section className="section bg-white">
-        <div className="container">
+      <section className="section bg-white" style={{position:"relative"}}>
+        <div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none"}}>
+          <img src={IMGS.cosmos} alt="" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.05,filter:"grayscale(80%)"}}/>
+        </div>
+        <div className="container" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
             <div className="label" style={{marginBottom:14}}>Ervaringen</div>
             <h2 className="h2">Wat onze klanten zeggen</h2>
@@ -1323,6 +1501,9 @@ function HomePage({go}){
       <section className="section-md bg-muted">
         <div className="container-md">
           <div className="sub-card">
+            <div className="sub-card-moon">
+              <img src={IMGS.sub_moon} alt="" loading="lazy"/>
+            </div>
             <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:36}}>
               <div style={{maxWidth:520}}>
                 <div className="label-light" style={{marginBottom:14}}>Maandabonnement</div>
@@ -1752,7 +1933,8 @@ function WatPage({go}){
 }
 
 function RapportenPage({go}){
-  const hd=REPORTS.filter(r=>!["numerologie","horoscoop","maandelijks"].includes(r.id));
+  const hdPure=REPORTS.filter(r=>["volledig","jaar","kind","loopbaan"].includes(r.id));
+  const relatie=REPORTS.filter(r=>r.id.startsWith("relatie_"));
   const other=REPORTS.filter(r=>["numerologie","horoscoop"].includes(r.id));
   const sub=REPORTS.find(r=>r.id==="maandelijks");
   return(
@@ -1769,13 +1951,31 @@ function RapportenPage({go}){
       </div>
       <section className="section bg-muted">
         <div className="container">
+
+          {/* Human Design */}
           <div className="label" style={{marginBottom:12}}>Human Design</div>
           <h2 className="h2" style={{marginBottom:36}}>Human Design rapporten</h2>
-          <div className="grid-3">{hd.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
+          <div className="grid-3" style={{gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))"}}>{hdPure.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
+
           <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
+
+          {/* Relatierapport trio */}
+          <div className="label" style={{marginBottom:12}}>Relatierapport</div>
+          <h2 className="h2" style={{marginBottom:8}}>Twee designs. Drie perspectieven.</h2>
+          <p className="body-md" style={{maxWidth:560,marginBottom:36,color:"var(--text-muted)"}}>Kies het perspectief dat past bij jullie relatie. Elk rapport analyseert twee volledige Human Design charts naast elkaar.</p>
+          <div className="grid-3">
+            {relatie.map(r=>(
+              <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
+            ))}
+          </div>
+
+          <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
+
+          {/* Aanvullende disciplines */}
           <div className="label" style={{marginBottom:12}}>Numerologie en Astrologie</div>
           <h2 className="h2" style={{marginBottom:36}}>Aanvullende disciplines</h2>
           <div className="grid-2" style={{maxWidth:780}}>{other.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
+
           {sub&&<>
             <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
             <div style={{maxWidth:760}}>
