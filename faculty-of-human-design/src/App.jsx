@@ -13,8 +13,8 @@ const IMGS = {
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
   w_depth:       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
-  // Ibiza: wit Mediterraan dorp van boven, turquoise zee — Oia/Ibiza sfeer
-  w_ibiza:       "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=1200&auto=format&fit=crop&q=80",
+  // Ibiza: Es Vedrà bij schemering — eigen foto, brandperfect
+  w_ibiza:       "/ibiza-es-vedra.jpg",
 
   // ── Subscription moon backdrop ──────────────────────────────────────
   sub_moon:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
@@ -1668,7 +1668,7 @@ function HomePage({go}){
       {/* ── ORIGINE — Ibiza origin section ───────────────────────────────── */}
       <div className="origin-section">
         <div className="origin-section-bg">
-          <img src={IMGS.origin} alt="Ibiza landschap" loading="lazy"/>
+          <img src="/ibiza-es-vedra.jpg" alt="Es Vedrà bij schemering — Ibiza, de geboorteplaats van Human Design" loading="lazy"/>
         </div>
         <div className="origin-content">
           <div>
