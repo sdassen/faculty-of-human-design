@@ -1129,8 +1129,8 @@ function ReportForm({rpt,onDone,postPayment}){
   if(loading)return(
     <div className="loading-overlay">
       <div className="loading-icon">✦</div>
-      <div className="loading-title">Rapport wordt opgemaakt</div>
-      <div className="loading-counter">Sectie {Math.min(ls+1,sections.length)} van {sections.length}</div>
+      <div className="loading-title">Je blauwdruk wordt samengesteld</div>
+      <div className="loading-counter">Analyse {Math.min(ls+1,sections.length)} van {sections.length}</div>
       <div className="loading-steps">
         {sections.map((step,i)=>(
           <div key={i} className="loading-step" style={{opacity:i<ls?.35:i===ls?1:.18}}>
@@ -1288,9 +1288,9 @@ function ReportForm({rpt,onDone,postPayment}){
             </div>
             )}
             <div className="order-block" style={{marginTop:24}}>
-              <div className="order-block-title">Stap 3 — Ontvang je volledige rapport</div>
-              <div className="order-block-sub">Chart berekend. Het volledige rapport bevat {rpt.pages} paginas diepgaande persoonlijke analyse — direct als PDF.</div>
-              <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>Betalen en rapport ontvangen — {rpt.price}</button>
+              <div className="order-block-title">Stap 3 — Ontvang je gepersonaliseerde digitale blauwdruk</div>
+              <div className="order-block-sub">Chart berekend. Je blauwdruk bevat {rpt.pages} pagina's diepgaande persoonlijke analyse — op maat samengesteld en direct beschikbaar als PDF.</div>
+              <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>Blauwdruk bestellen — {rpt.price}</button>
               <div style={{marginTop:10}}><TrustStrip light/></div>
             </div>
           </div>
@@ -1397,7 +1397,7 @@ function HomePage({go}){
           </ul>
           <div style={{display:"flex",gap:14,flexWrap:"wrap",alignItems:"center"}}>
             <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
-              Rapport bestellen — €75
+              Blauwdruk bestellen — €75
             </button>
             <span style={{fontSize:".8rem",color:"var(--text-light)"}}>40+ paginas · Direct als PDF</span>
           </div>
@@ -1486,7 +1486,7 @@ function HomePage({go}){
           <div style={{display:"flex",flexDirection:"column",gap:28,maxWidth:620,margin:"0 auto"}}>
             <StepCard num="1" title="Voer je geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Je chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
             <StepCard num="2" title="Bekijk je chart gratis" desc="Zie direct je Type, Autoriteit, Profiel en gedefinieerde centra. Volledig gratis, zonder betaling."/>
-            <StepCard num="3" title="Ontvang je persoonlijk rapport" desc="Na betaling wordt je rapport sectie voor sectie gegenereerd — 40+ paginas persoonlijke analyse, direct als PDF."/>
+            <StepCard num="3" title="Ontvang je gepersonaliseerde digitale blauwdruk" desc="Na betaling ontvang je een gepersonaliseerde digitale blauwdruk van 40+ pagina's — diepgaand, persoonlijk en direct beschikbaar als PDF."/>
           </div>
         </div>
       </section>
@@ -1633,8 +1633,8 @@ function WatPage({go}){
     ["Wat als ik mijn geboortetijd niet weet?","De geboortetijd beïnvloedt sommige centra en je profiel. Controleer je geboorteakte voor de meest nauwkeurige berekening. Zonder exacte tijd zijn Type en Autoriteit in de meeste gevallen nog steeds correct."],
     ["Verschilt een Numerologie rapport van een Human Design rapport?","Ja, fundamenteel. Numerologie werkt met de numerieke waarden van je naam en geboortedatum en beschrijft levenslessen, patronen en talenten. Human Design werkt met planetaire posities en beschrijft je energetische mechanismen. Beide zijn volledig verschillende disciplines die elkaar aanvullen."],
     ["Wat voegt een geboortehoroscoop toe aan Human Design?","Een geboortehoroscoop gaat dieper in op planetaire kwaliteiten, aspecten en huizen die in Human Design minder centraal staan. Waar HD je energetisch mechanisme beschrijft, beschrijft de horoscoop de kwaliteiten van je planetaire bezetting — je Mercurius, je Venus, je Maan — als aanvullende lagen."],
-    ["Hoe lang duurt het om een rapport te ontvangen?","Na betaling wordt je rapport sectie voor sectie gegenereerd — 40+ paginas zijn binnen 3 tot 4 minuten beschikbaar als PDF."],
-    ["Is het rapport persoonlijk of een template?","Elk rapport wordt volledig gegenereerd op basis van je specifieke chart. Geen twee rapporten zijn identiek."],
+    ["Hoe snel ontvang ik mijn blauwdruk?","Je gepersonaliseerde digitale blauwdruk is binnen 3 tot 4 minuten volledig samengesteld op basis van jouw chart — en direct beschikbaar als PDF."],
+    ["Is het een persoonlijk document of een template?","Elke blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],
   ];
 
   const TabBtn=({id,label})=>(
@@ -2038,7 +2038,7 @@ function RapportenPage({go}){
 
 function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
-  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software."],["Is het rapport persoonlijk?","Elk rapport wordt volledig op maat gegenereerd op basis van je specifieke chart. Geen twee rapporten zijn identiek."],["In welk format ontvang ik het rapport?","Direct als PDF via de browser. Sla op via het printvenster."],["Kan ik het rapport meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
+  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software. De blauwdruk is gebaseerd op je exacte geboortedata."],["Is de blauwdruk echt persoonlijk?","Je gepersonaliseerde digitale blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],["In welk format ontvang ik mijn blauwdruk?","Direct als PDF via de browser — druk op of sla op voor je archief. De digitale blauwdruk is meteen beschikbaar."],["Kan ik de blauwdruk meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
   return(
     <div className="pg">
       <div className="detail-hero">
@@ -2053,14 +2053,14 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
             <div className="detail-hero-meta">
               <span className="detail-hero-m">{rpt.pages} paginas</span>
               <span className="detail-hero-m">{rpt.sections} secties</span>
-              <span className="detail-hero-m">Direct als PDF</span>
+              <span className="detail-hero-m">Gepersonaliseerde Digitale Blauwdruk</span>
               <span className="detail-hero-m">{rpt.sub}</span>
             </div>
           </div>
           <div className="price-box">
             <div className="price-box-amount">{rpt.price}</div>
             <div className="price-box-period">{rpt.sub}</div>
-            <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>Rapport bestellen</button>
+            <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>Blauwdruk bestellen</button>
             <div style={{marginTop:12}}><TrustStrip light/></div>
           </div>
         </div>
@@ -2069,7 +2069,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
         <div className="container">
           <div className="grid-2" style={{gap:56,alignItems:"start"}}>
             <div>
-              <div className="label" style={{marginBottom:12}}>Over dit rapport</div>
+              <div className="label" style={{marginBottom:12}}>Over deze blauwdruk</div>
               <h2 className="h2" style={{marginBottom:16}}>{rpt.title}</h2>
               <p className="body-lg" style={{marginBottom:20}}>{rpt.intro}</p>
               <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"16px 20px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:24}}>
@@ -2077,9 +2077,9 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
                 <p className="body-sm">{rpt.for}</p>
               </div>
               <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
-                <div className="label" style={{marginBottom:14}}>Wat je ontvangt</div>
+                <div className="label" style={{marginBottom:14}}>Je gepersonaliseerde blauwdruk</div>
                 <div className="grid-2" style={{gap:12}}>
-                  {[["Omvang",rpt.pages+" paginas"],["Levertijd","3-4 minuten"],["Format","PDF download"],["Taal","Nederlands"]].map(([l,v])=>(
+                  {[["Omvang",rpt.pages+" pagina's"],["Gereed in","3-4 minuten"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]].map(([l,v])=>(
                     <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
                   ))}
                 </div>
