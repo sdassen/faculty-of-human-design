@@ -2499,14 +2499,17 @@ function BlogPage({go}){
     if(!post)return null;
     return(
       <div className="pg">
-        <section style={{background:"var(--dark)"}}>
+        <div className="origin-section" style={{minHeight:320}}>
+          <div className="origin-section-bg">
+            <img src={IMGS.cosmos} alt="Kosmische sfeer — Faculty of Human Design inzichten" loading="eager"/>
+          </div>
           <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:56}}>
             <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>← Terug naar inzichten</div>
-            <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:8}}>{post.tag}</div>
+            <div className="label-light" style={{marginBottom:8}}>{post.tag}</div>
             <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{post.title}</h1>
             <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} leestijd</div>
           </div>
-        </section>
+        </div>
         <section className="section bg-white">
           <div className="container-sm">
             {(()=>{
@@ -2749,12 +2752,16 @@ function ContactPage(){
   });
   return(
     <div className="pg">
-      <section style={{background:"var(--dark)"}}>
-        <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:72}}>
-          <div className="label" style={{color:"rgba(154,128,80,.8)",marginBottom:12}}>Contact</div>
-          <h1 className="h1" style={{color:"white"}}>Neem contact op</h1>
+      <div className="origin-section" style={{minHeight:360}}>
+        <div className="origin-section-bg">
+          <img src="/ibiza-es-vedra.jpg" alt="Es Vedrà bij schemering — Ibiza" loading="eager"/>
         </div>
-      </section>
+        <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:80}}>
+          <div className="label-light" style={{marginBottom:14}}>Contact</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>Neem contact op</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>Vragen over een rapport of bestelling? Wij reageren binnen 1 werkdag.</p>
+        </div>
+      </div>
       <section className="section bg-white">
         <div className="container-sm">
           <div className="grid-2" style={{gap:56,alignItems:"start"}}>
