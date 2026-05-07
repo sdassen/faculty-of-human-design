@@ -6,29 +6,29 @@ const IMGS = {
   // ── Full-bleed section backgrounds ─────────────────────────────────
   hero:          "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=2400&auto=format&fit=crop&q=82",
   ibiza:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  cosmos:        "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=2000&auto=format&fit=crop&q=82",
+  cosmos:        "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=2000&auto=format&fit=crop&q=82",
   origin:        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=2000&auto=format&fit=crop&q=82",
   cta:           "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=2000&auto=format&fit=crop&q=82",
 
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
-  w_depth:       "https://images.unsplash.com/photo-1530360458055-f1cd9f56b3a6?w=1200&auto=format&fit=crop&q=80",
-  w_ibiza:       "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=1200&auto=format&fit=crop&q=80",
+  w_depth:       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
+  w_ibiza:       "https://images.unsplash.com/photo-1579033461380-adb47c3eb938?w=1200&auto=format&fit=crop&q=80",
 
   // ── Subscription moon backdrop ──────────────────────────────────────
-  sub_moon:      "https://images.unsplash.com/photo-1446776858070-70c3d4f67820?w=1200&auto=format&fit=crop&q=80",
+  sub_moon:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
-  r_volledig:        "https://images.unsplash.com/photo-1534796636912-3b417148efca?w=900&auto=format&fit=crop&q=80",
+  r_volledig:        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&auto=format&fit=crop&q=80",
   r_relatie_liefde:  "https://images.unsplash.com/photo-1516979187457-637abb4f9353?w=900&auto=format&fit=crop&q=80",
-  r_relatie_business:"https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=900&auto=format&fit=crop&q=80",
-  r_relatie_familie: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=900&auto=format&fit=crop&q=80",
+  r_relatie_business:"https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
+  r_relatie_familie: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80",
   r_jaar:        "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
   r_kind:        "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&auto=format&fit=crop&q=80",
   r_loopbaan:    "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80",
-  r_numerologie: "https://images.unsplash.com/photo-1530360458055-f1cd9f56b3a6?w=900&auto=format&fit=crop&q=80",
-  r_horoscoop:   "https://images.unsplash.com/photo-1446776858070-70c3d4f67820?w=900&auto=format&fit=crop&q=80",
-  r_maandelijks: "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=900&auto=format&fit=crop&q=80",
+  r_numerologie: "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=900&auto=format&fit=crop&q=80",
+  r_horoscoop:   "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=900&auto=format&fit=crop&q=80",
+  r_maandelijks: "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=900&auto=format&fit=crop&q=80",
 };
 
 const CSS = `
@@ -381,9 +381,9 @@ button { cursor:pointer; font-family:var(--font-sans); }
 
 /* DETAIL HERO */
 .detail-hero { background:var(--dark); padding:96px 32px 68px; position:relative; overflow:hidden; }
-.detail-hero-bg { position:absolute; inset:0; opacity:.2; }
-.detail-hero-bg>img { width:100%; height:100%; object-fit:cover; }
-.detail-hero-bg::after { content:""; position:absolute; inset:0; background:var(--dark); opacity:.65; }
+.detail-hero-bg { position:absolute; inset:0; overflow:hidden; }
+.detail-hero-bg>img { width:100%; height:100%; object-fit:cover; opacity:.32; }
+.detail-hero-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(to bottom, rgba(12,10,23,.45) 0%, rgba(12,10,23,.78) 100%); }
 .detail-hero-inner { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1fr 300px; gap:64px; align-items:start; position:relative; z-index:1; }
 .detail-hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(154,128,80,.12); border:1px solid rgba(154,128,80,.22); padding:5px 14px; border-radius:100px; font-size:.6rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:rgba(201,168,92,.9); margin-bottom:22px; }
 .detail-hero-title { font-family:var(--font-serif); font-size:clamp(2rem,4.5vw,3.2rem); font-weight:300; color:white; margin-bottom:14px; line-height:1.07; }
