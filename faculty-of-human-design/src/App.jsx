@@ -1486,7 +1486,7 @@ function Footer({go}){
             <span className="footer-link">Veilige betaling</span>
             <span className="footer-link">Persoonlijke PDF</span>
             <span className="footer-link">Direct beschikbaar</span>
-            <span className="footer-link">info@facultyofhumandesign.com</span>
+            <span className="footer-link">info@facultyhd.com</span>
           </div>
         </div>
         <div className="footer-bottom">
@@ -2970,7 +2970,7 @@ function ContactPage(){
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   useSEO({
     title:"Contact — Faculty of Human Design",
-    description:"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyofhumandesign.com",
+    description:"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
     canonical:SITE+"/#contact",
     jsonLd:{
       "@context":"https://schema.org","@type":"ContactPage",
@@ -2978,7 +2978,7 @@ function ContactPage(){
       "url":SITE+"/#contact",
       "mainEntity":{
         "@type":"Organization","name":"Faculty of Human Design",
-        "email":"info@facultyofhumandesign.com",
+        "email":"info@facultyhd.com",
         "address":{"@type":"PostalAddress","addressLocality":"Ibiza","addressCountry":"ES"}
       }
     }
@@ -3001,7 +3001,7 @@ function ContactPage(){
             <div>
               <div className="label" style={{marginBottom:12}}>Contactgegevens</div>
               <h2 className="h2" style={{marginBottom:28}}>Faculty of Human Design</h2>
-              {[["Locatie","Ibiza, Spanje"],["E-mail","info@facultyofhumandesign.com"],["Reactietijd","Binnen 1 werkdag"],["Rapporten","Direct beschikbaar na bestelling"]].map(([l,v])=>(
+              {[["Locatie","Ibiza, Spanje"],["E-mail","info@facultyhd.com"],["Reactietijd","Binnen 1 werkdag"],["Rapporten","Direct beschikbaar na bestelling"]].map(([l,v])=>(
                 <div key={l} style={{marginBottom:20}}><div className="label" style={{marginBottom:5}}>{l}</div><div className="body-md">{v}</div></div>
               ))}
             </div>
@@ -3127,7 +3127,7 @@ function OrderConfirmationPage({result,go}){
         {/* Question? */}
         <p style={{fontSize:".78rem",color:"var(--text-light)",marginBottom:32}}>
           Vragen? Stuur een bericht naar{" "}
-          <a href="mailto:info@facultyofhumandesign.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyofhumandesign.com</a>
+          <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>
         </p>
         <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
       </div>
@@ -3188,7 +3188,7 @@ function DownloadPage({token}){
                 :"Deze downloadlink bestaat niet of is ongeldig."}
             </p>
             <p style={{fontSize:".8rem",color:"var(--text-light)"}}>
-              <a href="mailto:info@facultyofhumandesign.com" style={{color:"var(--brand)",fontWeight:500,textDecoration:"none"}}>info@facultyofhumandesign.com</a>
+              <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",fontWeight:500,textDecoration:"none"}}>info@facultyhd.com</a>
             </p>
           </>
         )}
@@ -3253,9 +3253,9 @@ export default function App(){
           retries--;
         }catch(e){console.error("Fetch error:",e);retries--;}
       }
-      if(!allText.includes("### "+sec)){allText+="### "+sec+"\n\n[Deze sectie kon niet worden gegenereerd. Neem contact op via info@facultyofhumandesign.com]\n\n";}
+      if(!allText.includes("### "+sec)){allText+="### "+sec+"\n\n[Deze sectie kon niet worden gegenereerd. Neem contact op via info@facultyhd.com]\n\n";}
     }
-    return allText.trim()||"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyofhumandesign.com";
+    return allText.trim()||"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyhd.com";
   }
   // Detect /download/<token> SPA route
   const downloadToken=(()=>{const p=window.location.pathname;const m=p.match(/^\/download\/([a-f0-9-]{36})$/i);return m?m[1]:null;})();
