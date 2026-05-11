@@ -25,6 +25,9 @@ function getSupabase() {
  * - Hard cap: always within 1 business day of the order.
  */
 function calculateDeliveryDate(paidAtIso) {
+  // ⚠️ TEST MODE: 1 minuut delay — zet terug naar productie na test!
+  return new Date(Date.now() + 60_000);
+
   const paidAt = paidAtIso ? new Date(paidAtIso) : new Date();
   const baseHours = 18 + Math.random() * 5; // 18.0 – 23.0 h
   const candidate = new Date(paidAt.getTime() + baseHours * 3_600_000);
@@ -244,7 +247,7 @@ export const orderDelivery = inngest.createFunction(
 
     // ── Step N+4: Send delivery email ─────────────────────────────────────
     await step.run("send-delivery-email", async () => {
-      const downloadUrl = `https://www.facultyofhumandesign.com/download/${downloadToken}`;
+      const downloadUrl = `https://www.facultyhd.com/download/${downloadToken}`;
       await sendDeliveryEmail({
         to: order.customer_email,
         name: order.customer_name || "klant",
