@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = "Faculty of Human Design <stevendassen@gmail.com>";
+const FROM = "Faculty of Human Design <onboarding@resend.dev>";
 
 // ─── CONFIRMATION EMAIL ───────────────────────────────────────────────────────
 // Sent immediately after payment — no download link yet
