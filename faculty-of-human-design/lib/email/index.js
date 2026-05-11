@@ -2,6 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// TODO: verander naar noreply@facultyhd.com zodra domein geverifieerd is in Resend
 const FROM = "Faculty of Human Design <onboarding@resend.dev>";
 
 // ─── CONFIRMATION EMAIL ───────────────────────────────────────────────────────
