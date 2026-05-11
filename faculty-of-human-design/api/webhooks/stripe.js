@@ -111,6 +111,9 @@ export default async function handler(req, res) {
       console.log("[stripe-webhook] Inngest event sent:", ids?.[0]);
     } catch (inngestError) {
       console.error("[stripe-webhook] Inngest send failed:", inngestError.message);
+      console.error("[stripe-webhook] Inngest error stack:", inngestError.stack);
+      console.error("[stripe-webhook] Inngest error full:", JSON.stringify(inngestError, Object.getOwnPropertyNames(inngestError)));
+      console.error("[stripe-webhook] INNGEST_EVENT_KEY set:", !!process.env.INNGEST_EVENT_KEY);
       // Mark as failed so we can retry manually
       await supabase
         .from("orders")
