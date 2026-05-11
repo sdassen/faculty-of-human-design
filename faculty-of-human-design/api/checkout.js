@@ -6,7 +6,7 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: "STRIPE_SECRET_KEY niet geconfigureerd in Vercel" });
   }
 
-  const BASE = "https://www.facultyofhumandesign.com";
+  const BASE = "https://www.facultyhd.com";
   const body = new URLSearchParams();
 
   if (isSubscription) {
