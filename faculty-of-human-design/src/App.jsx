@@ -892,22 +892,67 @@ const STRIPE = {
 };
 
 async function goToStripe(rptId, chartData, formData) {
-  sessionStorage.setItem("fhd_chart", JSON.stringify(chartData));
-  sessionStorage.setItem("fhd_form", JSON.stringify(formData));
-  sessionStorage.setItem("fhd_rpt_id", rptId);
   const rpt = REPORTS.find(r => r.id === rptId);
+
+  // ── Step 1: Pre-create order in Supabase (persists birth data + email) ──
+  let orderId = null;
   try {
-    const res = await fetch("/api/checkout", {
+    const sections = rpt?.prompt_extra
+      ? rpt.prompt_extra.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").trim())
+      : [];
+
+    const orderRes = await fetch("/api/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        reportId: rptId,
+        reportTitle: rpt?.title || rptId,
+        price: rpt?.priceNum || 75,
+        customerName: formData.name,
+        customerEmail: formData.email,
+        birthData: {
+          name: formData.name,
+          day: formData.day, month: formData.month, year: formData.year,
+          hour: formData.hour, minute: formData.minute,
+          place: formData.place,
+          // Embed calculated chart so Inngest can use it for AI generation
+          chart: chartData,
+        },
+        partnerBirthData: formData.pname ? {
+          name: formData.pname,
+          day: formData.pday, month: formData.pmonth, year: formData.pyear,
+          hour: formData.phour, minute: formData.pminute,
+          place: formData.pplace,
+        } : null,
+        promptSections: sections,
+      }),
+    });
+
+    const orderData = await orderRes.json();
+    if (!orderRes.ok || !orderData.orderId) {
+      throw new Error(orderData.error || "Order aanmaken mislukt");
+    }
+    orderId = orderData.orderId;
+  } catch (e) {
+    alert("Bestelling kon niet worden aangemaakt: " + e.message + "\n\nProbeer het opnieuw of neem contact op.");
+    return;
+  }
+
+  // ── Step 2: Create Stripe Checkout session ──────────────────────────────
+  try {
+    const checkoutRes = await fetch("/api/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        orderId,
         rptId,
         title: rpt?.title || rptId,
         price: rpt?.priceNum || 75,
         isSubscription: rptId === "maandelijks",
       }),
     });
-    const data = await res.json();
+
+    const data = await checkoutRes.json();
     if (data.url) {
       window.location.href = data.url;
     } else {
@@ -1459,7 +1504,7 @@ function Footer({go}){
 
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone,postPayment}){
-  const[form,setForm]=useState({name:"",day:"",month:"",year:"",hour:"",minute:"",place:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:""});
+  const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:""});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
@@ -1470,7 +1515,7 @@ function ReportForm({rpt,onDone,postPayment}){
   const needsTime=!isNum;
   const isRelatie=rpt.id.startsWith("relatie_");
   const partnerOk=!isRelatie||(form.pname&&form.pday&&form.pmonth&&form.pyear);
-  const ok=form.name&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
+  const ok=form.name&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
   const sections=rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
 
   const doChart=()=>{
@@ -1543,6 +1588,7 @@ function ReportForm({rpt,onDone,postPayment}){
             </div>
             <div className="form-grid">
               <div className="form-group full"><label className="form-label">Volledige naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Voor- en achternaam"/></div>
+              <div className="form-group full"><label className="form-label">E-mailadres <span style={{color:"var(--gold)",fontSize:".6rem"}}>— rapport wordt hierheen verstuurd</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder="uw@email.nl" required/></div>
               <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="day" min="1" max="31" value={form.day} onChange={ch} placeholder="15"/></div>
               <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
               <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="year" value={form.year} onChange={ch} placeholder="1990"/></div>
@@ -3045,6 +3091,112 @@ function ThankYouPage({result,go}){
   );
 }
 
+// ─── ORDER CONFIRMATION PAGE ──────────────────────────────────────────────────
+function OrderConfirmationPage({result,go}){
+  useSEO({title:"Bestelling bevestigd",description:"Je bestelling is ontvangen. Je rapport wordt binnen 1 werkdag per e-mail bezorgd.",canonical:SITE+"/"});
+  return(
+    <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
+      <div style={{maxWidth:560,width:"100%",textAlign:"center"}}>
+        {/* Icon */}
+        <div style={{width:72,height:72,borderRadius:"50%",background:"rgba(61,44,94,.08)",border:"1px solid rgba(61,44,94,.14)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 28px",fontSize:"1.6rem",color:"var(--brand)"}}>✓</div>
+        {/* Heading */}
+        <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.4rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>
+          Bestelling bevestigd
+        </div>
+        <p style={{fontSize:".95rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32}}>
+          Bedankt voor je bestelling. We zijn bezig met het samenstellen van jouw persoonlijke blauwdruk.
+        </p>
+        {/* Delivery info card */}
+        <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-xl)",padding:"28px 32px",marginBottom:28,textAlign:"left"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:18}}>
+            {[
+              ["◎","Bevestigingsmail verstuurd","Controleer je inbox (en spam) — je ontvangt een bevestiging van je bestelling."],
+              ["◇","Levering binnen 1 werkdag","Jouw persoonlijke blauwdruk wordt samengesteld en als PDF per e-mail bezorgd — je hoeft niets te doen."],
+              ["✦","Beveiligde downloadlink","De e-mail bevat een persoonlijke downloadlink die 30 dagen geldig is."],
+            ].map(([icon,title,desc])=>(
+              <div key={title} style={{display:"flex",gap:16,alignItems:"flex-start"}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,marginTop:1,opacity:.7}}>{icon}</div>
+                <div>
+                  <div style={{fontSize:".82rem",fontWeight:500,color:"var(--text)",marginBottom:3}}>{title}</div>
+                  <div style={{fontSize:".8rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65}}>{desc}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* Question? */}
+        <p style={{fontSize:".78rem",color:"var(--text-light)",marginBottom:32}}>
+          Vragen? Stuur een bericht naar{" "}
+          <a href="mailto:info@facultyofhumandesign.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyofhumandesign.com</a>
+        </p>
+        <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+      </div>
+    </div>
+  );
+}
+
+// ─── DOWNLOAD PAGE ─────────────────────────────────────────────────────────────
+function DownloadPage({token}){
+  const[status,setStatus]=useState("loading");// loading | ready | error
+  const[reportTitle,setReportTitle]=useState("");
+
+  useEffect(()=>{
+    // Just try a HEAD request to see if the token is valid
+    fetch("/api/download/"+token,{method:"GET",redirect:"manual"})
+      .then(r=>{
+        if(r.ok||r.status===200){setStatus("ready");}
+        else if(r.status===404){setStatus("notfound");}
+        else if(r.status===410){setStatus("expired");}
+        else{setStatus("error");}
+      })
+      .catch(()=>setStatus("error"));
+  },[token]);
+
+  const handleDownload=()=>{window.location.href="/api/download/"+token;};
+
+  return(
+    <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
+      <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
+        {status==="loading"&&(
+          <>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",fontWeight:300,color:"var(--text)",marginBottom:10}}>Rapport laden...</div>
+            <p style={{color:"var(--text-light)",fontSize:".85rem"}}>Even geduld.</p>
+          </>
+        )}
+        {status==="ready"&&(
+          <>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.2rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>Je blauwdruk is klaar</div>
+            <p style={{fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32}}>
+              Klik op de knop hieronder om je persoonlijke rapport te downloaden als PDF.
+            </p>
+            <button className="btn btn-primary btn-lg" onClick={handleDownload} style={{marginBottom:20}}>
+              Download rapport (PDF)
+            </button>
+            <p style={{fontSize:".72rem",color:"var(--text-light)"}}>
+              Sla het bestand op voor je archief — de link is 30 dagen geldig.
+            </p>
+          </>
+        )}
+        {(status==="notfound"||status==="expired"||status==="error")&&(
+          <>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",fontWeight:300,color:"var(--text)",marginBottom:14}}>
+              {status==="expired"?"Link verlopen":"Link niet gevonden"}
+            </div>
+            <p style={{fontSize:".9rem",color:"var(--text-muted)",lineHeight:1.7,marginBottom:24}}>
+              {status==="expired"
+                ?"Deze downloadlink is verlopen (ouder dan 30 dagen). Stuur ons een bericht voor een nieuwe link."
+                :"Deze downloadlink bestaat niet of is ongeldig."}
+            </p>
+            <p style={{fontSize:".8rem",color:"var(--text-light)"}}>
+              <a href="mailto:info@facultyofhumandesign.com" style={{color:"var(--brand)",fontWeight:500,textDecoration:"none"}}>info@facultyofhumandesign.com</a>
+            </p>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ─── ROUTER ───────────────────────────────────────────────────────────────────
 export default function App(){
   const[page,setPage]=useState("home");
@@ -3060,31 +3212,18 @@ export default function App(){
     const params=new URLSearchParams(window.location.search);
     const success=params.get("success");
     const cancelled=params.get("cancelled");
+    const orderId=params.get("order");
+
     if(cancelled){
-      // Remove query string and stay on page
       window.history.replaceState({},"",window.location.pathname);
       return;
     }
     if(success){
       window.history.replaceState({},"",window.location.pathname);
-      const savedChart=sessionStorage.getItem("fhd_chart");
-      const savedForm=sessionStorage.getItem("fhd_form");
-      const savedRptId=sessionStorage.getItem("fhd_rpt_id");
-      if(savedChart&&savedForm&&savedRptId){
-        const chart=JSON.parse(savedChart);
-        const form=JSON.parse(savedForm);
-        const rpt=REPORTS.find(r=>r.id===savedRptId);
-        if(rpt){
-          sessionStorage.removeItem("fhd_chart");
-          sessionStorage.removeItem("fhd_form");
-          sessionStorage.removeItem("fhd_rpt_id");
-          setGenerating(true);
-          generateReport(chart,form,rpt).then(report=>{
-            setGenerating(false);
-            onDone(chart,form,report,rpt);
-          });
-        }
-      }
+      // New async delivery flow: show confirmation page, report arrives by email
+      setPage("bedankt");
+      setResult({ orderId: orderId||null });
+      window.scrollTo(0,0);
     }
   },[]);
 
@@ -3118,27 +3257,28 @@ export default function App(){
     }
     return allText.trim()||"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyofhumandesign.com";
   }
+  // Detect /download/<token> SPA route
+  const downloadToken=(()=>{const p=window.location.pathname;const m=p.match(/^\/download\/([a-f0-9-]{36})$/i);return m?m[1]:null;})();
+
   return(
     <div>
       <style>{FONTS}{CSS}</style>
-      {generating&&(
-        <div className="loading-overlay">
-          <div className="loading-icon">✦</div>
-          <div className="loading-title">Betaling ontvangen — rapport wordt opgemaakt</div>
-          <div className="loading-counter">Dit duurt 3-4 minuten</div>
-          <div className="loading-bar-wrap"><div className="loading-bar-fill" style={{width:"60%"}}/></div>
-        </div>
-      )}
-      {page!=="result"&&<Nav page={page} go={go} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>}
-      {page==="home"&&<HomePage go={go}/>}
-      {page==="wat"&&<WatPage go={go}/>}
-      {page==="rapporten"&&<RapportenPage go={go}/>}
-      {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
-      {page==="blog"&&<BlogPage go={go}/>}
-      {page==="over"&&<OverPage go={go}/>}
-      {page==="contact"&&<ContactPage/>}
-      {page==="result"&&result&&<ThankYouPage result={result} go={go}/>}
-      {page!=="result"&&<Footer go={go}/>}
+      {downloadToken
+        ? <DownloadPage token={downloadToken}/>
+        : <>
+          {page!=="result"&&page!=="bedankt"&&<Nav page={page} go={go} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>}
+          {page==="home"&&<HomePage go={go}/>}
+          {page==="wat"&&<WatPage go={go}/>}
+          {page==="rapporten"&&<RapportenPage go={go}/>}
+          {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
+          {page==="blog"&&<BlogPage go={go}/>}
+          {page==="over"&&<OverPage go={go}/>}
+          {page==="contact"&&<ContactPage/>}
+          {page==="result"&&result&&<ThankYouPage result={result} go={go}/>}
+          {page==="bedankt"&&<OrderConfirmationPage result={result} go={go}/>}
+          {page!=="result"&&page!=="bedankt"&&<Footer go={go}/>}
+        </>
+      }
     </div>
   );
 }
