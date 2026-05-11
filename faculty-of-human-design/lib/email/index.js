@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM = "Faculty of Human Design <noreply@facultyofhumandesign.com>";
+const FROM = "Faculty of Human Design <stevendassen@gmail.com>";
 
 // ─── CONFIRMATION EMAIL ───────────────────────────────────────────────────────
 // Sent immediately after payment — no download link yet
@@ -50,7 +50,7 @@ function base(body) {
     <div style="background:#F7F5F0;padding:20px 40px;text-align:center;border-top:1px solid #E5E0D8;">
       <p style="margin:0 0 4px;font-size:11px;color:#9A9490;letter-spacing:.5px;">© 2026 Faculty of Human Design — Ibiza, Spanje</p>
       <p style="margin:0;font-size:11px;color:#B8B3AE;">
-        <a href="mailto:info@facultyofhumandesign.com" style="color:#9A8050;text-decoration:none;">info@facultyofhumandesign.com</a>
+        <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>
       </p>
     </div>
   </div>
@@ -83,7 +83,7 @@ function confirmationHtml({ name, reportTitle }) {
     </p>
     <p style="font-size:13px;color:#888;line-height:1.7;margin:0;">
       Vragen? Stuur een bericht naar
-      <a href="mailto:info@facultyofhumandesign.com" style="color:#3D2C5E;text-decoration:none;">info@facultyofhumandesign.com</a>.
+      <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
     </p>
   `);
 }
@@ -116,7 +116,7 @@ function deliveryHtml({ name, reportTitle, downloadUrl }) {
     </div>
     <p style="font-size:13px;color:#888;line-height:1.7;margin:0;">
       Vragen of opmerkingen? We horen graag van je via
-      <a href="mailto:info@facultyofhumandesign.com" style="color:#3D2C5E;text-decoration:none;">info@facultyofhumandesign.com</a>.
+      <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
     </p>
   `);
 }
