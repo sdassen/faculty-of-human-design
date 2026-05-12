@@ -1,10 +1,4 @@
 import { createClient } from "@supabase/supabase-js";
-import { head, del } from "@vercel/blob";
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
 
 // Token download link expires after 30 days
 const TOKEN_EXPIRY_DAYS = 30;
@@ -17,6 +11,12 @@ export default async function handler(req, res) {
     return res.status(400).send("Ongeldige downloadlink.");
   }
 
+  // Create Supabase client inside handler so env vars are definitely available
+  const supabase = createClient(
+    process.env.SUPABASE_URL,
+    process.env.SUPABASE_SERVICE_ROLE_KEY
+  );
+
   // Look up the order by download token
   const { data: order, error } = await supabase
     .from("orders")
@@ -25,6 +25,7 @@ export default async function handler(req, res) {
     .single();
 
   if (error || !order) {
+    console.error("[download] Token lookup failed:", token, error?.message);
     return res.status(404).send(notFoundPage());
   }
 
