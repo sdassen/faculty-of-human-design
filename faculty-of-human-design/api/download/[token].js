@@ -41,11 +41,7 @@ export default async function handler(req, res) {
 
   // Fetch the private blob and stream it to the client
   try {
-    const blobRes = await fetch(order.pdf_blob_url, {
-      headers: {
-        Authorization: `Bearer ${process.env.BLOB_READ_WRITE_TOKEN}`,
-      },
-    });
+    const blobRes = await fetch(order.pdf_blob_url);
 
     if (!blobRes.ok) {
       throw new Error(`Blob fetch failed: ${blobRes.status}`);
@@ -111,7 +107,7 @@ function notFoundPage() {
     <h1>Link niet gevonden</h1>
     <p>Deze downloadlink bestaat niet of is al verwijderd.</p>
     <p>Heb je vragen? Stuur een bericht naar
-      <a href="mailto:info@facultyofhumandesign.com">info@facultyofhumandesign.com</a>.</p>
+      <a href="mailto:info@facultyhd.com">info@facultyhd.com</a>.</p>
   `);
 }
 
@@ -131,7 +127,7 @@ function expiredPage() {
     <h1>Downloadlink verlopen</h1>
     <p>Deze link is ouder dan 30 dagen en niet meer geldig.</p>
     <p>Neem contact op via
-      <a href="mailto:info@facultyofhumandesign.com">info@facultyofhumandesign.com</a>
+      <a href="mailto:info@facultyhd.com">info@facultyhd.com</a>
       — wij sturen je een nieuwe link.</p>
   `);
 }

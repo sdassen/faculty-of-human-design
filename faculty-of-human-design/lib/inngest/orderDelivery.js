@@ -221,7 +221,7 @@ export const orderDelivery = inngest.createFunction(
       const filename = `reports/${orderId}.pdf`;
 
       const { url } = await put(filename, pdfBuffer, {
-        access: "private",           // Private: not publicly accessible
+        access: "public",
         contentType: "application/pdf",
         token: process.env.BLOB_READ_WRITE_TOKEN,
       });
