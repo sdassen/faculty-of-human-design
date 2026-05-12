@@ -2952,7 +2952,7 @@ function OverPage({go}){
         <div className="container-sm text-center">
           <div className="label" style={{marginBottom:14}}>Begin hier</div>
           <h2 className="h2" style={{marginBottom:18}}>De eerste stap begint<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>met jouw chart</em></h2>
-          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>Je chart wordt direct gratis berekend. Je blauwdruk is daarna binnen enkele minuten beschikbaar — persoonlijk, diepgaand en direct als PDF.</p>
+          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>Je chart wordt direct gratis berekend. Je blauwdruk wordt daarna binnen 1 werkdag per e-mail bezorgd — persoonlijk, diepgaand en als PDF.</p>
           <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",marginBottom:28}}>
             <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>Start met mijn blauwdruk</button>
             <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
@@ -3197,15 +3197,55 @@ function DownloadPage({token}){
   );
 }
 
+// ─── ROUTING HELPERS ─────────────────────────────────────────────────────────
+const ROUTABLE = new Set(["home","wat","rapporten","blog","over","contact"]);
+
+function pathToPage(pathname) {
+  if (!pathname || pathname === "/") return "home";
+  const rapportMatch = pathname.match(/^\/rapport\/(.+)$/);
+  if (rapportMatch) return "rapport-" + rapportMatch[1];
+  const seg = pathname.replace(/^\//, "").replace(/\/$/, "");
+  if (ROUTABLE.has(seg)) return seg;
+  return "home";
+}
+
+function pageToPath(page) {
+  if (page === "home") return "/";
+  if (page.startsWith("rapport-")) return "/rapport/" + page.slice("rapport-".length);
+  return "/" + page;
+}
+
 // ─── ROUTER ───────────────────────────────────────────────────────────────────
 export default function App(){
-  const[page,setPage]=useState("home");
+  const[page,setPage]=useState(()=>pathToPage(window.location.pathname));
   const[result,setResult]=useState(null);
   const[menuOpen,setMenuOpen]=useState(false);
   const[generating,setGenerating]=useState(false);
-  const go=p=>{setPage(p);setMenuOpen(false);window.scrollTo(0,0);};
+
+  const go=p=>{
+    setPage(p);
+    setMenuOpen(false);
+    window.scrollTo(0,0);
+    // Push URL for all navigable pages; skip transient states
+    if(p!=="result"&&p!=="bedankt"){
+      window.history.pushState({page:p},"",pageToPath(p));
+    }
+  };
+
   const onDone=(chart,form,report,rpt)=>{setResult({chart,form,report,rpt});setPage("result");window.scrollTo(0,0);};
   const currentRpt=page.startsWith("rapport-")?REPORTS.find(r=>r.id===page.replace("rapport-","")):null;
+
+  // Tag the initial history entry + listen for back/forward
+  useEffect(()=>{
+    window.history.replaceState({page:pathToPage(window.location.pathname)},"",window.location.href);
+    const onPop=e=>{
+      const p=e.state?.page||pathToPage(window.location.pathname);
+      setPage(p);
+      window.scrollTo(0,0);
+    };
+    window.addEventListener("popstate",onPop);
+    return()=>window.removeEventListener("popstate",onPop);
+  },[]);
 
   // Handle return from Stripe payment
   useEffect(()=>{
@@ -3215,11 +3255,11 @@ export default function App(){
     const orderId=params.get("order");
 
     if(cancelled){
-      window.history.replaceState({},"",window.location.pathname);
+      window.history.replaceState({page:"home"},"",window.location.pathname);
       return;
     }
     if(success){
-      window.history.replaceState({},"",window.location.pathname);
+      window.history.replaceState({page:"home"},"",window.location.pathname);
       // New async delivery flow: show confirmation page, report arrives by email
       setPage("bedankt");
       setResult({ orderId: orderId||null });
@@ -3257,8 +3297,8 @@ export default function App(){
     }
     return allText.trim()||"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyhd.com";
   }
-  // Detect /download/<token> SPA route
-  const downloadToken=(()=>{const p=window.location.pathname;const m=p.match(/^\/download\/([a-f0-9-]{36})$/i);return m?m[1]:null;})();
+  // Detect /download/<token> route
+  const downloadToken=(()=>{const m=window.location.pathname.match(/^\/download\/([a-f0-9-]{36})$/i);return m?m[1]:null;})();
 
   return(
     <div>
