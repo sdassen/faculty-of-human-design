@@ -1492,6 +1492,7 @@ function Footer({go}){
         <div className="footer-bottom">
           <div className="footer-copy">© 2026 Faculty of Human Design. Alle rechten voorbehouden.</div>
           <div className="footer-trust">
+            <span className="footer-trust-item" style={{cursor:"pointer"}} onClick={()=>go("voorwaarden")}>Algemene Voorwaarden & Privacy</span>
             <div className="footer-trust-item">SSL beveiligd</div>
             <div className="footer-trust-item">iDEAL beschikbaar</div>
           </div>
@@ -3198,7 +3199,7 @@ function DownloadPage({token}){
 }
 
 // ─── ROUTING HELPERS ─────────────────────────────────────────────────────────
-const ROUTABLE = new Set(["home","wat","rapporten","blog","over","contact"]);
+const ROUTABLE = new Set(["home","wat","rapporten","blog","over","contact","voorwaarden"]);
 
 function pathToPage(pathname) {
   if (!pathname || pathname === "/") return "home";
@@ -3213,6 +3214,160 @@ function pageToPath(page) {
   if (page === "home") return "/";
   if (page.startsWith("rapport-")) return "/rapport/" + page.slice("rapport-".length);
   return "/" + page;
+}
+
+// ─── TERMS & PRIVACY PAGE ─────────────────────────────────────────────────────
+function TermsPage({go}){
+  useSEO({
+    title:"Algemene Voorwaarden & Privacybeleid — Faculty of Human Design",
+    description:"Lees de algemene voorwaarden en het privacybeleid van Faculty of Human Design. Informatie over restitutie, aansprakelijkheid en AVG/GDPR.",
+    canonical:SITE+"/voorwaarden",
+  });
+
+  const Section=({title,children})=>(
+    <div style={{marginBottom:40,paddingBottom:40,borderBottom:"1px solid var(--border)"}}>
+      <h2 style={{fontFamily:"var(--font-serif)",fontSize:"1.25rem",fontWeight:400,color:"var(--text)",marginBottom:16,lineHeight:1.2}}>{title}</h2>
+      {children}
+    </div>
+  );
+  const P=({children,style={}})=>(
+    <p style={{fontSize:".92rem",fontWeight:300,color:"#555",lineHeight:1.85,marginBottom:12,...style}}>{children}</p>
+  );
+  const Li=({children})=>(
+    <li style={{fontSize:".92rem",fontWeight:300,color:"#555",lineHeight:1.85,marginBottom:6,paddingLeft:4}}>{children}</li>
+  );
+
+  return(
+    <div className="pg">
+      {/* Hero */}
+      <div style={{background:"var(--dark)",padding:"96px 32px 64px",position:"relative",overflow:"hidden"}}>
+        <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 60% 40%, rgba(61,44,94,.35) 0%, transparent 65%)",pointerEvents:"none"}}/>
+        <div style={{maxWidth:760,margin:"0 auto",position:"relative",zIndex:1}}>
+          <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(201,168,92,.6)",marginBottom:14}}>Juridische informatie</div>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:300,color:"white",marginBottom:16,lineHeight:1.08}}>Algemene Voorwaarden<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.4)"}}>& Privacybeleid</em></h1>
+          <p style={{fontSize:".9rem",fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>Versie 1.0 — van kracht per 1 januari 2026</p>
+        </div>
+      </div>
+
+      {/* Content */}
+      <section className="section bg-white">
+        <div style={{maxWidth:760,margin:"0 auto",padding:"0 24px"}}>
+
+          <Section title="1. Wie zijn wij">
+            <P>Faculty of Human Design is een zelfstandige aanbieder van gepersonaliseerde digitale rapporten op het gebied van Human Design, Numerologie en Astrologie. Wij zijn gevestigd op Ibiza, Spanje. Voor vragen kun je contact opnemen via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</P>
+          </Section>
+
+          <Section title="2. Toepasselijkheid">
+            <P>Deze algemene voorwaarden zijn van toepassing op alle bestellingen, leveringen en overeenkomsten via de website <strong>facultyhd.com</strong>. Door een bestelling te plaatsen accepteer je deze voorwaarden.</P>
+          </Section>
+
+          <Section title="3. Aard van de dienst — persoonlijk digitaal rapport">
+            <P>De rapporten die wij leveren zijn <strong>gepersonaliseerde digitale producten</strong>. Elk rapport wordt volledig op maat samengesteld op basis van de door jou opgegeven geboortedatum, -tijd en -plaats. Het eindproduct is een PDF-bestand dat uitsluitend voor jou is opgesteld.</P>
+            <P>Onze rapporten zijn bedoeld als persoonlijk inzichtsinstrument. Ze vormen <strong>geen vervanging voor professioneel medisch, psychologisch, juridisch of financieel advies</strong>. De inhoud is gebaseerd op de systemen van Human Design, Numerologie en Astrologie en dient als aanvulling op — niet als alternatief voor — erkende professionele hulpverlening.</P>
+          </Section>
+
+          <Section title="4. Geen restitutie">
+            <P>Omdat elk rapport volledig gepersonaliseerd is en onmiddellijk na betaling in productie gaat, is <strong>restitutie niet mogelijk</strong> zodra de bestelling is bevestigd.</P>
+            <P>Dit valt onder de uitzondering op het herroepingsrecht voor <em>digitale inhoud die niet op een materiële drager is geleverd</em>, waarvoor de klant uitdrukkelijk toestemming heeft gegeven dat de levering onmiddellijk begint (Artikel 16(m) van de EU Richtlijn 2011/83/EU, geïmplementeerd in Artikel 6:230p sub e BW).</P>
+            <P>Door de bestelling te plaatsen en de betaling te voltooien:</P>
+            <ul style={{paddingLeft:20,marginBottom:12}}>
+              <Li>stem je er uitdrukkelijk mee in dat wij direct beginnen met de uitvoering van de overeenkomst;</Li>
+              <Li>erken je dat je daarmee afstand doet van het herroepingsrecht;</Li>
+              <Li>bevestig je kennis te hebben genomen van deze voorwaarden.</Li>
+            </ul>
+            <P>Heb je een vraag of klacht over je rapport? Neem dan contact op via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — wij lossen het graag op.</P>
+          </Section>
+
+          <Section title="5. Levering">
+            <P>Rapporten worden binnen <strong>1 werkdag</strong> per e-mail bezorgd als beveiligde downloadlink (PDF). De downloadlink is 30 dagen geldig. Wij adviseren het bestand direct op te slaan in je eigen archief.</P>
+            <P>Bij technische problemen met de levering neem je contact op via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — wij sturen de link opnieuw.</P>
+          </Section>
+
+          <Section title="6. Aansprakelijkheid">
+            <P>Faculty of Human Design aanvaardt <strong>geen aansprakelijkheid</strong> voor schade die voortvloeit uit het gebruik van of vertrouwen op de inhoud van onze rapporten. Dit omvat — maar is niet beperkt tot — beslissingen op het gebied van gezondheid, relaties, financiën, werk of enig ander levensgebied.</P>
+            <P>Onze rapporten zijn gebaseerd op de systemen van Human Design (Ra Uru Hu), Pythagoreïsche numerologie en westerse astrologie. De toepasbaarheid en interpretatie van deze systemen is subjectief van aard. Wij garanderen geen specifieke uitkomsten of resultaten.</P>
+            <P>In het geval dat aansprakelijkheid toch wordt vastgesteld, is deze altijd beperkt tot het bedrag dat voor het betreffende rapport is betaald.</P>
+          </Section>
+
+          <Section title="7. Intellectueel eigendom">
+            <P>Alle rapporten, teksten, berekeningen en overige inhoud zijn het intellectueel eigendom van Faculty of Human Design. Het is niet toegestaan rapporten geheel of gedeeltelijk openbaar te maken, te reproduceren, te verkopen of door te sturen zonder schriftelijke toestemming, behoudens voor strikt persoonlijk gebruik.</P>
+          </Section>
+
+          <Section title="8. Privacybeleid — AVG/GDPR">
+            <P>Faculty of Human Design verwerkt persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG / GDPR, EU 2016/679).</P>
+
+            <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Welke gegevens verwerken wij?</div>
+              <ul style={{paddingLeft:20,margin:0}}>
+                <Li><strong>Identificatiegegevens:</strong> naam en e-mailadres</Li>
+                <Li><strong>Geboortedatum, -tijd en -plaats</strong> (noodzakelijk voor de berekening van je rapport)</Li>
+                <Li><strong>Betalingsgegevens</strong> worden verwerkt door Stripe en worden nooit door ons opgeslagen</Li>
+              </ul>
+            </div>
+
+            <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Waarvoor gebruiken wij jouw gegevens?</div>
+              <ul style={{paddingLeft:20,margin:0}}>
+                <Li>Het samenstellen en leveren van het bestelde rapport</Li>
+                <Li>Het versturen van de bevestigings- en leveringsmail</Li>
+                <Li>Het beantwoorden van vragen of klachten</Li>
+              </ul>
+            </div>
+
+            <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Grondslag voor verwerking</div>
+              <P style={{marginBottom:0}}>De verwerking is noodzakelijk voor de uitvoering van de overeenkomst die je met ons aangaat bij het plaatsen van een bestelling (Art. 6 lid 1 sub b AVG).</P>
+            </div>
+
+            <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Derde partijen</div>
+              <ul style={{paddingLeft:20,margin:0}}>
+                <Li><strong>Supabase</strong> — veilige opslag van bestellingen (servers in de EU)</Li>
+                <Li><strong>Stripe</strong> — betalingsverwerking (eigen verwerkersovereenkomst van toepassing)</Li>
+                <Li><strong>Resend</strong> — verzending van transactionele e-mail</Li>
+                <Li><strong>Anthropic (Claude API)</strong> — AI-analyse voor het samenstellen van rapporten; geboortegegevens worden uitsluitend voor dit doel gebruikt en niet bewaard door Anthropic</Li>
+                <Li><strong>Vercel</strong> — hosting van de website en rapporten (servers in de EU/VS)</Li>
+              </ul>
+            </div>
+
+            <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Bewaartermijn</div>
+              <P style={{marginBottom:0}}>Bestellingen en bijbehorende gegevens worden bewaard zolang nodig voor de dienstverlening en daarna conform wettelijke fiscale bewaarplichten (maximaal 7 jaar). De gegenereerde PDF wordt 30 dagen na levering verwijderd.</P>
+            </div>
+
+            <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Jouw rechten</div>
+              <P style={{marginBottom:8}}>Op grond van de AVG heb je het recht op:</P>
+              <ul style={{paddingLeft:20,margin:0}}>
+                <Li>Inzage in de gegevens die wij van je verwerken</Li>
+                <Li>Correctie van onjuiste gegevens</Li>
+                <Li>Verwijdering van je gegevens ('recht op vergetelheid')</Li>
+                <Li>Beperking van de verwerking</Li>
+                <Li>Bezwaar maken tegen de verwerking</Li>
+                <Li>Gegevensoverdraagbaarheid</Li>
+              </ul>
+              <P style={{marginTop:12,marginBottom:0}}>Je kunt deze rechten uitoefenen door een e-mail te sturen naar <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>. Wij reageren binnen 30 dagen. Je hebt ook het recht een klacht in te dienen bij de Autoriteit Persoonsgegevens (autoriteitpersoonsgegevens.nl).</P>
+            </div>
+          </Section>
+
+          <Section title="9. Cookies">
+            <P>Wij gebruiken geen tracking- of advertentiecookies. Er worden uitsluitend functioneel noodzakelijke gegevens opgeslagen (zoals anonieme sessiedata) om de website correct te laten functioneren.</P>
+          </Section>
+
+          <Section title="10. Toepasselijk recht">
+            <P>Op alle overeenkomsten is het <strong>Nederlands recht</strong> van toepassing. Geschillen worden voorgelegd aan de bevoegde rechter in Nederland, tenzij dwingend recht een andere rechter aanwijst.</P>
+          </Section>
+
+          <div style={{paddingTop:16,textAlign:"center"}}>
+            <p style={{fontSize:".8rem",color:"var(--text-light)",marginBottom:24}}>Vragen over deze voorwaarden? Stuur een e-mail naar{" "}
+              <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.
+            </p>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk onze rapporten</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
 }
 
 // ─── ROUTER ───────────────────────────────────────────────────────────────────
@@ -3314,6 +3469,7 @@ export default function App(){
           {page==="blog"&&<BlogPage go={go}/>}
           {page==="over"&&<OverPage go={go}/>}
           {page==="contact"&&<ContactPage/>}
+          {page==="voorwaarden"&&<TermsPage go={go}/>}
           {page==="result"&&result&&<ThankYouPage result={result} go={go}/>}
           {page==="bedankt"&&<OrderConfirmationPage result={result} go={go}/>}
           {page!=="result"&&page!=="bedankt"&&<Footer go={go}/>}
