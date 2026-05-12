@@ -703,7 +703,7 @@ const REPORTS = [
   {
     id:"volledig", icon:"✦", tag:"Meest gekozen",
     title:"Volledig Human Design Rapport",
-    price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    price:"€75", priceNum:75, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Begrijp eindelijk wie je werkelijk bent",
     tagline:"Je complete persoonlijke blauwdruk",
     intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
@@ -720,7 +720,7 @@ const REPORTS = [
   {
     id:"relatie_liefde", icon:"◎", tag:"",
     title:"Relatierapport — Liefde",
-    price:"€95", priceNum:95, sub:"Eenmalig · Direct als PDF",
+    price:"€95", priceNum:95, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Meer rust en begrip in je romantische verbinding",
     tagline:"Twee designs in romantische verbinding",
     intro:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel — waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?",
@@ -737,7 +737,7 @@ const REPORTS = [
   {
     id:"relatie_business", icon:"◈", tag:"",
     title:"Relatierapport — Business",
-    price:"€85", priceNum:85, sub:"Eenmalig · Direct als PDF",
+    price:"€85", priceNum:85, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Samenwerking die werkt voor jullie allebei",
     tagline:"Twee designs in zakelijke samenwerking",
     intro:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten — en hoe bouwen jullie een samenwerking die werkt voor beiden?",
@@ -754,7 +754,7 @@ const REPORTS = [
   {
     id:"relatie_familie", icon:"◇", tag:"",
     title:"Relatierapport — Familie",
-    price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    price:"€75", priceNum:75, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Meer begrip en verbinding in het gezin",
     tagline:"Twee designs in familieverband",
     intro:"Een analyse van twee familieleden — ouder en kind, broer en zus, of een andere gezinsrelatie. Hoe opereren jullie designs samen en hoe creëer je meer begrip, verbinding en ruimte?",
@@ -771,7 +771,7 @@ const REPORTS = [
   {
     id:"jaar", icon:"◈", tag:"",
     title:"Jaarrapport 2026",
-    price:"€55", priceNum:55, sub:"Eenmalig · Direct als PDF",
+    price:"€55", priceNum:55, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Weet wat er dit jaar van je gevraagd wordt",
     tagline:"De energetische thema's van je jaar",
     intro:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
@@ -788,7 +788,7 @@ const REPORTS = [
   {
     id:"kind", icon:"◇", tag:"",
     title:"Kinderrapport",
-    price:"€45", priceNum:45, sub:"Eenmalig · Direct als PDF",
+    price:"€45", priceNum:45, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Begeleid je kind vanuit wie het werkelijk is",
     tagline:"Je kind begrijpen vanuit zijn of haar design",
     intro:"Een rapport voor ouders. Hoe gebruik je kind energie en hoe leert het het beste?",
@@ -805,7 +805,7 @@ const REPORTS = [
   {
     id:"loopbaan", icon:"◆", tag:"",
     title:"Loopbaan & Geld Rapport",
-    price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
+    price:"€65", priceNum:65, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Verdien geld op een manier die bij je past",
     tagline:"Werk en financiën vanuit je design",
     intro:"Hoe maakt je geld op een manier die bij jou past? Welke werkomgeving geeft je energie?",
@@ -822,7 +822,7 @@ const REPORTS = [
   {
     id:"numerologie", icon:"∞", tag:"",
     title:"Numerologie Rapport",
-    price:"€65", priceNum:65, sub:"Eenmalig · Direct als PDF",
+    price:"€65", priceNum:65, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Begrijp de patronen achter je levensverhaal",
     tagline:"De getallen achter je naam en geboortedag",
     intro:"Op basis van je volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van je aard en levensdoel.",
@@ -839,7 +839,7 @@ const REPORTS = [
   {
     id:"horoscoop", icon:"☽", tag:"",
     title:"Geboortehoroscoop",
-    price:"€75", priceNum:75, sub:"Eenmalig · Direct als PDF",
+    price:"€75", priceNum:75, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
     outcome:"Je planeetstanden als persoonlijk kompas",
     tagline:"Je complete astrologische chart",
     intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.",
