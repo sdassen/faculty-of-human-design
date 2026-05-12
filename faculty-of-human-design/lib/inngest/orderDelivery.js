@@ -25,8 +25,10 @@ function getSupabase() {
  * - Hard cap: always within 1 business day of the order.
  */
 function calculateDeliveryDate(paidAtIso) {
-  // ⚠️ TEST MODE: 1 minuut delay — zet terug naar productie na test!
-  return new Date(Date.now() + 60_000);
+  // TEST MODE: zet DELIVERY_TEST_MODE=1 in Vercel env vars voor 1-minuut delay
+  if (process.env.DELIVERY_TEST_MODE === "1") {
+    return new Date(Date.now() + 60_000);
+  }
 
   const paidAt = paidAtIso ? new Date(paidAtIso) : new Date();
   const baseHours = 18 + Math.random() * 5; // 18.0 – 23.0 h
