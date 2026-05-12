@@ -450,9 +450,11 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .upsell-grid { grid-template-columns:1fr; }
   .report-summary-grid { grid-template-columns:1fr 1fr; }
   .footer-top { grid-template-columns:1fr; gap:28px; }
-  .footer-bottom { flex-direction:column; align-items:flex-start; }
+  .footer-bottom { flex-direction:column; align-items:flex-start; gap:16px; }
+  .footer-trust { flex-wrap:wrap; gap:10px; }
   .stat-row-inner { flex-wrap:wrap; }
-  .stat-row-item { flex:none; width:50%; border-bottom:1px solid var(--border); }
+  .stat-row-item { flex:none; width:50%; border-bottom:1px solid var(--border); text-align:center; padding:20px 12px; }
+  .stat-row-item:nth-child(odd) { border-right:1px solid var(--border); }
   .hero-content { padding:0 20px; }
   .photo-cta-content { padding:80px 20px; }
   /* Responsive utilities */
@@ -469,18 +471,21 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .sub-card { padding:36px 24px; }
   /* Portrait image collapses to landscape on mobile */
   .portrait-img { aspect-ratio:16/9; max-height:320px; }
-  /* Method steps tighter gap */
-  .method-step { gap:20px; padding:28px 0; }
-  .method-step-num { font-size:1.6rem; width:36px; }
-  /* Stats 2x2 stays as-is on mobile (2 cols at ~150px is fine) */
-  /* Price box in detail hero is full-width when inner collapses at 1024px — add breathing room */
+  /* Method steps: keep row layout, explicit left-align */
+  .method-step { gap:16px; padding:28px 0; align-items:flex-start; }
+  .method-step-num { font-size:1.4rem; width:32px; text-align:left; flex-shrink:0; }
+  .method-step h3, .method-step p { text-align:left; }
+  /* Price box */
   .price-box { padding:24px 20px; }
+  /* Upsell button: allow text wrap on mobile */
+  .upsell-card .btn { white-space:normal; line-height:1.4; padding:14px 24px; text-align:center; }
 }
 @media (max-width:480px) {
   .hero-actions { flex-direction:column; }
   .hero-actions .btn { width:100%; }
   .report-summary-grid { grid-template-columns:1fr; }
-  .stat-row-item { width:100%; }
+  /* Stat row: keep 2 per row even on small screens */
+  .stat-row-item { width:50%; }
   .waarom-card-img { height:180px; }
   /* Extra-small screens */
   .section, .section-md { padding:56px 16px; }
@@ -490,13 +495,17 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .detail-hero { padding:60px 16px 40px; }
   .sub-card { padding:28px 18px; }
   .two-col-lg { gap:28px; }
-  .method-step { gap:16px; padding:22px 0; }
-  .stats-2x2 { grid-template-columns:1fr; gap:12px; }
+  .method-step { gap:12px; padding:22px 0; }
+  /* Stats 2x2: always keep 2 columns */
+  .stats-2x2 { grid-template-columns:1fr 1fr; gap:12px; }
   .price-box { padding:20px 16px; }
   .price-box-amount { font-size:2.6rem; }
   /* Reduce heading sizes on very small phones so long titles don't become 4-liners */
   .h1 { font-size:clamp(1.85rem,6.5vw,2.4rem); }
   .h2 { font-size:clamp(1.6rem,5.5vw,2rem); }
+  /* Footer bottom: center on tiny screens */
+  .footer-bottom { align-items:center; text-align:center; }
+  .footer-trust { justify-content:center; }
 }
 
 /* ── CHART DASHBOARD ──────────────────────────────────────────────────────── */
@@ -1793,7 +1802,7 @@ function HomePage({go}){
           <div className="stat-row-item" style={{position:"relative"}}>
             <div className="stat-row-n" style={{fontSize:"1.2rem",letterSpacing:".04em"}}>Swiss Ephemeris</div>
             <div className="stat-row-l">Professionele standaard</div>
-            <div style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:172,lineHeight:1.55}}>Planeetposities tot op de graad nauwkeurig — dezelfde software die astronomen en astrologen wereldwijd gebruiken</div>
+            <div className="stat-row-ephemeris-desc" style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:172,lineHeight:1.55}}>Planeetposities tot op de graad nauwkeurig</div>
           </div>
         </div>
       </div>
