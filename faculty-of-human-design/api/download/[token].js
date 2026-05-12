@@ -44,7 +44,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  // GET: fetch the blob and stream it to the client
+  // GET: fetch the full PDF buffer and send it in one response
   try {
     const blobRes = await fetch(order.pdf_blob_url);
 
@@ -57,23 +57,20 @@ export default async function handler(req, res) {
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/(^-|-$)/g, "");
 
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader(
-      "Content-Disposition",
-      `attachment; filename="${safeFilename}-${(order.customer_name || "").toLowerCase().replace(/\s+/g, "-")}.pdf"`
-    );
-    res.setHeader("Cache-Control", "private, no-store");
+    const customerSlug = (order.customer_name || "")
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^a-z0-9-]/g, "");
 
-    // Stream response body
-    const reader = blobRes.body.getReader();
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      res.write(value);
-    }
-    res.end();
+    const pdfBuffer = Buffer.from(await blobRes.arrayBuffer());
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", `attachment; filename="${safeFilename}-${customerSlug}.pdf"`);
+    res.setHeader("Content-Length", pdfBuffer.length);
+    res.setHeader("Cache-Control", "private, no-store");
+    return res.status(200).send(pdfBuffer);
   } catch (e) {
-    console.error("[download] Error streaming PDF:", e.message);
+    console.error("[download] Error fetching PDF:", e.message);
     return res.status(500).send("Er is een fout opgetreden. Probeer het opnieuw of neem contact op.");
   }
 }
