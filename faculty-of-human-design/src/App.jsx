@@ -3142,8 +3142,8 @@ function DownloadPage({token}){
   const[reportTitle,setReportTitle]=useState("");
 
   useEffect(()=>{
-    // Just try a HEAD request to see if the token is valid
-    fetch("/api/download/"+token,{method:"GET",redirect:"manual"})
+    // Use HEAD to check token validity without downloading the PDF
+    fetch("/api/download/"+token,{method:"HEAD"})
       .then(r=>{
         if(r.ok||r.status===200){setStatus("ready");}
         else if(r.status===404){setStatus("notfound");}
@@ -3152,8 +3152,6 @@ function DownloadPage({token}){
       })
       .catch(()=>setStatus("error"));
   },[token]);
-
-  const handleDownload=()=>{window.location.href="/api/download/"+token;};
 
   return(
     <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
@@ -3170,9 +3168,13 @@ function DownloadPage({token}){
             <p style={{fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32}}>
               Klik op de knop hieronder om je persoonlijke rapport te downloaden als PDF.
             </p>
-            <button className="btn btn-primary btn-lg" onClick={handleDownload} style={{marginBottom:20}}>
+            <a
+              href={"/api/download/"+token}
+              className="btn btn-primary btn-lg"
+              style={{display:"inline-block",marginBottom:20,textDecoration:"none"}}
+            >
               Download rapport (PDF)
-            </button>
+            </a>
             <p style={{fontSize:".72rem",color:"var(--text-light)"}}>
               Sla het bestand op voor je archief — de link is 30 dagen geldig.
             </p>

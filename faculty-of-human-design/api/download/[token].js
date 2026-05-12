@@ -10,7 +10,7 @@ const supabase = createClient(
 const TOKEN_EXPIRY_DAYS = 30;
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") return res.status(405).end();
+  if (req.method !== "GET" && req.method !== "HEAD") return res.status(405).end();
 
   const { token } = req.query;
   if (!token || typeof token !== "string") {
@@ -39,7 +39,12 @@ export default async function handler(req, res) {
     return res.status(410).send(expiredPage());
   }
 
-  // Fetch the private blob and stream it to the client
+  // HEAD request: just confirm the token is valid, don't stream the file
+  if (req.method === "HEAD") {
+    return res.status(200).end();
+  }
+
+  // GET: fetch the blob and stream it to the client
   try {
     const blobRes = await fetch(order.pdf_blob_url);
 
