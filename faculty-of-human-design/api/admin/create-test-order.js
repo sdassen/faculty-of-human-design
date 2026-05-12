@@ -84,7 +84,6 @@ export default async function handler(req, res) {
       report_title: "Test Rapport",
       customer_name: "Test Klant",
       customer_email: "test@facultyhd.com",
-      price: 0,
       status: "delivered",
       pdf_blob_url: blobUrl,
       download_token: token,
