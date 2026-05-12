@@ -1,277 +1,147 @@
-// PDF generation using @react-pdf/renderer
-// Runs server-side in Node.js (Inngest steps / Vercel functions)
-import React from "react";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  renderToBuffer,
-} from "@react-pdf/renderer";
+// PDF generation using PDFKit (pure Node.js, no React dependency)
+import PDFDocument from "pdfkit";
 
-// ─── STYLES ───────────────────────────────────────────────────────────────────
-const S = StyleSheet.create({
-  // Cover page
-  cover: {
-    backgroundColor: "#1A1715",
-    flexDirection: "column",
-    justifyContent: "flex-end",
-    padding: 72,
-  },
-  coverInst: {
-    fontSize: 7,
-    letterSpacing: 4,
-    textTransform: "uppercase",
-    color: "rgba(201,168,92,0.5)",
-    marginBottom: 18,
-  },
-  coverTitle: {
-    fontFamily: "Helvetica",
-    fontSize: 32,
-    fontWeight: "300",
-    color: "#ffffff",
-    lineHeight: 1.2,
-    marginBottom: 10,
-  },
-  coverName: {
-    fontSize: 18,
-    color: "rgba(255,255,255,0.45)",
-    marginBottom: 28,
-    fontStyle: "italic",
-  },
-  coverMeta: {
-    fontSize: 8,
-    color: "rgba(255,255,255,0.22)",
-    letterSpacing: 2,
-    textTransform: "uppercase",
-    lineHeight: 1.8,
-  },
-  coverDivider: {
-    height: 1,
-    backgroundColor: "rgba(201,168,92,0.18)",
-    marginBottom: 28,
-    marginTop: 4,
-  },
+const W = 595.28; // A4 width in points
+const H = 841.89; // A4 height in points
+const M  = 56;    // page margin
+const TW = W - M * 2; // text width
+const FY = H - 38;    // footer Y
 
-  // Content pages
-  page: {
-    paddingTop: 64,
-    paddingBottom: 64,
-    paddingLeft: 72,
-    paddingRight: 72,
-    backgroundColor: "#ffffff",
-  },
-  sectionTitle: {
-    fontFamily: "Helvetica",
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#1A1715",
-    marginBottom: 14,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: "#E5E0D8",
-  },
-  body: {
-    fontSize: 10,
-    color: "#3a3a32",
-    lineHeight: 1.85,
-    fontWeight: "normal",
-  },
-  paragraph: {
-    marginBottom: 10,
-  },
+// ─── COVER PAGE ──────────────────────────────────────────────────────────────
+function drawCover(doc, order, sections) {
+  // Dark background
+  doc.rect(0, 0, W, H).fill("#1A1715");
+  // Gold top bar
+  doc.rect(0, 0, W, 3).fill("#C9A85C");
 
-  // Page footer
-  footer: {
-    position: "absolute",
-    bottom: 28,
-    left: 72,
-    right: 72,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderTopColor: "#EDEBE5",
-    paddingTop: 8,
-  },
-  footerInst: {
-    fontSize: 7,
-    color: "#B8B3AE",
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-  },
-  footerPage: {
-    fontSize: 7,
-    color: "#B8B3AE",
-  },
+  // Institute label
+  doc.font("Helvetica").fontSize(7).fillColor("#7A6840")
+    .text("FACULTY OF HUMAN DESIGN  ·  IBIZA", 0, 68, {
+      align: "center", width: W, characterSpacing: 4,
+    });
 
-  // Summary box on first content page
-  summaryBox: {
-    backgroundColor: "#F7F5F0",
-    borderLeftWidth: 2,
-    borderLeftColor: "#C9A85C",
-    padding: 16,
-    marginBottom: 28,
-  },
-  summaryRow: {
-    flexDirection: "row",
-    marginBottom: 5,
-  },
-  summaryLabel: {
-    fontSize: 7,
-    fontWeight: "bold",
-    color: "#9A8050",
-    letterSpacing: 1.5,
-    textTransform: "uppercase",
-    width: 100,
-    flexShrink: 0,
-  },
-  summaryValue: {
-    fontSize: 9,
-    color: "#1A1715",
-    flex: 1,
-  },
-});
+  // Report title
+  doc.font("Times-Italic").fontSize(30).fillColor("#FFFFFF")
+    .text(order.report_title || "Persoonlijk Rapport", M, 148, {
+      align: "center", width: TW, lineGap: 8,
+    });
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
-/** Split markdown-style text into paragraphs, stripping leading ### headers */
-function splitParagraphs(text) {
-  return (text || "")
-    .split("\n")
-    .filter((l) => l.trim() && !l.startsWith("###"))
-    .map((l) => l.trim());
-}
+  const ty = doc.y + 22;
+  // Gold divider
+  doc.rect(W / 2 - 20, ty, 40, 1).fill("#C9A85C");
 
-// ─── DOCUMENT ─────────────────────────────────────────────────────────────────
-function ReportDocument({ order, sections }) {
-  const { customer_name, report_title, birth_data } = order;
+  // Customer name
+  doc.font("Helvetica").fontSize(12).fillColor("#7A7470")
+    .text(order.customer_name || "", 0, ty + 14, { align: "center", width: W });
 
-  // Birth meta line
-  const bd = birth_data || {};
-  const birthLine = [
-    bd.day && bd.month && bd.year ? `${bd.day}-${bd.month}-${bd.year}` : null,
-    bd.hour !== undefined && bd.minute !== undefined
-      ? `${String(bd.hour).padStart(2, "0")}:${String(bd.minute).padStart(2, "0")}`
-      : null,
-    bd.place || null,
-  ]
-    .filter(Boolean)
-    .join("  ·  ");
+  // Birth + chart data
+  const bd = order.birth_data || {};
+  const chart = bd.chart || {};
+  let iy = ty + 38;
 
-  // Chart summary rows (HD, Numerology, or Horoscoop)
-  const chartData = bd.chart || {};
-  const summaryRows = buildSummaryRows(order.report_id, chartData);
-
-  return React.createElement(
-    Document,
-    {
-      title: report_title,
-      author: "Faculty of Human Design",
-      subject: `${report_title} — ${customer_name}`,
-    },
-
-    // ── Cover page ──
-    React.createElement(
-      Page,
-      { size: "A4", style: S.cover },
-      React.createElement(Text, { style: S.coverInst }, "Faculty of Human Design  ·  Ibiza, Spanje"),
-      React.createElement(View, { style: S.coverDivider }),
-      React.createElement(Text, { style: S.coverTitle }, report_title),
-      React.createElement(Text, { style: S.coverName }, customer_name || ""),
-      React.createElement(
-        Text,
-        { style: S.coverMeta },
-        birthLine || ""
-      )
-    ),
-
-    // ── Content pages (one section per page) ──
-    ...sections.map((sec, i) =>
-      React.createElement(
-        Page,
-        { key: i, size: "A4", style: S.page },
-
-        // First page: insert summary box above section text
-        i === 0 && summaryRows.length > 0
-          ? React.createElement(
-              View,
-              { style: S.summaryBox },
-              ...summaryRows.map((row, ri) =>
-                React.createElement(
-                  View,
-                  { key: ri, style: S.summaryRow },
-                  React.createElement(Text, { style: S.summaryLabel }, row.label),
-                  React.createElement(Text, { style: S.summaryValue }, String(row.value || ""))
-                )
-              )
-            )
-          : null,
-
-        // Section title
-        React.createElement(Text, { style: S.sectionTitle }, sec.title),
-
-        // Section body paragraphs
-        ...splitParagraphs(sec.text).map((para, pi) =>
-          React.createElement(
-            View,
-            { key: pi, style: S.paragraph },
-            React.createElement(Text, { style: S.body }, para)
-          )
-        ),
-
-        // Footer
-        React.createElement(
-          View,
-          { style: S.footer, fixed: true },
-          React.createElement(Text, { style: S.footerInst }, "Faculty of Human Design"),
-          React.createElement(
-            Text,
-            { style: S.footerPage, render: ({ pageNumber, totalPages }) => `${pageNumber} / ${totalPages}` }
-          )
-        )
-      )
-    )
-  );
-}
-
-function buildSummaryRows(reportId, chart) {
-  if (!chart || Object.keys(chart).length === 0) return [];
-
-  if (chart.isNumerology) {
-    return [
-      { label: "Levenspad", value: chart.lp },
-      { label: "Uitdrukking", value: chart.exp },
-      { label: "Ziel", value: chart.soul },
-      { label: "Pers. Jaar", value: chart.py },
-    ].filter((r) => r.value != null);
+  if (bd.day) {
+    doc.font("Helvetica").fontSize(9).fillColor("#504C48")
+      .text(
+        `${bd.day}-${bd.month}-${bd.year}${bd.place ? "  ·  " + bd.place : ""}`,
+        0, iy, { align: "center", width: W }
+      );
+    iy += 16;
   }
-  if (chart.isHoroscoop) {
-    return [
-      { label: "Zonneteken", value: chart.sun_sign },
-      { label: "Ascendant", value: chart.ascendant ? `${chart.ascendant.degree}° ${chart.ascendant.sign}` : null },
-      { label: "Dom. element", value: chart.dom_element },
-    ].filter((r) => r.value != null);
+  if (chart.type) {
+    doc.font("Helvetica").fontSize(9).fillColor("#7A6840")
+      .text(
+        [chart.type, chart.profile ? "Profiel " + chart.profile : null, chart.auth || null]
+          .filter(Boolean).join("  ·  "),
+        0, iy, { align: "center", width: W }
+      );
+    iy += 16;
   }
-  // Human Design
-  return [
-    { label: "Type", value: chart.type },
-    { label: "Autoriteit", value: chart.auth },
-    { label: "Strategie", value: chart.strat },
-    { label: "Profiel", value: chart.profile },
-    { label: "Signatuur", value: chart.sig },
-    { label: "Not-Self", value: chart.notSelf },
-  ].filter((r) => r.value != null);
+
+  // Table of contents
+  const tocY = Math.max(iy + 44, H / 2 - 20);
+  doc.font("Helvetica").fontSize(7).fillColor("#3A3630")
+    .text("INHOUD", M, tocY, { characterSpacing: 3 });
+  let ly = tocY + 18;
+  sections.forEach((s, i) => {
+    if (ly < H - 80) {
+      doc.font("Helvetica").fontSize(9).fillColor("#4A4640")
+        .text(`${i + 1}.  ${s.title}`, M + 12, ly);
+      ly += 16;
+    }
+  });
+
+  // Footer
+  doc.font("Helvetica").fontSize(7).fillColor("#252320")
+    .text("© 2026 Faculty of Human Design — Ibiza, Spanje", 0, H - 38, {
+      align: "center", width: W,
+    });
 }
 
-// ─── PUBLIC API ───────────────────────────────────────────────────────────────
-/**
- * Generate a PDF buffer for a completed order.
- *
- * @param {{ order: object, sections: Array<{title: string, text: string}> }} opts
- * @returns {Promise<Buffer>}
- */
+// ─── SECTION HEADER ──────────────────────────────────────────────────────────
+function drawSectionHeader(doc, section, idx) {
+  doc.rect(0, 0, W, 4).fill("#1A1715");
+  doc.rect(0, 4, 3, 56).fill("#C9A85C");
+  doc.font("Helvetica").fontSize(8).fillColor("#9A8050")
+    .text(String(idx + 1).padStart(2, "0"), M + 12, 16, { characterSpacing: 1 });
+  doc.font("Times-Roman").fontSize(19).fillColor("#1A1715")
+    .text(section.title, M + 12, 28, { width: TW - 12 });
+  const dy = doc.y + 8;
+  doc.rect(M + 12, dy, 28, 1).fill("#C9A85C");
+}
+
+// ─── PAGE FOOTER ─────────────────────────────────────────────────────────────
+function drawFooter(doc, order) {
+  doc.rect(M + 8, FY - 6, TW - 8, 0.5).fill("#E5E0D8");
+  doc.font("Helvetica").fontSize(7.5).fillColor("#B8B3AE")
+    .text(order.report_title || "", M + 8, FY, { width: TW / 2 });
+  doc.font("Helvetica").fontSize(7.5).fillColor("#B8B3AE")
+    .text("Faculty of Human Design", M + 8, FY, { width: TW - 8, align: "right" });
+}
+
+// ─── MAIN EXPORT ─────────────────────────────────────────────────────────────
 export async function generatePDF({ order, sections }) {
-  const doc = React.createElement(ReportDocument, { order, sections });
-  return renderToBuffer(doc);
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({
+      size: "A4",
+      autoFirstPage: true,
+      margins: { top: 0, bottom: 0, left: 0, right: 0 },
+      info: {
+        Title: order.report_title || "Rapport",
+        Author: "Faculty of Human Design",
+        Subject: `Persoonlijk rapport voor ${order.customer_name || ""}`,
+      },
+    });
+
+    const chunks = [];
+    doc.on("data", (c) => chunks.push(c));
+    doc.on("end", () => resolve(Buffer.concat(chunks)));
+    doc.on("error", reject);
+
+    // Cover
+    drawCover(doc, order, sections);
+
+    // Section pages
+    sections.forEach((section, idx) => {
+      doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
+      drawSectionHeader(doc, section, idx);
+      let y = doc.y + 14;
+
+      const paras = (section.text || "").split(/\n\n+/).filter((p) => p.trim());
+      for (const para of paras) {
+        const h = doc.heightOfString(para.trim(), { width: TW - 8, lineGap: 3 });
+        if (y + h > FY - 20) {
+          drawFooter(doc, order);
+          doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
+          doc.rect(0, 0, W, 4).fill("#1A1715");
+          y = 28;
+        }
+        doc.font("Helvetica").fontSize(10.5).fillColor("#2A2820")
+          .text(para.trim(), M + 8, y, { width: TW - 8, lineGap: 3 });
+        y = doc.y + 14;
+      }
+      drawFooter(doc, order);
+    });
+
+    doc.end();
+  });
 }
