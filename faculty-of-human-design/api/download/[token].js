@@ -41,6 +41,7 @@ export default async function handler(req, res) {
 
   // HEAD request: just confirm the token is valid, don't stream the file
   if (req.method === "HEAD") {
+    res.setHeader("X-FHD-Status", "ready");
     return res.status(200).end();
   }
 

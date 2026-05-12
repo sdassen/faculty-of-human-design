@@ -3154,9 +3154,9 @@ function DownloadPage({token}){
     // Use HEAD to check token validity without downloading the PDF
     fetch("/api/download/"+token,{method:"HEAD"})
       .then(r=>{
-        if(r.ok||r.status===200){setStatus("ready");}
-        else if(r.status===404){setStatus("notfound");}
+        if(r.status===404){setStatus("notfound");}
         else if(r.status===410){setStatus("expired");}
+        else if(r.ok&&r.headers.get("x-fhd-status")==="ready"){setStatus("ready");}
         else{setStatus("error");}
       })
       .catch(()=>setStatus("error"));
@@ -3179,6 +3179,9 @@ function DownloadPage({token}){
             </p>
             <a
               href={"/api/download/"+token}
+              download
+              target="_blank"
+              rel="noreferrer"
               className="btn btn-primary btn-lg"
               style={{display:"inline-block",marginBottom:20,textDecoration:"none"}}
             >
