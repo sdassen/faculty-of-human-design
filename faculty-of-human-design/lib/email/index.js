@@ -7,23 +7,27 @@ const FROM = "Faculty of Human Design <noreply@facultyhd.com>";
 // ─── CONFIRMATION EMAIL ───────────────────────────────────────────────────────
 // Sent immediately after payment — no download link yet
 export async function sendConfirmationEmail({ to, name, reportTitle }) {
-  return resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: FROM,
     to,
     subject: `Bevestiging: ${reportTitle} — Faculty of Human Design`,
     html: confirmationHtml({ name, reportTitle }),
   });
+  if (error) throw new Error(`Resend fout (bevestiging): ${error.message}`);
+  return data;
 }
 
 // ─── DELIVERY EMAIL ───────────────────────────────────────────────────────────
 // Sent ~20h later with the download link
 export async function sendDeliveryEmail({ to, name, reportTitle, downloadUrl }) {
-  return resend.emails.send({
+  const { data, error } = await resend.emails.send({
     from: FROM,
     to,
     subject: `Je ${reportTitle} is klaar — Faculty of Human Design`,
     html: deliveryHtml({ name, reportTitle, downloadUrl }),
   });
+  if (error) throw new Error(`Resend fout (levering): ${error.message}`);
+  return data;
 }
 
 // ─── TEMPLATES ────────────────────────────────────────────────────────────────
