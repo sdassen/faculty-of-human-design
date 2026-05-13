@@ -1550,7 +1550,7 @@ function TrustStrip({light}){
   const col=light?"rgba(255,255,255,.5)":"var(--text-muted)";
   return(
     <div className="trust-strip">
-      {[["Veilige betaling"],["Persoonlijke PDF"],["Direct beschikbaar"],["Geen generieke profielen"],["Nederlandstalig"]].map(([txt])=>(
+      {[["Veilige betaling"],["Persoonlijke PDF"],["Bezorgd binnen 1 werkdag"],["Geen generieke profielen"],["Nederlandstalig"]].map(([txt])=>(
         <div key={txt} className="trust-item" style={{color:col}}><span style={{color:light?"rgba(201,168,92,.55)":"var(--gold)",fontSize:".55rem"}}>✦</span><span>{txt}</span></div>
       ))}
     </div>
@@ -1703,16 +1703,57 @@ function ReportForm({rpt,onDone,postPayment}){
     track("checkout_started",{report:rpt.id,price:rpt.priceNum});
     const hdChart=(!isNum&&!isHoro)?chart:null;
     const chartContext=buildPrompt(hdChart,form,rpt).split("\n\n")[0];
-    const SYSTEM="Je bent een senior analist van de Faculty of Human Design op Ibiza. Schrijf nauwkeurige, diepgaande rapporten in het Nederlands. Schrijf vanuit het instituut. Geen bulletpoints, geen headers in de tekst — alleen alineas. Minimaal 900 woorden per sectie.";
+    const SYSTEM=`Je bent een senior analist van de Faculty of Human Design op Ibiza. Je schrijft diepgaande, gepersonaliseerde rapporten in het Nederlands.
+
+STEM & STIJL:
+- Spreek de lezer altijd aan met "je" en "jouw" — nooit "u" of "uw", nooit wisselen.
+- Gebruik de voornaam van de klant maximaal één keer per sectie.
+- Toon: rustig, premium, warm-spiritueel, precies en betrouwbaar. Geen clichés, geen superlatieven.
+- Begin elke sectie direct met relevantie — verboden openers: "Het is belangrijk om...", "In de hedendaagse samenleving...", "Laat ons eerst...".
+- Korte zinnen; liever meer alinea's dan lange blokken.
+
+INHOUD:
+- Veranker elke alinea in de chartdata: type, strategie, autoriteit, profiel, centra, kanalen, poorten.
+- Geen algemene psychologie zonder koppeling aan dit specifieke ontwerp.
+- Geen biografische aannames — alleen patronen als werk-hypotheses.
+
+STRUCTUUR — elke sectie volgt exact dit format:
+
+In jouw chart:
+• [3–5 concrete feiten specifiek voor DEZE chart]
+
+[Kernuitleg: 3–5 subparagrafen met subkopjes, max ~800 woorden, verankerd in chartdata]
+
+Valkuilen:
+• [3 concrete bullets]
+• [...]
+• [...]
+
+Praktijk:
+• [3 uitvoerbare bullets]
+• [...]
+• [...]
+
+Deze week:
+• [3 tijdgebonden micro-acties]
+• [...]
+• [...]
+
+Reflectievragen:
+1. [Vraag]
+2. [Vraag]
+3. [Vraag]
+
+Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de tekst.`;
     let allText="";
     try{
       for(let i=0;i<sections.length;i++){
         const sec=sections[i];
         setLs(Math.min(i,LSTEPS.length-1));setPr(Math.round((i/sections.length)*95));
-        const prompt=chartContext+"\n\nSchrijf uitsluitend sectie '"+sec+"' van het rapport voor "+form.name+". Minimaal 900 woorden, in alineas, persoonlijk en concreet.";
+        const prompt=chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+form.name+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
         const res=await fetch("/api/generate-report",{
           method:"POST",headers:{"Content-Type":"application/json"},
-          body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:SYSTEM,
+          body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2400,system:SYSTEM,
             messages:[{role:"user",content:prompt}]})
         });
         const data=await res.json();
@@ -1741,7 +1782,7 @@ function ReportForm({rpt,onDone,postPayment}){
         ))}
       </div>
       <div className="loading-bar-wrap"><div className="loading-bar-fill" style={{width:pr+"%"}}/></div>
-      <p style={{marginTop:18,fontSize:".72rem",color:"rgba(255,255,255,.15)",letterSpacing:".1em"}}>Dit duurt 3-4 minuten</p>
+      <p style={{marginTop:18,fontSize:".72rem",color:"rgba(255,255,255,.15)",letterSpacing:".1em"}}>Bezorgd per e-mail binnen 1 werkdag</p>
     </div>
   );
 
@@ -1919,7 +1960,7 @@ function ReportForm({rpt,onDone,postPayment}){
             )}
             <div className="order-block" style={{marginTop:24}}>
               <div className="order-block-title">Stap 3 — Ontvang je gepersonaliseerde digitale blauwdruk</div>
-              <div className="order-block-sub">Chart berekend. Je blauwdruk bevat {rpt.pages} pagina's diepgaande persoonlijke analyse — op maat samengesteld en direct beschikbaar als PDF.</div>
+              <div className="order-block-sub">Chart berekend. Je blauwdruk bevat {rpt.pages} pagina's diepgaande persoonlijke analyse — op maat samengesteld en bezorgd per e-mail binnen 1 werkdag.</div>
               <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>Blauwdruk bestellen — {rpt.price}</button>
               <div style={{marginTop:10}}><TrustStrip light/></div>
             </div>
@@ -1975,7 +2016,7 @@ function HomePage({go}){
             <div className="hero-trust">
               {[
                 "Veilige betaling",
-                "Persoonlijke PDF · direct beschikbaar",
+                "Persoonlijke PDF · bezorgd binnen 1 werkdag",
                 "Swiss Ephemeris — planeetposities tot op de graad",
                 "Opgericht 2014 · Ibiza",
               ].map(t=>(
@@ -2053,7 +2094,7 @@ function HomePage({go}){
             <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
               Blauwdruk bestellen — €75
             </button>
-            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>40+ paginas · Direct als PDF</span>
+            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>40+ pagina's · Bezorgd binnen 1 werkdag</span>
           </div>
         </div>
         <div className="feature-image-wrap ph">
@@ -2063,7 +2104,7 @@ function HomePage({go}){
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
               <div>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"2.4rem",fontWeight:300,color:"white",lineHeight:1}}>€75</div>
-                <div style={{fontSize:".62rem",color:"rgba(255,255,255,.4)",marginTop:4,textTransform:"uppercase",letterSpacing:".08em"}}>Eenmalig · Direct als PDF</div>
+                <div style={{fontSize:".62rem",color:"rgba(255,255,255,.4)",marginTop:4,textTransform:"uppercase",letterSpacing:".08em"}}>Eenmalig · Binnen 1 werkdag</div>
               </div>
               <div style={{textAlign:"right"}}>
                 <div style={{fontSize:".6rem",fontWeight:600,color:"rgba(201,168,92,.8)",textTransform:"uppercase",letterSpacing:".1em"}}>40+ paginas</div>
@@ -2146,7 +2187,7 @@ function HomePage({go}){
           <div style={{display:"flex",flexDirection:"column",gap:28,maxWidth:620,margin:"0 auto"}}>
             <StepCard num="1" title="Voer je geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Je chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
             <StepCard num="2" title="Bekijk je chart gratis" desc="Zie direct je Type, Autoriteit, Profiel en gedefinieerde centra. Volledig gratis, zonder betaling."/>
-            <StepCard num="3" title="Ontvang je gepersonaliseerde digitale blauwdruk" desc="Na betaling ontvang je een gepersonaliseerde digitale blauwdruk van 40+ pagina's — diepgaand, persoonlijk en direct beschikbaar als PDF."/>
+            <StepCard num="3" title="Ontvang je gepersonaliseerde digitale blauwdruk" desc="Na betaling ontvang je een gepersonaliseerde digitale blauwdruk van 40+ pagina's — diepgaand, persoonlijk en bezorgd per e-mail binnen 1 werkdag."/>
           </div>
         </div>
       </section>
@@ -2237,7 +2278,7 @@ function HomePage({go}){
         <div style={{display:"flex",gap:10,alignItems:"center",justifyContent:"space-between"}}>
           <div>
             <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>Ontdek je Human Design</div>
-            <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>Vanaf €45 · Direct als PDF</div>
+            <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>Vanaf €45 · Bezorgd binnen 1 werkdag</div>
           </div>
           <button className="btn btn-primary" style={{flexShrink:0,whiteSpace:"nowrap"}} onClick={()=>{track("sticky_cta_click",{});go("rapporten");}}>Start nu →</button>
         </div>
@@ -2648,7 +2689,7 @@ function RapportenPage({go}){
   const sub=REPORTS.find(r=>r.id==="maandelijks");
   useSEO({
     title:"Human Design Rapporten — Kies je persoonlijke analyse",
-    description:"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk, directe PDF. Vanaf €45.",
+    description:"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
     canonical:SITE+"/#rapporten",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
@@ -2728,10 +2769,10 @@ function RapportenPage({go}){
 
 function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
-  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software. De blauwdruk is gebaseerd op je exacte geboortedata."],["Is de blauwdruk echt persoonlijk?","Je gepersonaliseerde digitale blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],["In welk format ontvang ik mijn blauwdruk?","Direct als PDF via de browser — druk op of sla op voor je archief. De digitale blauwdruk is meteen beschikbaar."],["Kan ik de blauwdruk meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
+  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software. De blauwdruk is gebaseerd op je exacte geboortedata."],["Is de blauwdruk echt persoonlijk?","Je gepersonaliseerde digitale blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],["In welk format ontvang ik mijn blauwdruk?","Je ontvangt de blauwdruk als PDF per e-mail — bewaar hem in je archief of print hem uit. Bezorgd binnen 1 werkdag na betaling."],["Kan ik de blauwdruk meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
   useSEO({
     title:rpt.title+" — "+rpt.outcome,
-    description:rpt.title+" van Faculty of Human Design. "+rpt.intro.slice(0,160)+" "+rpt.pages+" pagina's. Direct als PDF. "+rpt.price+".",
+    description:rpt.title+" van Faculty of Human Design. "+rpt.intro.slice(0,160)+" "+rpt.pages+" pagina's. Bezorgd per e-mail binnen 1 werkdag. "+rpt.price+".",
     canonical:SITE+"/#rapport-"+rpt.id,
     jsonLd:{
       "@graph":[
@@ -2764,7 +2805,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
             <div className="price-box-amount">{rpt.price}</div>
             <div className="price-box-period">{rpt.sub}</div>
             <div style={{display:"flex",flexDirection:"column",gap:7,margin:"14px 0 20px",textAlign:"left"}}>
-              {[["Chart gratis berekend","Betaal pas na het zien van je chart"],["Direct als PDF","Klaar in 3-4 minuten"],["Persoonlijk","Geen generieke profielen"]].map(([t,d])=>(
+              {[["Chart gratis berekend","Betaal pas na het zien van je chart"],["Bezorgd per e-mail","Binnen 1 werkdag"],["Persoonlijk","Geen generieke profielen"]].map(([t,d])=>(
                 <div key={t} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
                   <span style={{color:"rgba(201,168,92,.7)",fontSize:".55rem",flexShrink:0,marginTop:3}}>✦</span>
                   <div>
@@ -2785,7 +2826,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       {/* ── SOCIAL PROOF BAR ─ immediately below hero, above the fold on mobile ── */}
       <div className="stat-row" role="region" aria-label="Betrouwbaarheidsindicatoren">
         <div className="stat-row-inner">
-          {[["2.400+","Blauwdrukken uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["3–4 min","Klaar als PDF"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
+          {[["2.400+","Blauwdrukken uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["1 werkdag","Bezorgd per e-mail"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
             <div key={l} className="stat-row-item">
               <div className="stat-row-n" style={{fontSize:"1.5rem"}}>{n}</div>
               <div className="stat-row-l">{l}</div>
@@ -2808,7 +2849,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
                 <div className="label" style={{marginBottom:14}}>Je gepersonaliseerde blauwdruk</div>
                 <div className="grid-2" style={{gap:12}}>
-                  {[["Omvang",rpt.pages+" pagina's"],["Gereed in","3-4 minuten"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]].map(([l,v])=>(
+                  {[["Omvang",rpt.pages+" pagina's"],["Levering","Binnen 1 werkdag"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]].map(([l,v])=>(
                     <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
                   ))}
                 </div>
@@ -3652,7 +3693,7 @@ export default function App(){
         try{
           const res=await fetch("/api/generate-report",{
             method:"POST",headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1500,system:SYSTEM,
+            body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2400,system:SYSTEM,
               messages:[{role:"user",content:prompt}]})
           });
           if(!res.ok){const err=await res.text();console.error("API error:",res.status,err);retries--;continue;}

@@ -69,58 +69,113 @@ function calculateDeliveryDate(paidAtIso) {
 }
 
 // ─── AI TEXT GENERATION ───────────────────────────────────────────────────────
-const SYSTEM_PROMPT =
-  "Je bent een senior analist van de Faculty of Human Design op Ibiza. " +
-  "Schrijf nauwkeurige, diepgaande rapporten in het Nederlands. " +
-  "Schrijf vanuit het instituut. " +
-  "Geen bulletpoints, geen headers in de tekst — alleen alinea's. " +
-  "Minimaal 900 woorden per sectie.";
+const SYSTEM_PROMPT = `Je bent een senior analist van de Faculty of Human Design op Ibiza. Je schrijft diepgaande, gepersonaliseerde rapporten in het Nederlands voor betalende klanten.
+
+STEM & STIJL:
+- Spreek de lezer altijd aan met "je" en "jouw" — nooit "u" of "uw", nooit wisselen binnen één rapport.
+- Gebruik de voornaam van de klant maximaal één keer per sectie.
+- Toon: rustig, premium, warm-spiritueel, precies en betrouwbaar. Geen zweverige clichés, geen overdreven superlatieven, geen sensatie.
+- Begin elke sectie direct met relevantie voor de lezer — vermijd openers als "Het is belangrijk om...", "In de hedendaagse samenleving...", "Laat ons eerst...", "Het is van cruciaal belang...".
+- Houd zinnen beknopt; liever meerdere korte alinea's dan lange blokken.
+
+INHOUD:
+- Veranker elke alinea in de concrete chartdata: noem type, strategie, autoriteit, profiel, gedefinieerde/open centra, kanalen en poorten waar relevant.
+- Geen algemene psychologie of vage uitspraken zonder directe koppeling aan dit specifieke ontwerp.
+- Vermijd biografische aannames ("je hebt vast...") — beschrijf alleen patronen als werk-hypotheses vanuit de chart.
+- Noem de Strategie van het type slechts één keer uitgebreid (in de Type-sectie); verwijs daarna alleen terug.
+
+TERMINOLOGIE:
+- Gebruik consistente Nederlandse HD-termen. Engelse term maximaal één keer tussen haakjes bij introductie, daarna alleen Nederlands.
+- Kies één label per centrum en houd dat vast (bijv. altijd "Sacraalcentrum", nooit afwisselend "Sacral"/"Sacraal").
+
+STRUCTUUR — elke sectie volgt exact dit format (gebruik deze exacte labels als kopjes):
+
+In jouw chart:
+• [3–5 concrete feiten specifiek voor DEZE chart: getallen, poorten, centra, kanalen]
+
+[Kernuitleg: 3–5 korte subparagrafen met subkopjes. Elke paragraaf verankerd in chartdata. Max ~800 woorden totaal.]
+
+Valkuilen:
+• [3 bullets — operationeel, concreet]
+• [...]
+• [...]
+
+Praktijk:
+• [3 bullets — concrete oefening of antidote, vandaag uitvoerbaar]
+• [...]
+• [...]
+
+Deze week:
+• [3 micro-acties — extreem concreet, tijdgebonden, max één zin per actie]
+• [...]
+• [...]
+
+Reflectievragen:
+1. [Vraag]
+2. [Vraag]
+3. [Vraag]
+
+AFSLUITING:
+- Sluit de kernuitleg af met een volledige, afgeronde zin — geen afgekapte regels.
+- De Slotanalyse synthethiseert de rode draad van het rapport; herhaal geen kanaalbeschrijvingen die al eerder staan.`;
 
 async function generateSectionText(sectionTitle, order) {
-  const { birth_data, report_title, customer_name, report_id } = order;
+  const { birth_data, report_title, customer_name } = order;
   const bd = birth_data || {};
-
-  // Build context paragraph
-  let context = `Rapport: ${report_title}\nKlant: ${customer_name}\n`;
-  if (bd.day) {
-    context += `Geboortedatum: ${bd.day}-${bd.month}-${bd.year}\n`;
-  }
-  if (bd.hour !== undefined) {
-    context += `Geboortetijd: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}\n`;
-  }
-  if (bd.place) context += `Geboorteplaats: ${bd.place}\n`;
-
-  // Add chart data to context
   const chart = bd.chart || {};
-  if (chart.type)     context += `HD Type: ${chart.type}\n`;
-  if (chart.strat)    context += `Strategie: ${chart.strat}\n`;
-  if (chart.auth)     context += `Autoriteit: ${chart.auth}\n`;
-  if (chart.profile)  context += `Profiel: ${chart.profile}\n`;
-  if (chart.sig)      context += `Signatuur: ${chart.sig}\n`;
-  if (chart.notSelf)  context += `Not-Self: ${chart.notSelf}\n`;
-  if (chart.cross)    context += `Inkarnatie-Kruis: Poort ${chart.cross}\n`;
-  if (chart.definedCenters?.length) {
-    context += `Gedefinieerde centra: ${chart.definedCenters.join(", ")}\n`;
-  }
-  if (chart.channels?.length) {
-    context += `Actieve kanalen: ${chart.channels.map((c) => `${c.g1}-${c.g2}`).join(", ")}\n`;
-  }
-  if (chart.lp)        context += `Levenspad: ${chart.lp}\n`;
-  if (chart.exp)       context += `Uitdrukking: ${chart.exp}\n`;
-  if (chart.sun_sign)  context += `Zonneteken: ${chart.sun_sign}\n`;
 
-  // Add partner data if present
+  // ── Chart context ────────────────────────────────────────────────────────
+  const lines = [
+    `Rapport: ${report_title}`,
+    `Klant: ${customer_name}`,
+  ];
+  if (bd.day)           lines.push(`Geboortedatum: ${bd.day}-${bd.month}-${bd.year}`);
+  if (bd.hour != null)  lines.push(`Geboortetijd: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
+  if (bd.place)         lines.push(`Geboorteplaats: ${bd.place}`);
+
+  if (chart.type)    lines.push(`HD Type: ${chart.type}`);
+  if (chart.strat)   lines.push(`Strategie: ${chart.strat}`);
+  if (chart.auth)    lines.push(`Autoriteit: ${chart.auth}`);
+  if (chart.profile) lines.push(`Profiel: ${chart.profile}`);
+  if (chart.sig)     lines.push(`Signatuur (Signature): ${chart.sig}`);
+  if (chart.notSelf) lines.push(`Not-Self thema: ${chart.notSelf}`);
+  if (chart.cross)   lines.push(`Inkarnatie-Kruis: Poort ${chart.cross}`);
+
+  if (chart.definedCenters?.length)
+    lines.push(`Gedefinieerde centra: ${chart.definedCenters.join(", ")}`);
+  if (chart.openCenters?.length)
+    lines.push(`Open centra: ${chart.openCenters.join(", ")}`);
+  if (chart.channels?.length)
+    lines.push(`Actieve kanalen: ${chart.channels.map((c) => `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`).join(", ")}`);
+  if (chart.allGates?.length)
+    lines.push(`Alle actieve poorten: ${chart.allGates.join(", ")}`);
+
+  if (chart.lp)       lines.push(`Levenspadgetal: ${chart.lp}`);
+  if (chart.exp)      lines.push(`Uitdrukkingsgetal: ${chart.exp}`);
+  if (chart.sun_sign) lines.push(`Zonneteken: ${chart.sun_sign}`);
+
   if (order.partner_birth_data) {
     const p = order.partner_birth_data;
-    context += `\nPartner: ${p.name || "Partner"}, geboren ${p.day}-${p.month}-${p.year}`;
-    if (p.chart?.type) context += `, HD Type: ${p.chart.type}`;
-    context += "\n";
+    const pc = p.chart || {};
+    lines.push(`\nPartner/tweede persoon: ${p.name || "Partner"}, geboren ${p.day}-${p.month}-${p.year}`);
+    if (pc.type)    lines.push(`Partner HD Type: ${pc.type}`);
+    if (pc.auth)    lines.push(`Partner Autoriteit: ${pc.auth}`);
+    if (pc.profile) lines.push(`Partner Profiel: ${pc.profile}`);
+    if (pc.definedCenters?.length) lines.push(`Partner gedefinieerde centra: ${pc.definedCenters.join(", ")}`);
   }
 
-  const prompt =
-    context +
-    `\nSchrijf uitsluitend sectie '${sectionTitle}' van het rapport voor ${customer_name}. ` +
-    "Minimaal 900 woorden, in alinea's, persoonlijk en concreet. Geen sectietitel in de tekst.";
+  const context = lines.join("\n");
+
+  const prompt = `${context}
+
+Schrijf sectie "${sectionTitle}" voor ${customer_name}.
+
+Gebruik exact het voorgeschreven format uit je instructies:
+1. Begin met "In jouw chart:" gevolgd door 3–5 concrete bullets met specifieke data uit bovenstaande chart.
+2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).
+3. Eindig met de vier blokken: "Valkuilen:", "Praktijk:", "Deze week:", "Reflectievragen:" — elk met exact 3 items.
+
+Geen sectietitel in de tekst. Sluit de kernuitleg af met een volledige, afgeronde zin.`;
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -131,7 +186,7 @@ async function generateSectionText(sectionTitle, order) {
     },
     body: JSON.stringify({
       model: "claude-sonnet-4-20250514",
-      max_tokens: 1800,
+      max_tokens: 2400,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: prompt }],
     }),
