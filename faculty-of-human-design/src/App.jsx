@@ -1253,6 +1253,167 @@ function Bodygraph({chart,name}){
   );
 }
 
+// ─── COMPOSITE BODYGRAPH (Relatie / Kind) ─────────────────────────────────────
+function CompositeBodygraph({chart1,chart2,name1,name2}){
+  const[hov,setHov]=useState(null);
+  const def1=new Set(chart1?.definedCenters||[]);
+  const def2=new Set(chart2?.definedCenters||[]);
+  const gates1=new Set(chart1?.allGates||[]);
+  const gates2=new Set(chart2?.allGates||[]);
+
+  const C1="#1C2E4A",C1L="#2d5080";   // person 1 — navy
+  const C2="#7B3664",C2L="#a4527e";   // person 2 — plum
+  const CE="#C9A85C",CEL="#E8CB7A";   // electromagnetic / both — gold
+
+  function chType(g1,g2){
+    const p1g1=gates1.has(g1),p1g2=gates1.has(g2);
+    const p2g1=gates2.has(g1),p2g2=gates2.has(g2);
+    const p1Full=p1g1&&p1g2,p2Full=p2g1&&p2g2;
+    const em=!p1Full&&!p2Full&&((p1g1&&p2g2)||(p2g1&&p1g2));
+    if(p1Full&&p2Full)return"both";
+    if(p1Full)return"p1";
+    if(p2Full)return"p2";
+    if(em)return"em";
+    return"inactive";
+  }
+
+  function pathType(pathKey){
+    const[pc1,pc2]=pathKey.split("-");
+    const types=new Set();
+    for(const[k,[cc1,cc2]]of Object.entries(CH)){
+      if(!((cc1===pc1&&cc2===pc2)||(cc1===pc2&&cc2===pc1)))continue;
+      const[g1s,g2s]=k.split("-");
+      const t=chType(Number(g1s),Number(g2s));
+      if(t!=="inactive")types.add(t);
+    }
+    if(types.has("both")||( types.has("p1")&&types.has("p2")))return"both";
+    if(types.has("em"))return"em";
+    if(types.has("p1"))return"p1";
+    if(types.has("p2"))return"p2";
+    return"inactive";
+  }
+
+  const activeChs=[];
+  for(const[k,[cc1,cc2]]of Object.entries(CH)){
+    const[g1s,g2s]=k.split("-");
+    const g1=Number(g1s),g2=Number(g2s);
+    const t=chType(g1,g2);
+    if(t!=="inactive")activeChs.push({g1,g2,c1:cc1,c2:cc2,type:t});
+  }
+
+  function centerState(cn){
+    const d1=def1.has(cn),d2=def2.has(cn);
+    if(d1&&d2)return"both";if(d1)return"p1";if(d2)return"p2";return"open";
+  }
+  function strokeColor(t){if(t==="p1")return C1;if(t==="p2")return C2;return CE;}
+  function centerFill(s){if(s==="both")return"url(#cg-em)";if(s==="p1")return"url(#cg1)";if(s==="p2")return"url(#cg2)";return"white";}
+  function centerStrokeC(s){if(s==="both")return CE;if(s==="p1")return C1;if(s==="p2")return C2;return"#D0C8BE";}
+
+  const n1=name1||"Persoon 1",n2=name2||"Persoon 2";
+
+  return(
+    <div>
+      {/* Legend */}
+      <div style={{display:"flex",justifyContent:"center",gap:20,marginBottom:12,flexWrap:"wrap"}}>
+        {[{c:C1,l:n1},{c:C2,l:n2},{c:CE,l:"Elektromagnetisch / beide"}].map(({c,l})=>(
+          <div key={l} style={{display:"flex",alignItems:"center",gap:6,fontSize:".75rem",fontFamily:"var(--font-sans)"}}>
+            <div style={{width:16,height:4,borderRadius:2,background:c}}/>
+            <span style={{color:"var(--text-muted)"}}>{l}</span>
+          </div>
+        ))}
+      </div>
+      <svg viewBox="0 0 640 620" style={{width:"100%",maxWidth:500,display:"block",margin:"0 auto",borderRadius:10}}>
+        <defs>
+          <linearGradient id="cg1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={C1L}/><stop offset="100%" stopColor={C1}/>
+          </linearGradient>
+          <linearGradient id="cg2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={C2L}/><stop offset="100%" stopColor={C2}/>
+          </linearGradient>
+          <linearGradient id="cg-em" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor={CEL}/><stop offset="100%" stopColor={CE}/>
+          </linearGradient>
+          <filter id="ds2" x="-20%" y="-20%" width="140%" height="140%">
+            <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor="#000" floodOpacity="0.15"/>
+          </filter>
+        </defs>
+        <rect width="640" height="620" fill="none" rx="10"/>
+        <line x1="0" y1="580" x2="640" y2="580" stroke="rgba(10,26,47,.07)" strokeWidth="1"/>
+
+        {/* Inactive channels */}
+        {Object.entries(CPATHS).filter(([k])=>pathType(k)==="inactive").map(([k,p])=>(
+          <path key={k} d={p} fill="none" stroke="#CEC8BF" strokeWidth="1.5" strokeDasharray="3,6" strokeLinecap="round" opacity="0.45"/>
+        ))}
+
+        {/* Active channels */}
+        {Object.entries(CPATHS).filter(([k])=>pathType(k)!=="inactive").map(([k,p])=>{
+          const sc=strokeColor(pathType(k));
+          return(
+            <g key={k}>
+              <path d={p} fill="none" stroke={sc} strokeWidth="9" strokeLinecap="round" opacity="0.12"/>
+              <path d={p} fill="none" stroke={sc} strokeWidth="3.5" strokeLinecap="round" opacity="0.9"/>
+            </g>
+          );
+        })}
+
+        {/* Gate badges */}
+        {activeChs.map((ch,i)=>{
+          const p1=CP[ch.c1],p2=CP[ch.c2];
+          if(!p1||!p2)return null;
+          const dx=p2.cx-p1.cx,dy=p2.cy-p1.cy,dist=Math.sqrt(dx*dx+dy*dy)||1;
+          const off=Math.min(58,dist*0.38);
+          const g1x=p1.cx+dx/dist*off,g1y=p1.cy+dy/dist*off;
+          const g2x=p2.cx-dx/dist*off,g2y=p2.cy-dy/dist*off;
+          const sc=strokeColor(ch.type);
+          return(
+            <g key={i}>
+              <circle cx={g1x} cy={g1y} r="9" fill={sc} opacity="0.9"/>
+              <text x={g1x} y={g1y} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="7.5" fontWeight="600" fill="white">{ch.g1}</text>
+              <circle cx={g2x} cy={g2y} r="9" fill={sc} opacity="0.9"/>
+              <text x={g2x} y={g2y} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="7.5" fontWeight="600" fill="white">{ch.g2}</text>
+            </g>
+          );
+        })}
+
+        {/* Centers */}
+        {Object.entries(CP).map(([cn,pos])=>{
+          const state=centerState(cn);
+          const d=state!=="open",h=hov===cn;
+          return(
+            <g key={cn} onMouseEnter={()=>setHov(cn)} onMouseLeave={()=>setHov(null)} style={{cursor:"default"}}>
+              {h&&<path d={cpth(pos)} fill="none" stroke={d?CE:"#A8A29E"} strokeWidth="2.5" opacity="0.6"/>}
+              <path d={cpth(pos)} fill={centerFill(state)} stroke={centerStrokeC(state)} strokeWidth={d?2:1.5} filter={d?"url(#ds2)":undefined} opacity={d?1:0.92}/>
+              <text x={pos.cx} y={pos.cy} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize={d?"8.5":"7.5"} fontWeight={d?"600":"400"} letterSpacing="0.7" fill={d?"#fff":"#B8B0A6"}>{pos.lb}</text>
+            </g>
+          );
+        })}
+
+        {/* Tooltip */}
+        {hov&&(()=>{
+          const pos=CP[hov],state=centerState(hov);
+          const stateNl=state==="open"?"open":state==="both"?"beiden gedefinieerd":state==="p1"?n1+" — gedefinieerd":n2+" — gedefinieerd";
+          const label=CENTER_NL[hov]+" — "+stateNl;
+          const tw=label.length*5.6+16;
+          const tx=Math.min(Math.max(pos.cx-tw/2,8),632-tw);
+          const ty=pos.cy>300?pos.cy-64:pos.cy+56;
+          const bgC=state==="open"?"#555":state==="p1"?C1:state==="p2"?C2:CE;
+          return(
+            <g pointerEvents="none">
+              <rect x={tx} y={ty} width={tw} height={26} rx="5" fill={bgC} opacity="0.93"/>
+              <text x={tx+tw/2} y={ty+14} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="9.5" fill="white">{label}</text>
+            </g>
+          );
+        })()}
+
+        {/* Footer */}
+        <text x="160" y="598" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill={C1} fontStyle="italic">{n1}</text>
+        <text x="480" y="598" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill={C2} fontStyle="italic">{n2}</text>
+        <text x="320" y="613" textAnchor="middle" fontFamily="Jost,sans-serif" fontSize="7" letterSpacing="1.5" fill="rgba(10,26,47,.25)">GECOMBINEERDE CHART</text>
+      </svg>
+    </div>
+  );
+}
+
 // ─── CHART DASHBOARD ──────────────────────────────────────────────────────────
 const TYPE_DESC={
   "Generator":"Bouwt voort op sacrale energie — duurzame levenspotentie",
@@ -1639,8 +1800,8 @@ function ReportForm({rpt,onDone,postPayment}){
         <div className="section bg-white" id="chart-res">
           <div className="container-sm">
             <div className="label" style={{marginBottom:8}}>Stap 2 — Je chart</div>
-            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Je kerngetallen":chart.isHoroscoop?"Je planeetstanden":rpt.id.startsWith("relatie_")?"Twee Human Design charts":"Je Human Design chart"}</h2>
-            {/* ── Relatie: twee charts naast elkaar ── */}
+            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Je kerngetallen":chart.isHoroscoop?"Je planeetstanden":(rpt.id.startsWith("relatie_")||rpt.needsChild)?"Gecombineerde Human Design chart":"Je Human Design chart"}</h2>
+            {/* ── Relatie: gecombineerde bodygraph + twee compacte tabellen ── */}
             {rpt.id.startsWith("relatie_")&&(()=>{
               const lbl=rpt.partnerLabel||"Partner";
               const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
@@ -1654,14 +1815,19 @@ function ReportForm({rpt,onDone,postPayment}){
                     <tr><td>Strategie</td><td>{c.strat}</td></tr>
                     <tr><td>Autoriteit</td><td>{c.auth}</td></tr>
                     <tr><td>Profiel</td><td>{c.profile}</td></tr>
-                    <tr><td>Gedefinieerd</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(c2=><span key={c2} className="tag-def">{c2}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
+                    <tr><td>Gedefinieerd</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
                     <tr><td>Poorten</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
                   </tbody></table>
                 </div>
               );
               return(
                 <>
-                  <div className="grid-2" style={{gap:20,marginBottom:16}}>
+                  {c2
+                    ?<CompositeBodygraph chart1={chart} chart2={c2} name1={form.name} name2={form.pname||lbl}/>
+                    :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
+                      <p className="body-sm" style={{color:"var(--text-light)"}}>Vul de gegevens van de {lbl.toLowerCase()} in om de gecombineerde chart te zien</p>
+                    </div>}
+                  <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
                     <HDRow c={chart} name={form.name}/>
                     {c2?<HDRow c={c2} name={form.pname||lbl}/>:
                       <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
@@ -1677,8 +1843,42 @@ function ReportForm({rpt,onDone,postPayment}){
                 </>
               );
             })()}
+            {/* ── Kinderrapport: gecombineerde bodygraph ouder + kind ── */}
+            {rpt.needsChild&&(()=>{
+              const childChart=(form.cday&&form.cmonth&&form.cyear)?calcHD(parseInt(form.cyear),parseInt(form.cmonth),parseInt(form.cday),parseInt(form.chour||"12"),parseInt(form.cminute||"0")):null;
+              const HDRow=({c,name})=>(
+                <div className="chart-result">
+                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>Human Design</div>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{name}</div>
+                  <table className="chart-table"><tbody>
+                    <tr><td>Type</td><td><strong>{c.type}</strong></td></tr>
+                    <tr><td>Strategie</td><td>{c.strat}</td></tr>
+                    <tr><td>Autoriteit</td><td>{c.auth}</td></tr>
+                    <tr><td>Profiel</td><td>{c.profile}</td></tr>
+                    <tr><td>Gedefinieerd</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
+                    <tr><td>Poorten</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
+                  </tbody></table>
+                </div>
+              );
+              return(
+                <>
+                  {childChart
+                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.name} name2={form.cname||"Kind"}/>
+                    :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
+                      <p className="body-sm" style={{color:"var(--text-light)"}}>Vul de gegevens van het kind in om de gecombineerde chart te zien</p>
+                    </div>}
+                  <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
+                    <HDRow c={chart} name={form.name}/>
+                    {childChart?<HDRow c={childChart} name={form.cname||"Kind"}/>:
+                      <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
+                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>Vul de gegevens van het kind in</p>
+                      </div>}
+                  </div>
+                </>
+              );
+            })()}
             {/* ── Standaard HD: premium ChartDashboard ── */}
-            {!rpt.id.startsWith("relatie_")&&!chart.isNumerology&&!chart.isHoroscoop&&(
+            {!rpt.id.startsWith("relatie_")&&!rpt.needsChild&&!chart.isNumerology&&!chart.isHoroscoop&&(
               <ChartDashboard
                 chart={chart}
                 name={form.name}
