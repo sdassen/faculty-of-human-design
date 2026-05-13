@@ -3152,7 +3152,7 @@ function DownloadPage({token}){
 
   useEffect(()=>{
     // Use HEAD to check token validity without downloading the PDF
-    fetch("/api/download/"+token,{method:"HEAD"})
+    fetch("/api/get-download?token="+token,{method:"HEAD"})
       .then(r=>{
         if(r.status===404){setStatus("notfound");}
         else if(r.status===410){setStatus("expired");}
@@ -3178,7 +3178,7 @@ function DownloadPage({token}){
               Klik op de knop hieronder om je persoonlijke rapport te downloaden als PDF.
             </p>
             <a
-              href={"/api/download/"+token}
+              href={"/api/get-download?token="+token}
               download
               target="_blank"
               rel="noreferrer"
