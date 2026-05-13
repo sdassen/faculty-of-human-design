@@ -3509,7 +3509,7 @@ function TermsPage({go}){
         <div style={{maxWidth:760,margin:"0 auto",padding:"0 24px"}}>
 
           <Section title="1. Wie zijn wij">
-            <P>Faculty of Human Design is een zelfstandige aanbieder van gepersonaliseerde digitale rapporten op het gebied van Human Design, Numerologie en Astrologie. Wij zijn gevestigd op Ibiza, Spanje. Voor vragen kun je contact opnemen via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</P>
+            <P>Faculty of Human Design is een zelfstandige aanbieder van gepersonaliseerde digitale rapporten op het gebied van Human Design, Numerologie en Astrologie. Voor vragen kun je contact opnemen via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</P>
           </Section>
 
           <Section title="2. Toepasselijkheid">
