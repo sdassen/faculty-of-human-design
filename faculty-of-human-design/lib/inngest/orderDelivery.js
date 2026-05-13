@@ -77,36 +77,40 @@ STEM & STIJL:
 - Toon: rustig, premium, warm-spiritueel, precies en betrouwbaar. Geen zweverige clichés, geen overdreven superlatieven, geen sensatie.
 - Begin elke sectie direct met relevantie voor de lezer — vermijd openers als "Het is belangrijk om...", "In de hedendaagse samenleving...", "Laat ons eerst...", "Het is van cruciaal belang...".
 - Houd zinnen beknopt; liever meerdere korte alinea's dan lange blokken.
+- GEEN Markdown-opmaak: geen sterretjes (**bold**, *italic*), geen hekjes (# Heading), geen underscores. Schrijf uitsluitend platte tekst en gebruik de structuurlabels hieronder als kopjes.
 
 INHOUD:
 - Veranker elke alinea in de concrete chartdata: noem type, strategie, autoriteit, profiel, gedefinieerde/open centra, kanalen en poorten waar relevant.
 - Geen algemene psychologie of vage uitspraken zonder directe koppeling aan dit specifieke ontwerp.
 - Vermijd biografische aannames ("je hebt vast...") — beschrijf alleen patronen als werk-hypotheses vanuit de chart.
 - Noem de Strategie van het type slechts één keer uitgebreid (in de Type-sectie); verwijs daarna alleen terug.
+- Maancyclus: gebruik altijd exact "28 dagen" (niet "28 of 29", niet "een maandcyclus").
+- Inkarnatie-Kruis: noem het kruis alleen bij de naam die in de chartdata staat; verzin geen alternative namen.
+- Herhaal geen volledige beschrijvingen van kanalen of centra die al in een eerdere sectie zijn behandeld — verwijs alleen terug.
 
 TERMINOLOGIE:
 - Gebruik consistente Nederlandse HD-termen. Engelse term maximaal één keer tussen haakjes bij introductie, daarna alleen Nederlands.
 - Kies één label per centrum en houd dat vast (bijv. altijd "Sacraalcentrum", nooit afwisselend "Sacral"/"Sacraal").
 
-STRUCTUUR — elke sectie volgt exact dit format (gebruik deze exacte labels als kopjes):
+STRUCTUUR — elke sectie volgt exact dit format. Gebruik precies deze labels als kopjes (geen Markdown, geen extra opmaak):
 
 In jouw chart:
 • [3–5 concrete feiten specifiek voor DEZE chart: getallen, poorten, centra, kanalen]
 
-[Kernuitleg: 3–5 korte subparagrafen met subkopjes. Elke paragraaf verankerd in chartdata. Max ~800 woorden totaal.]
+[Kernuitleg: 3–5 korte subparagrafen met subkopjes als platte tekst. Elke paragraaf verankerd in chartdata. Max ~600 woorden totaal — streef naar kwaliteit boven kwantiteit.]
 
 Valkuilen:
-• [3 bullets — operationeel, concreet]
+• [concreet, operationeel — geen algemeenheden]
 • [...]
 • [...]
 
 Praktijk:
-• [3 bullets — concrete oefening of antidote, vandaag uitvoerbaar]
+• [concrete oefening of antidote, vandaag uitvoerbaar]
 • [...]
 • [...]
 
 Deze week:
-• [3 micro-acties — extreem concreet, tijdgebonden, max één zin per actie]
+• [micro-actie — extreem concreet, tijdgebonden, max één zin]
 • [...]
 • [...]
 
@@ -170,12 +174,19 @@ async function generateSectionText(sectionTitle, order) {
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
-Gebruik exact het voorgeschreven format uit je instructies:
-1. Begin met "In jouw chart:" gevolgd door 3–5 concrete bullets met specifieke data uit bovenstaande chart.
-2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).
-3. Eindig met de vier blokken: "Valkuilen:", "Praktijk:", "Deze week:", "Reflectievragen:" — elk met exact 3 items.
+REGELS:
+- Geen sectietitel in de tekst — begin direct met "In jouw chart:"
+- Geen Markdown: geen **, geen *, geen #, geen _
+- Schrijf platte tekst; subkopjes in de kernuitleg zijn gewone korte regels (max 8 woorden, geen punt aan het einde)
+- Maancyclus altijd "28 dagen" (niet "28 of 29")
+- Inkarnatie-Kruis: gebruik alleen de naam uit de chartdata hierboven
 
-Geen sectietitel in de tekst. Sluit de kernuitleg af met een volledige, afgeronde zin.`;
+Gebruik exact het voorgeschreven format:
+1. "In jouw chart:" met 3–5 concrete bullets (• Bullet) met data uit DEZE chart.
+2. Kernuitleg: 3–5 subparagrafen met subkopjes als platte tekst, max ~600 woorden, verankerd in chartdata.
+3. De vier slotblokken: "Valkuilen:" / "Praktijk:" / "Deze week:" / "Reflectievragen:" — elk exact 3 items.
+
+Sluit de kernuitleg af met een volledige, afgeronde zin.`;
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
