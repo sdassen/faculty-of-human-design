@@ -4,6 +4,8 @@ import { put } from "@vercel/blob";
 import { inngest } from "./client.js";
 import { generatePDF } from "../pdf/index.js";
 import { sendConfirmationEmail, sendDeliveryEmail } from "../email/index.js";
+import { getCanonContext } from "../canon/index.js";
+import { scoreSection, MAX_RETRIES } from "./qualityScore.js";
 
 // ─── SUPABASE ─────────────────────────────────────────────────────────────────
 function getSupabase() {
@@ -123,12 +125,12 @@ AFSLUITING:
 - Sluit de kernuitleg af met een volledige, afgeronde zin — geen afgekapte regels.
 - De Slotanalyse synthethiseert de rode draad van het rapport; herhaal geen kanaalbeschrijvingen die al eerder staan.`;
 
-async function generateSectionText(sectionTitle, order) {
+// ─── BUILD CHART CONTEXT ──────────────────────────────────────────────────────
+function buildChartContext(order) {
   const { birth_data, report_title, customer_name } = order;
   const bd = birth_data || {};
   const chart = bd.chart || {};
 
-  // ── Chart context ────────────────────────────────────────────────────────
   const lines = [
     `Rapport: ${report_title}`,
     `Klant: ${customer_name}`,
@@ -141,9 +143,9 @@ async function generateSectionText(sectionTitle, order) {
   if (chart.strat)   lines.push(`Strategie: ${chart.strat}`);
   if (chart.auth)    lines.push(`Autoriteit: ${chart.auth}`);
   if (chart.profile) lines.push(`Profiel: ${chart.profile}`);
-  if (chart.sig)     lines.push(`Signatuur (Signature): ${chart.sig}`);
+  if (chart.sig)     lines.push(`Signatuur: ${chart.sig}`);
   if (chart.notSelf) lines.push(`Not-Self thema: ${chart.notSelf}`);
-  if (chart.cross)   lines.push(`Inkarnatie-Kruis: Poort ${chart.cross}`);
+  if (chart.cross)   lines.push(`Inkarnatie-Kruis poorten: ${chart.cross}`);
 
   if (chart.definedCenters?.length)
     lines.push(`Gedefinieerde centra: ${chart.definedCenters.join(", ")}`);
@@ -168,25 +170,32 @@ async function generateSectionText(sectionTitle, order) {
     if (pc.definedCenters?.length) lines.push(`Partner gedefinieerde centra: ${pc.definedCenters.join(", ")}`);
   }
 
-  const context = lines.join("\n");
+  return lines.join("\n");
+}
 
-  const prompt = `${context}
+// ─── SUMMARIZE PREVIOUS SECTIONS ──────────────────────────────────────────────
+/**
+ * Compact summary of already-written sections so the AI can refer back
+ * instead of repeating. Caps each section at ~300 chars.
+ */
+function previousSectionsSummary(previousSections) {
+  if (!previousSections.length) return null;
+  return previousSections
+    .map((s) => `[${s.title}]\n${(s.text || "").slice(0, 280).trim()}...`)
+    .join("\n\n");
+}
 
-Schrijf sectie "${sectionTitle}" voor ${customer_name}.
-
-REGELS:
-- Geen sectietitel in de tekst — begin direct met "In jouw chart:"
-- Geen Markdown: geen **, geen *, geen #, geen _
-- Schrijf platte tekst; subkopjes in de kernuitleg zijn gewone korte regels (max 8 woorden, geen punt aan het einde)
-- Maancyclus altijd "28 dagen" (niet "28 of 29")
-- Inkarnatie-Kruis: gebruik alleen de naam uit de chartdata hierboven
-
-Gebruik exact het voorgeschreven format:
-1. "In jouw chart:" met 3–5 concrete bullets (• Bullet) met data uit DEZE chart.
-2. Kernuitleg: 3–5 subparagrafen met subkopjes als platte tekst, max ~600 woorden, verankerd in chartdata.
-3. De vier slotblokken: "Valkuilen:" / "Praktijk:" / "Deze week:" / "Reflectievragen:" — elk exact 3 items.
-
-Sluit de kernuitleg af met een volledige, afgeronde zin.`;
+// ─── SINGLE CLAUDE CALL ───────────────────────────────────────────────────────
+async function callClaude(systemPrompt, userPrompt, { thinking = false } = {}) {
+  const body = {
+    model: "claude-sonnet-4-20250514",
+    max_tokens: thinking ? 12000 : 2400,
+    system: systemPrompt,
+    messages: [{ role: "user", content: userPrompt }],
+  };
+  if (thinking) {
+    body.thinking = { type: "enabled", budget_tokens: 6000 };
+  }
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -195,12 +204,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin.`;
       "x-api-key": process.env.ANTHROPIC_API_KEY,
       "anthropic-version": "2023-06-01",
     },
-    body: JSON.stringify({
-      model: "claude-sonnet-4-20250514",
-      max_tokens: 2400,
-      system: SYSTEM_PROMPT,
-      messages: [{ role: "user", content: prompt }],
-    }),
+    body: JSON.stringify(body),
   });
 
   if (!res.ok) {
@@ -209,11 +213,108 @@ Sluit de kernuitleg af met een volledige, afgeronde zin.`;
   }
 
   const data = await res.json();
-  const text = data.content?.find((b) => b.type === "text")?.text || "";
-  if (text.length < 100) {
+  // Skip thinking blocks; return text blocks only
+  const text = data.content?.filter((b) => b.type === "text").map((b) => b.text).join("\n") || "";
+  return text;
+}
+
+// ─── KEY SECTIONS — use Extended Thinking for depth ────────────────────────────
+const DEEP_THINKING_SECTIONS = [
+  /type.*strateg|type.*levensstrategie/i,
+  /autoriteit/i,
+  /inkarnatie|kruis|levensdoel/i,
+  /slotanalyse/i,
+];
+
+function shouldUseDeepThinking(sectionTitle) {
+  return DEEP_THINKING_SECTIONS.some((rx) => rx.test(sectionTitle));
+}
+
+// ─── GENERATE SECTION (with canon, interdep, and retry) ───────────────────────
+async function generateSectionText(sectionTitle, order, previousSections, attempt = 0, lastIssues = []) {
+  const { customer_name, birth_data } = order;
+  const chart = (birth_data || {}).chart || {};
+  const chartCtx = buildChartContext(order);
+
+  // ── Canon injection ──────────────────────────────────────────────────────
+  const canon = getCanonContext(sectionTitle, chart);
+  const canonBlock = canon
+    ? `\n\nCANON REFERENTIE (ground truth — gebruik deze namen en thema's exact, verzin geen alternatieven):\n${canon}`
+    : "";
+
+  // ── Previous sections (avoid repetition) ─────────────────────────────────
+  const prevSummary = previousSectionsSummary(previousSections);
+  const prevBlock = prevSummary
+    ? `\n\nEERDER GESCHREVEN SECTIES (niet herhalen, alleen kort terugverwijzen waar nodig):\n${prevSummary}`
+    : "";
+
+  // ── Retry context ────────────────────────────────────────────────────────
+  const retryBlock = (attempt > 0 && lastIssues.length)
+    ? `\n\nHERSCHRIJVEN — vorige versie miste op:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix deze punten in deze versie.`
+    : "";
+
+  const prompt = `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+
+Schrijf sectie "${sectionTitle}" voor ${customer_name}.
+
+REGELS (strikt):
+- Geen sectietitel in de tekst — begin direct met "In jouw chart:"
+- Geen Markdown: geen **, geen *, geen #, geen _
+- Subkopjes in de kernuitleg zijn korte regels (max 8 woorden, geen punt aan het einde)
+- Maancyclus altijd exact "28 dagen"
+- Inkarnatie-Kruis: gebruik alleen de namen uit de canon-referentie hierboven
+- Veranker ELKE alinea in concrete chartdata uit de chart context
+
+Format:
+1. "In jouw chart:" met 3–5 concrete bullets (• Bullet) met data uit DEZE chart.
+2. Kernuitleg: 3–5 subparagrafen met subkopjes, max ~600 woorden, elke paragraaf verankerd in chartdata.
+3. Vier slotblokken in deze volgorde: "Valkuilen:" / "Praktijk:" / "Deze week:" / "Reflectievragen:" — elk exact 3 items.
+
+Sluit de kernuitleg af met een volledige, afgeronde zin.`;
+
+  const useDeepThinking = shouldUseDeepThinking(sectionTitle);
+  const text = await callClaude(SYSTEM_PROMPT, prompt, { thinking: useDeepThinking });
+
+  if (text.length < 200) {
     throw new Error(`Section text too short (${text.length} chars)`);
   }
   return text;
+}
+
+// ─── GENERATE WITH QUALITY GATE ───────────────────────────────────────────────
+/**
+ * Generate a section + score it + retry up to MAX_RETRIES times if below threshold.
+ * Returns the best version found (highest score), even if all attempts failed.
+ */
+async function generateScoredSection(sectionTitle, order, previousSections) {
+  const chart = (order.birth_data || {}).chart || {};
+  let bestText = "";
+  let bestScore = -1;
+  let lastIssues = [];
+
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    let text;
+    try {
+      text = await generateSectionText(sectionTitle, order, previousSections, attempt, lastIssues);
+    } catch (e) {
+      console.warn(`[gen] "${sectionTitle}" attempt ${attempt} failed: ${e.message}`);
+      continue;
+    }
+
+    const result = await scoreSection(text, sectionTitle, chart);
+    console.log(`[QA] "${sectionTitle}" attempt ${attempt}: score ${result.total}/40 (${result.passed ? "PASS" : "FAIL"})`);
+
+    if (result.total > bestScore) {
+      bestText = text;
+      bestScore = result.total;
+      lastIssues = result.issues;
+    }
+
+    if (result.passed) return bestText;
+  }
+
+  console.warn(`[QA] "${sectionTitle}" used best-of-${MAX_RETRIES + 1} (score ${bestScore}/40)`);
+  return bestText;
 }
 
 // ─── INNGEST FUNCTION ─────────────────────────────────────────────────────────
@@ -263,13 +364,20 @@ export const orderDelivery = inngest.createFunction(
     await step.sleepUntil("labour-illusion-delay", deliveryDate);
 
     // ── Steps 3…N: Generate each section via Claude ────────────────────────
+    // Each section is generated WITH:
+    //   1. Canon ground-truth injection (centers/channels/gates/types/profiles)
+    //   2. Summary of previously written sections (avoids repetition)
+    //   3. Quality scoring + up to 2 retries if score < threshold
+    //   4. Extended thinking for the key analytical sections
     const sections = [];
     const sectionTitles = order.prompt_sections || [];
 
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
+      // Snapshot previous sections to pass as interdependence context
+      const previous = sections.map((s) => ({ title: s.title, text: s.text }));
       const text = await step.run(`generate-section-${i}`, async () => {
-        return generateSectionText(title, order);
+        return generateScoredSection(title, order, previous);
       });
       sections.push({ title, text });
     }
