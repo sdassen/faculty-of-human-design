@@ -6,6 +6,7 @@ import { generatePDF } from "../pdf/index.js";
 import { sendConfirmationEmail, sendDeliveryEmail } from "../email/index.js";
 import { getCanonContext } from "../canon/index.js";
 import { scoreSection, MAX_RETRIES } from "./qualityScore.js";
+import { calcHDServer } from "../hd/calculator.js";
 
 // ─── SUPABASE ─────────────────────────────────────────────────────────────────
 function getSupabase() {
@@ -363,6 +364,38 @@ export const orderDelivery = inngest.createFunction(
     const deliveryDate = calculateDeliveryDate(order.paid_at || order.created_at);
     await step.sleepUntil("labour-illusion-delay", deliveryDate);
 
+    // ── Step 2.5: Recompute chart server-side (accurate astronomy) ────────
+    // The browser-side chart in birth_data.chart is used as a fallback if
+    // server-side calculation fails. Only HD reports get recomputed here.
+    const enrichedOrder = await step.run("recompute-chart", async () => {
+      const bd = order.birth_data || {};
+      const isHDReport = !/horoscoop|numerologie/i.test(order.report_title || "");
+      if (!isHDReport || !bd.day) return order;
+
+      try {
+        const serverChart = calcHDServer({
+          day:    parseInt(bd.day),
+          month:  parseInt(bd.month),
+          year:   parseInt(bd.year),
+          hour:   bd.hour != null ? parseInt(bd.hour) : 12,
+          minute: bd.minute != null ? parseInt(bd.minute) : 0,
+          tz:     bd.tz != null ? parseFloat(bd.tz) : 1, // default Amsterdam
+        });
+        return {
+          ...order,
+          birth_data: {
+            ...bd,
+            chart: serverChart,
+            // Preserve the browser-computed chart for audit/comparison
+            _browser_chart: bd.chart,
+          },
+        };
+      } catch (e) {
+        console.warn(`[recompute-chart] Failed for ${orderId}, using browser chart: ${e.message}`);
+        return order;
+      }
+    });
+
     // ── Steps 3…N: Generate each section via Claude ────────────────────────
     // Each section is generated WITH:
     //   1. Canon ground-truth injection (centers/channels/gates/types/profiles)
@@ -370,21 +403,21 @@ export const orderDelivery = inngest.createFunction(
     //   3. Quality scoring + up to 2 retries if score < threshold
     //   4. Extended thinking for the key analytical sections
     const sections = [];
-    const sectionTitles = order.prompt_sections || [];
+    const sectionTitles = enrichedOrder.prompt_sections || [];
 
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
       // Snapshot previous sections to pass as interdependence context
       const previous = sections.map((s) => ({ title: s.title, text: s.text }));
       const text = await step.run(`generate-section-${i}`, async () => {
-        return generateScoredSection(title, order, previous);
+        return generateScoredSection(title, enrichedOrder, previous);
       });
       sections.push({ title, text });
     }
 
     // ── Step N+1: Render PDF ───────────────────────────────────────────────
     const pdfBytes = await step.run("render-pdf", async () => {
-      const buffer = await generatePDF({ order, sections });
+      const buffer = await generatePDF({ order: enrichedOrder, sections });
       // Convert Buffer to base64 string for serialisation through Inngest state
       return Buffer.from(buffer).toString("base64");
     });
@@ -414,6 +447,7 @@ export const orderDelivery = inngest.createFunction(
           pdf_blob_url: blobUrl,
           download_token: token,
           delivered_at: new Date().toISOString(),
+          generated_sections: sections,  // store for admin preview / re-render
         })
         .eq("id", orderId);
 

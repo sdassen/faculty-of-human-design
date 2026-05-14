@@ -1,5 +1,7 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
 import PDFDocument from "pdfkit";
+import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
+import { FONT, registerFonts } from "./fonts.js";
 
 // ─── LAYOUT TOKENS ───────────────────────────────────────────────────────────
 const W   = 595.28;          // A4 width  (points)
@@ -196,6 +198,76 @@ function drawFooter(doc, order) {
   doc.restore();
 }
 
+// ─── BODYGRAPH PAGE ──────────────────────────────────────────────────────────
+function drawBodygraphPage(doc, order, chart) {
+  doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
+  doc.rect(0, 0, W, 3).fill(CLR.dark);
+
+  // Page label
+  doc.font("Helvetica").fontSize(7).fillColor(CLR.goldWarm)
+    .text("JOUW BODYGRAPH", ML, 28, { characterSpacing: 3, width: TW });
+
+  // Title
+  doc.font(FONT.display).fontSize(22).fillColor(CLR.dark)
+    .text("Het visuele kaartwerk van jouw ontwerp", ML, 46, { width: TW });
+
+  // Gold rule
+  doc.rect(ML, 92, 32, 1.5).fill(CLR.gold);
+
+  // ── Bodygraph drawing (centered) ────────────────────────────────────────
+  const bgScale = 0.95;
+  const { width: bgW, height: bgH } = bodygraphSize(bgScale);
+  const bgX = (W - bgW) / 2;
+  const bgY = 110;
+  drawBodygraph(doc, chart, { x: bgX, y: bgY, scale: bgScale });
+
+  // ── Below: Chart kerndata as compact grid ───────────────────────────────
+  const dataY = bgY + bgH + 26;
+  doc.font("Helvetica").fontSize(6.5).fillColor(CLR.goldWarm)
+    .text("DE KERNDATA VAN DEZE CHART", ML, dataY, { characterSpacing: 2.5 });
+
+  const items = [
+    chart.type    && { label: "Type",       value: chart.type },
+    chart.strat   && { label: "Strategie",  value: chart.strat },
+    chart.auth    && { label: "Autoriteit", value: chart.auth },
+    chart.profile && { label: "Profiel",    value: chart.profile },
+    chart.sig     && { label: "Signatuur",  value: chart.sig },
+    chart.notSelf && { label: "Not-Self",   value: chart.notSelf },
+  ].filter(Boolean);
+
+  // 2-column layout
+  const colW = TW / 2;
+  let cy = dataY + 18;
+  items.forEach((it, i) => {
+    const col = i % 2;
+    const row = Math.floor(i / 2);
+    const itemX = ML + col * colW;
+    const itemY = cy + row * 26;
+    doc.font("Helvetica").fontSize(7).fillColor(CLR.textMuted)
+       .text(it.label.toUpperCase(), itemX, itemY, { characterSpacing: 1.5 });
+    doc.font(FONT.displayRegular).fontSize(12).fillColor(CLR.dark)
+       .text(it.value, itemX, itemY + 10);
+  });
+
+  // ── Legend (small bottom strip) ─────────────────────────────────────────
+  const legY = FY - 60;
+  doc.rect(ML, legY, TW, 0.5).fill(CLR.border);
+  doc.font("Helvetica").fontSize(7).fillColor(CLR.goldWarm)
+    .text("LEGENDA", ML, legY + 10, { characterSpacing: 2 });
+
+  // Defined center swatch
+  doc.rect(ML, legY + 24, 12, 8).fillAndStroke("#876B4A", "#2A2620");
+  doc.font("Helvetica").fontSize(8).fillColor(CLR.text)
+    .text("Gedefinieerd centrum — vaste eigen energie", ML + 18, legY + 26);
+
+  // Open center swatch
+  doc.rect(ML + 200, legY + 24, 12, 8).fillAndStroke("#FFFFFF", "#2A2620");
+  doc.font("Helvetica").fontSize(8).fillColor(CLR.text)
+    .text("Open centrum — neemt op uit omgeving", ML + 218, legY + 26);
+
+  drawFooter(doc, order);
+}
+
 // ─── COVER PAGE ──────────────────────────────────────────────────────────────
 function drawCover(doc, order, sections) {
   doc.rect(0, 0, W, H).fill(CLR.dark);
@@ -207,7 +279,7 @@ function drawCover(doc, order, sections) {
       align: "center", width: W, characterSpacing: 3.5,
     });
 
-  doc.font("Times-Italic").fontSize(28).fillColor("#FFFFFF")
+  doc.font(FONT.display).fontSize(28).fillColor("#FFFFFF")
     .text(order.report_title || "Persoonlijk Rapport", ML, 140, {
       align: "center", width: TW, lineGap: 6,
     });
@@ -301,7 +373,7 @@ function drawSectionHeader(doc, section, idx) {
   doc.font("Helvetica").fontSize(8).fillColor(CLR.goldWarm)
     .text(String(idx + 1).padStart(2, "0"), ML, 14, { characterSpacing: 1 });
 
-  doc.font("Times-Roman").fontSize(20).fillColor(CLR.dark)
+  doc.font(FONT.displayRegular).fontSize(20).fillColor(CLR.dark)
     .text(section.title, ML, 26, { width: TW });
 
   const uy = doc.y + 6;
@@ -386,8 +458,18 @@ export async function generatePDF({ order, sections }) {
     doc.on("end",   () => resolve(Buffer.concat(chunks)));
     doc.on("error", reject);
 
+    // Register premium fonts (silent fallback to built-ins if files missing)
+    registerFonts(doc);
+
     // ── Cover ──────────────────────────────────────────────────────────────
     drawCover(doc, order, adjustedSections);
+
+    // ── Bodygraph page (only if chart data is present) ─────────────────────
+    const chartData = (order.birth_data || {}).chart || {};
+    const hasChartData = chartData.type && Array.isArray(chartData.definedCenters);
+    if (hasChartData) {
+      drawBodygraphPage(doc, order, chartData);
+    }
 
     // ── Section pages ──────────────────────────────────────────────────────
     adjustedSections.forEach((section, idx) => {
@@ -444,7 +526,7 @@ export async function generatePDF({ order, sections }) {
           }
 
           if (isSubhead) {
-            doc.font("Times-Roman").fontSize(12.5).fillColor(CLR.navy)
+            doc.font(FONT.displayRegular).fontSize(12.5).fillColor(CLR.navy)
               .text(para, ML, y, opts);
           } else {
             doc.font("Helvetica").fontSize(10.5).fillColor(CLR.text)
@@ -471,7 +553,7 @@ export async function generatePDF({ order, sections }) {
     doc.rect(0, 0, W, 3).fill(CLR.gold);
     doc.rect(0, H - 3, W, 3).fill(CLR.gold);
 
-    doc.font("Times-Italic").fontSize(22).fillColor("#FFFFFF")
+    doc.font(FONT.display).fontSize(22).fillColor("#FFFFFF")
       .text("Met dank voor je vertrouwen.", ML, 180, { align: "center", width: TW });
 
     const bd      = order.birth_data || {};
