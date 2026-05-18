@@ -1,15 +1,7 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
-//
-// We load pdfkit via createRequire with an explicit CJS path to prevent ncc
-// (Vercel's webpack bundler) from picking up pdfkit's ESM build (pdfkit.es.js)
-// through the "module" mainField. The ESM build pulls in fontkit's .mjs files
-// which can't be require()'d at runtime → "(node:X) Warning: To load an ES module".
-// Pointing directly at the CJS build ensures the full CJS chain:
-//   pdfkit.js → fontkit/dist/main.cjs → unicode-properties/dist/main.cjs → ...
-import { createRequire } from "module";
-const _require = createRequire(import.meta.url);
-const PDFDocument = _require("pdfkit/js/pdfkit.js");
-
+// Note: scripts/patch-esm.js (run during build) removes the "module" field from
+// pdfkit and its dependencies so ncc uses the CJS builds instead of ESM.
+import PDFDocument from "pdfkit";
 import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
 import { FONT, registerFonts } from "./fonts.js";
 
