@@ -86,7 +86,9 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: e.message,
       type: e.constructor?.name || "Error",
-      stack: (e.stack || "").split("\n").slice(0, 12),
+      url: e.url || undefined,       // ESM module URL with syntax error
+      cause: e.cause ? String(e.cause) : undefined,
+      stack: (e.stack || "").split("\n").slice(0, 15),
       hint: e.code === "ENOENT"
         ? "File not found — likely PDFKit AFM font file missing on Vercel."
         : undefined,
