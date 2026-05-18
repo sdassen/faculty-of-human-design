@@ -1,10 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-// Dynamic import — keeps pdfkit OUT of ncc's static bundle graph.
-// Any load error is caught by the try/catch below and returned as JSON.
-async function loadPDF() {
-  const mod = await import("../../lib/pdf/index.js");
-  return mod.generatePDF;
-}
+import { generatePDF } from "../../lib/pdf/index.js";
 
 function isAuthorized(req) {
   const secret = process.env.ADMIN_SECRET;
@@ -68,7 +63,6 @@ export default async function handler(req, res) {
     }
 
     // ── Render PDF ────────────────────────────────────────────────────────
-    const generatePDF = await loadPDF();
     const pdfBuffer = await generatePDF({ order, sections });
 
     // ── Stream back as inline PDF ─────────────────────────────────────────
