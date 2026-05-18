@@ -74,8 +74,17 @@ export default async function handler(req, res) {
     res.setHeader("Cache-Control", "no-store");
     return res.end(pdfBuffer);
   } catch (e) {
-    console.error("[preview-report]", e);
-    return res.status(500).json({ error: e.message });
+    console.error("[preview-report] FAIL:", e);
+    console.error("[preview-report] stack:", e.stack);
+    // Return detailed error for admin endpoint
+    return res.status(500).json({
+      error: e.message,
+      type: e.constructor?.name || "Error",
+      stack: (e.stack || "").split("\n").slice(0, 12),
+      hint: e.code === "ENOENT"
+        ? "File not found — likely PDFKit AFM font file missing on Vercel."
+        : undefined,
+    });
   }
 }
 
