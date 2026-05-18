@@ -1,3 +1,10 @@
+// Log any uncaught crash so the full error appears in Vercel runtime logs
+// (FUNCTION_INVOCATION_FAILED swallows the message otherwise).
+process.on("uncaughtExceptionMonitor", (err) => {
+  console.error("[CRASH]", err?.constructor?.name, err?.message);
+  console.error("[CRASH STACK]", err?.stack);
+});
+
 import { createClient } from "@supabase/supabase-js";
 import { generatePDF } from "../../lib/pdf/index.js";
 

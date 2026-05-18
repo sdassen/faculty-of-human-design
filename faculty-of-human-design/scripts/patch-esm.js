@@ -32,10 +32,19 @@ if (fs.existsSync(cacheDir)) {
 }
 
 const targets = [
+  // pdfkit / fontkit ESM chain
   "node_modules/pdfkit/package.json",
   "node_modules/pdfkit/node_modules/fontkit/package.json",
   "node_modules/pdfkit/node_modules/@swc/helpers/package.json",
   "node_modules/unicode-properties/package.json",
+  // @supabase packages — auth-js / realtime-js / functions-js have no "exports"
+  // map so ncc falls through to the "module" field (ESM build).
+  "node_modules/@supabase/supabase-js/package.json",
+  "node_modules/@supabase/auth-js/package.json",
+  "node_modules/@supabase/realtime-js/package.json",
+  "node_modules/@supabase/functions-js/package.json",
+  "node_modules/@supabase/postgrest-js/package.json",
+  "node_modules/@supabase/storage-js/package.json",
 ];
 
 let patched = 0;
