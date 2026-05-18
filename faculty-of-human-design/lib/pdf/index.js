@@ -430,9 +430,8 @@ export async function generatePDF({ order, sections }) {
 
       doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
       drawSectionHeader(doc, section, idx);
+      let y = doc.y + 18;  // capture y BEFORE footer (footer sets doc.y to page bottom)
       drawFooter(doc, order);
-
-      let y = doc.y + 18;
       const segments = parseSection(cleanText);
       let pageHasContent = false;
 
