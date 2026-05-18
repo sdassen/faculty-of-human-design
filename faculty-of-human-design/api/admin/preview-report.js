@@ -46,11 +46,30 @@ export default async function handler(req, res) {
     ({ generatePDF } = await import("../../lib/pdf/index.js"));
   } catch (e) {
     console.error("[preview-report] pdf import FAILED:", e);
+    // Dig into cause chain for the actual SyntaxError location
+    const causeInfo = [];
+    let cur = e;
+    for (let i = 0; i < 5 && cur; i++) {
+      causeInfo.push({
+        message: cur.message,
+        type: cur.constructor?.name,
+        url: cur.url || undefined,
+        filename: cur.filename || undefined,
+        lineNumber: cur.lineNumber || undefined,
+        columnNumber: cur.columnNumber || undefined,
+        stack: (cur.stack || "").split("\n").slice(0, 8),
+        keys: Object.getOwnPropertyNames(cur),
+      });
+      cur = cur.cause;
+    }
     return res.status(500).json({
       phase: "load-pdf",
       error: e.message,
       type: e.constructor?.name || "Error",
-      stack: (e.stack || "").split("\n").slice(0, 20),
+      url: e.url || undefined,
+      filename: e.filename || undefined,
+      allKeys: Object.getOwnPropertyNames(e),
+      causeChain: causeInfo,
     });
   }
 
