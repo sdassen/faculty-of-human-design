@@ -2,6 +2,20 @@ import { createClient } from "@supabase/supabase-js";
 // Dynamic import — keeps pdfkit OUT of ncc's static bundle graph.
 // Any load error is caught by the try/catch below and returned as JSON.
 async function loadPDF() {
+  // Test each file separately to find which has the SyntaxError
+  const results = {};
+  for (const f of ["fonts.js", "bodygraph.js", "index.js"]) {
+    try {
+      await import(`../../lib/pdf/${f}`);
+      results[f] = "OK";
+    } catch (e) {
+      results[f] = e.message;
+      throw Object.assign(
+        new Error(`SyntaxError in lib/pdf/${f}: ${e.message}`),
+        { fileResults: results }
+      );
+    }
+  }
   const mod = await import("../../lib/pdf/index.js");
   return mod.generatePDF;
 }
@@ -86,8 +100,8 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: e.message,
       type: e.constructor?.name || "Error",
-      url: e.url || undefined,       // ESM module URL with syntax error
-      cause: e.cause ? String(e.cause) : undefined,
+      fileResults: e.fileResults || undefined,
+      url: e.url || undefined,
       stack: (e.stack || "").split("\n").slice(0, 15),
       hint: e.code === "ENOENT"
         ? "File not found — likely PDFKit AFM font file missing on Vercel."
