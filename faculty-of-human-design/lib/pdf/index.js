@@ -1,16 +1,15 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
 // Runs as native ESM on Vercel (package.json "type":"module") — no ncc bundling.
 //
-// pdfkit is loaded via createRequire so Node.js uses the CJS build (js/pdfkit.js)
-// instead of the ESM build (js/pdfkit.es.js). pdfkit has no "exports" map, so the
-// ESM loader would otherwise pick up the "module" field → pdfkit.es.js which then
-// causes SyntaxError when compiled as ESM in Node.js 20 strict mode.
+// ALL dependencies are loaded via createRequire (CJS path) so that the ESM
+// static-link phase has nothing to parse except the built-in "module" import.
+// This eliminates the SyntaxError: Unexpected token ')' that occurs when the
+// ESM linker tries to parse pdfkit's ESM build or our own helper files.
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
-const PDFDocument = require("pdfkit");
-
-import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
-import { FONT, registerFonts } from "./fonts.js";
+const PDFDocument                      = require("pdfkit");
+const { drawBodygraph, bodygraphSize } = require("./bodygraph.cjs");
+const { FONT, registerFonts }          = require("./fonts.cjs");
 
 // ─── LAYOUT TOKENS ───────────────────────────────────────────────────────────
 const W   = 595.28;          // A4 width  (points)
