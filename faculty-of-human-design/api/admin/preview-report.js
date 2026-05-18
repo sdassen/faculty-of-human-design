@@ -1,17 +1,13 @@
-import { createClient } from "@supabase/supabase-js";
-import { generatePDF } from "../../lib/pdf/index.js";
+// Dynamic imports so that any module-init error is caught and returned
+// as JSON (instead of crashing the Lambda silently).
+// Static imports crash the process before any request handler runs;
+// dynamic imports defer loading until the first request, making the
+// error catchable and surfaceable in the response body.
 
 function isAuthorized(req) {
   const secret = process.env.ADMIN_SECRET;
   if (!secret) return false;
   return req.query.secret === secret;
-}
-
-function getSupabase() {
-  return createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
-  );
 }
 
 /**
@@ -33,6 +29,31 @@ export default async function handler(req, res) {
     return res.status(401).json({ error: "Unauthorized. Add ?secret=<ADMIN_SECRET>" });
   }
 
+  // ── Load dependencies (dynamic so errors surface as JSON) ─────────────────
+  let createClient, generatePDF;
+  try {
+    ({ createClient } = await import("@supabase/supabase-js"));
+  } catch (e) {
+    console.error("[preview-report] supabase import FAILED:", e);
+    return res.status(500).json({
+      phase: "load-supabase",
+      error: e.message,
+      type: e.constructor?.name || "Error",
+      stack: (e.stack || "").split("\n").slice(0, 20),
+    });
+  }
+  try {
+    ({ generatePDF } = await import("../../lib/pdf/index.js"));
+  } catch (e) {
+    console.error("[preview-report] pdf import FAILED:", e);
+    return res.status(500).json({
+      phase: "load-pdf",
+      error: e.message,
+      type: e.constructor?.name || "Error",
+      stack: (e.stack || "").split("\n").slice(0, 20),
+    });
+  }
+
   const { orderId, sample } = req.query;
 
   try {
@@ -44,7 +65,10 @@ export default async function handler(req, res) {
       sections = makeSampleSections();
     } else if (orderId) {
       // ── Re-render an existing order ──────────────────────────────────────
-      const db = getSupabase();
+      const db = createClient(
+        process.env.SUPABASE_URL,
+        process.env.SUPABASE_SERVICE_ROLE_KEY
+      );
       const { data, error } = await db.from("orders").select("*").eq("id", orderId).single();
       if (error || !data) {
         return res.status(404).json({ error: `Order ${orderId} not found` });
