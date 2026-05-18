@@ -1,7 +1,9 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
 // Note: scripts/patch-esm.js (run during build) removes the "module" field from
 // pdfkit and its dependencies so ncc uses the CJS builds instead of ESM.
-import PDFDocument from "pdfkit";
+//
+// pdfkit is loaded lazily inside generatePDF so that any load error is caught
+// and returned as a JSON response instead of crashing the Lambda silently.
 import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
 import { FONT, registerFonts } from "./fonts.js";
 
@@ -435,6 +437,20 @@ function drawBlock(doc, order, block, lines, y) {
 
 // ─── MAIN EXPORT ─────────────────────────────────────────────────────────────
 export async function generatePDF({ order, sections }) {
+  // Lazy-load pdfkit so any load failure surfaces as a catchable error
+  // (instead of crashing the Lambda at cold-start before any request is handled).
+  let PDFDocument;
+  try {
+    const mod = await import("pdfkit");
+    PDFDocument = mod.default ?? mod;
+  } catch (e) {
+    console.error("[pdfkit-load] FAILED:", e);
+    throw Object.assign(new Error(`pdfkit load failed: ${e.message}`), {
+      pdfkitLoadError: true,
+      cause: e.stack,
+    });
+  }
+
   return new Promise((resolve, reject) => {
 
     // 1. Adjust chapter titles for edge cases (Reflector + 0 channels, etc.)

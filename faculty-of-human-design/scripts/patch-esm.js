@@ -21,6 +21,16 @@
 const fs = require("fs");
 const path = require("path");
 
+// Clear webpack/ncc build cache so stale module-resolution results
+// (which pre-date our "module" field patches) are not reused.
+const cacheDir = path.resolve("node_modules/.cache");
+if (fs.existsSync(cacheDir)) {
+  fs.rmSync(cacheDir, { recursive: true, force: true });
+  console.log("[patch-esm] Cleared node_modules/.cache (stale ncc/webpack cache)");
+} else {
+  console.log("[patch-esm] node_modules/.cache not present — nothing to clear");
+}
+
 const targets = [
   "node_modules/pdfkit/package.json",
   "node_modules/pdfkit/node_modules/fontkit/package.json",
