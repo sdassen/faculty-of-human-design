@@ -1,5 +1,11 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
-import PDFDocument from "pdfkit";
+// Use createRequire so ncc (Vercel's bundler) does NOT inline-bundle pdfkit.
+// Combined with vercel.json includeFiles: "node_modules/pdfkit/**", this lets
+// the runtime load pdfkit from the raw included files instead of a broken bundle.
+import { createRequire } from "module";
+const _require = createRequire(import.meta.url);
+const PDFDocument = _require("pdfkit");
+
 import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
 import { FONT, registerFonts } from "./fonts.js";
 
