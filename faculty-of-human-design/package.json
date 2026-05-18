@@ -2,8 +2,7 @@
   "name": "faculty-of-human-design",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
-  "engines": {
+"engines": {
     "node": "20.x"
   },
   "scripts": {
