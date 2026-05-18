@@ -2,12 +2,13 @@
   "name": "faculty-of-human-design",
   "private": true,
   "version": "0.0.0",
-"engines": {
+  "type": "module",
+  "engines": {
     "node": "20.x"
   },
   "scripts": {
     "dev": "vite",
-    "build": "node scripts/patch-esm.js && vite build",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
