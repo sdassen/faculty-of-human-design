@@ -2,20 +2,6 @@ import { createClient } from "@supabase/supabase-js";
 // Dynamic import — keeps pdfkit OUT of ncc's static bundle graph.
 // Any load error is caught by the try/catch below and returned as JSON.
 async function loadPDF() {
-  // Test each file separately to find which has the SyntaxError
-  const results = {};
-  for (const f of ["fonts.js", "bodygraph.js", "index.js"]) {
-    try {
-      await import(`../../lib/pdf/${f}`);
-      results[f] = "OK";
-    } catch (e) {
-      results[f] = e.message;
-      throw Object.assign(
-        new Error(`SyntaxError in lib/pdf/${f}: ${e.message}`),
-        { fileResults: results }
-      );
-    }
-  }
   const mod = await import("../../lib/pdf/index.js");
   return mod.generatePDF;
 }

@@ -1,5 +1,10 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
-import PDFDocument from "pdfkit";
+// Node.js 24's CJS-to-ESM translator fails to wrap pdfkit (SyntaxError in generated wrapper).
+// Use createRequire with process.cwd() to load pdfkit as plain CJS instead.
+import { createRequire } from "module";
+const _require = createRequire(process.cwd() + "/package.json");
+const PDFDocument = _require("pdfkit");
+
 import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
 import { FONT, registerFonts } from "./fonts.js";
 
