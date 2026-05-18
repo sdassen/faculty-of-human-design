@@ -1,7 +1,14 @@
 // PDF generation using PDFKit (pure Node.js, no React dependency)
-// Runs as native ESM on Vercel (package.json "type":"module") — no ncc bundling,
-// so pdfkit and its CJS dependencies are imported directly by Node.js.
-import PDFDocument from "pdfkit";
+// Runs as native ESM on Vercel (package.json "type":"module") — no ncc bundling.
+//
+// pdfkit is loaded via createRequire so Node.js uses the CJS build (js/pdfkit.js)
+// instead of the ESM build (js/pdfkit.es.js). pdfkit has no "exports" map, so the
+// ESM loader would otherwise pick up the "module" field → pdfkit.es.js which then
+// causes SyntaxError when compiled as ESM in Node.js 20 strict mode.
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const PDFDocument = require("pdfkit");
+
 import { drawBodygraph, bodygraphSize } from "./bodygraph.js";
 import { FONT, registerFonts } from "./fonts.js";
 
