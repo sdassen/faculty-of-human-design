@@ -220,7 +220,17 @@ function parseSection(text) {
 
 // ─── DRAWING HELPERS ─────────────────────────────────────────────────────────
 function strH(doc, text, opts) {
+  // PDFKit's heightOfString uses the CURRENT document font size, not opts.fontSize.
+  // We must temporarily set the font size so height estimates are accurate even when
+  // the document is left in a large-font state (e.g., 32pt after drawSectionHeader).
   try {
+    if (opts && opts.fontSize != null) {
+      const savedSize = doc._fontSize;
+      doc.fontSize(opts.fontSize);
+      const h = doc.heightOfString(text, opts);
+      doc.fontSize(savedSize != null ? savedSize : BODY_SIZE);
+      return h;
+    }
     return doc.heightOfString(text, opts);
   } catch (err) {
     return 14;
@@ -1161,7 +1171,7 @@ export async function generatePDF({ order, sections }) {
 
           if (isSubhead) {
             // Subhead: Display SemiBold with generous breathing room
-            const opts = { width: PMW, lineGap: 2 };
+            const opts = { width: PMW, lineGap: 2, fontSize: SUB_SIZE };
             const h    = SUB_BEFORE + strH(doc, para, opts) + SUB_AFTER + 4;
             if (needsNewPage(doc, y, h + 40)) {
               drawFooter(doc, order);
@@ -1176,7 +1186,7 @@ export async function generatePDF({ order, sections }) {
             y = doc.y + SUB_AFTER + 4;
           } else {
             // Body paragraph — 11pt Inter, generous lineGap
-            const opts = { width: PMW, lineGap: BODY_GAP };
+            const opts = { width: PMW, lineGap: BODY_GAP, fontSize: BODY_SIZE };
             const h    = strH(doc, para, opts) + BODY_PARA_SEP;
             if (needsNewPage(doc, y, h)) {
               drawFooter(doc, order);
