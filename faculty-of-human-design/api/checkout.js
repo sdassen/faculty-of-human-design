@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  const { orderId, rptId, title, price, isSubscription } = req.body;
+  const { orderId, rptId, title, price, isSubscription, language } = req.body;
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(500).json({ error: "STRIPE_SECRET_KEY niet geconfigureerd in Vercel" });
   }
@@ -29,9 +29,11 @@ export default async function handler(req, res) {
   }
 
   // success_url includes orderId so the confirmation page can display it
+  // Include language prefix so the confirmation page renders in the correct language
+  const langPrefix = language === "en" ? "/en" : "";
   const successUrl = orderId
-    ? `${BASE}/?success=true&order=${orderId}`
-    : `${BASE}/?success=true`;
+    ? `${BASE}${langPrefix}/?success=true&order=${orderId}`
+    : `${BASE}${langPrefix}/?success=true`;
   body.append("success_url", successUrl);
   body.append("cancel_url", `${BASE}/?cancelled=true`);
   body.append("metadata[rptId]", rptId);

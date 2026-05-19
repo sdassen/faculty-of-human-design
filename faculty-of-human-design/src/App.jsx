@@ -1198,6 +1198,7 @@ async function goToStripe(rptId, chartData, formData) {
         title: tl(rpt?.title) || rptId,
         price: rpt?.priceNum || 75,
         isSubscription: rptId === "maandelijks",
+        language: LANG,
       }),
     });
 

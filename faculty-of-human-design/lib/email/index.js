@@ -6,25 +6,35 @@ const FROM = "Faculty of Human Design <noreply@facultyhd.com>";
 
 // ─── PUBLIC API ───────────────────────────────────────────────────────────────
 
-export async function sendConfirmationEmail({ to, name, reportTitle }) {
+export async function sendConfirmationEmail({ to, name, reportTitle, language }) {
+  const lang = language === "en" ? "en" : "nl";
+  const subject = lang === "en"
+    ? `Your payment has been received — we've started your analysis`
+    : `Je betaling is ontvangen — we zijn gestart met jouw analyse`;
+
   const { data, error } = await resend.emails.send({
     from: FROM,
     to,
-    subject: `Je betaling is ontvangen — we zijn gestart met jouw analyse`,
-    html: confirmationHtml({ name, reportTitle }),
+    subject,
+    html: confirmationHtml({ name, reportTitle, lang }),
   });
-  if (error) throw new Error(`Resend fout (bevestiging): ${error.message}`);
+  if (error) throw new Error(`Resend error (confirmation): ${error.message}`);
   return data;
 }
 
-export async function sendDeliveryEmail({ to, name, reportTitle, downloadUrl }) {
+export async function sendDeliveryEmail({ to, name, reportTitle, downloadUrl, language }) {
+  const lang = language === "en" ? "en" : "nl";
+  const subject = lang === "en"
+    ? `Your ${reportTitle} is ready`
+    : `Jouw ${reportTitle} staat klaar`;
+
   const { data, error } = await resend.emails.send({
     from: FROM,
     to,
-    subject: `Jouw ${reportTitle} staat klaar`,
-    html: deliveryHtml({ name, reportTitle, downloadUrl }),
+    subject,
+    html: deliveryHtml({ name, reportTitle, downloadUrl, lang }),
   });
-  if (error) throw new Error(`Resend fout (levering): ${error.message}`);
+  if (error) throw new Error(`Resend error (delivery): ${error.message}`);
   return data;
 }
 
@@ -60,7 +70,7 @@ function base(body) {
     <!-- Footer -->
     <div style="background:#F7F5F0;padding:22px 40px;text-align:center;border-top:1px solid #E8E3DB;">
       <p style="margin:0 0 5px;font-size:10.5px;color:#A8A39E;letter-spacing:.4px;">
-        © 2026 Faculty of Human Design — Ibiza, Spanje
+        © 2026 Faculty of Human Design — Ibiza, Spain
       </p>
       <p style="margin:0;font-size:10.5px;color:#B8B3AE;">
         <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>
@@ -75,9 +85,57 @@ function base(body) {
 }
 
 // ─── CONFIRMATION TEMPLATE ────────────────────────────────────────────────────
-function confirmationHtml({ name, reportTitle }) {
+function confirmationHtml({ name, reportTitle, lang }) {
   const isHD = /human design/i.test(reportTitle);
 
+  if (lang === "en") {
+    return base(`
+    <!-- Title -->
+    <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:400;color:#1A1715;margin:0 0 22px;line-height:1.3;letter-spacing:-.3px;">
+      Congratulations on this step.
+    </h1>
+
+    <!-- Greeting -->
+    <p style="font-size:15px;color:#3A3830;line-height:1.85;margin:0 0 16px;font-weight:300;">
+      Dear ${escHtml(name)},
+    </p>
+    <p style="font-size:15px;color:#4A4840;line-height:1.85;margin:0 0 24px;font-weight:300;">
+      Your payment has been successfully received and we have immediately started assembling your
+      <strong style="color:#1A1715;font-weight:500;">${escHtml(reportTitle)}</strong>.
+    </p>
+
+    <!-- Why it takes time -->
+    <p style="font-size:14.5px;color:#5A5850;line-height:1.85;margin:0 0 28px;font-weight:300;">
+      Your report is fully custom-assembled based on your exact birth data — from
+      ${isHD
+        ? "the calculation of type, centres and channels to your incarnation cross"
+        : "the numerological calculations to your personal yearly cycle"
+      }. We take that time deliberately.
+    </p>
+
+    <!-- Delivery callout -->
+    <div style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid #C9A85C;border-radius:0 6px 6px 0;padding:20px 24px;margin:0 0 32px;">
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#9A8050;margin-bottom:10px;font-weight:600;">What to expect</div>
+      ${bulletItem("Delivery", "Your report will be <strong>in your inbox within 1 business day</strong> — you'll receive a separate email as soon as it's ready.")}
+      ${bulletItem("Contents", `An in-depth, personalised report of <strong>40+ pages</strong> as a downloadable PDF.`)}
+      ${bulletItem("In the meantime", "Plan a quiet moment for tomorrow. This report contains a lot of information that lands best when you give it your full attention.")}
+    </div>
+
+    <!-- Divider -->
+    <div style="height:1px;background:#EEEBE5;margin:0 0 28px;"></div>
+
+    <!-- Spam tip -->
+    <p style="font-size:13px;color:#888;line-height:1.75;margin:0 0 10px;">
+      <strong style="color:#555;font-weight:500;">No email after 24 hours?</strong>
+      Check your spam folder. If it's not there either, simply reply to this email — we'll look into it right away.
+    </p>
+    <p style="font-size:13px;color:#AAA;line-height:1.75;margin:0;">
+      Questions? Write to us at <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
+    </p>
+  `);
+  }
+
+  // Dutch (default)
   return base(`
     <!-- Title -->
     <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:400;color:#1A1715;margin:0 0 22px;line-height:1.3;letter-spacing:-.3px;">
@@ -125,12 +183,77 @@ function confirmationHtml({ name, reportTitle }) {
 }
 
 // ─── DELIVERY TEMPLATE ────────────────────────────────────────────────────────
-function deliveryHtml({ name, reportTitle, downloadUrl }) {
+function deliveryHtml({ name, reportTitle, downloadUrl, lang }) {
   const isHD      = /human design/i.test(reportTitle);
-  const isKind    = /kind/i.test(reportTitle);
-  const isRelatie = /relatie|samenwerking/i.test(reportTitle);
+  const isKind    = /kind|child/i.test(reportTitle);
+  const isRelatie = /relatie|samenwerking|relationship|business/i.test(reportTitle);
 
-  // Context-aware reading tip
+  if (lang === "en") {
+    // English reading tip
+    let startTip;
+    if (isKind) {
+      startTip = "Start with <strong>Type & Strategy</strong> — this gives immediate practical tools for guidance and parenting.";
+    } else if (isRelatie) {
+      startTip = "Start with the <strong>electromagnetic channels</strong> — that's the core of the dynamic between your two designs.";
+    } else if (isHD) {
+      startTip = "Start with <strong>Type, Strategy and Authority</strong> — these are the foundations you can start experimenting with right away.";
+    } else {
+      startTip = "Start at the beginning of the report and read through it without trying to understand everything at once. Let it settle.";
+    }
+
+    return base(`
+    <!-- Title -->
+    <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:24px;font-weight:400;color:#1A1715;margin:0 0 22px;line-height:1.3;letter-spacing:-.3px;">
+      Your blueprint is ready.
+    </h1>
+
+    <!-- Greeting -->
+    <p style="font-size:15px;color:#3A3830;line-height:1.85;margin:0 0 16px;font-weight:300;">
+      Dear ${escHtml(name)},
+    </p>
+    <p style="font-size:15px;color:#4A4840;line-height:1.85;margin:0 0 28px;font-weight:300;">
+      The analysis of your unique design is complete. The data points from your chart have been translated into a personal blueprint — your
+      <strong style="color:#1A1715;font-weight:500;">${escHtml(reportTitle)}</strong>
+      is ready for you.
+    </p>
+
+    <!-- CTA button -->
+    <div style="text-align:center;margin:0 0 14px;">
+      <a href="${escHtml(downloadUrl)}"
+         style="display:inline-block;background:#3D2C5E;color:#ffffff;text-decoration:none;
+                padding:17px 52px;border-radius:100px;font-size:14.5px;font-weight:500;
+                letter-spacing:.4px;line-height:1;box-shadow:0 4px 14px rgba(61,44,94,.3);">
+        Download your blueprint (PDF) &rarr;
+      </a>
+    </div>
+
+    <!-- Fallback URL -->
+    <p style="font-size:11.5px;color:#B0AAA4;text-align:center;margin:0 0 36px;line-height:1.6;">
+      Button not working? Copy this link into your browser:<br>
+      <a href="${escHtml(downloadUrl)}" style="color:#9A8050;text-decoration:none;word-break:break-all;">${escHtml(downloadUrl)}</a>
+    </p>
+
+    <!-- Reading tips -->
+    <div style="background:#FAFAF7;border:1px solid #E5E0D8;border-radius:6px;padding:22px 26px;margin:0 0 28px;">
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#9A8050;margin-bottom:14px;font-weight:600;">Tips for reading</div>
+      ${bulletItem("Where to start", startTip)}
+      ${bulletItem("Take your time", "There is a lot of information. You don't need to understand everything at once — the report is a reference work that grows in value the more you live with it.")}
+      ${bulletItem("Experiment", `${isHD ? "Human Design" : "This system"} is not a set of rules but an experiment. Notice what happens when you start making decisions based on what the report describes.`)}
+      ${bulletItem("Save the file", "Save the PDF to your archive — that way you can always return to it, even without the download link.")}
+    </div>
+
+    <!-- Link validity -->
+    <p style="font-size:12px;color:#B0AAA4;line-height:1.75;margin:0 0 10px;">
+      The download link is <strong style="color:#888;">valid for 30 days</strong>. Save the file locally afterwards so you always have it to hand.
+    </p>
+    <p style="font-size:12px;color:#B0AAA4;line-height:1.75;margin:0;">
+      Questions or feedback? We'd love to hear from you at
+      <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
+    </p>
+  `);
+  }
+
+  // Dutch (default)
   let startTip;
   if (isKind) {
     startTip = "Begin bij <strong>Type & Strategie</strong> — dit geeft direct praktische handvatten voor begeleiding en opvoeding.";

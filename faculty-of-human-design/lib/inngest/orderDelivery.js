@@ -445,6 +445,7 @@ export const orderDelivery = inngest.createFunction(
         to: data.customer_email,
         name: data.customer_name || "klant",
         reportTitle: data.report_title,
+        language: data.language || "nl",
       });
 
       // Mark as processing
@@ -562,6 +563,7 @@ export const orderDelivery = inngest.createFunction(
         name: order.customer_name || "klant",
         reportTitle: order.report_title,
         downloadUrl,
+        language: order.language || "nl",
       });
     });
 
