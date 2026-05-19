@@ -157,7 +157,33 @@ const TOPICS = [
   },
 ];
 
-// ─── SYSTEM PROMPT ────────────────────────────────────────────────────────────
+// ─── SYSTEM PROMPTS ───────────────────────────────────────────────────────────
+const ARTICLE_SYSTEM_PROMPT_EN = `You are a knowledgeable writer for the Faculty of Human Design on Ibiza. You write clear, informative and engaging articles in English about Human Design, Numerology and Astrology for a broad audience that is interested but not yet expert.
+
+STYLE:
+- Write in the second person ("you", "your") — consistent throughout
+- Tone: warm, intellectual, accessible — no vague spiritual clichés, no excessive superlatives
+- Paragraphs are concise: 3–5 sentences per paragraph, easy to read on mobile
+- No subheadings, no bullet points, no lists — pure flowing prose
+- Avoid clichés: "In today's society...", "It is important to...", "More and more people..."
+
+CONTENT:
+- Grounded in facts and the system — no vague claims without foundation
+- Technical term introduced in Dutch (in brackets) once on first mention; thereafter English only
+- Reference related concepts where relevant but don't fully explain them — the reader can discover more
+- Write as an authority who knows the system inside out, not as an enthusiast who just started
+
+STRUCTURE:
+- 7–9 paragraphs, ~1200–1500 words total
+- First paragraph is a strong introduction: draws the reader straight into the subject
+- Last paragraph closes with an open invitation to further reflection or exploration — no hard call-to-action
+- Flow: from concept to context to practical implication
+
+OUTPUT:
+- Only the article text — no title, no "Here is the article:", no preamble
+- Paragraphs separated by one blank line (\\n\\n)
+- No markdown formatting, no bold, no italic`;
+
 const ARTICLE_SYSTEM_PROMPT = `Je bent een diepgaand schrijver voor de Faculty of Human Design op Ibiza. Je schrijft heldere, informatieve en boeiende artikelen in het Nederlands over Human Design, Numerologie en Astrologie voor een breed publiek dat geïnteresseerd is maar nog niet alles weet.
 
 STIJL:
@@ -231,8 +257,8 @@ export const articleGeneration = inngest.createFunction(
       return TOPICS.find((t) => !existing.has(t.title)) ?? TOPICS[0];
     });
 
-    // ── Step 2: Generate article body via Claude ──────────────────────────
-    const body = await step.run("generate-article", async () => {
+    // ── Step 2a: Generate Dutch article body ──────────────────────────────
+    const body = await step.run("generate-article-nl", async () => {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: {
@@ -244,25 +270,36 @@ export const articleGeneration = inngest.createFunction(
           model: "claude-sonnet-4-20250514",
           max_tokens: 3000,
           system: ARTICLE_SYSTEM_PROMPT,
-          messages: [
-            {
-              role: "user",
-              content: `Schrijf een artikel over: "${topic.title}"\n\nInvalshoek: ${topic.angle}`,
-            },
-          ],
+          messages: [{ role: "user", content: `Schrijf een artikel over: "${topic.title}"\n\nInvalshoek: ${topic.angle}` }],
         }),
       });
-
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(`Anthropic API error ${res.status}: ${txt.slice(0, 200)}`);
-      }
-
+      if (!res.ok) { const txt = await res.text(); throw new Error(`Anthropic NL error ${res.status}: ${txt.slice(0, 200)}`); }
       const data = await res.json();
       const text = data.content?.find((b) => b.type === "text")?.text || "";
-      if (text.length < 500) {
-        throw new Error(`Article too short (${text.length} chars)`);
-      }
+      if (text.length < 500) throw new Error(`NL article too short (${text.length} chars)`);
+      return text.trim();
+    });
+
+    // ── Step 2b: Generate English article body ────────────────────────────
+    const bodyEn = await step.run("generate-article-en", async () => {
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 3000,
+          system: ARTICLE_SYSTEM_PROMPT_EN,
+          messages: [{ role: "user", content: `Write an article about: "${topic.title_en || topic.title}"\n\nAngle: ${topic.angle_en || topic.angle}` }],
+        }),
+      });
+      if (!res.ok) { const txt = await res.text(); throw new Error(`Anthropic EN error ${res.status}: ${txt.slice(0, 200)}`); }
+      const data = await res.json();
+      const text = data.content?.find((b) => b.type === "text")?.text || "";
+      if (text.length < 500) throw new Error(`EN article too short (${text.length} chars)`);
       return text.trim();
     });
 
@@ -274,10 +311,13 @@ export const articleGeneration = inngest.createFunction(
       const row = {
         tag: topic.tag,
         title: topic.title,
+        title_en: topic.title_en || topic.title,
         date: formatDutchDate(now),
         readtime: estimateReadtime(body),
         excerpt: extractExcerpt(body),
+        excerpt_en: extractExcerpt(bodyEn),
         body,
+        body_en: bodyEn,
         images: topic.images,
         published_at: now.toISOString(),
       };

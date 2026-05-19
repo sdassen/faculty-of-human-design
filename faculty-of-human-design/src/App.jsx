@@ -3603,10 +3603,13 @@ function BlogPage({go}){
 
   const activeArticle = activePost ? articles.find(a=>String(a.id)===String(activePost)) : null;
 
+  // Pick the right language field: en version if LANG=en and it exists, else nl fallback
+  const al=(a,f)=>(LANG==="en"&&a[f+"_en"])?a[f+"_en"]:a[f];
+
   // SEO for list view or single article
   useSEO(activeArticle ? {
-    title: activeArticle.title,
-    description: activeArticle.excerpt || activeArticle.title + (LANG==="en"?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
+    title: al(activeArticle,"title"),
+    description: al(activeArticle,"excerpt") || al(activeArticle,"title") + (LANG==="en"?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
     canonical: SITE + "/#blog",
     jsonLd: {
       "@context":"https://schema.org","@type":"Article",
@@ -3641,14 +3644,14 @@ function BlogPage({go}){
           <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:56}}>
             <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>{t("blog.backToList")}</div>
             <div className="label-light" style={{marginBottom:8}}>{post.tag}</div>
-            <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{post.title}</h1>
+            <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{al(post,"title")}</h1>
             <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} {t("blog.readTime")}</div>
           </div>
         </div>
         <section className="section bg-white">
           <div className="container-sm">
             {(()=>{
-              const paras=(post.body||"").trim().split("\n\n");
+              const paras=(al(post,"body")||"").trim().split("\n\n");
               const imgs=post.images||[];
               const mid=Math.floor(paras.length/2);
               return paras.map((p,i)=>(
@@ -3665,7 +3668,7 @@ function BlogPage({go}){
                 {articles.filter(a=>String(a.id)!==String(activePost)).slice(0,2).map(a=>(
                   <div key={a.id} className="blog-card" onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
                     <div className="blog-tag">{a.tag}</div>
-                    <div className="blog-title" style={{fontSize:"1rem"}}>{a.title}</div>
+                    <div className="blog-title" style={{fontSize:"1rem"}}>{al(a,"title")}</div>
                   </div>
                 ))}
               </div>
@@ -3698,8 +3701,8 @@ function BlogPage({go}){
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"start",gap:16}}>
                 <div>
                   <div className="blog-tag">{p.tag}</div>
-                  <div className="blog-title">{p.title}</div>
-                  <div className="blog-excerpt">{p.excerpt}</div>
+                  <div className="blog-title">{al(p,"title")}</div>
+                  <div className="blog-excerpt">{al(p,"excerpt")}</div>
                   <div className="blog-more">{t("blog.readMore")}</div>
                 </div>
                 <div style={{fontSize:".65rem",letterSpacing:".06em",color:"var(--text-light)",textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{p.date}<br/>{p.readtime} {t("blog.readTime")}</div>
