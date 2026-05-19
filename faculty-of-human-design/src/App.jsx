@@ -1600,7 +1600,7 @@ function ReportCard({rpt,onClick}){
         {rpt.outcome&&<div className="rcard-outcome">{rpt.outcome}</div>}
         <div className="rcard-tagline">{rpt.tagline}</div>
         <div className="rcard-footer">
-          <div className="rcard-meta">{rpt.pages} pag. · {rpt.sections} secties</div>
+          <div className="rcard-meta">{rpt.pages} pag. · {rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).length} secties</div>
           <div className="rcard-cta">Start met dit rapport</div>
         </div>
       </div>
@@ -2316,7 +2316,7 @@ function HomePage({go}){
               </div>
               <div style={{textAlign:"right"}}>
                 <div style={{fontSize:".6rem",fontWeight:600,color:"rgba(201,168,92,.8)",textTransform:"uppercase",letterSpacing:".1em"}}>40+ paginas</div>
-                <div style={{fontSize:".6rem",color:"rgba(255,255,255,.35)",marginTop:2}}>12 secties</div>
+                <div style={{fontSize:".6rem",color:"rgba(255,255,255,.35)",marginTop:2}}>{REPORTS[0].prompt_extra.split("\n").filter(l=>l.startsWith("###")).length} secties</div>
               </div>
             </div>
             {[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching & Kabbalah","64 poorten · 9 centra"]].map(([t,d])=>(
@@ -3003,7 +3003,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
             <div className="detail-hero-tagline">{rpt.outcome || rpt.tagline}</div>
             <div className="detail-hero-meta">
               <span className="detail-hero-m">{rpt.pages} pagina's</span>
-              <span className="detail-hero-m">{rpt.sections} secties</span>
+              <span className="detail-hero-m">{rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).length} secties</span>
               <span className="detail-hero-m">Gepersonaliseerde Digitale Blauwdruk</span>
               <span className="detail-hero-m">{rpt.sub}</span>
             </div>
@@ -3067,7 +3067,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               <div className="label" style={{marginBottom:12}}>Inhoudsopgave</div>
               <h2 className="h2" style={{marginBottom:20}}>Dit staat erin</h2>
               <ul className="includes-list">
-                {rpt.includes.map((item,i)=>(
+                {rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*\d+\.\s*/,"").trim()).map((item,i)=>(
                   <li key={i} className="includes-item">
                     <div className="includes-num">{i+1}</div>{item}
                   </li>
