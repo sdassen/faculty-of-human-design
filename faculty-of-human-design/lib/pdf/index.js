@@ -30,11 +30,11 @@ const CLR = {
   border:    "#E5E0D8",
   bg:        "#F7F5F0",
   bgMuted:   "#F0EDE6",
-  tintChart: "#EEF1F6",  accentChart: "#1C2E4A",
-  tintVal:   "#FDF6EC",  accentVal:   "#C9A85C",
-  tintPrakt: "#F0F5F1",  accentPrakt: "#4A7A5A",
-  tintWeek:  "#F3F0F8",  accentWeek:  "#3D2C5E",
-  tintRefl:  "#F5F3EE",  accentRefl:  "#9A8050",
+  tintChart: "#E8EDF5",  accentChart: "#1C2E4A",
+  tintVal:   "#FBF2E4",  accentVal:   "#B8862A",
+  tintPrakt: "#E8F2EB",  accentPrakt: "#3A6848",
+  tintWeek:  "#EDE8F5",  accentWeek:  "#3D2C5E",
+  tintRefl:  "#F0EDE4",  accentRefl:  "#7A6030",
 };
 
 // ─── TYPOGRAPHY TOKENS ───────────────────────────────────────────────────────
@@ -110,6 +110,40 @@ const BLOCKS = [
   { key: "week",   label: "Deze week",        tint: CLR.tintWeek,   accent: CLR.accentWeek  },
   { key: "refl",   label: "Reflectievragen",  tint: CLR.tintRefl,   accent: CLR.accentRefl  },
 ];
+
+// Draw a small decorative symbol (5×5pt) at position (sx, sy).
+// Each block type has its own vector mark.
+function drawBlockSymbol(doc, key, sx, sy, accent) {
+  const s = 5;
+  doc.save();
+  doc.fillColor(accent).strokeColor(accent).lineWidth(0.8);
+  switch (key) {
+    case "chart": // Diamond
+      doc.moveTo(sx, sy - s).lineTo(sx + s, sy).lineTo(sx, sy + s).lineTo(sx - s, sy)
+         .closePath().fill();
+      break;
+    case "val": // Downward triangle
+      doc.moveTo(sx - s, sy - s).lineTo(sx + s, sy - s).lineTo(sx, sy + s)
+         .closePath().fill();
+      break;
+    case "prakt": // Filled circle
+      doc.circle(sx, sy, s).fill();
+      break;
+    case "week": // Filled square
+      doc.rect(sx - s, sy - s, s * 2, s * 2).fill();
+      break;
+    case "refl": // Open circle with centre dot
+      doc.save();
+      doc.strokeColor(accent).lineWidth(1);
+      doc.circle(sx, sy, s).stroke();
+      doc.circle(sx, sy, 1.5).fill();
+      doc.restore();
+      break;
+    default:
+      doc.circle(sx, sy, s).fill();
+  }
+  doc.restore();
+}
 
 function parseSection(text) {
   const rawLines = (text || "").split(/\n/);
@@ -504,9 +538,12 @@ function drawSectionHeader(doc, section, idx) {
 
 // ─── BLOCK RENDERER ──────────────────────────────────────────────────────────
 function drawBlock(doc, order, block, lines, y) {
-  const PAD    = 16;                   // inner padding (was 12)
-  const BW     = 4;                    // accent bar width (was 3)
-  const innerW = TW - PAD * 2 - BW;
+  const PAD     = 18;   // inner padding
+  const BW      = 6;    // left accent bar width
+  const GAP     = BW + PAD;   // total left indent from ML
+  const innerW  = TW - GAP - PAD;
+
+  const isRefl = block.key === "refl";
 
   const items = lines
     .map(function(l) {
@@ -516,58 +553,91 @@ function drawBlock(doc, order, block, lines, y) {
 
   if (!items.length) return y;
 
-  const ITEM_FONT = BODY_SIZE - 0.5;   // 10.5pt — slightly smaller than prose
-  const ITEM_GAP  = 4;                 // lineGap within item
-  const ITEM_SEP  = 7;                 // space between items
+  const ITEM_FONT = BODY_SIZE - 0.5;  // 10.5pt
+  const ITEM_GAP  = 4;
+  const ITEM_SEP  = isRefl ? 12 : 7;  // reflection questions breathe more
 
-  let bH = PAD + 6;                    // top pad + label row
-  bH += strH(doc, block.label, { width: innerW, fontSize: 7 }) + 10;
+  // ── Height calculation
+  const LABEL_H = 16;                  // Cormorant label ~12pt + breathing
+  let bH = PAD + LABEL_H + 6;         // top padding + label + divider gap
   for (const item of items) {
-    bH += strH(doc, item, { width: innerW - 18, lineGap: ITEM_GAP, fontSize: ITEM_FONT }) + ITEM_SEP;
+    bH += strH(doc, item, { width: innerW - (isRefl ? 20 : 16), lineGap: ITEM_GAP, fontSize: ITEM_FONT }) + ITEM_SEP;
   }
   bH += PAD;
 
-  if (needsNewPage(doc, y, bH + 20)) {
+  if (needsNewPage(doc, y, bH + 24)) {
     drawFooter(doc, order);
     y = addContentPage(doc, order);
   }
 
-  // Block background + left accent bar
+  // ── Background layers
+  // Base tint
   doc.rect(ML, y, TW, bH).fill(block.tint);
-  doc.rect(ML, y, BW, bH).fill(block.accent);
-
-  // Label
-  doc.font(FONT.bodyMedium).fontSize(7).fillColor(block.accent)
-    .text(block.label.toUpperCase(), ML + PAD, y + PAD, {
-      width: innerW, characterSpacing: 2,
-    });
-
-  // Thin rule below label
-  const labelBottom = y + PAD + strH(doc, block.label, { width: innerW, fontSize: 7 }) + 4;
+  // Subtle top wash — slightly more saturated near the top
   doc.save();
-  doc.rect(ML + PAD, labelBottom, innerW, 0.5).fillOpacity(0.3).fill(block.accent);
+  doc.rect(ML, y, TW, Math.min(bH, 36)).fillOpacity(0.12).fill(block.accent);
   doc.restore();
 
-  let iy = labelBottom + 8;
+  // ── Left accent bar (wider, with a thin inner shadow line)
+  doc.rect(ML, y, BW, bH).fill(block.accent);
+  doc.save();
+  doc.rect(ML + BW, y, 1, bH).fillOpacity(0.08).fill(block.accent);
+  doc.restore();
 
+  // ── Label row: symbol + Cormorant label
+  const symX  = ML + GAP - 2;
+  const symY  = y + PAD + 5;          // vertically centered in label row
+  drawBlockSymbol(doc, block.key, symX, symY, block.accent);
+
+  doc.font(FONT.displaySemiBold).fontSize(12).fillColor(block.accent)
+    .text(block.label, ML + GAP + 10, y + PAD, {
+      width: innerW - 10, lineBreak: false,
+    });
+
+  // ── Divider under label
+  const divY = y + PAD + LABEL_H;
+  doc.save();
+  doc.rect(ML + GAP, divY, innerW, 0.5).fillOpacity(0.25).fill(block.accent);
+  doc.restore();
+
+  let iy = divY + 8;
+
+  // ── Items
   for (let i = 0; i < items.length; i++) {
-    const item   = items[i];
-    const bullet = block.key === "refl" ? String(i + 1) + "." : "•";
+    const item = items[i];
 
-    // Bullet / number
-    doc.font(FONT.bodyMedium).fontSize(ITEM_FONT).fillColor(block.accent)
-      .text(bullet, ML + PAD + 2, iy, { width: 14, lineBreak: false });
+    if (isRefl) {
+      // Reflection questions: large faint ordinal behind the text
+      const numStr = String(i + 1);
+      doc.save();
+      doc.font(FONT.display).fontSize(32).fillColor(block.accent).fillOpacity(0.08)
+        .text(numStr, ML + GAP - 4, iy - 4, { width: 24, align: "right", lineBreak: false });
+      doc.restore();
 
-    // Item text — indented past bullet
-    doc.font(FONT.body).fontSize(ITEM_FONT).fillColor(CLR.text)
-      .text(item, ML + PAD + 18, iy, {
-        width: innerW - 18, lineGap: ITEM_GAP,
-      });
+      // Question number (small, colored)
+      doc.font(FONT.bodyMedium).fontSize(ITEM_FONT).fillColor(block.accent)
+        .text(numStr + ".", ML + GAP, iy, { width: 16, lineBreak: false });
+
+      // Question text
+      doc.font(FONT.body).fontSize(ITEM_FONT).fillColor(CLR.text)
+        .text(item, ML + GAP + 18, iy, { width: innerW - 18, lineGap: ITEM_GAP });
+    } else {
+      // Regular items: bullet in accent, text in text color
+      doc.font(FONT.bodyMedium).fontSize(ITEM_FONT).fillColor(block.accent)
+        .text("•", ML + GAP, iy, { width: 12, lineBreak: false });
+      doc.font(FONT.body).fontSize(ITEM_FONT).fillColor(CLR.text)
+        .text(item, ML + GAP + 14, iy, { width: innerW - 14, lineGap: ITEM_GAP });
+    }
 
     iy = doc.y + ITEM_SEP;
   }
 
-  return y + bH + 16;
+  // ── Bottom rule (subtle closure)
+  doc.save();
+  doc.rect(ML + GAP, y + bH - 2, innerW, 0.5).fillOpacity(0.15).fill(block.accent);
+  doc.restore();
+
+  return y + bH + 18;
 }
 
 // ─── PROFILE SUMMARY PAGE ────────────────────────────────────────────────────
