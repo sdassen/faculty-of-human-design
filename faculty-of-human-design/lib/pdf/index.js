@@ -228,13 +228,13 @@ function strH(doc, text, opts) {
       const savedSize = doc._fontSize;
       doc.fontSize(opts.fontSize);
       const h = doc.heightOfString(text, opts);
-      console.log("[PDF:strH] fontSize=" + opts.fontSize + " savedSize=" + savedSize + " h=" + Math.round(h) + " textLen=" + text.length);
+      if (h > 300) {
+        console.warn("[PDF:strH] LARGE h=" + Math.round(h) + " fontSize=" + opts.fontSize + " savedSize=" + savedSize + " textLen=" + text.length);
+      }
       doc.fontSize(savedSize != null ? savedSize : BODY_SIZE);
       return h;
     }
-    const h = doc.heightOfString(text, opts);
-    console.log("[PDF:strH] noSize docSize=" + doc._fontSize + " h=" + Math.round(h) + " textLen=" + text.length);
-    return h;
+    return doc.heightOfString(text, opts);
   } catch (err) {
     return 14;
   }
@@ -242,6 +242,9 @@ function strH(doc, text, opts) {
 
 function needsNewPage(doc, y, needed) {
   if (needed === undefined) needed = 60;
+  // Safety guard: right below a section header (y < HEADER_H+50=205) there is
+  // always ample room. Never force a page break here, even if font metrics are off.
+  if (y < HEADER_H + 50) return false;
   return y + needed > FY - 24;
 }
 
@@ -684,7 +687,6 @@ function drawBlock(doc, order, block, lines, y, bX, bW) {
   bH += PAD;
 
   // Page break only for full-width blocks; grid renderer pre-checks for pairs
-  console.log("[PDF:drawBlock] key=" + block.key + " y=" + Math.round(y) + " bH=" + Math.round(bH) + " items=" + items.length + " docFontSize=" + doc._fontSize + " needsBreak=" + (!isHalf && needsNewPage(doc, y, bH + 24)));
   if (!isHalf && needsNewPage(doc, y, bH + 24)) {
     drawFooter(doc, order);
     y = addContentPage(doc, order);
