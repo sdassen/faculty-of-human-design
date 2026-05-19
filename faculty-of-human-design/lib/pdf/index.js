@@ -37,6 +37,19 @@ const CLR = {
   tintRefl:  "#F5F3EE",  accentRefl:  "#9A8050",
 };
 
+// ─── TYPOGRAPHY TOKENS ───────────────────────────────────────────────────────
+// Prose text is indented slightly inside the grid margins for better line length.
+// At 11pt Inter, TW=483pt ≈ 90 chars — way too wide. PMW ≈ 432pt ≈ 72 chars (ideal).
+const PMX = ML + 4;          // prose margin left  (4pt extra indent)
+const PMW = TW - 8;          // prose text width    (narrower column)
+
+const BODY_SIZE     = 11;    // body text size (pt)
+const BODY_GAP      = 5;     // lineGap within a paragraph
+const BODY_PARA_SEP = 16;    // space after a body paragraph
+const SUB_SIZE      = 13.5;  // subhead size (pt)
+const SUB_BEFORE    = 12;    // space added before a subhead
+const SUB_AFTER     = 8;     // space added after a subhead
+
 // ─── FORBIDDEN / QA STRINGS ──────────────────────────────────────────────────
 const FORBIDDEN_STRINGS = ["**", "* ", "*\n", "##", "###", "---\n"];
 
@@ -491,8 +504,9 @@ function drawSectionHeader(doc, section, idx) {
 
 // ─── BLOCK RENDERER ──────────────────────────────────────────────────────────
 function drawBlock(doc, order, block, lines, y) {
-  const PAD    = 12;
-  const innerW = TW - PAD * 2 - 4;
+  const PAD    = 16;                   // inner padding (was 12)
+  const BW     = 4;                    // accent bar width (was 3)
+  const innerW = TW - PAD * 2 - BW;
 
   const items = lines
     .map(function(l) {
@@ -502,39 +516,58 @@ function drawBlock(doc, order, block, lines, y) {
 
   if (!items.length) return y;
 
-  let bH = PAD;
-  bH += strH(doc, block.label, { width: innerW, fontSize: 7 }) + 6;
+  const ITEM_FONT = BODY_SIZE - 0.5;   // 10.5pt — slightly smaller than prose
+  const ITEM_GAP  = 4;                 // lineGap within item
+  const ITEM_SEP  = 7;                 // space between items
+
+  let bH = PAD + 6;                    // top pad + label row
+  bH += strH(doc, block.label, { width: innerW, fontSize: 7 }) + 10;
   for (const item of items) {
-    bH += strH(doc, item, { width: innerW - 14, lineGap: 2, fontSize: 9.5 }) + 6;
+    bH += strH(doc, item, { width: innerW - 18, lineGap: ITEM_GAP, fontSize: ITEM_FONT }) + ITEM_SEP;
   }
   bH += PAD;
 
-  if (needsNewPage(doc, y, bH + 16)) {
+  if (needsNewPage(doc, y, bH + 20)) {
     drawFooter(doc, order);
     y = addContentPage(doc, order);
   }
 
+  // Block background + left accent bar
   doc.rect(ML, y, TW, bH).fill(block.tint);
-  doc.rect(ML, y, 3, bH).fill(block.accent);
+  doc.rect(ML, y, BW, bH).fill(block.accent);
 
+  // Label
   doc.font(FONT.bodyMedium).fontSize(7).fillColor(block.accent)
     .text(block.label.toUpperCase(), ML + PAD, y + PAD, {
-      width: innerW, characterSpacing: 1.5,
+      width: innerW, characterSpacing: 2,
     });
 
-  let iy = y + PAD + strH(doc, block.label, { width: innerW, fontSize: 7 }) + 4;
+  // Thin rule below label
+  const labelBottom = y + PAD + strH(doc, block.label, { width: innerW, fontSize: 7 }) + 4;
+  doc.save();
+  doc.rect(ML + PAD, labelBottom, innerW, 0.5).fillOpacity(0.3).fill(block.accent);
+  doc.restore();
+
+  let iy = labelBottom + 8;
 
   for (let i = 0; i < items.length; i++) {
     const item   = items[i];
-    const bullet = block.key === "refl" ? (i + 1) + "." : "•";
-    doc.font(FONT.bodyMedium).fontSize(9.5).fillColor(block.accent)
-      .text(bullet, ML + PAD + 2, iy, { width: 12, lineBreak: false });
-    doc.font(FONT.body).fontSize(9.5).fillColor(CLR.text)
-      .text(item, ML + PAD + 16, iy, { width: innerW - 14, lineGap: 2 });
-    iy = doc.y + 6;
+    const bullet = block.key === "refl" ? String(i + 1) + "." : "•";
+
+    // Bullet / number
+    doc.font(FONT.bodyMedium).fontSize(ITEM_FONT).fillColor(block.accent)
+      .text(bullet, ML + PAD + 2, iy, { width: 14, lineBreak: false });
+
+    // Item text — indented past bullet
+    doc.font(FONT.body).fontSize(ITEM_FONT).fillColor(CLR.text)
+      .text(item, ML + PAD + 18, iy, {
+        width: innerW - 18, lineGap: ITEM_GAP,
+      });
+
+    iy = doc.y + ITEM_SEP;
   }
 
-  return y + bH + 14;
+  return y + bH + 16;
 }
 
 // ─── PROFILE SUMMARY PAGE ────────────────────────────────────────────────────
@@ -797,31 +830,43 @@ export async function generatePDF({ order, sections }) {
 
         for (const para of paras) {
           const isSubhead =
-            para.length <= 70
+            para.length <= 72
             && !para.endsWith(".")
             && !para.endsWith("?")
+            && !para.endsWith(",")
             && para[0] === para[0].toUpperCase()
             && !para.startsWith("•")
             && !/^\d+\./.test(para)
-            && para.split(" ").length <= 8;
-
-          const opts = { width: TW, lineGap: isSubhead ? 1 : 3 };
-          const h    = strH(doc, para, opts) + (isSubhead ? 14 : 16);
-
-          if (needsNewPage(doc, y, h)) {
-            drawFooter(doc, order);
-            y = addContentPage(doc, order);
-            pageHasContent = false;
-          }
+            && para.split(" ").length <= 9;
 
           if (isSubhead) {
-            doc.font(FONT.displaySemiBold).fontSize(13).fillColor(CLR.navy)
-              .text(para, ML, y, opts);
+            // Subhead: Display SemiBold with generous breathing room
+            const opts = { width: PMW, lineGap: 2 };
+            const h    = SUB_BEFORE + strH(doc, para, opts) + SUB_AFTER + 4;
+            if (needsNewPage(doc, y, h + 40)) {
+              drawFooter(doc, order);
+              y = addContentPage(doc, order);
+              pageHasContent = false;
+            }
+            y += SUB_BEFORE;
+            doc.font(FONT.displaySemiBold).fontSize(SUB_SIZE).fillColor(CLR.navy)
+              .text(para, PMX, y, opts);
+            // Short gold rule under subhead
+            doc.rect(PMX, doc.y + 3, 24, 0.75).fill(CLR.gold);
+            y = doc.y + SUB_AFTER + 4;
           } else {
-            doc.font(FONT.body).fontSize(10.5).fillColor(CLR.text)
-              .text(para, ML, y, opts);
+            // Body paragraph — 11pt Inter, generous lineGap
+            const opts = { width: PMW, lineGap: BODY_GAP };
+            const h    = strH(doc, para, opts) + BODY_PARA_SEP;
+            if (needsNewPage(doc, y, h)) {
+              drawFooter(doc, order);
+              y = addContentPage(doc, order);
+              pageHasContent = false;
+            }
+            doc.font(FONT.body).fontSize(BODY_SIZE).fillColor(CLR.text)
+              .text(para, PMX, y, opts);
+            y = doc.y + BODY_PARA_SEP;
           }
-          y = doc.y + (isSubhead ? 8 : 13);
           pageHasContent = true;
         }
       }
