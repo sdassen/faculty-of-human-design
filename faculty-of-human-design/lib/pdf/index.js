@@ -501,6 +501,190 @@ function drawBlock(doc, order, block, lines, y) {
   return y + bH + 14;
 }
 
+// ─── PROFILE SUMMARY PAGE ────────────────────────────────────────────────────
+// Accent color per energy type — used for the hero band behind the type name.
+function typeAccent(type) {
+  const t = (type || "").toLowerCase();
+  if (t.includes("manifesting generator") || t.includes("manifesterend generator")) return { bg: "#2A1F0A", fg: "#E8B060", bar: "#D4956A" };
+  if (t.includes("generator"))    return { bg: "#1E1A08", fg: "#C9A85C", bar: CLR.gold };
+  if (t.includes("projector"))    return { bg: "#0A1220", fg: "#8AAAD4", bar: "#3D5A8A" };
+  if (t.includes("manifestor") || t.includes("manifesteerder")) return { bg: "#1A0A14", fg: "#C88AAA", bar: "#8A3D5A" };
+  if (t.includes("reflector"))    return { bg: "#0E1818", fg: "#8ABABA", bar: "#3D7A7A" };
+  return { bg: "#1A1715", fg: CLR.gold, bar: CLR.gold };
+}
+
+// All 9 centers in anatomical order (top → bottom of bodygraph)
+const ALL_CENTERS = ["Head", "Ajna", "Throat", "G", "Heart", "Spleen", "Sacral", "Solar Plexus", "Root"];
+const CENTER_NL   = {
+  "Head": "Hoofd", "Ajna": "Ajna", "Throat": "Keel", "G": "G",
+  "Heart": "Hart", "Spleen": "Milt", "Sacral": "Sacraal",
+  "Solar Plexus": "Zonnevlecht", "Root": "Wortel",
+};
+
+function drawProfilePage(doc, order, chart) {
+  doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
+
+  // ── Background + top stripe
+  doc.rect(0, 0, W, H).fill(CLR.bg);
+  doc.rect(0, 0, W, 4).fill(CLR.dark);
+
+  // ── Page label
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
+    .text("JOUW MENSELIJK ONTWERP", ML, 18, { characterSpacing: 2.5 });
+
+  // ── Name + birth data (right-aligned)
+  const bd = order.birth_data || {};
+  if (order.customer_name) {
+    doc.font(FONT.displayLight).fontSize(11).fillColor(CLR.textMuted)
+      .text(order.customer_name, ML, 14, { width: TW, align: "right" });
+  }
+  if (bd.day) {
+    const bStr = [
+      bd.day + "-" + bd.month + "-" + bd.year,
+      bd.place || null,
+    ].filter(Boolean).join("  ·  ");
+    doc.font(FONT.bodyLight).fontSize(7.5).fillColor(CLR.textLight)
+      .text(bStr, ML, 28, { width: TW, align: "right" });
+  }
+
+  // ── TYPE HERO BAND
+  const accent = typeAccent(chart.type);
+  const heroY  = 56;
+  const heroH  = 90;
+
+  doc.rect(0, heroY, W, heroH).fill(accent.bg);
+  // Left color bar
+  doc.rect(0, heroY, 6, heroH).fill(accent.bar);
+  // Right fade strip (decorative)
+  doc.save();
+  doc.rect(W - 80, heroY, 80, heroH).fillOpacity(0.08).fill(accent.bar);
+  doc.restore();
+
+  // TYPE label
+  doc.font(FONT.body).fontSize(6.5).fillColor(accent.bar)
+    .text("ENERGIE TYPE", ML + 16, heroY + 14, { characterSpacing: 2 });
+
+  // TYPE value — large Cormorant Italic
+  doc.font(FONT.display).fontSize(48).fillColor(accent.fg)
+    .text(chart.type || "—", ML + 16, heroY + 24, { width: TW - 24, lineGap: 0 });
+
+  // ── KEY DATA — 3-column row (Strategy / Authority / Profile)
+  const row1Y = heroY + heroH + 28;
+  const col3  = TW / 3;
+
+  const row1 = [
+    { label: "STRATEGIE",  value: chart.strat   || "—" },
+    { label: "AUTORITEIT", value: chart.auth    || "—" },
+    { label: "PROFIEL",    value: chart.profile || "—" },
+  ];
+
+  // Thin gold top rule
+  doc.rect(ML, row1Y - 12, TW, 0.75).fill(CLR.gold);
+
+  row1.forEach(function(item, i) {
+    const cx = ML + i * col3;
+    if (i > 0) {
+      doc.save();
+      doc.rect(cx, row1Y - 8, 0.5, 44).fillOpacity(0.25).fill(CLR.gold);
+      doc.restore();
+    }
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
+      .text(item.label, cx, row1Y, { width: col3 - 4, characterSpacing: 1.5 });
+    doc.font(FONT.displayRegular).fontSize(13).fillColor(CLR.dark)
+      .text(item.value, cx, row1Y + 10, { width: col3 - 8 });
+  });
+
+  // ── KEY DATA — 2-column row (Signature / Not-Self)
+  const row2Y = row1Y + 52;
+  const col2  = TW / 2;
+
+  doc.rect(ML, row2Y - 12, TW, 0.5).fill(CLR.border);
+
+  const row2 = [
+    { label: "SIGNATUUR",      value: chart.sig     || "—" },
+    { label: "NOT-SELF THEMA", value: chart.notSelf || "—" },
+  ];
+  row2.forEach(function(item, i) {
+    const cx = ML + i * col2;
+    if (i > 0) {
+      doc.save();
+      doc.rect(cx, row2Y - 8, 0.5, 40).fillOpacity(0.2).fill(CLR.gold);
+      doc.restore();
+    }
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
+      .text(item.label, cx, row2Y, { width: col2 - 4, characterSpacing: 1.5 });
+    doc.font(FONT.displayRegular).fontSize(13).fillColor(CLR.dark)
+      .text(item.value, cx, row2Y + 10, { width: col2 - 8 });
+  });
+
+  // ── CENTERS OVERVIEW
+  const centersY = row2Y + 60;
+  doc.rect(ML, centersY - 12, TW, 0.75).fill(CLR.gold);
+
+  doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
+    .text("ENERGIECENTRA", ML, centersY, { characterSpacing: 1.5 });
+
+  const defined = new Set((chart.definedCenters || []).map(function(c) { return c.trim(); }));
+
+  const nodeSize  = 28;
+  const nodeGap   = 6;
+  const perRow    = Math.min(9, Math.floor(TW / (nodeSize + nodeGap)));
+  const startX    = ML;
+  let   nodeX     = startX;
+  let   nodeY     = centersY + 14;
+
+  ALL_CENTERS.forEach(function(center, i) {
+    if (i > 0 && i % perRow === 0) {
+      nodeX  = startX;
+      nodeY += nodeSize + nodeGap + 12;
+    }
+    const isDef = defined.has(center);
+
+    if (isDef) {
+      doc.rect(nodeX, nodeY, nodeSize, nodeSize).fill(CLR.brand);
+      doc.font(FONT.bodyLight).fontSize(6).fillColor("#FFFFFF")
+        .text(CENTER_NL[center] || center, nodeX, nodeY + 10, {
+          width: nodeSize, align: "center", lineBreak: false,
+        });
+    } else {
+      doc.rect(nodeX, nodeY, nodeSize, nodeSize).stroke(CLR.border).lineWidth(0.75);
+      doc.font(FONT.bodyLight).fontSize(6).fillColor(CLR.textLight)
+        .text(CENTER_NL[center] || center, nodeX, nodeY + 10, {
+          width: nodeSize, align: "center", lineBreak: false,
+        });
+    }
+
+    nodeX += nodeSize + nodeGap;
+  });
+
+  // Centers legend
+  const legY = nodeY + nodeSize + 14;
+  doc.rect(ML, legY, nodeSize, 8).fill(CLR.brand);
+  doc.font(FONT.bodyLight).fontSize(7).fillColor(CLR.textMuted)
+    .text("Gedefinieerd — vaste eigen energie", ML + nodeSize + 6, legY + 1);
+
+  doc.rect(ML + 130, legY, nodeSize, 8).stroke(CLR.border).lineWidth(0.75);
+  doc.font(FONT.bodyLight).fontSize(7).fillColor(CLR.textMuted)
+    .text("Open — ontvangt uit omgeving", ML + 130 + nodeSize + 6, legY + 1);
+
+  // ── INCARNATION CROSS
+  if (chart.cross) {
+    const crossY = legY + 28;
+    doc.rect(ML, crossY - 12, TW, 0.5).fill(CLR.border);
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
+      .text("INKARNATIE-KRUIS", ML, crossY, { characterSpacing: 1.5 });
+    doc.font(FONT.displayRegular).fontSize(13).fillColor(CLR.dark)
+      .text(chart.cross, ML, crossY + 10, { width: TW });
+  }
+
+  // ── Footer (light page — no dark footer bar)
+  doc.rect(ML, FY - 8, TW, 0.5).fill(CLR.border);
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.textLight)
+    .text(order.report_title || "", ML, FY, { width: TW / 2 });
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.textLight)
+    .text("Faculty of Human Design", ML, FY, { width: TW, align: "right" });
+}
+
 // ─── MAIN EXPORT ─────────────────────────────────────────────────────────────
 export async function generatePDF({ order, sections }) {
   return new Promise(function(resolve, reject) {
@@ -533,6 +717,13 @@ export async function generatePDF({ order, sections }) {
 
     const chartData    = (order.birth_data || {}).chart || {};
     const hasChartData = chartData.type && Array.isArray(chartData.definedCenters);
+
+    // Profile summary page — always shown when chart data is available
+    if (hasChartData) {
+      drawProfilePage(doc, order, chartData);
+    }
+
+    // Bodygraph visualisation
     if (hasChartData) {
       drawBodygraphPage(doc, order, chartData);
     }
