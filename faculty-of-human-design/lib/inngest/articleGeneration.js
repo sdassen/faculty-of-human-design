@@ -242,6 +242,62 @@ export const articleGeneration = inngest.createFunction(
   [{ cron: "0 10 1,15 * *" }, { event: "article/generate" }],
 
   async ({ event, step }) => {
+    // ── Backfill mode: translate all articles missing body_en ─────────────
+    // Trigger via Inngest dashboard: event "article/generate" with data { action: "backfill" }
+    if (event?.data?.action === "backfill") {
+      return await step.run("backfill-translations", async () => {
+        const SUPABASE_URL = process.env.SUPABASE_URL?.replace(/\/$/, "");
+        const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
+
+        const listRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/articles?select=id,title,body&body_en=is.null&order=published_at.asc`,
+          { headers: { apikey: KEY, Authorization: "Bearer " + KEY } }
+        );
+        const articles = await listRes.json();
+        if (!Array.isArray(articles) || articles.length === 0) return { translated: 0 };
+
+        const TRANSLATE_SYSTEM = `You are an expert translator for the Faculty of Human Design on Ibiza.
+Translate the following Dutch article into fluent, natural English.
+Preserve the tone, structure and paragraph breaks exactly.
+Output only the translated article text — no title, no preamble.
+Paragraphs separated by a blank line.`;
+
+        const results = [];
+        for (const article of articles) {
+          try {
+            const [bodyRes, titleRes] = await Promise.all([
+              fetch("https://api.anthropic.com/v1/messages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
+                body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 3000, system: TRANSLATE_SYSTEM, messages: [{ role: "user", content: article.body }] }),
+              }),
+              fetch("https://api.anthropic.com/v1/messages", {
+                method: "POST",
+                headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
+                body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 100, system: "Translate this Dutch article title to English. Output only the translated title, nothing else.", messages: [{ role: "user", content: article.title }] }),
+              }),
+            ]);
+            const bodyData = await bodyRes.json();
+            const titleData = await titleRes.json();
+            const bodyEn = bodyData.content?.find((b) => b.type === "text")?.text?.trim() || "";
+            const titleEn = titleData.content?.find((b) => b.type === "text")?.text?.trim() || article.title;
+            const firstPara = bodyEn.split("\n\n")[0] || "";
+            const excerptEn = firstPara.length > 220 ? firstPara.slice(0, 217).trim() + "..." : firstPara.trim();
+            await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${article.id}`, {
+              method: "PATCH",
+              headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + KEY, Prefer: "return=minimal" },
+              body: JSON.stringify({ title_en: titleEn, excerpt_en: excerptEn, body_en: bodyEn }),
+            });
+            results.push({ id: article.id, title_en: titleEn, status: "ok" });
+          } catch (e) {
+            results.push({ id: article.id, title: article.title, status: "error", error: e.message });
+          }
+        }
+        return { translated: results.length, results };
+      });
+    }
+
     // ── Step 1: Pick the next topic not yet in the DB ─────────────────────
     const topic = await step.run("pick-topic", async () => {
       // Manual trigger can specify a topic index
