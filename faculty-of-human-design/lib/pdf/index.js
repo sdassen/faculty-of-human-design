@@ -405,8 +405,22 @@ function drawCover(doc, order, sections) {
   doc.rect(0, 0, W, 4).fill(CLR.gold);
   doc.rect(0, H - 4, W, 4).fill(CLR.gold);
 
-  // ── Geometric decoration — drawn first so text sits on top
-  //    Center it between institution label and chart grid
+  // ── Bodygraph watermark — this person's actual chart, faint behind all text
+  //    Renders at ~7% opacity so it's felt rather than read.
+  //    Makes every cover uniquely personal without being distracting.
+  if (chart.type) {
+    const wmScale = 0.78;
+    const wmSize  = bodygraphSize(wmScale);
+    const wmX = (W - wmSize.width)  / 2;
+    const wmY = (H - wmSize.height) / 2 - 30; // slightly above center
+    doc.save();
+    doc.fillOpacity(0.07);
+    doc.strokeOpacity(0.07);
+    drawBodygraph(doc, chart, { x: wmX, y: wmY, scale: wmScale });
+    doc.restore();
+  }
+
+  // ── Subtle geometric ring decoration — layered on top of bodygraph watermark
   drawCoverDecoration(doc, 290);
 
   // ── Institution label
@@ -415,9 +429,9 @@ function drawCover(doc, order, sections) {
       align: "center", width: W, characterSpacing: 4,
     });
 
-  // ── Report title (Cormorant Italic — the signature display face)
-  doc.font(FONT.display).fontSize(38).fillColor("#FFFFFF")
-    .text(order.report_title || "Persoonlijk Rapport", ML, 112, {
+  // ── Report title — slightly smaller so it fits on one line more often
+  doc.font(FONT.display).fontSize(34).fillColor("#FFFFFF")
+    .text(order.report_title || "Persoonlijk Rapport", ML, 108, {
       align: "center", width: TW, lineGap: 9,
     });
 
