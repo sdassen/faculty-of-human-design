@@ -2,10 +2,18 @@ import { createClient } from "@supabase/supabase-js";
 import { inngest } from "./client.js";
 
 // ─── SUPABASE ─────────────────────────────────────────────────────────────────
+// Pass a no-op WebSocket stub so @supabase/realtime-js doesn't throw in Node.js 20.
+class _NoopWS {
+  constructor() { this.readyState = 3; }
+  send() {} close() {} addEventListener() {} removeEventListener() {}
+}
+_NoopWS.CONNECTING = 0; _NoopWS.OPEN = 1; _NoopWS.CLOSING = 2; _NoopWS.CLOSED = 3;
+
 function getSupabase() {
   return createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { realtime: { transport: _NoopWS } }
   );
 }
 

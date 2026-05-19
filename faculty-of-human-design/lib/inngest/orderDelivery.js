@@ -9,10 +9,20 @@ import { scoreSection, MAX_RETRIES } from "./qualityScore.js";
 import { calcHDServer } from "../hd/calculator.js";
 
 // ─── SUPABASE ─────────────────────────────────────────────────────────────────
+// @supabase/realtime-js throws in Node.js 20 if no WebSocket is available.
+// We never use Realtime (only PostgREST over fetch), so we pass a no-op stub
+// as the transport so the check is satisfied without opening any connection.
+class _NoopWS {
+  constructor() { this.readyState = 3; } // CLOSED
+  send() {} close() {} addEventListener() {} removeEventListener() {}
+}
+_NoopWS.CONNECTING = 0; _NoopWS.OPEN = 1; _NoopWS.CLOSING = 2; _NoopWS.CLOSED = 3;
+
 function getSupabase() {
   return createClient(
     process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+    process.env.SUPABASE_SERVICE_ROLE_KEY,
+    { realtime: { transport: _NoopWS } }
   );
 }
 
