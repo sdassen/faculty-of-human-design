@@ -1,55 +1,22 @@
-// Dynamic import so any module-init error is returned as JSON rather than
-// crashing the Lambda silently with FUNCTION_INVOCATION_FAILED.
+// Calls the Supabase REST API directly via fetch so we avoid the
+// @supabase/realtime-js WebSocket check that throws in Node.js 20.
 export default async function handler(req, res) {
-  // Temporary GET diagnostic — remove after issue is resolved
+  // Temporary GET diagnostic — remove once orders are working
   if (req.method === "GET") {
-    const diag = {
-      envVars: {
-        SUPABASE_URL: process.env.SUPABASE_URL ? "✅ set" : "❌ MISSING",
-        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ set" : "❌ MISSING",
-      },
-      supabaseImport: "pending",
-      createClient: "pending",
-    };
-    try {
-      const mod = await import("@supabase/supabase-js");
-      diag.supabaseImport = "✅ ok";
-      try {
-        mod.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
-        diag.createClient = "✅ ok";
-      } catch (e) {
-        diag.createClient = "❌ " + e.message;
-      }
-    } catch (e) {
-      diag.supabaseImport = "❌ " + e.message;
-      diag.createClient = "skipped";
-    }
-    return res.json(diag);
+    return res.json({
+      SUPABASE_URL: process.env.SUPABASE_URL ? "✅ set" : "❌ MISSING",
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ set" : "❌ MISSING",
+      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? "✅ set" : "❌ MISSING",
+    });
   }
+
   if (req.method !== "POST") return res.status(405).end();
 
-  // ── Load Supabase (dynamic so import errors surface as JSON) ─────────────
-  let createClient;
-  try {
-    ({ createClient } = await import("@supabase/supabase-js"));
-  } catch (e) {
-    console.error("[create-order] supabase import FAILED:", e);
-    return res.status(500).json({
-      error: "Server configuratiefout. Neem contact op met support.",
-      _debug: { phase: "import", message: e.message },
-    });
-  }
-
-  // ── Validate env vars ─────────────────────────────────────────────────────
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     console.error("[create-order] Missing Supabase env vars");
-    return res.status(500).json({
-      error: "Server configuratiefout. Neem contact op met support.",
-      _debug: { phase: "env", missing: !process.env.SUPABASE_URL ? "SUPABASE_URL" : "SUPABASE_SERVICE_ROLE_KEY" },
-    });
+    return res.status(500).json({ error: "Server configuratiefout." });
   }
 
-  // ── Parse body ────────────────────────────────────────────────────────────
   const {
     reportId,
     reportTitle,
@@ -69,47 +36,46 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Ongeldig e-mailadres" });
   }
 
-  // ── Create order ──────────────────────────────────────────────────────────
-  let orderId;
-  try {
-    const { randomUUID } = await import("crypto");
-    orderId = randomUUID();
-  } catch (e) {
-    orderId = crypto.randomUUID?.() || Math.random().toString(36).slice(2);
-  }
+  const { randomUUID } = await import("crypto");
+  const orderId = randomUUID();
 
-  let supabase;
-  try {
-    supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-  } catch (e) {
-    console.error("[create-order] createClient FAILED:", e);
-    return res.status(500).json({
-      error: "Server configuratiefout. Neem contact op met support.",
-      _debug: { phase: "createClient", message: e.message },
-    });
-  }
-
-  const { error } = await supabase.from("orders").insert({
+  const row = {
     id: orderId,
     report_id: reportId,
-    report_title: reportTitle,
+    report_title: reportTitle || reportId,
     customer_name: customerName || null,
     customer_email: customerEmail.trim().toLowerCase(),
     birth_data: birthData,
     partner_birth_data: partnerBirthData || null,
     prompt_sections: promptSections,
     status: "pending",
-  });
+  };
 
-  if (error) {
-    console.error("[create-order] Supabase insert error:", error.message, error.code, error.details);
-    return res.status(500).json({
-      error: "Order aanmaken mislukt. Probeer opnieuw.",
-      _debug: { phase: "insert", message: error.message, code: error.code },
+  const url = process.env.SUPABASE_URL.replace(/\/$/, "") + "/rest/v1/orders";
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  let dbRes;
+  try {
+    dbRes = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + key,
+        "apikey": key,
+        "Prefer": "return=minimal",
+      },
+      body: JSON.stringify(row),
     });
+  } catch (e) {
+    console.error("[create-order] fetch to Supabase failed:", e.message);
+    return res.status(500).json({ error: "Order aanmaken mislukt. Probeer opnieuw." });
+  }
+
+  if (!dbRes.ok) {
+    let errBody = "";
+    try { errBody = await dbRes.text(); } catch (_) {}
+    console.error("[create-order] Supabase error:", dbRes.status, errBody);
+    return res.status(500).json({ error: "Order aanmaken mislukt. Probeer opnieuw." });
   }
 
   return res.json({ orderId });
