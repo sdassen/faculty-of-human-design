@@ -1,5 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
-
 // Token download link expires after 30 days
 const TOKEN_EXPIRY_DAYS = 30;
 
@@ -12,16 +10,23 @@ export default async function handler(req, res) {
     return res.status(400).send("Ongeldige downloadlink.");
   }
 
-  const supabase = createClient(
-    process.env.SUPABASE_URL,
-    process.env.SUPABASE_SERVICE_ROLE_KEY
+  // Use Supabase REST API directly to avoid WebSocket check in Node.js 20
+  const base = (process.env.SUPABASE_URL || "").replace(/\/$/, "");
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const dbRes = await fetch(
+    base + "/rest/v1/orders?download_token=eq." + encodeURIComponent(token) +
+    "&select=id,pdf_blob_url,delivered_at,customer_name,report_title,status",
+    {
+      headers: {
+        Authorization: "Bearer " + key,
+        apikey: key,
+        Accept: "application/json",
+      },
+    }
   );
-
-  const { data: order, error } = await supabase
-    .from("orders")
-    .select("id, pdf_blob_url, delivered_at, customer_name, report_title, status")
-    .eq("download_token", token)
-    .single();
+  const rows = dbRes.ok ? await dbRes.json() : [];
+  const order = rows[0] || null;
+  const error = !dbRes.ok || !order;
 
   if (error || !order) {
     console.error("[get-download] Token lookup failed:", token, error?.message);

@@ -1,4 +1,3 @@
-import { createClient } from "@supabase/supabase-js";
 import { createHmac, timingSafeEqual } from "crypto";
 
 // Inngest client (lazy-imported to avoid cold-start failures on missing env)
@@ -45,10 +44,29 @@ function verifyStripeSignature(rawBody, signatureHeader, secret) {
   }
 }
 
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY
-);
+// Use Supabase REST API directly — avoids the @supabase/realtime-js
+// WebSocket check that throws in Node.js 20.
+async function supabasePatch(table, filter, data) {
+  const base = (process.env.SUPABASE_URL || "").replace(/\/$/, "");
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+  const params = new URLSearchParams(
+    Object.entries(filter).map(([k, v]) => [k, "eq." + v])
+  );
+  const res = await fetch(base + "/rest/v1/" + table + "?" + params, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "Bearer " + key,
+      apikey: key,
+      Prefer: "return=minimal",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => "");
+    throw new Error("Supabase PATCH " + table + " failed (" + res.status + "): " + txt);
+  }
+}
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
@@ -79,26 +97,25 @@ export default async function handler(req, res) {
     const orderId = session.client_reference_id;
 
     if (!orderId) {
-      // Legacy order without pre-created order — ignore
       console.warn("[stripe-webhook] No client_reference_id on session", session.id);
       return res.json({ received: true });
     }
 
-    // Update order to paid
-    const { error: updateError } = await supabase
-      .from("orders")
-      .update({
-        status: "paid",
-        stripe_session_id: session.id,
-        stripe_payment_intent: session.payment_intent || null,
-        paid_at: new Date().toISOString(),
-      })
-      .eq("id", orderId)
-      .eq("status", "pending"); // idempotency guard
-
-    if (updateError) {
-      console.error("[stripe-webhook] DB update error:", updateError.message);
-      // Still fire Inngest — it will handle state recovery
+    // Update order to paid (idempotent — only if still pending)
+    try {
+      await supabasePatch(
+        "orders",
+        { id: orderId, status: "pending" },
+        {
+          status: "paid",
+          stripe_session_id: session.id,
+          stripe_payment_intent: session.payment_intent || null,
+          paid_at: new Date().toISOString(),
+        }
+      );
+    } catch (dbErr) {
+      console.error("[stripe-webhook] DB update error:", dbErr.message);
+      // Still fire Inngest — it handles state recovery
     }
 
     // Fire Inngest delivery event
@@ -109,13 +126,9 @@ export default async function handler(req, res) {
         data: { orderId },
       });
       console.log("[stripe-webhook] Inngest event sent:", ids?.[0]);
-    } catch (inngestError) {
-      console.error("[stripe-webhook] Inngest send failed:", inngestError.message);
-      // Mark as failed so we can retry manually
-      await supabase
-        .from("orders")
-        .update({ status: "failed" })
-        .eq("id", orderId);
+    } catch (inngestErr) {
+      console.error("[stripe-webhook] Inngest send failed:", inngestErr.message);
+      return res.status(500).json({ error: "Inngest send failed" });
     }
   }
 
