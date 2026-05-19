@@ -59,6 +59,22 @@ function ui(order, nl, en) {
   return (order && order.language === "en") ? en : nl;
 }
 
+// ─── PULL QUOTE EXTRACTOR ────────────────────────────────────────────────────
+// Grabs the first complete sentence from the core analysis (after the "In jouw
+// chart:" / "In your chart:" block) to use as a header band tagline.
+function extractPullQuote(text, maxLen) {
+  if (maxLen === undefined) maxLen = 115;
+  if (!text) return "";
+  // Strip the leading chart-facts block (everything up to first blank line)
+  const withoutChartBlock = text.replace(/^in (jouw|your) chart:[\s\S]*?\n\n/im, "").trim();
+  // Take first sentence
+  const m = withoutChartBlock.match(/[^.\n]{20,}[.]/);
+  if (!m) return "";
+  const sentence = m[0].replace(/^[^\w]+/, "").trim(); // strip leading punctuation
+  if (sentence.length < 24) return "";
+  return sentence.length > maxLen ? sentence.slice(0, maxLen - 1).trimEnd() + "…" : sentence;
+}
+
 // ─── MARKDOWN STRIPPER ───────────────────────────────────────────────────────
 function stripMd(text) {
   if (!text) return "";
@@ -216,6 +232,9 @@ function addContentPage(doc, order) {
 }
 
 function drawFooter(doc, order) {
+  // Increment page counter stored on doc instance (set to 0 in generatePDF)
+  doc.__pg = (doc.__pg || 0) + 1;
+
   doc.save();
   // Footer rule — gold tinted
   doc.rect(ML, FY - 9, TW, 0.5).fill(CLR.border);
@@ -224,6 +243,10 @@ function drawFooter(doc, order) {
   // Left: report title
   doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
     .text(order.report_title || "", ML, FY, { width: TW / 2 });
+
+  // Center: page number (faint)
+  doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
+    .text(String(doc.__pg), ML, FY, { width: TW, align: "center" });
 
   // Right: brand name
   doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
@@ -546,11 +569,24 @@ function drawSectionHeader(doc, section, idx, order) {
     .text(section.title, ML + 16, 54, { width: TW - 40, lineGap: 6 });
 
   // Gold ornament line below title
-  const titleBottom = doc.y + 14;
+  const titleBottom = doc.y + 12;
   doc.rect(ML + 16, titleBottom, 48, 1).fill(CLR.gold);
   doc.save();
   doc.rect(ML + 16 + 48, titleBottom, 24, 0.5).fillOpacity(0.4).fill(CLR.gold);
   doc.restore();
+
+  // ── Pull quote — first sentence of core analysis, rendered as faint italic
+  const pullQuote = extractPullQuote(section.cleanText || "");
+  if (pullQuote) {
+    const pqY = titleBottom + 10;
+    // Only render if it fits comfortably inside the dark band
+    if (pqY + 22 < HEADER_H - 12) {
+      doc.font(FONT.display).fontSize(9).fillColor(CLR.gold)
+        .fillOpacity(0.38)
+        .text(pullQuote, ML + 16, pqY, { width: TW - 80, lineGap: 3 });
+      doc.fillOpacity(1);
+    }
+  }
 
   // ── Light transition zone — subtle strip between dark and content
   doc.rect(0, HEADER_H, W, 8).fill(CLR.bgMuted);
@@ -887,6 +923,10 @@ export async function generatePDF({ order, sections }) {
 
     registerFonts(doc);
 
+    // Page counter — incremented by every drawFooter() call.
+    // Profile page draws its own footer (doesn't call drawFooter), so starts at 0.
+    doc.__pg = 0;
+
     drawCover(doc, order, adjustedSections);
 
     const chartData    = (order.birth_data || {}).chart || {};
@@ -906,8 +946,11 @@ export async function generatePDF({ order, sections }) {
       const cleanText = cleanSectionText(section.text, section.title);
       qaSection(cleanText, section.title);
 
+      // Attach cleanText to section so drawSectionHeader can extract a pull quote
+      const sectionWithClean = Object.assign({}, section, { cleanText: cleanText });
+
       doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
-      drawSectionHeader(doc, section, idx, order);
+      drawSectionHeader(doc, sectionWithClean, idx, order);
       // Content starts after the dark opener band + transition strip
       let y = HEADER_H + 24;
       drawFooter(doc, order);
@@ -922,22 +965,32 @@ export async function generatePDF({ order, sections }) {
           continue;
         }
 
-        const paras = seg.lines
-          .join("\n")
-          .split(/\n\n+/)
+        // Split on double newlines AND on single newlines that precede a likely
+        // subheading (short line, capitalised, no trailing period/comma/question).
+        // This handles Claude's single-newline paragraph separators correctly.
+        const rawProse = seg.lines.join("\n");
+        const paras = rawProse
+          .split(/\n\n+|\n(?=[A-ZÁÉÍÓÚ][^\n]{2,60}(?:\n|$)(?![•\-–\d]))/u)
           .map(function(p) { return stripMd(p.trim()); })
           .filter(Boolean);
 
         for (const para of paras) {
+          // A subhead is: short, capitalised, no sentence-ending punctuation,
+          // no bullet/number prefix, and doesn't contain multiple sentences.
           const isSubhead =
-            para.length <= 72
+            para.length <= 80
             && !para.endsWith(".")
             && !para.endsWith("?")
+            && !para.endsWith("!")
             && !para.endsWith(",")
+            && !para.endsWith(":")
+            && para.length > 3
             && para[0] === para[0].toUpperCase()
             && !para.startsWith("•")
+            && !para.startsWith("-")
             && !/^\d+\./.test(para)
-            && para.split(" ").length <= 9;
+            && !para.includes(". ")        // no mid-sentence periods
+            && para.split(/\s+/).length <= 10;
 
           if (isSubhead) {
             // Subhead: Display SemiBold with generous breathing room
