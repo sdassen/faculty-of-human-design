@@ -1856,6 +1856,13 @@ function ReportForm({rpt,onDone,postPayment}){
   const[pr,setPr]=useState(0);
   const[loading,setLoading]=useState(false);const[autoTrigger,setAutoTrigger]=useState(false);useEffect(()=>{if(!postPayment)return;setChart(postPayment.chart);setForm(f=>({...f,...postPayment.form}));setAutoTrigger(true);},[postPayment]);useEffect(()=>{if(autoTrigger&&chart){setAutoTrigger(false);doReport();}},[autoTrigger,chart]);
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
+  // Clamp numeric fields on blur to prevent invalid values (e.g. minute=66, day=44)
+  const numBlur=(name,min,max)=>e=>{
+    const v=parseInt(e.target.value);
+    if(e.target.value===""||isNaN(v))return;
+    setForm(f=>({...f,[name]:String(Math.max(min,Math.min(max,v)))}));
+  };
+  const maxDay=()=>{const m=parseInt(form.month),y=parseInt(form.year)||2000;return m?new Date(y,m,0).getDate():31;};
   const isNum=rpt.id==="numerologie";
   const isHoro=rpt.id==="horoscoop";
   const needsTime=!isNum;
@@ -1981,10 +1988,10 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
             <div className="form-grid">
               <div className="form-group full"><label className="form-label">Volledige naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Voor- en achternaam"/></div>
               <div className="form-group full"><label className="form-label">E-mailadres <span style={{color:"var(--gold)",fontSize:".6rem"}}>— rapport wordt hierheen verstuurd</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder="uw@email.nl" required/></div>
-              <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="day" min="1" max="31" value={form.day} onChange={ch} placeholder="15"/></div>
+              <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="day" min="1" max={maxDay()} value={form.day} onChange={ch} onBlur={numBlur("day",1,maxDay())} placeholder="15"/></div>
               <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-              <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="year" value={form.year} onChange={ch} placeholder="1990"/></div>
-              {needsTime&&<div className="form-group"><label className="form-label">Geboortetijd</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} placeholder="min"/></div></div>}
+              <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="year" min="1900" max={new Date().getFullYear()} value={form.year} onChange={ch} onBlur={numBlur("year",1900,new Date().getFullYear())} placeholder="1990"/></div>
+              {needsTime&&<div className="form-group"><label className="form-label">Geboortetijd</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} onBlur={numBlur("hour",0,23)} placeholder="uur"/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} onBlur={numBlur("minute",0,59)} placeholder="min"/></div></div>}
               <div className="form-group full">
                 <label className="form-label">Geboorteplaats</label>
                 <PlaceAutocomplete
@@ -1999,10 +2006,10 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens {rpt.partnerLabel||"partner"}</div>
               <div className="form-grid">
                 <div className="form-group full"><label className="form-label">Naam {rpt.partnerLabel||"partner"}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={"Naam "+(rpt.partnerLabel||"partner")}/></div>
-                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch}/></div>
+                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="pyear" value={form.pyear} onChange={ch}/></div>
-                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} placeholder="min"/></div></div>
+                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
+                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} onBlur={numBlur("phour",0,23)} placeholder="uur"/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} onBlur={numBlur("pminute",0,59)} placeholder="min"/></div></div>
                 <div className="form-group full">
                   <label className="form-label">Geboorteplaats {rpt.partnerLabel||"partner"}</label>
                   <PlaceAutocomplete
@@ -2018,10 +2025,10 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens kind</div>
               <div className="form-grid">
                 <div className="form-group full"><label className="form-label">Naam kind</label><input className="form-input" name="cname" value={form.cname} onChange={ch} placeholder="Naam kind"/></div>
-                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch}/></div>
+                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch} onBlur={numBlur("cday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="cyear" value={form.cyear} onChange={ch}/></div>
-                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} placeholder="min"/></div></div>
+                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="cyear" min="1900" max={new Date().getFullYear()} value={form.cyear} onChange={ch} onBlur={numBlur("cyear",1900,new Date().getFullYear())}/></div>
+                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} onBlur={numBlur("chour",0,23)} placeholder="uur"/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} onBlur={numBlur("cminute",0,59)} placeholder="min"/></div></div>
                 <div className="form-group full">
                   <label className="form-label">Geboorteplaats kind</label>
                   <PlaceAutocomplete
