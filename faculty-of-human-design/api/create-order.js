@@ -20,6 +20,7 @@ export default async function handler(req, res) {
   const {
     reportId,
     reportTitle,
+    language,
     price,
     customerName,
     customerEmail,
@@ -43,6 +44,7 @@ export default async function handler(req, res) {
     id: orderId,
     report_id: reportId,
     report_title: reportTitle || reportId,
+    language: language || "nl",
     customer_name: customerName || null,
     customer_email: customerEmail.trim().toLowerCase(),
     birth_data: birthData,

@@ -82,7 +82,7 @@ function calculateDeliveryDate(paidAtIso) {
 }
 
 // ─── AI TEXT GENERATION ───────────────────────────────────────────────────────
-const SYSTEM_PROMPT = `Je bent een senior analist van de Faculty of Human Design op Ibiza. Je schrijft diepgaande, gepersonaliseerde rapporten in het Nederlands voor betalende klanten.
+const SYSTEM_PROMPT_NL = `Je bent een senior analist van de Faculty of Human Design op Ibiza. Je schrijft diepgaande, gepersonaliseerde rapporten in het Nederlands voor betalende klanten.
 
 STEM & STIJL:
 - Spreek de lezer altijd aan met "je" en "jouw" — nooit "u" of "uw", nooit wisselen binnen één rapport.
@@ -135,6 +135,64 @@ Reflectievragen:
 AFSLUITING:
 - Sluit de kernuitleg af met een volledige, afgeronde zin — geen afgekapte regels.
 - De Slotanalyse synthethiseert de rode draad van het rapport; herhaal geen kanaalbeschrijvingen die al eerder staan.`;
+
+const SYSTEM_PROMPT_EN = `You are a senior analyst at the Faculty of Human Design in Ibiza. You write in-depth, personalised reports in English for paying clients.
+
+VOICE & STYLE:
+- Always address the reader as "you" and "your" — consistent throughout the report.
+- Use the client's first name at most once per section.
+- Tone: calm, premium, warm-spiritual, precise and trustworthy. No vague spiritual clichés, no excessive superlatives, no sensationalism.
+- Begin each section directly with relevance for the reader — avoid openers like "It is important to...", "In today's society...", "Let us first...", "It is of crucial importance...".
+- Keep sentences concise; prefer multiple short paragraphs over long blocks.
+- NO Markdown formatting: no asterisks (**bold**, *italic*), no hashes (# Heading), no underscores. Write plain text only and use the structure labels below as headings.
+
+CONTENT:
+- Anchor every paragraph in concrete chart data: mention type, strategy, authority, profile, defined/open centers, channels and gates where relevant.
+- No general psychology or vague statements without direct connection to this specific design.
+- Avoid biographical assumptions ("you must have...") — describe only patterns as working hypotheses from the chart.
+- Mention the Strategy of the type only once in full (in the Type section); refer back only thereafter.
+- Moon cycle: always use exactly "28 days" (not "28 or 29", not "a lunar cycle").
+- Incarnation Cross: name the cross only by the name in the chart data; do not invent alternative names.
+- Do not repeat full descriptions of channels or centers already covered in a previous section — only refer back.
+
+TERMINOLOGY:
+- Use consistent English HD terms throughout.
+- Choose one label per center and maintain it (e.g. always "Sacral Center", never alternating).
+
+STRUCTURE — every section follows exactly this format. Use precisely these labels as headings (no Markdown, no extra formatting):
+
+In your chart:
+• [3–5 concrete facts specific to THIS chart: numbers, gates, centers, channels]
+
+[Core analysis: 3–5 short sub-paragraphs with sub-headings as plain text. Each paragraph anchored in chart data. Max ~600 words total — quality over quantity.]
+
+Pitfalls:
+• [concrete, operational — no generalities]
+• [...]
+• [...]
+
+Practice:
+• [concrete exercise or antidote, actionable today]
+• [...]
+• [...]
+
+This week:
+• [micro-action — extremely concrete, time-bound, max one sentence]
+• [...]
+• [...]
+
+Reflection questions:
+1. [Question]
+2. [Question]
+3. [Question]
+
+CLOSING:
+- End the core analysis with a complete, rounded sentence — no cut-off lines.
+- The Closing Analysis synthesises the key thread of the report; do not repeat channel descriptions already covered earlier.`;
+
+function getSystemPrompt(lang) {
+  return lang === "en" ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_NL;
+}
 
 // ─── BUILD CHART CONTEXT ──────────────────────────────────────────────────────
 function buildChartContext(order) {
@@ -243,7 +301,8 @@ function shouldUseDeepThinking(sectionTitle) {
 
 // ─── GENERATE SECTION (with canon, interdep, and retry) ───────────────────────
 async function generateSectionText(sectionTitle, order, previousSections, attempt = 0, lastIssues = []) {
-  const { customer_name, birth_data } = order;
+  const { customer_name, birth_data, language } = order;
+  const lang = language || "nl";
   const chart = (birth_data || {}).chart || {};
   const chartCtx = buildChartContext(order);
 
@@ -264,7 +323,26 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
     ? `\n\nHERSCHRIJVEN — vorige versie miste op:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix deze punten in deze versie.`
     : "";
 
-  const prompt = `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+  const prompt = lang === "en"
+    ? `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+
+Write section "${sectionTitle}" for ${customer_name}.
+
+RULES (strict):
+- No section title in the text — begin directly with "In your chart:"
+- No Markdown: no **, no *, no #, no _
+- Sub-headings in the core analysis are short lines (max 8 words, no period at end)
+- Moon cycle always exactly "28 days"
+- Incarnation Cross: use only the names from the canon reference above
+- Anchor EVERY paragraph in concrete chart data from the chart context
+
+Format:
+1. "In your chart:" with 3–5 concrete bullets (• Bullet) with data from THIS chart.
+2. Core analysis: 3–5 sub-paragraphs with sub-headings, max ~600 words, each paragraph anchored in chart data.
+3. Four closing blocks in this order: "Pitfalls:" / "Practice:" / "This week:" / "Reflection questions:" — each exactly 3 items.
+
+End the core analysis with a complete, rounded sentence.`
+    : `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
@@ -284,7 +362,8 @@ Format:
 Sluit de kernuitleg af met een volledige, afgeronde zin.`;
 
   const useDeepThinking = shouldUseDeepThinking(sectionTitle);
-  const text = await callClaude(SYSTEM_PROMPT, prompt, { thinking: useDeepThinking });
+  const systemPrompt = getSystemPrompt(lang);
+  const text = await callClaude(systemPrompt, prompt, { thinking: useDeepThinking });
 
   if (text.length < 200) {
     throw new Error(`Section text too short (${text.length} chars)`);
