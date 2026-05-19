@@ -244,6 +244,14 @@ function drawFooter(doc, order) {
   // Increment page counter stored on doc instance (set to 0 in generatePDF)
   doc.__pg = (doc.__pg || 0) + 1;
 
+  // KEY: save doc.y before footer rendering and restore it afterward.
+  // PDFKit auto-inserts a new page when doc.text(…, x, y) is called with
+  // y < doc.y ("backward" motion). Footer renders at FY ≈ 806, which sets
+  // doc.y ≈ 814. Any subsequent content at y=175 (section header page) or
+  // y=28 (continuation page) would then trigger an unwanted blank page.
+  // Saving/restoring doc.y makes drawFooter invisible to the cursor.
+  const prevY = doc.y;
+
   doc.save();
   // Footer rule — gold tinted
   doc.rect(ML, FY - 9, TW, 0.5).fill(CLR.border);
@@ -261,6 +269,10 @@ function drawFooter(doc, order) {
   doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
     .text("Faculty of Human Design", ML, FY, { width: TW, align: "right" });
   doc.restore();
+
+  // Restore cursor — must come AFTER doc.restore() since restore() doesn't
+  // reset doc.y (it only restores graphics state like colors/transforms).
+  doc.y = prevY;
 }
 
 // ─── BODYGRAPH PAGE ──────────────────────────────────────────────────────────
