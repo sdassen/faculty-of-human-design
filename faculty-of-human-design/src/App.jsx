@@ -894,6 +894,80 @@ const REPORTS = [
 ];
 
 
+// ─── PER-RAPPORT FAQS ────────────────────────────────────────────────────────
+const REPORT_FAQS = {
+  volledig:[
+    ["Heb ik mijn exacte geboortetijd nodig?","Ja, voor de meest nauwkeurige berekening. De geboortetijd bepaalt je profiel en sommige centra. Als je de exacte tijd niet weet, kijk dan op je geboorteakte. Zelfs zonder exacte tijd zijn je Type en Autoriteit in de meeste gevallen correct."],
+    ["Hoe nauwkeurig is de chartberekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele HD-software — tot op de graad nauwkeurig. De berekening is gebaseerd op je exacte geboortedatum, -tijd en -plaats."],
+    ["Is het rapport echt persoonlijk?","Elk rapport wordt volledig op maat samengesteld op basis van jouw specifieke combinatie van Type, Autoriteit, Profiel, centra en poorten. Geen twee rapporten zijn identiek."],
+    ["Wat is het verschil met een gratis HD-overzicht?","Gratis tools geven een technische samenvatting van je chart. Dit rapport geeft diepgaande, gepersonaliseerde analyse per sectie — specifiek afgestemd op jouw unieke combinatie, niet op je type in het algemeen."],
+    ["Hoe ontvang ik het rapport?","Als PDF per e-mail, binnen 1 werkdag na betaling. Je kunt het meerdere keren lezen — en wij raden dat aan."],
+  ],
+  relatie_liefde:[
+    ["Hebben we beiden een account nodig?","Nee. Je bestelt het rapport voor twee personen tegelijk. Je voert de geboortedata van jullie beiden in tijdens het bestelproces."],
+    ["Hoe nauwkeurig moet de geboortetijd van mijn partner zijn?","Zo nauwkeurig mogelijk — de geboortetijd bepaalt het profiel en sommige centra. Als je de exacte tijd van je partner niet weet, kun je een schatting gebruiken. De kern van de analyse blijft accuraat."],
+    ["Is dit rapport ook geschikt aan het begin van een relatie?","Ja. Veel mensen bestellen dit juist aan het begin — om patronen vroeg te herkennen en communicatie bewust te starten. Het is net zo waardevol voor koppels die al jaren samen zijn."],
+    ["Hoe persoonlijk is het rapport voor ons specifiek?","Het rapport is volledig gebaseerd op jullie twee specifieke charts. De elektromagnetische verbindingen en compatibiliteitsdynamieken zijn uniek voor jullie combinatie."],
+    ["Hoe snel ontvangen we het?","Binnen 1 werkdag na betaling, als PDF per e-mail. Wij raden aan het samen te lezen."],
+  ],
+  relatie_business:[
+    ["Werkt dit ook voor een online samenwerking?","Ja. Human Design kijkt naar energetische patronen — die zijn onafhankelijk van fysieke nabijheid. Het rapport werkt voor online en offline samenwerkingen."],
+    ["Is dit alleen voor gelijkwaardige partners, of ook voor leidinggevende en medewerker?","Het rapport analyseert elke combinatie van twee mensen. De dynamieken zijn relevant voor compagnons, oprichters, maar ook voor leidinggevenden en teamleden."],
+    ["Hoe concreet zijn de adviezen?","De adviezen zijn gebaseerd op jullie specifieke type-combinatie: wie van nature leidt, hoe jullie beslissingen het best neemt, en hoe de communicatiestijlen op elkaar aansluiten."],
+    ["Is het rapport geschikt als we net starten of al jaren samenwerken?","Beide. Bij een nieuwe samenwerking helpt het patronen vroeg te begrijpen. In een bestaande samenwerking biedt het verklaring voor terugkerende dynamieken."],
+    ["Hoe snel ontvangen we het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  relatie_familie:[
+    ["Voor welke familierelaties is dit geschikt?","Voor ouder en kind, broer en zus, of andere gezinsleden. Het rapport analyseert de specifieke energetische dynamiek tussen twee personen — ongeacht de familierelatie."],
+    ["Is het rapport ook geschikt voor volwassen kinderen?","Ja. Veel mensen bestellen dit juist later, wanneer patronen al jaren spelen en pas nu begrepen worden. Het werkt voor kinderen van alle leeftijden."],
+    ["Heb ik de exacte geboortetijd van het familielid nodig?","Zo nauwkeurig mogelijk. Als de exacte tijd onbekend is, kun je een schatting gebruiken — de kern van de analyse blijft relevant."],
+    ["Is het rapport ook bruikbaar als de ander er niet van weet?","Ja. Je kunt het rapport lezen vanuit je eigen perspectief. Inzicht in de ander begint bij inzicht in jezelf."],
+    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  jaar:[
+    ["Op welke periode is het jaarrapport gebaseerd?","Op je Solar Return — de posities van de planeten op je verjaardag in 2026. Dit markeert het begin van een nieuw persoonlijk jaar en vormt de basis voor de analyse van de komende twaalf maanden."],
+    ["Is dit voor het kalenderjaar 2026 of mijn persoonlijk jaar?","Je persoonlijk jaar, dat begint op je verjaardag. Als je in september jarig bent, loopt het van september 2026 tot september 2027."],
+    ["Hoe concreet zijn de kwartaaladviezen?","De kwartaaladviezen zijn gebaseerd op planetaire invloeden specifiek voor jouw chart — geen dagkalender, maar een bewust energetisch kader per kwartaal."],
+    ["Heb ik ook een Volledig Rapport nodig om dit te begrijpen?","Nee, het jaarrapport is op zichzelf staand. Als je ook een Volledig Rapport hebt, vullen ze elkaar goed aan."],
+    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  kind:[
+    ["Vanaf welke leeftijd is dit rapport nuttig?","Vanaf de geboorte. Het rapport helpt ouders begrijpen hoe hun kind van nature functioneert — ongeacht leeftijd. Veel ouders bestellen het voor baby's, peuters én tieners."],
+    ["Is het rapport bedoeld voor het kind zelf of voor de ouder?","Primair voor de ouder. Het rapport geeft inzicht in hoe je kind energie gebruikt, beslissingen neemt en het best begeleid wordt. Oudere kinderen kunnen het ook zelf lezen."],
+    ["Heb ik de exacte geboortetijd van mijn kind nodig?","Ja, zo nauwkeurig mogelijk — de geboortetijd staat op de geboorteakte. Ook zonder exacte tijd is de kern van het rapport accuraat."],
+    ["Is dit anders dan een opvoedboek?","Ja. Dit rapport is volledig gebaseerd op het unieke design van jouw kind. Geen generieke opvoedtips, maar begeleiding afgestemd op hoe jouw kind van nature werkt."],
+    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  loopbaan:[
+    ["Is dit ook geschikt als ik al weet wat ik wil doen?","Ja — en dan is het vaak het meest waardevol. Het rapport legt uit hoe je jouw werk het best inricht, welke omgeving bij je past en hoe je geld aantrekt op een manier die aansluit bij jouw design."],
+    ["Geeft het rapport concrete carrièreadviezen?","Het rapport is concreet en toepasbaar: werkomgeving, besluitvormingsstijl, samenwerking, en of loondienst of ondernemerschap beter past bij jouw energiesysteem."],
+    ["Werkt dit ook als ik ondernemer ben?","Ja. Het rapport behandelt specifiek de vraag ondernemen versus loondienst — op basis van jouw type, profiel en centra. Voor ondernemers is de sectie over hoe je geld aantrekt bijzonder relevant."],
+    ["Is dit een vervanging voor loopbaanbegeleiding?","Nee — het is een aanvulling. Het rapport geeft een energetisch perspectief op werk en financiën. Veel mensen combineren het met praktische loopbaanbegeleiding."],
+    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  numerologie:[
+    ["Heb ik een geboortetijd nodig voor numerologie?","Nee. Numerologie werkt uitsluitend op basis van je volledige naam en geboortedatum. Geboortetijd is niet vereist."],
+    ["Welke naam gebruik je voor de berekening?","Je geboortenaam — de naam zoals die op je geboorteakte staat. Als je een andere naam gebruikt of je naam heeft veranderd, vermeld dan je volledige geboortenaam."],
+    ["Wat is het verschil tussen numerologie en Human Design?","Fundamenteel. Numerologie werkt met getalswaarden van je naam en geboortedatum en beschrijft levenspatronen en talenten. Human Design werkt met planetaire posities en beschrijft je energetisch mechanisme. Ze vullen elkaar aan."],
+    ["Is dit rapport ook nuttig als ik al een HD rapport heb?","Absoluut. Numerologie en Human Design belichten verschillende lagen van dezelfde persoon. Veel klanten bestellen beide als aanvullend portret."],
+    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  horoscoop:[
+    ["Is dit anders dan een daghoroscoop?","Ja, fundamenteel. Een daghoroscoop is generiek voor iedereen met hetzelfde zonneteken. Een geboortehoroscoop is gebaseerd op de exacte posities van alle tien planeten op jouw geboortemoment — specifiek voor jou."],
+    ["Heb ik mijn exacte geboortetijd nodig?","Ja, voor de meest nauwkeurige berekening. De geboortetijd bepaalt je Ascendant, Midhemel en de huisindeling. Als je de tijd niet weet, zijn de planeetposities en tekens nog steeds correct."],
+    ["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige schatting die je heeft, of controleer je geboorteakte. Zonder geboortetijd berekenen wij de chart op 12:00 uur — de planetaire posities zijn dan correct, alleen de Ascendant en huizen zijn minder nauwkeurig."],
+    ["Is dit rapport ook nuttig in combinatie met Human Design?","Ja. Astrologie beschrijft de kwaliteiten van je planetaire bezetting; HD beschrijft je energetisch mechanisme. Samen geven ze een completer portret."],
+    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+  ],
+  maandelijks:[
+    ["Wanneer ontvang ik mijn eerste maandrapport?","Binnen 1 werkdag na je eerste betaling. Daarna ontvang je elke maand een nieuw rapport — afgestemd op de energetische thema's van die specifieke maand en jouw chart."],
+    ["Hoe opzegbaar is het abonnement?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Je kunt op elk moment stoppen."],
+    ["Is elk maandrapport anders?","Ja. Elk rapport is gebaseerd op de planetaire invloeden van die specifieke maand in relatie tot jouw persoonlijke chart. Thema's, kansen en aandachtspunten wisselen elke maand."],
+    ["Heb ik ook een Volledig Rapport nodig?","Het maandabonnement is op zichzelf staand. Als je ook een Volledig Rapport hebt, is de maandelijkse guidance nog rijker — omdat je de context van je eigen chart al kent."],
+    ["Hoeveel pagina's is een maandrapport?","Gemiddeld 12 pagina's — compact en gericht op de thema's van die maand."],
+  ],
+};
+
 // ─── STRIPE PAYMENT LINKS ─────────────────────────────────────────────────────
 // Vervang test_ links met live_ links voor productie
 // Voeg toe aan elke Stripe Payment Link:
@@ -2977,7 +3051,12 @@ function RapportenPage({go}){
 
 function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
-  const faqs=[["Hoe nauwkeurig is de berekening?","Wij gebruiken de Meeus ephemeris — dezelfde algoritmen als professionele astronomische software. De blauwdruk is gebaseerd op je exacte geboortedata."],["Is de blauwdruk echt persoonlijk?","Je gepersonaliseerde digitale blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],["In welk format ontvang ik mijn blauwdruk?","Je ontvangt de blauwdruk als PDF per e-mail — bewaar hem in je archief of print hem uit. Bezorgd binnen 1 werkdag na betaling."],["Kan ik de blauwdruk meerdere keren lezen?","Ja — en wij raden dat aan. Human Design verdiept zich naarmate je er meer mee leeft."],["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."]];
+  const faqs = REPORT_FAQS[rpt.id] || [
+    ["Hoe nauwkeurig is de berekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele software. De blauwdruk is gebaseerd op je exacte geboortedata."],
+    ["Is de blauwdruk echt persoonlijk?","Elk rapport wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee rapporten zijn identiek."],
+    ["In welk format ontvang ik mijn blauwdruk?","Als PDF per e-mail — bewaar hem in je archief of print hem uit. Bezorgd binnen 1 werkdag na betaling."],
+    ["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."],
+  ];
   useSEO({
     title:rpt.title+" — "+rpt.outcome,
     description:rpt.title+" van Faculty of Human Design. "+rpt.intro.slice(0,160)+" "+rpt.pages+" pagina's. Bezorgd per e-mail binnen 1 werkdag. "+rpt.price+".",
