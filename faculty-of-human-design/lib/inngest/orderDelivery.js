@@ -354,6 +354,13 @@ export const orderDelivery = inngest.createFunction(
         throw new Error(`Order not found: ${orderId}`);
       }
 
+      // Idempotency guard: only process if status is still "paid"
+      // Prevents duplicate emails when the same event is retried or resent
+      if (data.status !== "paid") {
+        console.log(`[order-delivery] Skipping ${orderId} — already in status "${data.status}"`);
+        return null;
+      }
+
       // Send confirmation email immediately
       await sendConfirmationEmail({
         to: data.customer_email,
@@ -369,6 +376,9 @@ export const orderDelivery = inngest.createFunction(
 
       return data;
     });
+
+    // Exit early if order was already processed (idempotency)
+    if (!order) return { skipped: true };
 
     // ── Step 2: Sleep until delivery time ─────────────────────────────────
     const deliveryDate = calculateDeliveryDate(order.paid_at || order.created_at);

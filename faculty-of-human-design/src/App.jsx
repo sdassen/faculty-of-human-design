@@ -508,6 +508,18 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .footer-trust { justify-content:center; }
 }
 
+/* ── PLACE AUTOCOMPLETE ───────────────────────────────────────────────────── */
+.place-wrap { position:relative; }
+.place-dropdown { position:absolute; top:100%; left:0; right:0; z-index:200; background:#fff; border:1px solid var(--border); border-radius:var(--radius-md); box-shadow:var(--shadow-lg); margin-top:4px; overflow:hidden; }
+.place-option { padding:11px 14px; font-size:.87rem; cursor:pointer; border-bottom:1px solid var(--border); line-height:1.35; color:var(--text); transition:background .12s; }
+.place-option:last-child { border-bottom:none; }
+.place-option:hover { background:var(--muted); }
+.place-option-main { font-weight:500; }
+.place-option-sub { font-size:.75rem; color:var(--text-muted); margin-top:2px; }
+.place-tz { margin-top:5px; font-size:.73rem; color:var(--text-muted); display:flex; align-items:center; gap:5px; }
+.place-tz-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; }
+.place-tz-error { color:#c0392b; }
+
 /* ── CHART DASHBOARD ──────────────────────────────────────────────────────── */
 /* Main wrapper */
 .cd { background:#F9F8F5; border-radius:20px; border:1px solid #E8E3DB; box-shadow:0 8px 40px rgba(10,26,47,.08),0 2px 8px rgba(10,26,47,.04); overflow:hidden; }
@@ -924,6 +936,10 @@ async function goToStripe(rptId, chartData, formData) {
           day: formData.day, month: formData.month, year: formData.year,
           hour: formData.hour, minute: formData.minute,
           place: formData.place,
+          lat: formData.lat || null,
+          lon: formData.lon || null,
+          timezone: formData.timezone || null,
+          tz: formData.tz ? parseFloat(formData.tz) : null,
           // Embed calculated chart so Inngest can use it for AI generation
           chart: chartData,
         },
@@ -931,7 +947,11 @@ async function goToStripe(rptId, chartData, formData) {
           name: formData.pname,
           day: formData.pday, month: formData.pmonth, year: formData.pyear,
           hour: formData.phour, minute: formData.pminute,
-          place: formData.pplace,
+          place: formData.pplace || "",
+          lat: formData.plat || null,
+          lon: formData.plon || null,
+          timezone: formData.ptimezone || null,
+          tz: formData.ptz ? parseFloat(formData.ptz) : null,
         } : null,
         promptSections: sections,
       }),
@@ -993,8 +1013,9 @@ const PROFS={"1-2":"1/2 Onderzoeker/Kluizenaar","1-3":"1/3 Onderzoeker/Martelaar
 
 function lonToGL(lon){lon=((lon%360)+360)%360;const gs=360/64,idx=Math.floor(lon/gs),gate=GS[idx%64],line=Math.min(Math.floor(((lon%gs)/gs)*6)+1,6);return[gate,line];}
 
-function calcHD(y,m,d,h,min){
-  const jdP=jday(y,m,d,h+min/60),jdD=jdP-(88/360)*365.25;
+function calcHD(y,m,d,h,min,tz=0){
+  const utcH=h+min/60-(tz||0); // convert local birth time to UTC
+  const jdP=jday(y,m,d,utcH),jdD=jdP-(88/360)*365.25;
   const pers={},des={};
   for(const p of PLANETS_HD){const[gp,lp]=lonToGL(getPL(jdP,p));pers[p]={gate:gp,line:lp};const[gd,ld]=lonToGL(getPL(jdD,p));des[p]={gate:gd,line:ld};}
   const allG=new Set([...Object.values(pers).map(x=>x.gate),...Object.values(des).map(x=>x.gate)]);
@@ -1040,8 +1061,8 @@ function calcNumerology(fullName,day,month,year){
 const SIGNS_NL=["Ram","Stier","Tweelingen","Kreeft","Leeuw","Maagd","Weegschaal","Schorpioen","Boogschutter","Steenbok","Waterman","Vissen"];
 const EL_MAP_A={"Ram":"Vuur","Stier":"Aarde","Tweelingen":"Lucht","Kreeft":"Water","Leeuw":"Vuur","Maagd":"Aarde","Weegschaal":"Lucht","Schorpioen":"Water","Boogschutter":"Vuur","Steenbok":"Aarde","Waterman":"Lucht","Vissen":"Water"};
 function lonToSign_A(lon){lon=((lon%360)+360)%360;const idx=Math.floor(lon/30)%12;return{sign:SIGNS_NL[idx],degree:Math.round((lon%30)*10)/10};}
-function calcHoroscoop(y,m,d,h,min){
-  const jdP=jday(y,m,d,h+min/60);
+function calcHoroscoop(y,m,d,h,min,tz=0){
+  const jdP=jday(y,m,d,h+min/60-(tz||0));
   const pDefs={Zon:"Sun",Maan:"Moon",Mercurius:"Mercury",Venus:"Venus",Mars:"Mars",Jupiter:"Jupiter",Saturnus:"Saturn",Uranus:"Uranus",Neptunus:"Neptune",Pluto:"Pluto"};
   const planets={};
   for(const[nl,en]of Object.entries(pDefs)){const lon=getPL(jdP,en);const pos=lonToSign_A(lon);planets[nl]={...pos,house:Math.floor((lon%360)/30)%12+1,longitude:Math.round(lon*100)/100};}
@@ -1678,9 +1699,139 @@ function Footer({go}){
 }
 
 
+// ─── TIMEZONE HELPER ─────────────────────────────────────────────────────────
+function getUTCOffsetHours(ianaTimezone, year, month, day, hour = 12, minute = 0) {
+  if (!ianaTimezone) return null;
+  try {
+    const testDate = new Date(Date.UTC(year || 2000, (month || 1) - 1, day || 1, hour, minute));
+    const str = new Intl.DateTimeFormat("en", {
+      timeZone: ianaTimezone,
+      timeZoneName: "shortOffset",
+    }).formatToParts(testDate).find(p => p.type === "timeZoneName")?.value || "";
+    const m = str.match(/GMT([+-])(\d+)(?::(\d+))?/);
+    if (!m) return 0;
+    return (m[1] === "+" ? 1 : -1) * (parseInt(m[2]) + (m[3] ? parseInt(m[3]) / 60 : 0));
+  } catch { return null; }
+}
+
+// ─── PLACE AUTOCOMPLETE ───────────────────────────────────────────────────────
+function PlaceAutocomplete({ value, onSelect, placeholder, label }) {
+  const [query, setQuery] = useState(value || "");
+  const [suggestions, setSuggestions] = useState([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+  const [loadingTz, setLoadingTz] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [tzInfo, setTzInfo] = useState(null); // { timezone, offset, error }
+  const debounceRef = useState(null);
+  const wrapRef = useState(null);
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handler = (e) => {
+      if (wrapRef[0] && !wrapRef[0].contains(e.target)) setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const search = (q) => {
+    clearTimeout(debounceRef[0]);
+    if (q.length < 2) { setSuggestions([]); setOpen(false); return; }
+    debounceRef[0] = setTimeout(async () => {
+      setLoadingSearch(true);
+      try {
+        const res = await fetch(
+          "https://nominatim.openstreetmap.org/search?q=" + encodeURIComponent(q) +
+          "&format=json&limit=6&addressdetails=1",
+          { headers: { "Accept-Language": "nl,en" } }
+        );
+        const data = await res.json();
+        const items = data.map(d => {
+          const a = d.address || {};
+          const city = a.city || a.town || a.village || a.hamlet || a.county || a.state || d.name;
+          const country = a.country || "";
+          return {
+            shortLabel: [city, country].filter(Boolean).join(", "),
+            fullLabel: d.display_name,
+            lat: parseFloat(d.lat),
+            lon: parseFloat(d.lon),
+          };
+        }).filter((v, i, arr) => arr.findIndex(x => x.shortLabel === v.shortLabel) === i); // dedupe
+        setSuggestions(items);
+        setOpen(items.length > 0);
+      } catch { /* network error — silent */ }
+      finally { setLoadingSearch(false); }
+    }, 400);
+  };
+
+  const fetchTimezone = async (lat, lon) => {
+    setLoadingTz(true);
+    setTzInfo(null);
+    try {
+      const res = await fetch(
+        "https://timezonefinder.michelfe.it/api/0?lat=" + lat + "&lng=" + lon
+      );
+      const data = await res.json();
+      if (data.timezone) {
+        setTzInfo({ timezone: data.timezone, offset: null }); // offset computed later per birth date
+        return data.timezone;
+      }
+      setTzInfo({ error: "Tijdzone niet gevonden" });
+      return null;
+    } catch {
+      setTzInfo({ error: "Tijdzone niet beschikbaar" });
+      return null;
+    } finally { setLoadingTz(false); }
+  };
+
+  const select = async (item) => {
+    setQuery(item.shortLabel);
+    setOpen(false);
+    const timezone = await fetchTimezone(item.lat, item.lon);
+    onSelect({ place: item.shortLabel, lat: item.lat, lon: item.lon, timezone: timezone || "" });
+  };
+
+  return (
+    <div className="place-wrap" ref={el => { wrapRef[0] = el; }}>
+      <input
+        className={"form-input" + (loadingSearch ? " loading" : "")}
+        value={query}
+        onChange={e => { setQuery(e.target.value); search(e.target.value); onSelect({ place: e.target.value, lat: null, lon: null, timezone: "" }); setTzInfo(null); }}
+        onFocus={() => { if (suggestions.length > 0) setOpen(true); }}
+        placeholder={placeholder || "Stad, land"}
+        autoComplete="off"
+      />
+      {open && suggestions.length > 0 && (
+        <div className="place-dropdown">
+          {suggestions.map((s, i) => (
+            <div key={i} className="place-option" onMouseDown={e => { e.preventDefault(); select(s); }}>
+              <div className="place-option-main">{s.shortLabel}</div>
+              {s.fullLabel !== s.shortLabel && (
+                <div className="place-option-sub">{s.fullLabel.split(",").slice(0, 3).join(",")}</div>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
+      {loadingTz && (
+        <div className="place-tz"><div className="place-tz-dot" style={{background:"var(--text-light)"}}/>Tijdzone ophalen…</div>
+      )}
+      {tzInfo && !loadingTz && (
+        <div className={"place-tz" + (tzInfo.error ? " place-tz-error" : "")}>
+          {tzInfo.error ? (
+            <>{tzInfo.error} — vul tijdzone handmatig in</>
+          ) : (
+            <><div className="place-tz-dot"/>{tzInfo.timezone}</>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone,postPayment}){
-  const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:""});
+  const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:""});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
@@ -1698,8 +1849,13 @@ function ReportForm({rpt,onDone,postPayment}){
     const y=parseInt(form.year),m=parseInt(form.month),d=parseInt(form.day);
     if(!form.name||!d||!m||!y){alert("Vul alle verplichte velden in.");return;}
     if(isNum){const num=calcNumerology(form.name,d,m,y);setChart({...num,isNumerology:true});}
-    else{const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
-      setChart(isHoro?{...calcHoroscoop(y,m,d,h,min),isHoroscoop:true}:calcHD(y,m,d,h,min));}
+    else{
+      const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
+      // Compute tz offset for birth date (accounts for DST)
+      const tz=form.timezone?getUTCOffsetHours(form.timezone,y,m,d,h,min):parseFloat(form.tz||"0")||0;
+      setForm(f=>({...f,tz:String(tz)}));
+      setChart(isHoro?{...calcHoroscoop(y,m,d,h,min,tz),isHoroscoop:true}:calcHD(y,m,d,h,min,tz));
+    }
     setTimeout(()=>document.getElementById("chart-res")?.scrollIntoView({behavior:"smooth"}),80);
   };
 
@@ -1810,7 +1966,14 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
               <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="year" value={form.year} onChange={ch} placeholder="1990"/></div>
               {needsTime&&<div className="form-group"><label className="form-label">Geboortetijd</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} placeholder="min"/></div></div>}
-              <div className="form-group full"><label className="form-label">Geboorteplaats</label><input className="form-input" name="place" value={form.place} onChange={ch} placeholder="Amsterdam, Nederland"/></div>
+              <div className="form-group full">
+                <label className="form-label">Geboorteplaats</label>
+                <PlaceAutocomplete
+                  value={form.place}
+                  placeholder="Amsterdam, Nederland"
+                  onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,place,lat:lat||"",lon:lon||"",timezone:timezone||"",tz:""}))}
+                />
+              </div>
             </div>
             {rpt.needsPartner&&<>
               <div className="form-divider"/>
@@ -1821,7 +1984,14 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                 <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="pyear" value={form.pyear} onChange={ch}/></div>
                 <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} placeholder="min"/></div></div>
-                <div className="form-group full"><label className="form-label">Geboorteplaats {rpt.partnerLabel||"partner"}</label><input className="form-input" name="pplace" value={form.pplace||""} onChange={ch} placeholder="Stad, land"/></div>
+                <div className="form-group full">
+                  <label className="form-label">Geboorteplaats {rpt.partnerLabel||"partner"}</label>
+                  <PlaceAutocomplete
+                    value={form.pplace}
+                    placeholder="Stad, land"
+                    onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,pplace:place,plat:lat||"",plon:lon||"",ptimezone:timezone||"",ptz:""}))}
+                  />
+                </div>
               </div>
             </>}
             {rpt.needsChild&&<>
@@ -1833,7 +2003,14 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                 <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="cyear" value={form.cyear} onChange={ch}/></div>
                 <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} placeholder="uur"/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} placeholder="min"/></div></div>
-                <div className="form-group full"><label className="form-label">Geboorteplaats kind</label><input className="form-input" name="cplace" value={form.cplace||""} onChange={ch} placeholder="Stad, land"/></div>
+                <div className="form-group full">
+                  <label className="form-label">Geboorteplaats kind</label>
+                  <PlaceAutocomplete
+                    value={form.cplace}
+                    placeholder="Stad, land"
+                    onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,cplace:place,clat:lat||"",clon:lon||"",ctimezone:timezone||"",ctz:""}))}
+                  />
+                </div>
               </div>
             </>}
             <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={doChart} disabled={!ok}>Bereken mijn chart gratis</button>
