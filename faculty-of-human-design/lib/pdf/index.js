@@ -792,9 +792,7 @@ function drawSectionClosingPage(doc, order, sectionTitle, sectionIdx, blocks) {
   doc.font(FONT.bodyLight).fontSize(6).fillColor(CLR.gold)
     .text(insightsLabel, 0, 22, { width: W - ML - 12, align: "right", characterSpacing: 1.5 });
 
-  drawFooter(doc, order);
-
-  // ── Block grid
+  // ── Block grid (draw BEFORE footer so doc.y is at STRIPE_H+16, not ~813)
   const GRID_GAP = 8;
   const colW = (TW - GRID_GAP) / 2;
   let y = STRIPE_H + 16;
@@ -811,6 +809,9 @@ function drawSectionClosingPage(doc, order, sectionTitle, sectionIdx, blocks) {
       y = Math.max(leftY, rightY) + 16;
     }
   }
+
+  // Footer drawn last so it doesn't push doc.y to the page bottom before blocks render
+  drawFooter(doc, order);
 }
 
 // Keep drawBlockGrid for any non-section-closing uses (defensive)
