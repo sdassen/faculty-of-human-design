@@ -1,14 +1,30 @@
 // Dynamic import so any module-init error is returned as JSON rather than
 // crashing the Lambda silently with FUNCTION_INVOCATION_FAILED.
 export default async function handler(req, res) {
-  // Temporary GET diagnostic — remove after env vars are confirmed
+  // Temporary GET diagnostic — remove after issue is resolved
   if (req.method === "GET") {
-    return res.json({
-      SUPABASE_URL: process.env.SUPABASE_URL ? "✅ set" : "❌ MISSING",
-      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ set" : "❌ MISSING",
-      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? "✅ set" : "❌ MISSING",
-      ADMIN_SECRET: process.env.ADMIN_SECRET ? "✅ set" : "❌ MISSING",
-    });
+    const diag = {
+      envVars: {
+        SUPABASE_URL: process.env.SUPABASE_URL ? "✅ set" : "❌ MISSING",
+        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ set" : "❌ MISSING",
+      },
+      supabaseImport: "pending",
+      createClient: "pending",
+    };
+    try {
+      const mod = await import("@supabase/supabase-js");
+      diag.supabaseImport = "✅ ok";
+      try {
+        mod.createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
+        diag.createClient = "✅ ok";
+      } catch (e) {
+        diag.createClient = "❌ " + e.message;
+      }
+    } catch (e) {
+      diag.supabaseImport = "❌ " + e.message;
+      diag.createClient = "skipped";
+    }
+    return res.json(diag);
   }
   if (req.method !== "POST") return res.status(405).end();
 
