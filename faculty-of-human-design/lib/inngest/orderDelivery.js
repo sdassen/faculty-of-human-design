@@ -309,6 +309,40 @@ function shouldUseDeepThinking(sectionTitle) {
   return DEEP_THINKING_SECTIONS.some((rx) => rx.test(sectionTitle));
 }
 
+// ─── CRITICAL ALERT BLOCK ─────────────────────────────────────────────────────
+// Prepended to every user prompt so the AI cannot miss the key chart facts.
+// This is the primary defence against the model hallucinating wrong type /
+// authority / channels when handling multiple concurrent sections.
+function buildCriticalAlert(chart, isEN) {
+  const lines = [];
+  if (chart.type)    lines.push(`  ${isEN ? "Type" : "Type"}: ${chart.type}`);
+  if (chart.auth)    lines.push(`  ${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
+  if (chart.profile) lines.push(`  ${isEN ? "Profile" : "Profiel"}: ${chart.profile}`);
+
+  if (chart.channels && chart.channels.length) {
+    const channelStr = chart.channels.map(function(c) { return `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`; }).join(", ");
+    lines.push(`  ${isEN ? "Active channels (ONLY these exist)" : "Actieve kanalen (ALLEEN deze bestaan)"}: ${channelStr}`);
+  } else {
+    lines.push(`  ${isEN ? "Active channels: NONE" : "Actieve kanalen: GEEN"}`);
+  }
+
+  if (!lines.length) return "";
+
+  if (isEN) {
+    return `⚠️ CRITICAL CHART CHECK — READ THIS FIRST, VERIFY BEFORE FINISHING:
+${lines.join("\n")}
+If your output mentions any type, authority, or channel NOT listed above → it is FACTUALLY WRONG. Delete and rewrite those sentences.
+
+`;
+  } else {
+    return `⚠️ KRITIEKE CHARTCONTROLE — LEES DIT EERST, CONTROLEER VOOR JE KLAAR BENT:
+${lines.join("\n")}
+Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT → het is FEITELIJK ONJUIST. Verwijder die zinnen en herschrijf.
+
+`;
+  }
+}
+
 // ─── GENERATE SECTION (with canon, interdep, and retry) ───────────────────────
 async function generateSectionText(sectionTitle, order, previousSections, attempt = 0, lastIssues = []) {
   const { customer_name, birth_data, language } = order;
@@ -337,8 +371,10 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
         : `\n\nHERSCHRIJVEN — vorige versie miste op:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix deze punten in deze versie.`)
     : "";
 
+  const criticalAlert = buildCriticalAlert(chart, lang === "en");
+
   const prompt = lang === "en"
-    ? `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+    ? `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}
 
 Write section "${sectionTitle}" for ${customer_name}.
 
@@ -386,7 +422,7 @@ Reflection questions:
 • [item 3]
 
 CRITICAL: The "In your chart:" block ends after the bullets and a blank line. The core analysis that follows has NEVER a "•" bullet prefix. Sub-headings are plain lines with no prefix. End the core analysis with a complete sentence.`
-    : `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+    : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 

@@ -588,6 +588,39 @@ function drawSectionHeader(doc, section, idx, order) {
   doc.rect(0, HEADER_H, W, 1).fill(CLR.border);
 }
 
+// ─── BLOCK HEIGHT (DRY-RUN) ──────────────────────────────────────────────────
+// Returns the rendered height of a block without drawing anything.
+// Mirrors the height computation in drawBlock so drawBlockGrid can do an
+// accurate page-break check instead of relying on a rough estimate.
+function blockHeight(doc, block, lines, bW) {
+  if (bW === undefined) bW = TW;
+  const isHalf  = bW < TW - 4;
+  const PAD     = isHalf ? 12 : 18;
+  const BW      = isHalf ? 4  : 6;
+  const GAP     = BW + PAD;
+  const innerW  = bW - GAP - PAD;
+  const isRefl  = block.key === "refl";
+  const ITEM_FONT = isHalf ? BODY_SIZE - 1.5 : BODY_SIZE - 0.5;
+  const ITEM_GAP  = isHalf ? 3 : 4;
+  const ITEM_SEP  = isRefl ? (isHalf ? 9 : 12) : (isHalf ? 5 : 7);
+  const LABEL_H   = 14;
+
+  const items = lines
+    .map(function(l) {
+      return stripMd(l.replace(/^[•\-–—*]\s*/, "").replace(/^\d+\.\s*/, ""));
+    })
+    .filter(Boolean);
+
+  if (!items.length) return 0;
+
+  let bH = PAD + LABEL_H + 6;
+  for (const item of items) {
+    bH += strH(doc, item, { width: innerW - (isRefl ? 18 : 14), lineGap: ITEM_GAP, fontSize: ITEM_FONT }) + ITEM_SEP;
+  }
+  bH += PAD;
+  return bH;
+}
+
 // ─── BLOCK RENDERER ──────────────────────────────────────────────────────────
 // bX / bW allow half-width rendering for the 2×2 closing block grid.
 // When omitted they default to the full content column (ML / TW).
@@ -742,10 +775,10 @@ function drawBlockGrid(doc, order, blocks, y) {
       continue;
     }
 
-    // Estimate combined height for page-break check
-    const leftItems  = left.lines.filter(function(l) { return l.trim(); }).length;
-    const rightItems = right.lines.filter(function(l) { return l.trim(); }).length;
-    const estH = Math.max(leftItems, rightItems) * 20 + 55;
+    // Accurate height check using the same logic as drawBlock (no rendering)
+    const leftH  = blockHeight(doc, left.block,  left.lines,  colW);
+    const rightH = blockHeight(doc, right.block, right.lines, colW);
+    const estH   = Math.max(leftH, rightH);
 
     if (needsNewPage(doc, y, estH)) {
       drawFooter(doc, order);
