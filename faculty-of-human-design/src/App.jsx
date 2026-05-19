@@ -2356,15 +2356,15 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
             </div>
             {rpt.needsPartner&&<>
               <div className="form-divider"/>
-              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{t("form.partnerSection",{label:rpt.partnerLabel||(LANG==="en"?"partner":"partner")})}</div>
+              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{t("form.partnerSection",{label:tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")})}</div>
               <div className="form-grid">
-                <div className="form-group full"><label className="form-label">{LANG==="en"?"Name":"Naam"} {rpt.partnerLabel||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={(LANG==="en"?"Name ":"Naam ")+(rpt.partnerLabel||(LANG==="en"?"partner":"partner"))}/></div>
+                <div className="form-group full"><label className="form-label">{LANG==="en"?"Name":"Naam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={(LANG==="en"?"Name ":"Naam ")+(tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner"))}/></div>
                 <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
                 <div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} onBlur={numBlur("phour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} onBlur={numBlur("pminute",0,59)} placeholder={t("form.minute")}/></div></div>
                 <div className="form-group full">
-                  <label className="form-label">{t("form.birthPlace")} {rpt.partnerLabel||(LANG==="en"?"partner":"partner")}</label>
+                  <label className="form-label">{t("form.birthPlace")} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label>
                   <PlaceAutocomplete
                     value={form.pplace}
                     placeholder={t("form.placePlaceholder")}
@@ -2405,7 +2405,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
             <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?(LANG==="en"?"Your core numbers":"Je kerngetallen"):chart.isHoroscoop?(LANG==="en"?"Your planet positions":"Je planeetstanden"):(rpt.id.startsWith("relatie_")||rpt.needsChild)?(LANG==="en"?"Combined Human Design chart":"Gecombineerde Human Design chart"):(LANG==="en"?"Your Human Design chart":"Je Human Design chart")}</h2>
             {/* ── Relatie: gecombineerde bodygraph + twee compacte tabellen ── */}
             {rpt.id.startsWith("relatie_")&&(()=>{
-              const lbl=rpt.partnerLabel||"Partner";
+              const lbl=tl(rpt.partnerLabel)||"Partner";
               const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
               const gedeeld=c2?chart.allGates.filter(g=>c2.allGates.includes(g)):[];
               const HDRow=({c,name})=>(
