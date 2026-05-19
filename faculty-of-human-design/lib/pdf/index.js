@@ -540,74 +540,67 @@ function drawCover(doc, order, sections) {
 
 // ─── SECTION HEADER ──────────────────────────────────────────────────────────
 // Returns the y-position where content should begin (below the opener band).
-const HEADER_H = 190; // height of the dark opener band (was 224 — 34pt more content space)
+const HEADER_H = 155; // height of the dark opener band — clean, editorial
 
 function drawSectionHeader(doc, section, idx, order) {
-  // ── Dark opener band (top portion of page)
+  // ── Dark opener band
   doc.rect(0, 0, W, HEADER_H).fill(CLR.dark);
 
-  // Left gold accent bar — full height
-  doc.rect(0, 0, 4, HEADER_H).fill(CLR.gold);
+  // Left gold accent bar — thin, refined
+  doc.rect(0, 0, 3, HEADER_H).fill(CLR.gold);
 
-  // Faint diagonal decoration (geometric — evokes the bodygraph grid)
-  doc.save();
-  doc.strokeColor(CLR.gold).strokeOpacity(0.04).lineWidth(0.5);
-  for (let i = 0; i < 6; i++) {
-    const ox = W - 220 + i * 34;
-    doc.moveTo(ox, 0).lineTo(ox - HEADER_H, HEADER_H).stroke();
-  }
-  doc.restore();
-
-  // Section number — large, faint, decorative
-  doc.font(FONT.display).fontSize(110).fillColor(CLR.gold)
-    .fillOpacity(0.06)
-    .text(String(idx + 1).padStart(2, "0"), W - 200, -18, {
-      width: 200, align: "right", lineBreak: false,
+  // Section number — subtle, right-aligned, purely decorative
+  doc.font(FONT.display).fontSize(72).fillColor(CLR.gold)
+    .fillOpacity(0.05)
+    .text(String(idx + 1).padStart(2, "0"), W - 160, -10, {
+      width: 150, align: "right", lineBreak: false,
     });
-  doc.fillOpacity(1); // reset
+  doc.fillOpacity(1);
 
-  // "ONDERDEEL XX" / "PART XX" label — language-aware
+  // "ONDERDEEL XX" / "PART XX" label
   const partLabel = ui(order, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
   doc.font(FONT.body).fontSize(6.5).fillColor(CLR.goldWarm)
-    .text(partLabel, ML + 16, 28, {
-      characterSpacing: 3,
-    });
+    .text(partLabel, ML + 16, 24, { characterSpacing: 3 });
 
-  // Section title — large Cormorant SemiBold
-  doc.font(FONT.displaySemiBold).fontSize(30).fillColor("#FFFFFF")
-    .text(section.title, ML + 16, 54, { width: TW - 40, lineGap: 6 });
+  // Section title — Cormorant SemiBold, generous size
+  doc.font(FONT.displaySemiBold).fontSize(32).fillColor("#FFFFFF")
+    .text(section.title, ML + 16, 44, { width: TW - 40, lineGap: 5 });
 
   // Gold ornament line below title
-  const titleBottom = doc.y + 12;
-  doc.rect(ML + 16, titleBottom, 48, 1).fill(CLR.gold);
+  const titleBottom = doc.y + 10;
+  doc.rect(ML + 16, titleBottom, 40, 0.75).fill(CLR.gold);
   doc.save();
-  doc.rect(ML + 16 + 48, titleBottom, 24, 0.5).fillOpacity(0.4).fill(CLR.gold);
+  doc.rect(ML + 16 + 40, titleBottom, 20, 0.4).fillOpacity(0.35).fill(CLR.gold);
   doc.restore();
 
-  // ── Pull quote — first sentence of core analysis, rendered as faint italic
+  // ── Pull quote — faint italic, first key sentence from the section
   const pullQuote = extractPullQuote(section.cleanText || "");
   if (pullQuote) {
-    const pqY = titleBottom + 10;
-    // Only render if it fits comfortably inside the dark band
-    if (pqY + 22 < HEADER_H - 12) {
-      doc.font(FONT.display).fontSize(9).fillColor(CLR.gold)
-        .fillOpacity(0.38)
-        .text(pullQuote, ML + 16, pqY, { width: TW - 80, lineGap: 3 });
+    const pqY = titleBottom + 9;
+    if (pqY + 18 < HEADER_H - 10) {
+      doc.font(FONT.display).fontSize(9.5).fillColor(CLR.gold)
+        .fillOpacity(0.45)
+        .text(pullQuote, ML + 16, pqY, { width: TW - 72, lineGap: 3 });
       doc.fillOpacity(1);
     }
   }
 
-  // ── Light transition zone — subtle strip between dark and content
-  doc.rect(0, HEADER_H, W, 8).fill(CLR.bgMuted);
-  doc.rect(0, HEADER_H + 7, W, 1).fill(CLR.border);
+  // ── Thin transition strip between dark band and content
+  doc.rect(0, HEADER_H, W, 1).fill(CLR.border);
 }
 
 // ─── BLOCK RENDERER ──────────────────────────────────────────────────────────
-function drawBlock(doc, order, block, lines, y) {
-  const PAD     = 18;   // inner padding
-  const BW      = 6;    // left accent bar width
-  const GAP     = BW + PAD;   // total left indent from ML
-  const innerW  = TW - GAP - PAD;
+// bX / bW allow half-width rendering for the 2×2 closing block grid.
+// When omitted they default to the full content column (ML / TW).
+function drawBlock(doc, order, block, lines, y, bX, bW) {
+  if (bX === undefined) bX = ML;
+  if (bW === undefined) bW = TW;
+
+  const isHalf  = bW < TW - 4;       // true when rendered in a 2-column grid
+  const PAD     = isHalf ? 12 : 18;
+  const BW      = isHalf ? 4  : 6;
+  const GAP     = BW + PAD;
+  const innerW  = bW - GAP - PAD;
 
   const isRefl = block.key === "refl";
 
@@ -619,92 +612,153 @@ function drawBlock(doc, order, block, lines, y) {
 
   if (!items.length) return y;
 
-  const ITEM_FONT = BODY_SIZE - 0.5;  // 10.5pt
-  const ITEM_GAP  = 4;
-  const ITEM_SEP  = isRefl ? 12 : 7;  // reflection questions breathe more
+  const ITEM_FONT = isHalf ? BODY_SIZE - 1.5 : BODY_SIZE - 0.5;  // 9.5 / 10.5pt
+  const ITEM_GAP  = isHalf ? 3 : 4;
+  const ITEM_SEP  = isRefl
+    ? (isHalf ? 9  : 12)
+    : (isHalf ? 5  : 7);
 
   // ── Height calculation
-  const LABEL_H = 16;                  // Cormorant label ~12pt + breathing
-  let bH = PAD + LABEL_H + 6;         // top padding + label + divider gap
+  const LABEL_H = 14;
+  let bH = PAD + LABEL_H + 6;
   for (const item of items) {
-    bH += strH(doc, item, { width: innerW - (isRefl ? 20 : 16), lineGap: ITEM_GAP, fontSize: ITEM_FONT }) + ITEM_SEP;
+    bH += strH(doc, item, { width: innerW - (isRefl ? 18 : 14), lineGap: ITEM_GAP, fontSize: ITEM_FONT }) + ITEM_SEP;
   }
   bH += PAD;
 
-  if (needsNewPage(doc, y, bH + 24)) {
+  // Page break only for full-width blocks; grid renderer pre-checks for pairs
+  if (!isHalf && needsNewPage(doc, y, bH + 24)) {
     drawFooter(doc, order);
     y = addContentPage(doc, order);
   }
 
   // ── Background layers
-  // Base tint
-  doc.rect(ML, y, TW, bH).fill(block.tint);
-  // Subtle top wash — slightly more saturated near the top
+  doc.rect(bX, y, bW, bH).fill(block.tint);
   doc.save();
-  doc.rect(ML, y, TW, Math.min(bH, 36)).fillOpacity(0.12).fill(block.accent);
+  doc.rect(bX, y, bW, Math.min(bH, 30)).fillOpacity(0.10).fill(block.accent);
   doc.restore();
 
-  // ── Left accent bar (wider, with a thin inner shadow line)
-  doc.rect(ML, y, BW, bH).fill(block.accent);
+  // ── Left accent bar
+  doc.rect(bX, y, BW, bH).fill(block.accent);
   doc.save();
-  doc.rect(ML + BW, y, 1, bH).fillOpacity(0.08).fill(block.accent);
+  doc.rect(bX + BW, y, 1, bH).fillOpacity(0.07).fill(block.accent);
   doc.restore();
 
-  // ── Label row: symbol + Cormorant label
-  const symX  = ML + GAP - 2;
-  const symY  = y + PAD + 5;          // vertically centered in label row
+  // ── Label row: symbol + label
+  const symX = bX + GAP - 2;
+  const symY = y + PAD + 5;
   drawBlockSymbol(doc, block.key, symX, symY, block.accent);
 
   const blockLabel = (order.language === "en" && block.labels[1]) ? block.labels[1] : block.labels[0];
-  doc.font(FONT.displaySemiBold).fontSize(12).fillColor(block.accent)
-    .text(blockLabel, ML + GAP + 10, y + PAD, {
-      width: innerW - 10, lineBreak: false,
-    });
+  doc.font(FONT.displaySemiBold).fontSize(isHalf ? 11 : 12).fillColor(block.accent)
+    .text(blockLabel, bX + GAP + 9, y + PAD, { width: innerW - 9, lineBreak: false });
 
   // ── Divider under label
   const divY = y + PAD + LABEL_H;
   doc.save();
-  doc.rect(ML + GAP, divY, innerW, 0.5).fillOpacity(0.25).fill(block.accent);
+  doc.rect(bX + GAP, divY, innerW, 0.5).fillOpacity(0.22).fill(block.accent);
   doc.restore();
 
-  let iy = divY + 8;
+  let iy = divY + 7;
 
   // ── Items
   for (let i = 0; i < items.length; i++) {
     const item = items[i];
 
     if (isRefl) {
-      // Reflection questions: large faint ordinal behind the text
+      if (!isHalf) {
+        // Full-width: large faint ordinal behind text
+        const numStr = String(i + 1);
+        doc.save();
+        doc.font(FONT.display).fontSize(28).fillColor(block.accent).fillOpacity(0.07)
+          .text(numStr, bX + GAP - 4, iy - 4, { width: 22, align: "right", lineBreak: false });
+        doc.restore();
+      }
       const numStr = String(i + 1);
-      doc.save();
-      doc.font(FONT.display).fontSize(32).fillColor(block.accent).fillOpacity(0.08)
-        .text(numStr, ML + GAP - 4, iy - 4, { width: 24, align: "right", lineBreak: false });
-      doc.restore();
-
-      // Question number (small, colored)
       doc.font(FONT.bodyMedium).fontSize(ITEM_FONT).fillColor(block.accent)
-        .text(numStr + ".", ML + GAP, iy, { width: 16, lineBreak: false });
-
-      // Question text
+        .text(numStr + ".", bX + GAP, iy, { width: 14, lineBreak: false });
       doc.font(FONT.body).fontSize(ITEM_FONT).fillColor(CLR.text)
-        .text(item, ML + GAP + 18, iy, { width: innerW - 18, lineGap: ITEM_GAP });
+        .text(item, bX + GAP + 16, iy, { width: innerW - 16, lineGap: ITEM_GAP });
     } else {
-      // Regular items: bullet in accent, text in text color
       doc.font(FONT.bodyMedium).fontSize(ITEM_FONT).fillColor(block.accent)
-        .text("•", ML + GAP, iy, { width: 12, lineBreak: false });
+        .text("•", bX + GAP, iy, { width: 11, lineBreak: false });
       doc.font(FONT.body).fontSize(ITEM_FONT).fillColor(CLR.text)
-        .text(item, ML + GAP + 14, iy, { width: innerW - 14, lineGap: ITEM_GAP });
+        .text(item, bX + GAP + 13, iy, { width: innerW - 13, lineGap: ITEM_GAP });
     }
 
     iy = doc.y + ITEM_SEP;
   }
 
-  // ── Bottom rule (subtle closure)
+  // ── Bottom rule
   doc.save();
-  doc.rect(ML + GAP, y + bH - 2, innerW, 0.5).fillOpacity(0.15).fill(block.accent);
+  doc.rect(bX + GAP, y + bH - 2, innerW, 0.4).fillOpacity(0.13).fill(block.accent);
   doc.restore();
 
-  return y + bH + 18;
+  // No trailing gap for half-width — the grid renderer adds it after the row
+  return y + bH + (isHalf ? 0 : 16);
+}
+
+// ─── 2×2 CLOSING BLOCK GRID ──────────────────────────────────────────────────
+// Groups val/prakt/week/refl blocks into side-by-side pairs to save vertical space.
+const CLOSING_BLOCK_KEYS = new Set(["val", "prakt", "week", "refl"]);
+
+function groupClosingBlocks(segments) {
+  const result = [];
+  let i = 0;
+  while (i < segments.length) {
+    const seg = segments[i];
+    if (seg.type === "block" && CLOSING_BLOCK_KEYS.has(seg.block.key)) {
+      const group = [];
+      while (i < segments.length
+          && segments[i].type === "block"
+          && CLOSING_BLOCK_KEYS.has(segments[i].block.key)) {
+        group.push(segments[i]);
+        i++;
+      }
+      // Only group if we have 2+ consecutive closing blocks
+      if (group.length >= 2) {
+        result.push({ type: "block-grid", blocks: group });
+      } else {
+        result.push(...group);
+      }
+    } else {
+      result.push(seg);
+      i++;
+    }
+  }
+  return result;
+}
+
+function drawBlockGrid(doc, order, blocks, y) {
+  const GRID_GAP = 8;
+  const colW = (TW - GRID_GAP) / 2;
+
+  for (let i = 0; i < blocks.length; i += 2) {
+    const left  = blocks[i];
+    const right = blocks[i + 1];
+
+    if (!right) {
+      // Odd block — render full width
+      y = drawBlock(doc, order, left.block, left.lines, y, ML, TW);
+      continue;
+    }
+
+    // Estimate combined height for page-break check
+    const leftItems  = left.lines.filter(function(l) { return l.trim(); }).length;
+    const rightItems = right.lines.filter(function(l) { return l.trim(); }).length;
+    const estH = Math.max(leftItems, rightItems) * 20 + 55;
+
+    if (needsNewPage(doc, y, estH)) {
+      drawFooter(doc, order);
+      y = addContentPage(doc, order);
+    }
+
+    const leftY  = drawBlock(doc, order, left.block,  left.lines,  y, ML,                  colW);
+    const rightY = drawBlock(doc, order, right.block, right.lines, y, ML + colW + GRID_GAP, colW);
+    y = Math.max(leftY, rightY) + 16; // gap after each grid row
+  }
+
+  return y;
 }
 
 // ─── PROFILE SUMMARY PAGE ────────────────────────────────────────────────────
@@ -960,16 +1014,23 @@ export async function generatePDF({ order, sections }) {
 
       doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
       drawSectionHeader(doc, sectionWithClean, idx, order);
-      // Content starts after the dark opener band + transition strip
-      let y = HEADER_H + 24;
+      // Content starts after the dark opener band + breathing room
+      let y = HEADER_H + 20;
       drawFooter(doc, order);
-      const segments = parseSection(cleanText);
+      const segments = groupClosingBlocks(parseSection(cleanText));
       let pageHasContent = false;
 
       for (const seg of segments) {
         if (seg.type === "block") {
           const prevY = y;
           y = drawBlock(doc, order, seg.block, seg.lines, y);
+          if (y !== prevY) pageHasContent = true;
+          continue;
+        }
+
+        if (seg.type === "block-grid") {
+          const prevY = y;
+          y = drawBlockGrid(doc, order, seg.blocks, y);
           if (y !== prevY) pageHasContent = true;
           continue;
         }
