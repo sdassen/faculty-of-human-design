@@ -228,10 +228,13 @@ function strH(doc, text, opts) {
       const savedSize = doc._fontSize;
       doc.fontSize(opts.fontSize);
       const h = doc.heightOfString(text, opts);
+      console.log("[PDF:strH] fontSize=" + opts.fontSize + " savedSize=" + savedSize + " h=" + Math.round(h) + " textLen=" + text.length);
       doc.fontSize(savedSize != null ? savedSize : BODY_SIZE);
       return h;
     }
-    return doc.heightOfString(text, opts);
+    const h = doc.heightOfString(text, opts);
+    console.log("[PDF:strH] noSize docSize=" + doc._fontSize + " h=" + Math.round(h) + " textLen=" + text.length);
+    return h;
   } catch (err) {
     return 14;
   }
@@ -681,6 +684,7 @@ function drawBlock(doc, order, block, lines, y, bX, bW) {
   bH += PAD;
 
   // Page break only for full-width blocks; grid renderer pre-checks for pairs
+  console.log("[PDF:drawBlock] key=" + block.key + " y=" + Math.round(y) + " bH=" + Math.round(bH) + " items=" + items.length + " docFontSize=" + doc._fontSize + " needsBreak=" + (!isHalf && needsNewPage(doc, y, bH + 24)));
   if (!isHalf && needsNewPage(doc, y, bH + 24)) {
     drawFooter(doc, order);
     y = addContentPage(doc, order);
