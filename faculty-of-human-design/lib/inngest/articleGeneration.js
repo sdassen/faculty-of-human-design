@@ -245,59 +245,63 @@ export const articleGeneration = inngest.createFunction(
     // ── Backfill mode: translate all articles missing body_en ─────────────
     // Trigger via Inngest dashboard: event "article/generate" with data { action: "backfill" }
     if (event?.data?.action === "backfill") {
-      return await step.run("backfill-translations", async () => {
+      // Step 1: fetch which articles need translation
+      const toTranslate = await step.run("backfill-fetch-list", async () => {
         const SUPABASE_URL = process.env.SUPABASE_URL?.replace(/\/$/, "");
         const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
-        const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
-
-        const listRes = await fetch(
+        const r = await fetch(
           `${SUPABASE_URL}/rest/v1/articles?select=id,title,body&body_en=is.null&order=published_at.asc`,
           { headers: { apikey: KEY, Authorization: "Bearer " + KEY } }
         );
-        const articles = await listRes.json();
-        if (!Array.isArray(articles) || articles.length === 0) return { translated: 0 };
+        const data = await r.json();
+        return Array.isArray(data) ? data : [];
+      });
 
-        const TRANSLATE_SYSTEM = `You are an expert translator for the Faculty of Human Design on Ibiza.
+      if (toTranslate.length === 0) return { translated: 0, message: "Nothing to translate" };
+
+      const TRANSLATE_SYSTEM = `You are an expert translator for the Faculty of Human Design on Ibiza.
 Translate the following Dutch article into fluent, natural English.
 Preserve the tone, structure and paragraph breaks exactly.
 Output only the translated article text — no title, no preamble.
 Paragraphs separated by a blank line.`;
 
-        async function claudeTranslate(text, maxTokens, systemPrompt) {
-          const r = await fetch("https://api.anthropic.com/v1/messages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
-            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: maxTokens, system: systemPrompt, messages: [{ role: "user", content: text }] }),
-          });
-          if (!r.ok) throw new Error(`Claude API ${r.status}: ${await r.text().then(t => t.slice(0,100))}`);
-          const d = await r.json();
-          const out = d.content?.find((b) => b.type === "text")?.text?.trim();
-          if (!out) throw new Error(`Empty response from Claude (type=${d.type}, stop=${d.stop_reason})`);
-          return out;
-        }
+      // Step per article — each step stays well within the 30s timeout
+      for (let i = 0; i < toTranslate.length; i++) {
+        const article = toTranslate[i];
+        await step.run(`backfill-translate-${i}`, async () => {
+          const SUPABASE_URL = process.env.SUPABASE_URL?.replace(/\/$/, "");
+          const KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+          const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY;
 
-        const results = [];
-        for (const article of articles) {
-          try {
-            // Sequential to avoid rate limiting
-            const bodyEn = await claudeTranslate(article.body, 3000, TRANSLATE_SYSTEM);
-            const titleEn = await claudeTranslate(article.title, 100, "Translate this Dutch article title to English. Output only the translated title, nothing else.");
-            const firstPara = bodyEn.split("\n\n")[0] || "";
-            const excerptEn = firstPara.length > 220 ? firstPara.slice(0, 217).trim() + "..." : firstPara.trim();
-            const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${article.id}`, {
-              method: "PATCH",
-              headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + KEY, Prefer: "return=minimal" },
-              body: JSON.stringify({ title_en: titleEn, excerpt_en: excerptEn, body_en: bodyEn }),
+          async function claudeCall(content, maxTokens, system) {
+            const r = await fetch("https://api.anthropic.com/v1/messages", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
+              body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: maxTokens, system, messages: [{ role: "user", content }] }),
             });
-            if (!patchRes.ok) throw new Error(`DB PATCH failed: ${patchRes.status}`);
-            results.push({ id: article.id, title_en: titleEn, status: "ok" });
-          } catch (e) {
-            console.error(`[backfill] "${article.title}" failed:`, e.message);
-            results.push({ id: article.id, title: article.title, status: "error", error: e.message });
+            if (!r.ok) throw new Error(`Claude ${r.status}: ${(await r.text()).slice(0, 120)}`);
+            const d = await r.json();
+            const text = d.content?.find((b) => b.type === "text")?.text?.trim();
+            if (!text) throw new Error(`Empty Claude response, stop_reason=${d.stop_reason}`);
+            return text;
           }
-        }
-        return { translated: results.filter(r => r.status === "ok").length, results };
-      });
+
+          const bodyEn = await claudeCall(article.body, 3000, TRANSLATE_SYSTEM);
+          const titleEn = await claudeCall(article.title, 100, "Translate this Dutch article title to English. Output only the translated title, nothing else.");
+          const firstPara = bodyEn.split("\n\n")[0] || "";
+          const excerptEn = firstPara.length > 220 ? firstPara.slice(0, 217).trim() + "..." : firstPara.trim();
+
+          const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${article.id}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + KEY, Prefer: "return=minimal" },
+            body: JSON.stringify({ title_en: titleEn, excerpt_en: excerptEn, body_en: bodyEn }),
+          });
+          if (!patchRes.ok) throw new Error(`DB PATCH ${patchRes.status}`);
+          return { id: article.id, title_en: titleEn };
+        });
+      }
+
+      return { translated: toTranslate.length };
     }
 
     // ── Step 1: Pick the next topic not yet in the DB ─────────────────────
