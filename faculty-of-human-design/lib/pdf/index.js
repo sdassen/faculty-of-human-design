@@ -1130,12 +1130,15 @@ export async function generatePDF({ order, sections }) {
       let y = HEADER_H + 20;
       drawFooter(doc, order);
       const segments = groupClosingBlocks(parseSection(cleanText));
+      console.warn("[PDF:s" + idx + "] docY=" + Math.round(doc.y) + " y=" + y + " segs=" + segments.length + " types=" + segments.map(function(s){return s.type[0];}).join(","));
       let pageHasContent = false;
 
       for (const seg of segments) {
         if (seg.type === "block") {
           const prevY = y;
+          console.warn("[PDF:block] key=" + seg.block.key + " y=" + Math.round(y) + " docY=" + Math.round(doc.y) + " lines=" + seg.lines.length);
           y = drawBlock(doc, order, seg.block, seg.lines, y);
+          console.warn("[PDF:block] after y=" + Math.round(y) + " docY=" + Math.round(doc.y));
           if (y !== prevY) pageHasContent = true;
           continue;
         }
