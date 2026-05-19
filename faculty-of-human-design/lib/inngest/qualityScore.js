@@ -22,7 +22,7 @@ export const MAX_RETRIES = 2;
  * @param {string} [lang] — "nl" (default) or "en"
  * Returns { passed: boolean, issues: string[], score: 0-10 }
  */
-export function quickCheck(text, lang = "nl") {
+export function quickCheck(text, lang = "nl", chart = null) {
   const isEN = lang === "en";
   const issues = [];
   let score = 10;
@@ -108,6 +108,84 @@ export function quickCheck(text, lang = "nl") {
     }
   }
 
+  // ── TYPE CONTAMINATION (P0 — hardest factual error) ──────────────────────────
+  // If the chart is known, verify no wrong-type keywords appear in the text.
+  // A Generator section must NOT mention Projector, Manifestor, or Reflector.
+  // Penalty = -5 per wrong type → always triggers retry.
+  if (chart && chart.type) {
+    const ct = chart.type.toLowerCase();
+    // Build the set of type labels that should NOT appear in this section
+    const wrongTypePatterns = [];
+    if (ct.includes("generator")) {
+      // Both Generator and Manifesting Generator should never say "Projector"
+      wrongTypePatterns.push({ rx: /\bprojector\b/i, label: "Projector" });
+      // "Manifestor" is also wrong for a (Manifesting) Generator
+      wrongTypePatterns.push({ rx: /\bmanifestor\b|\bmanifesteerder\b/i, label: "Manifestor" });
+      // Reflector
+      wrongTypePatterns.push({ rx: /\breflector\b/i, label: "Reflector" });
+    } else if (ct.includes("projector")) {
+      wrongTypePatterns.push({ rx: /\bgenerator\b/i, label: "Generator" });
+      wrongTypePatterns.push({ rx: /\bmanifestor\b|\bmanifesteerder\b/i, label: "Manifestor" });
+      wrongTypePatterns.push({ rx: /\breflector\b/i, label: "Reflector" });
+    } else if (ct.includes("manifestor") || ct.includes("manifesteerder")) {
+      wrongTypePatterns.push({ rx: /\bgenerator\b/i, label: "Generator" });
+      wrongTypePatterns.push({ rx: /\bprojector\b/i, label: "Projector" });
+      wrongTypePatterns.push({ rx: /\breflector\b/i, label: "Reflector" });
+    } else if (ct.includes("reflector")) {
+      wrongTypePatterns.push({ rx: /\bgenerator\b/i, label: "Generator" });
+      wrongTypePatterns.push({ rx: /\bprojector\b/i, label: "Projector" });
+      wrongTypePatterns.push({ rx: /\bmanifestor\b|\bmanifesteerder\b/i, label: "Manifestor" });
+    }
+    for (const { rx, label } of wrongTypePatterns) {
+      if (rx.test(text)) {
+        issues.push(isEN
+          ? `CRITICAL: Wrong type "${label}" mentioned — chart is ${chart.type}. Rewrite immediately.`
+          : `KRITIEK: Verkeerd type "${label}" in tekst — chart is ${chart.type}. Herschrijf onmiddellijk.`
+        );
+        score -= 5;
+      }
+    }
+  }
+
+  // ── LOCALE CONTAMINATION (P1) ─────────────────────────────────────────────────
+  // NL sections must not contain English block labels, and vice versa.
+  if (!isEN) {
+    // NL text should not have English block headings
+    if (/^in your chart:/im.test(text)) {
+      issues.push("Engelse bloktitel 'In your chart:' in NL sectie — rewrite in Dutch");
+      score -= 4;
+    }
+    if (/^(?:pitfalls|practice|this week|reflection questions):/im.test(text)) {
+      issues.push("Engelse bloktitels (Pitfalls/Practice/This week/Reflection questions) in NL sectie");
+      score -= 4;
+    }
+    // "Your " as a possessive strongly suggests the AI wrote in English
+    if (/\byour\b/i.test(text)) {
+      issues.push("Engels bezittelijk 'your' gevonden in NL sectie — tekst is (deels) in het Engels geschreven");
+      score -= 3;
+    }
+  } else {
+    // EN text should not have Dutch block headings
+    if (/^in jouw chart:/im.test(text)) {
+      issues.push("Dutch block label 'In jouw chart:' in EN section — rewrite in English");
+      score -= 4;
+    }
+    if (/^(?:valkuilen|praktijk|deze week|reflectievragen):/im.test(text)) {
+      issues.push("Dutch block labels (Valkuilen/Praktijk/Deze week/Reflectievragen) in EN section");
+      score -= 4;
+    }
+  }
+
+  // ── MARKDOWN TABLES (P1) ─────────────────────────────────────────────────────
+  // Pipe-character tables break PDF rendering entirely.
+  if (/^\|.+\|/m.test(text)) {
+    issues.push(isEN
+      ? "Contains markdown table (|...|) — PDF cannot render tables. Remove and rewrite as bullets."
+      : "Bevat markdown-tabel (|...|) — PDF kan geen tabellen renderen. Verwijder en herschrijf als bullets."
+    );
+    score -= 5;
+  }
+
   return {
     passed: score >= 7,
     issues,
@@ -137,8 +215,10 @@ ${text}
 
 CRITERIA:
 1. CHARTVERANKERING (1-10): Wordt de tekst concreet verankerd in DEZE chart? Worden specifieke poorten, kanalen, centra, profielcijfers genoemd die kloppen met de chartdata hierboven? (10 = elke alinea verankerd, 1 = generieke HD-tekst)
+   AUTOMATISCH 1 als de tekst een verkeerd TYPE, AUTORITEIT of KANAAL noemt dat NIET in de chartdata staat.
 2. SPECIFICITEIT (1-10): Vermijdt de tekst vage psychologie en clichés? Geeft het concrete, actionable inzichten? (10 = scherp en bruikbaar, 1 = open deuren)
 3. CONSISTENTIE (1-10): Klopt alles intern? Geen tegenstrijdigheden, geen feitelijke fouten over deze chart? (10 = volledig consistent, 1 = bevat fouten)
+   AUTOMATISCH 1 als het type (bijv. "Projector") of de autoriteit niet overeenkomt met de chartdata.
 
 Antwoord ALLEEN met JSON, geen prose. Format:
 {"chart_anchor": N, "specificity": N, "consistency": N, "total": N, "issues": ["korte issue 1", "korte issue 2"]}`;
@@ -194,7 +274,7 @@ Antwoord ALLEEN met JSON, geen prose. Format:
  * Returns total score (max 40), all issues, and a pass/fail flag.
  */
 export async function scoreSection(text, sectionTitle, chart, lang = "nl") {
-  const q = quickCheck(text, lang);
+  const q = quickCheck(text, lang, chart);  // pass chart for type/locale contamination checks
   const c = await contentScore(text, sectionTitle, chart);
 
   const total = q.score + c.score;

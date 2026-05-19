@@ -578,6 +578,11 @@ export const orderDelivery = inngest.createFunction(
     // ── Step 2.5: Recompute chart server-side (accurate astronomy) ────────
     // The browser-side chart in birth_data.chart is used as a fallback if
     // server-side calculation fails. Only HD reports get recomputed here.
+    //
+    // SINGLE SOURCE OF TRUTH: after a successful recompute, the authoritative
+    // chart is persisted back to the DB so test-PDF re-renders, customer
+    // downloads, and admin previews all use the exact same chartFacts that
+    // drove LLM generation — preventing cover/narrative mismatches.
     const enrichedOrder = await step.run("recompute-chart", async () => {
       const bd = order.birth_data || {};
       const isHDReport = !/horoscoop|numerologie/i.test(order.report_title || "");
@@ -592,15 +597,26 @@ export const orderDelivery = inngest.createFunction(
           minute: bd.minute != null ? parseInt(bd.minute) : 0,
           tz:     bd.tz != null ? parseFloat(bd.tz) : 1, // default Amsterdam
         });
-        return {
-          ...order,
-          birth_data: {
-            ...bd,
-            chart: serverChart,
-            // Preserve the browser-computed chart for audit/comparison
-            _browser_chart: bd.chart,
-          },
+
+        const newBirthData = {
+          ...bd,
+          chart: serverChart,
+          // Preserve browser-computed chart for audit / accuracy comparison
+          _browser_chart: bd.chart,
         };
+
+        // ← CRITICAL: persist authoritative chart so all future renders use
+        // the same chartFacts that will drive LLM generation below.
+        const db = getSupabase();
+        const { error: updateErr } = await db
+          .from("orders")
+          .update({ birth_data: newBirthData })
+          .eq("id", orderId);
+        if (updateErr) {
+          console.warn(`[recompute-chart] Could not persist chart to DB: ${updateErr.message}`);
+        }
+
+        return { ...order, birth_data: newBirthData };
       } catch (e) {
         console.warn(`[recompute-chart] Failed for ${orderId}, using browser chart: ${e.message}`);
         return order;
