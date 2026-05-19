@@ -406,19 +406,17 @@ function drawCover(doc, order, sections) {
   doc.rect(0, H - 4, W, 4).fill(CLR.gold);
 
   // ── Bodygraph watermark — this person's actual chart, ghosted behind text.
-  //    bodygraph.cjs resets its own graphics state internally so we can't use
-  //    fillOpacity on the call itself. Instead: render at full opacity, then
-  //    cover with a near-opaque dark overlay → net ~7% visible.
+  //    bodygraph.cjs resets graphics state internally so opacity must be set
+  //    via a full-page overlay after rendering. Full-page avoids visible edges.
   if (chart.type) {
     const wmScale = 0.78;
     const wmSize  = bodygraphSize(wmScale);
     const wmX = (W - wmSize.width)  / 2;
     const wmY = (H - wmSize.height) / 2 - 30;
     drawBodygraph(doc, chart, { x: wmX, y: wmY, scale: wmScale });
-    // Dark overlay: 92% opaque → leaves ~8% of bodygraph visible
+    // Full-page overlay — no rectangle boundary, uniform ghosting
     doc.save();
-    doc.rect(wmX - 6, wmY - 6, wmSize.width + 12, wmSize.height + 12)
-      .fillOpacity(0.92).fill(CLR.dark);
+    doc.rect(0, 0, W, H).fillOpacity(0.94).fill(CLR.dark);
     doc.restore();
   }
 
