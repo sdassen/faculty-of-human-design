@@ -202,7 +202,16 @@ function parseSection(text) {
       }
       segments[segments.length - 1].lines.push(line);
     } else {
-      current.lines.push(line);
+      // Special rule: end the "chart" block on a blank line once ≥3 bullets
+      // have been collected. This prevents the AI putting the entire core
+      // analysis (subheadings + paragraphs) as extra bullets inside the block.
+      const isChartBlock = current.type === "block" && current.block && current.block.key === "chart";
+      const bulletCount  = current.lines.filter(function(l) { return /^\s*[•\-–—*]/.test(l); }).length;
+      if (isChartBlock && line.trim() === "" && bulletCount >= 3) {
+        flush(); // Close the chart block — rest becomes prose
+      } else {
+        current.lines.push(line);
+      }
     }
   }
   flush();

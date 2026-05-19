@@ -352,12 +352,40 @@ RULES (strict):
 - STRICT word limit: core analysis max 500 words. Quality over quantity. Every sentence must earn its place.
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — only a brief callback reference is allowed.
 
-Format:
-1. "In your chart:" with 3–5 concrete bullets (• Bullet) with data from THIS chart.
-2. Core analysis: 3–5 sub-paragraphs with sub-headings, max 500 words total, each paragraph anchored in chart data.
-3. Four closing blocks in this order: "Pitfalls:" / "Practice:" / "This week:" / "Reflection questions:" — each exactly 3 items (short, concrete).
+REQUIRED FORMAT — copy this structure exactly:
 
-End the core analysis with a complete, rounded sentence.`
+In your chart:
+• [Concrete fact 1 — gate/channel/center + meaning]
+• [Concrete fact 2 — specific to this chart]
+• [Concrete fact 3 — max 5 bullets total]
+
+[Short sub-heading for first core paragraph — no bullet, no colon]
+[Paragraph text. Plain prose, NO "•" prefix. Anchored in chart data.]
+
+[Short sub-heading for second core paragraph]
+[Paragraph text. Max 500 words total across all core paragraphs.]
+
+Pitfalls:
+• [item 1]
+• [item 2]
+• [item 3]
+
+Practice:
+• [item 1]
+• [item 2]
+• [item 3]
+
+This week:
+• [item 1]
+• [item 2]
+• [item 3]
+
+Reflection questions:
+• [item 1]
+• [item 2]
+• [item 3]
+
+CRITICAL: The "In your chart:" block ends after the bullets and a blank line. The core analysis that follows has NEVER a "•" bullet prefix. Sub-headings are plain lines with no prefix. End the core analysis with a complete sentence.`
     : `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
@@ -372,12 +400,40 @@ REGELS (strikt):
 - STRIKTE woordgrens: kernuitleg max 500 woorden. Kwaliteit boven kwantiteit. Elke zin moet zijn plek verdienen.
 - Herhaal GEEN kanaal-, centrum- of profiel-beschrijving die al in een eerdere sectie staat — alleen een korte terugverwijzing is toegestaan.
 
-Format:
-1. "In jouw chart:" met 3–5 concrete bullets (• Bullet) met data uit DEZE chart.
-2. Kernuitleg: 3–5 subparagrafen met subkopjes, max 500 woorden totaal, elke paragraaf verankerd in chartdata.
-3. Vier slotblokken in deze volgorde: "Valkuilen:" / "Praktijk:" / "Deze week:" / "Reflectievragen:" — elk exact 3 items (kort en concreet).
+VERPLICHT FORMAT — kopieer deze structuur exact:
 
-Sluit de kernuitleg af met een volledige, afgeronde zin.`;
+In jouw chart:
+• [Concreet feit 1 — poort/kanaal/centrum + betekenis]
+• [Concreet feit 2 — specifiek voor DEZE chart]
+• [Concreet feit 3 — max 5 bullets totaal]
+
+[Kort subkopje eerste kernparagraaf — geen bullet, geen dubbele punt]
+[Alineatekst. Gewone lopende tekst, NOOIT "•" bullet-prefix. Verankerd in chartdata.]
+
+[Kort subkopje tweede kernparagraaf]
+[Alineatekst. Max 500 woorden totaal voor alle kernparagrafen samen.]
+
+Valkuilen:
+• [item 1]
+• [item 2]
+• [item 3]
+
+Praktijk:
+• [item 1]
+• [item 2]
+• [item 3]
+
+Deze week:
+• [item 1]
+• [item 2]
+• [item 3]
+
+Reflectievragen:
+• [item 1]
+• [item 2]
+• [item 3]
+
+CRUCIAAL: De "In jouw chart:" sectie eindigt na de bullets en een witregel. De kernuitleg die DAARNA komt heeft NOOIT een "•" bullet-prefix. Subkopjes zijn gewone regels zonder prefix. Sluit de kernuitleg af met een volledige, afgeronde zin.`;
 
   const useDeepThinking = shouldUseDeepThinking(sectionTitle);
   const systemPrompt = getSystemPrompt(lang);
