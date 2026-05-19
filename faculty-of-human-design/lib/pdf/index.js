@@ -203,14 +203,20 @@ function drawBodygraphPage(doc, order, chart) {
   const colW = TW / 2;
   let cy = dataY + 18;
   items.forEach(function(it, i) {
-    const col  = i % 2;
-    const row  = Math.floor(i / 2);
+    const col   = i % 2;
+    const row   = Math.floor(i / 2);
     const itemX = ML + col * colW;
-    const itemY = cy + row * 26;
-    doc.font(FONT.body).fontSize(7).fillColor(CLR.textMuted)
+    const itemY = cy + row * 30;
+    // Faint row separator
+    if (col === 0 && row > 0) {
+      doc.save();
+      doc.rect(ML, itemY - 5, TW, 0.4).fillOpacity(0.15).fill(CLR.border);
+      doc.restore();
+    }
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
        .text(it.label.toUpperCase(), itemX, itemY, { characterSpacing: 1.5 });
     doc.font(FONT.displayRegular).fontSize(12).fillColor(CLR.dark)
-       .text(it.value, itemX, itemY + 10);
+       .text(it.value, itemX, itemY + 9);
   });
 
   const legY = FY - 60;
@@ -229,98 +235,205 @@ function drawBodygraphPage(doc, order, chart) {
   drawFooter(doc, order);
 }
 
+// ─── COVER DECORATION ────────────────────────────────────────────────────────
+// Faint geometric motif — concentric circles with axis lines, drawn behind text.
+// Evokes the circular structure of the bodygraph without being literal.
+function drawCoverDecoration(doc, cy) {
+  const cx = W / 2;
+  doc.save();
+
+  // Concentric rings — progressively more visible toward center
+  const rings = [
+    { r: 205, w: 0.3, op: 0.05 },
+    { r: 162, w: 0.3, op: 0.07 },
+    { r: 118, w: 0.4, op: 0.09 },
+    { r: 76,  w: 0.5, op: 0.12 },
+    { r: 40,  w: 0.7, op: 0.17 },
+  ];
+  rings.forEach(function(ring) {
+    doc.save();
+    doc.strokeColor(CLR.gold).lineWidth(ring.w).strokeOpacity(ring.op);
+    doc.circle(cx, cy, ring.r).stroke();
+    doc.restore();
+  });
+
+  // Axis cross (horizontal + vertical)
+  doc.save();
+  doc.strokeColor(CLR.gold).lineWidth(0.3).strokeOpacity(0.04);
+  doc.moveTo(cx - 205, cy).lineTo(cx + 205, cy).stroke();
+  doc.moveTo(cx, cy - 205).lineTo(cx, cy + 205).stroke();
+  doc.restore();
+
+  // Diagonal lines (45°)
+  doc.save();
+  doc.strokeColor(CLR.gold).lineWidth(0.3).strokeOpacity(0.03);
+  const d = 145;
+  doc.moveTo(cx - d, cy - d).lineTo(cx + d, cy + d).stroke();
+  doc.moveTo(cx + d, cy - d).lineTo(cx - d, cy + d).stroke();
+  doc.restore();
+
+  // Eight small diamond nodes on mid ring (evocative of gate channels)
+  const nodeR = 76;
+  const angles = [0, 45, 90, 135, 180, 225, 270, 315];
+  angles.forEach(function(deg) {
+    const rad = (deg * Math.PI) / 180;
+    const nx  = cx + Math.cos(rad) * nodeR;
+    const ny  = cy + Math.sin(rad) * nodeR;
+    doc.save();
+    doc.fillColor(CLR.gold).fillOpacity(0.18);
+    doc.circle(nx, ny, 2.5).fill();
+    doc.restore();
+  });
+
+  // Center dot
+  doc.save();
+  doc.fillColor(CLR.gold).fillOpacity(0.3);
+  doc.circle(cx, cy, 4).fill();
+  doc.restore();
+
+  doc.restore();
+}
+
 // ─── COVER PAGE ──────────────────────────────────────────────────────────────
 function drawCover(doc, order, sections) {
-  doc.rect(0, 0, W, H).fill(CLR.dark);
-  doc.rect(0, 0, W, 3).fill(CLR.gold);
-  doc.rect(0, H - 3, W, 3).fill(CLR.gold);
-
-  doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#7A6840")
-    .text("FACULTY OF HUMAN DESIGN  ·  IBIZA  ·  EST. 2014", 0, 64, {
-      align: "center", width: W, characterSpacing: 3.5,
-    });
-
-  doc.font(FONT.display).fontSize(34).fillColor("#FFFFFF")
-    .text(order.report_title || "Persoonlijk Rapport", ML, 140, {
-      align: "center", width: TW, lineGap: 8,
-    });
-
-  const gy = doc.y + 20;
-  doc.rect(W / 2 - 24, gy, 48, 1).fill(CLR.gold);
-
-  doc.font(FONT.displayLight).fontSize(16).fillColor("#B8A880")
-    .text(order.customer_name || "", 0, gy + 16, { align: "center", width: W });
-
   const bd    = order.birth_data || {};
   const chart = bd.chart || {};
-  let iy = gy + 44;
 
+  // ── Background
+  doc.rect(0, 0, W, H).fill(CLR.dark);
+
+  // ── Gold accent stripes (thicker = more premium)
+  doc.rect(0, 0, W, 4).fill(CLR.gold);
+  doc.rect(0, H - 4, W, 4).fill(CLR.gold);
+
+  // ── Geometric decoration — drawn first so text sits on top
+  //    Center it between institution label and chart grid
+  drawCoverDecoration(doc, 290);
+
+  // ── Institution label
+  doc.font(FONT.bodyLight).fontSize(6).fillColor("#5A5438")
+    .text("FACULTY OF HUMAN DESIGN  ·  IBIZA  ·  EST. 2014", 0, 28, {
+      align: "center", width: W, characterSpacing: 4,
+    });
+
+  // ── Report title (Cormorant Italic — the signature display face)
+  doc.font(FONT.display).fontSize(38).fillColor("#FFFFFF")
+    .text(order.report_title || "Persoonlijk Rapport", ML, 112, {
+      align: "center", width: TW, lineGap: 9,
+    });
+
+  // ── Gold ornament line below title
+  const titleBottom = doc.y + 18;
+  doc.save();
+  doc.rect(W / 2 - 40, titleBottom, 80, 0.75).fill(CLR.gold);
+  doc.fillOpacity(0.35).rect(W / 2 - 80, titleBottom, 40, 0.5).fill(CLR.gold);
+  doc.fillOpacity(0.35).rect(W / 2 + 40, titleBottom, 40, 0.5).fill(CLR.gold);
+  doc.restore();
+
+  // ── Name
+  doc.font(FONT.displayLight).fontSize(17).fillColor("#C4B898")
+    .text(order.customer_name || "", 0, titleBottom + 16, { align: "center", width: W });
+
+  // ── Birth data
+  let iy = doc.y + 10;
   if (bd.day) {
     const parts = [
       bd.day + "-" + bd.month + "-" + bd.year,
       bd.hour != null ? bd.hour + ":" + String(bd.minute || 0).padStart(2, "0") : null,
       bd.place || null,
     ].filter(Boolean);
-    doc.font(FONT.bodyLight).fontSize(8.5).fillColor("#504C48")
+    doc.font(FONT.bodyLight).fontSize(8).fillColor("#484440")
       .text(parts.join("  ·  "), 0, iy, { align: "center", width: W });
-    iy += 18;
+    iy = doc.y + 5;
   }
-
   if (chart.type) {
     const cparts = [
       chart.type,
       chart.profile ? "Profiel " + chart.profile : null,
-      chart.auth || null,
+      chart.auth    || null,
     ].filter(Boolean);
-    doc.font(FONT.body).fontSize(8.5).fillColor(CLR.goldWarm)
+    doc.font(FONT.body).fontSize(8).fillColor(CLR.goldWarm)
       .text(cparts.join("  ·  "), 0, iy, { align: "center", width: W });
-    iy += 16;
   }
 
-  const sumY = Math.max(iy + 36, 360);
-  const sumItems = [
-    chart.type    ? "Type: " + chart.type       : null,
-    chart.strat   ? "Strategie: " + chart.strat : null,
-    chart.auth    ? "Autoriteit: " + chart.auth : null,
-    chart.profile ? "Profiel: " + chart.profile : null,
-    chart.sig     ? "Signatuur: " + chart.sig   : null,
-    chart.notSelf ? "Not-Self: " + chart.notSelf : null,
+  // ── Chart data grid  (2 columns × up to 4 rows — label above, value below)
+  const gridItems = [
+    chart.type    ? { label: "TYPE",            value: chart.type    } : null,
+    chart.strat   ? { label: "STRATEGIE",       value: chart.strat   } : null,
+    chart.auth    ? { label: "AUTORITEIT",      value: chart.auth    } : null,
+    chart.profile ? { label: "PROFIEL",         value: chart.profile } : null,
+    chart.sig     ? { label: "SIGNATUUR",       value: chart.sig     } : null,
+    chart.notSelf ? { label: "NOT-SELF THEMA",  value: chart.notSelf } : null,
     (chart.definedCenters && chart.definedCenters.length)
-      ? "Gedefinieerd: " + chart.definedCenters.join(", ") : null,
-    chart.cross   ? "Inkarnatie-Kruis: " + chart.cross : null,
+      ? { label: "GEDEFINIEERD",
+          value: chart.definedCenters.join(", ") } : null,
+    chart.cross   ? { label: "INKARNATIE-KRUIS", value: chart.cross  } : null,
   ].filter(Boolean);
 
-  if (sumItems.length) {
-    doc.rect(ML, sumY - 8, TW, 1).fill("#2A2620");
-    doc.font(FONT.bodyLight).fontSize(6).fillColor("#7A6840")
-      .text("JOUW ONTWERP — KERNDATA", ML, sumY + 2, { characterSpacing: 2.5 });
-    let sy = sumY + 16;
-    for (const item of sumItems.slice(0, 8)) {
-      if (sy > H - 100) break;
-      doc.rect(ML, sy + 3, 3, 8).fill(CLR.gold);
-      doc.font(FONT.body).fontSize(8.5).fillColor("#A09880")
-        .text(item, ML + 10, sy, { width: TW - 10 });
-      sy += 16;
-    }
-    doc.rect(ML, sy + 6, TW, 1).fill("#2A2620");
+  if (gridItems.length) {
+    const gridY   = 420;
+    const colW    = TW / 2;
+    const rowH    = 38;
+
+    // Subtle separator above grid
+    doc.save();
+    doc.rect(ML, gridY - 14, TW, 0.5).fillOpacity(0.25).fill(CLR.gold);
+    doc.restore();
+    doc.font(FONT.bodyLight).fontSize(5.5).fillColor("#5A5438")
+      .text("JOUW MENSELIJK ONTWERP", ML, gridY - 8, { characterSpacing: 3 });
+
+    gridItems.slice(0, 8).forEach(function(item, i) {
+      const col  = i % 2;
+      const row  = Math.floor(i / 2);
+      const gx   = ML + col * colW;
+      const gy   = gridY + 12 + row * rowH;
+
+      // Faint column divider for right column
+      if (col === 1 && row === 0) {
+        doc.save();
+        doc.rect(ML + colW, gridY + 10, 0.5, rowH * Math.ceil(gridItems.length / 2) - 4)
+          .fillOpacity(0.12).fill(CLR.gold);
+        doc.restore();
+      }
+
+      doc.font(FONT.bodyLight).fontSize(6).fillColor("#5A5438")
+        .text(item.label, gx, gy, { width: colW - 8, characterSpacing: 1.5 });
+      doc.font(FONT.displayRegular).fontSize(11).fillColor("#B8B0A0")
+        .text(item.value, gx, gy + 9, { width: colW - 8 });
+    });
+
+    // Separator below grid
+    const gridBottom = gridY + 12 + Math.ceil(gridItems.length / 2) * rowH;
+    doc.save();
+    doc.rect(ML, gridBottom, TW, 0.5).fillOpacity(0.2).fill(CLR.gold);
+    doc.restore();
   }
 
-  const tocY = Math.max(doc.y + 32, H * 0.68);
-  if (tocY < H - 100) {
-    doc.font(FONT.bodyLight).fontSize(6).fillColor("#3A3630")
-      .text("INHOUD", ML, tocY, { characterSpacing: 2.5 });
-    let ly = tocY + 16;
+  // ── Table of contents
+  const tocY = Math.max(gridItems.length ? 420 + 12 + Math.ceil(gridItems.length / 2) * 38 + 20 : 600, H * 0.72);
+  if (tocY < H - 100 && sections.length) {
+    doc.font(FONT.bodyLight).fontSize(5.5).fillColor("#5A5438")
+      .text("INHOUD", ML, tocY, { characterSpacing: 3 });
+
+    const midToc = ML + Math.floor(sections.length / 2) * 0; // single column
+    const colWToc = (TW - 12) / 2;
     sections.forEach(function(s, i) {
-      if (ly < H - 52) {
-        doc.font(FONT.body).fontSize(8).fillColor("#4A4640")
-          .text(String(i + 1).padStart(2, "0") + "  " + s.title, ML + 10, ly);
-        ly += 14;
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const tx  = ML + col * (colWToc + 12);
+      const ty  = tocY + 14 + row * 13;
+      if (ty < H - 48) {
+        doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#3A3830")
+          .text(String(i + 1).padStart(2, "0"), tx, ty, { width: 14, lineBreak: false });
+        doc.font(FONT.body).fontSize(6.5).fillColor("#4A4840")
+          .text(s.title, tx + 16, ty, { width: colWToc - 16, lineBreak: false });
       }
     });
   }
 
-  doc.font(FONT.bodyLight).fontSize(7).fillColor("#2A2620")
-    .text("© 2026 Faculty of Human Design — Ibiza, Spanje", 0, H - 30, {
+  // ── Copyright
+  doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#2C2A26")
+    .text("© 2026 Faculty of Human Design — Ibiza, Spanje", 0, H - 26, {
       align: "center", width: W,
     });
 }
@@ -489,29 +602,43 @@ export async function generatePDF({ order, sections }) {
 
     doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
     doc.rect(0, 0, W, H).fill(CLR.dark);
-    doc.rect(0, 0, W, 3).fill(CLR.gold);
-    doc.rect(0, H - 3, W, 3).fill(CLR.gold);
+    doc.rect(0, 0, W, 4).fill(CLR.gold);
+    doc.rect(0, H - 4, W, 4).fill(CLR.gold);
 
-    doc.font(FONT.display).fontSize(26).fillColor("#FFFFFF")
-      .text("Met dank voor je vertrouwen.", ML, 180, { align: "center", width: TW });
+    // Subtle closing decoration — same motif as cover, centered lower
+    drawCoverDecoration(doc, H / 2 + 40);
+
+    doc.font(FONT.bodyLight).fontSize(6).fillColor("#5A5438")
+      .text("FACULTY OF HUMAN DESIGN", 0, 36, {
+        align: "center", width: W, characterSpacing: 4,
+      });
+
+    doc.font(FONT.display).fontSize(30).fillColor("#FFFFFF")
+      .text("Met dank voor je vertrouwen.", ML, H / 2 - 100, { align: "center", width: TW });
+
+    // Gold ornament
+    const ry = doc.y + 18;
+    doc.save();
+    doc.rect(W / 2 - 40, ry, 80, 0.75).fill(CLR.gold);
+    doc.fillOpacity(0.3).rect(W / 2 - 80, ry, 40, 0.5).fill(CLR.gold);
+    doc.fillOpacity(0.3).rect(W / 2 + 40, ry, 40, 0.5).fill(CLR.gold);
+    doc.restore();
 
     const bd2 = order.birth_data || {};
     const closingPlace = bd2.place ? " — geboren in " + bd2.place : "";
-    const closing = "Dit rapport is persoonlijk samengesteld op basis van de exacte"
-      + " geboortedata van " + (order.customer_name || "jou") + closingPlace
+    const closing = "Dit rapport is persoonlijk samengesteld op basis van de exacte geboortedata van "
+      + (order.customer_name || "jou") + closingPlace
       + ". Human Design verdiept zich naarmate je er meer mee leeft. Neem de tijd.";
 
-    doc.font(FONT.body).fontSize(9.5).fillColor("#7A7470")
-      .text(closing, ML + 24, 234, { align: "center", width: TW - 48, lineGap: 5 });
+    doc.font(FONT.body).fontSize(9.5).fillColor("#6A6460")
+      .text(closing, ML + 32, ry + 18, { align: "center", width: TW - 64, lineGap: 5 });
 
-    const ry = doc.y + 28;
-    doc.rect(W / 2 - 20, ry, 40, 1).fill(CLR.gold);
+    const contactY = doc.y + 32;
+    doc.font(FONT.body).fontSize(8).fillColor("#484440")
+      .text("info@facultyhd.com", 0, contactY, { align: "center", width: W });
 
-    doc.font(FONT.body).fontSize(8).fillColor("#504C48")
-      .text("Vragen of opmerkingen? info@facultyhd.com", 0, ry + 14, { align: "center", width: W });
-
-    doc.font(FONT.bodyLight).fontSize(7).fillColor("#2A2620")
-      .text("© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", 0, H - 30, {
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#282420")
+      .text("© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", 0, H - 26, {
         align: "center", width: W,
       });
 
