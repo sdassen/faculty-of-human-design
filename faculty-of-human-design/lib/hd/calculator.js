@@ -1,14 +1,43 @@
 // ─── SERVER-SIDE HD CHART CALCULATOR ──────────────────────────────────────────
-// Accurate Human Design chart computation using astronomy-engine
-// (pure JavaScript, arcsecond-level accuracy, no native dependencies).
+// Primary engine: Swiss Ephemeris (swisseph npm, Moshier built-in — no data files).
+// Fallback engine: astronomy-engine (pure JS, arcsecond-level accuracy).
 //
-// Replaces the browser-side calcHD() as the source of truth for the AI pipeline.
+// Swiss Ephemeris uses the TRUE lunar node (not the mean approximation),
+// matching the standard used by Jovian Archive and myBodyGraph.
 //
-// Run:  npm install astronomy-engine
+// The fallback is completely transparent; if swisseph's native binding is
+// unavailable in the Lambda runtime, astronomy-engine handles everything.
+//
+// Run:  npm install   (swisseph is now in package.json)
 
+import { createRequire } from "module";
 import { Body, MakeTime, GeoVector, Ecliptic, GeoMoon } from "astronomy-engine";
 
-// ─── PLANETARY BODIES USED IN HD ──────────────────────────────────────────────
+const _require = createRequire(import.meta.url);
+
+// ─── OPTIONAL SWISS EPHEMERIS LOADER ─────────────────────────────────────────
+let _sweph = null;
+let _swephLoaded = false;
+
+function getSweph() {
+  if (_swephLoaded) return _sweph;
+  _swephLoaded = true;
+  try {
+    _sweph = _require("swisseph");
+    // Point to empty path → swisseph uses built-in Moshier ephemeris
+    // (accurate ~1 arcsec for planets; no data files shipped)
+    if (typeof _sweph.swe_set_ephe_path === "function") {
+      _sweph.swe_set_ephe_path("");
+    }
+    console.log("[HD] Swiss Ephemeris loaded (Moshier built-in, true node)");
+  } catch (e) {
+    console.log("[HD] swisseph unavailable (" + e.message.slice(0, 80) + "), using astronomy-engine");
+    _sweph = null;
+  }
+  return _sweph;
+}
+
+// ─── PLANETARY BODIES USED IN HD ─────────────────────────────────────────────
 const HD_PLANETS = [
   "Sun", "Earth", "Moon",
   "NorthNode", "SouthNode",
@@ -17,7 +46,7 @@ const HD_PLANETS = [
   "Uranus", "Neptune", "Pluto",
 ];
 
-// ─── GATE WHEEL ────────────────────────────────────────────────────────────────
+// ─── GATE WHEEL ───────────────────────────────────────────────────────────────
 // Gate numbers in zodiac order starting at 0° Aries.
 // This is the standard HD gate wheel (I Ching to zodiac mapping).
 // Each gate spans 5.625° (360 / 64); each of its 6 lines spans 0.9375°.
@@ -30,17 +59,10 @@ const GATE_WHEEL = [
   37, 63, 22, 36,
 ];
 
-// HD wheel starts at gate 25 at 15° Aquarius (= 315° tropical when starting from 0° Aries).
-// However the canonical HD start point is 1.875° Aquarius for gate 1.
-// Our mapping below uses the standard offset.
-//
-// The exact rotation: gate 41 starts the wheel at 2°00'00" Aquarius = 302° tropical
-// (this is when the Sun is at the start of gate 41 around Jan 22).
-//
-// Reference: standard HD gate wheel as used by Jovian Archive.
-const WHEEL_START_DEG = 302.0; // longitude (tropical) where gate 41 begins
+// HD wheel starts at gate 41 at 2°00'00" Aquarius = 302° tropical longitude.
+const WHEEL_START_DEG = 302.0;
 
-// ─── CENTERS & GATE-TO-CENTER MAPPING ─────────────────────────────────────────
+// ─── CENTERS & GATE-TO-CENTER MAPPING ────────────────────────────────────────
 export const ALL_CENTERS = [
   "Head", "Ajna", "Throat", "G", "Heart/Ego",
   "Spleen", "Sacral", "Solar Plexus", "Root",
@@ -63,9 +85,7 @@ const GATE_TO_CENTER = {
   52:"Root", 19:"Root", 39:"Root", 41:"Root",
 };
 
-// ─── CHANNEL DEFINITIONS ──────────────────────────────────────────────────────
-// All 36 channels as gate pairs. When both gates are active, the channel is
-// defined and connects the two centers it spans.
+// ─── CHANNEL DEFINITIONS ─────────────────────────────────────────────────────
 const CHANNELS = {
   "1-8":   ["G", "Throat"],
   "2-14":  ["G", "Sacral"],
@@ -105,7 +125,7 @@ const CHANNELS = {
   "47-64": ["Ajna", "Head"],
 };
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
+// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function normalizeLongitude(deg) {
   return ((deg % 360) + 360) % 360;
 }
@@ -122,14 +142,87 @@ function longitudeToGateLine(lon) {
   return { gate: GATE_WHEEL[gateIdx], line: Math.max(1, Math.min(6, line)) };
 }
 
+// ─── SWISS EPHEMERIS LONGITUDE ────────────────────────────────────────────────
+// Planet IDs in the swisseph binding
+const SE_IDS = {
+  Sun:       0,
+  Moon:      1,
+  Mercury:   2,
+  Venus:     3,
+  Mars:      4,
+  Jupiter:   5,
+  Saturn:    6,
+  Uranus:    7,
+  Neptune:   8,
+  Pluto:     9,
+  NorthNode: 11, // SE_TRUE_NODE — matches Jovian Archive standard
+};
+
+// SE_FLG_MOSEPH (4): use Moshier ephemeris; no .se1 data files required.
+const SEFLG_MOSEPH = 4;
+
 /**
- * Get geocentric ecliptic longitude (tropical, in degrees) of a body at a given Date.
+ * Try to get ecliptic longitude via Swiss Ephemeris.
+ * Returns null if swisseph is unavailable or calculation fails.
  */
-function getEclipticLongitude(bodyName, date) {
+function getSwephLongitude(bodyName, date) {
+  const se = getSweph();
+  if (!se) return null;
+
+  try {
+    const utH = date.getUTCHours()
+              + date.getUTCMinutes() / 60
+              + date.getUTCSeconds() / 3600;
+
+    const gregCal = se.SE_GREG_CAL ?? 1;
+    const jd = se.swe_julday(
+      date.getUTCFullYear(),
+      date.getUTCMonth() + 1,
+      date.getUTCDate(),
+      utH,
+      gregCal
+    );
+
+    if (bodyName === "Earth") {
+      // Earth in HD = geocentric longitude of point opposite the Sun
+      const r = se.swe_calc_ut(jd, 0 /* SE_SUN */, SEFLG_MOSEPH);
+      const err = r.error || (typeof r.rflag === "number" && r.rflag < 0);
+      if (err) return null;
+      const lon = r.longitude ?? (Array.isArray(r.data) ? r.data[0] : null);
+      if (lon == null) return null;
+      return normalizeLongitude(lon + 180);
+    }
+
+    if (bodyName === "SouthNode") {
+      // South Node = True North Node + 180°
+      const r = se.swe_calc_ut(jd, 11 /* SE_TRUE_NODE */, SEFLG_MOSEPH);
+      const err = r.error || (typeof r.rflag === "number" && r.rflag < 0);
+      if (err) return null;
+      const lon = r.longitude ?? (Array.isArray(r.data) ? r.data[0] : null);
+      if (lon == null) return null;
+      return normalizeLongitude(lon + 180);
+    }
+
+    const id = SE_IDS[bodyName];
+    if (id === undefined) return null;
+
+    const r = se.swe_calc_ut(jd, id, SEFLG_MOSEPH);
+    const err = r.error || (typeof r.rflag === "number" && r.rflag < 0);
+    if (err) return null;
+    const lon = r.longitude ?? (Array.isArray(r.data) ? r.data[0] : null);
+    if (lon == null) return null;
+    return normalizeLongitude(lon);
+  } catch (e) {
+    // Swallow; fall through to astronomy-engine
+    return null;
+  }
+}
+
+// ─── ASTRONOMY-ENGINE LONGITUDE (fallback) ───────────────────────────────────
+function getAstroLongitude(bodyName, date) {
   const time = MakeTime(date);
 
   if (bodyName === "Earth") {
-    // Earth in HD = Sun's longitude + 180° (geocentric)
     const sun = GeoVector(Body.Sun, time, true);
     const ecl = Ecliptic(sun);
     return normalizeLongitude(ecl.elon + 180);
@@ -142,16 +235,13 @@ function getEclipticLongitude(bodyName, date) {
   }
 
   if (bodyName === "NorthNode" || bodyName === "SouthNode") {
-    // Mean lunar node — approximation. Astronomy-engine doesn't expose
-    // nodes directly, so we use the well-known mean node formula.
-    // Reference: Meeus, Astronomical Algorithms, ch. 47.
+    // Mean lunar node — Meeus, Astronomical Algorithms, ch. 47.
     const T = (time.tt - 2451545.0) / 36525.0;
     const meanNode = 125.04452 - 1934.136261 * T + 0.0020708 * T*T + (T*T*T)/450000;
     const lon = normalizeLongitude(meanNode);
     return bodyName === "NorthNode" ? lon : normalizeLongitude(lon + 180);
   }
 
-  // All other planets
   const bodyMap = {
     Sun:     Body.Sun,
     Mercury: Body.Mercury,
@@ -171,46 +261,47 @@ function getEclipticLongitude(bodyName, date) {
   return normalizeLongitude(ecl.elon);
 }
 
-// ─── TYPE / AUTHORITY / PROFILE DERIVATION ────────────────────────────────────
+// ─── UNIFIED ENTRY ───────────────────────────────────────────────────────────
+/**
+ * Get geocentric ecliptic longitude (tropical, degrees) of an HD body.
+ * Tries Swiss Ephemeris first; falls back to astronomy-engine.
+ */
+function getEclipticLongitude(bodyName, date) {
+  const swLon = getSwephLongitude(bodyName, date);
+  if (swLon !== null) return swLon;
+  return getAstroLongitude(bodyName, date);
+}
+
+// ─── TYPE / AUTHORITY / PROFILE DERIVATION ───────────────────────────────────
 function determineType(definedCenters) {
   const has = (c) => definedCenters.has(c);
   const hasSacral = has("Sacral");
   const hasThroat = has("Throat");
-  const motors = ["Heart/Ego", "Solar Plexus", "Root", "Sacral"];
 
-  // Reflector: no centers defined
   if (definedCenters.size === 0) {
     return { type: "Reflector", strat: "Wacht een maancyclus van 28 dagen", sig: "Verrassing", notSelf: "Teleurstelling" };
   }
 
-  // Manifestor: motor connected to throat, no sacral
   if (!hasSacral && hasThroat) {
-    // Check if any motor (non-sacral) is connected to throat via channels
-    // For simplicity, presence of throat + motor (non-sacral) = Manifestor
     const hasNonSacralMotor = ["Heart/Ego", "Solar Plexus", "Root"].some(has);
     if (hasNonSacralMotor) {
       return { type: "Manifestor", strat: "Informeer voor je handelt", sig: "Vrede", notSelf: "Woede" };
     }
   }
 
-  // Manifesting Generator: sacral + throat (with sacral motor connection)
   if (hasSacral && hasThroat) {
     return { type: "Manifesting Generator", strat: "Wacht om te reageren, informeer dan voor je handelt", sig: "Bevrediging en vrede", notSelf: "Frustratie en woede" };
   }
 
-  // Generator: sacral defined, no throat connection
   if (hasSacral) {
     return { type: "Generator", strat: "Wacht om te reageren", sig: "Bevrediging", notSelf: "Frustratie" };
   }
 
-  // Projector: any other case (no sacral, no motor-to-throat)
   return { type: "Projector", strat: "Wacht op de uitnodiging", sig: "Succes", notSelf: "Bitterheid" };
 }
 
 function determineAuthority(definedCenters, type) {
-  // Reflector
   if (type === "Reflector") return "Maancyclus";
-  // Hierarchy: Solar Plexus → Sacral → Spleen → Heart → G → Mentaal
   if (definedCenters.has("Solar Plexus")) return "Emotioneel";
   if (definedCenters.has("Sacral"))       return "Sacraal";
   if (definedCenters.has("Spleen"))       return "Splenisch";
@@ -219,52 +310,47 @@ function determineAuthority(definedCenters, type) {
   return "Mentaal";
 }
 
-// ─── MAIN ENTRY POINT ─────────────────────────────────────────────────────────
+// ─── MAIN ENTRY POINT ────────────────────────────────────────────────────────
 /**
  * Calculate a complete HD chart for the given birth data.
  *
  * @param {Object} birth — { day, month, year, hour, minute, place, lat?, lon?, tz? }
- *   If lat/lon/tz are not provided, place is treated as Amsterdam (TZ+1).
- *   For HD only sidereal longitudes matter, so location precision is forgiving.
+ *   If tz is not provided, defaults to UTC+1 (Amsterdam winter).
+ *   Pass the actual DST-aware UTC offset for maximum accuracy.
  *
- * @returns {Object} chart — drop-in replacement for browser calcHD() output:
- *   { type, strat, auth, profile, sig, notSelf, cross,
- *     definedCenters, openCenters, channels, allGates, pers, des }
+ * @returns {Object} chart — { type, strat, auth, profile, sig, notSelf, cross,
+ *   definedCenters, openCenters, channels, allGates, pers, des, _engine }
  */
 export function calcHDServer({ day, month, year, hour = 12, minute = 0, tz = 1 }) {
-  // Convert local time to UTC. Default: Amsterdam (UTC+1, no DST adjustment here
-  // — for higher precision pass tz adjusted for DST.)
+  // Convert local birth time → UTC
   const localDate = new Date(Date.UTC(year, month - 1, day, hour, minute, 0));
   const utcDate   = new Date(localDate.getTime() - tz * 3600 * 1000);
 
-  // Personality (birth time)
+  // Probe once to determine which engine is active (for metadata)
+  const usingSweph = getSwephLongitude("Sun", utcDate) !== null;
+
+  // ── Personality (birth time) ─────────────────────────────────────────────
   const pers = {};
   for (const p of HD_PLANETS) {
     const lon = getEclipticLongitude(p, utcDate);
     pers[p] = { lon, ...longitudeToGateLine(lon) };
   }
 
-  // Design: ~88 days before birth — calculated as Sun moving back 88°
-  // Standard HD: Design Sun is 88° before Personality Sun (88-degree arc).
-  // This corresponds to roughly 88 days for the Sun, but the rule is
-  // a SOLAR ARC of 88°, not a time interval. All planets are computed at
-  // the moment when the Sun's longitude was 88° earlier.
+  // ── Design: find date when Sun's longitude was 88° earlier ──────────────
+  // Standard HD rule: Design = moment when transiting Sun was exactly 88°
+  // behind Personality Sun (solar arc, not fixed days).
   const personSunLon = pers.Sun.lon;
   const designSunLon = normalizeLongitude(personSunLon - 88);
 
-  // Iteratively find the date where Sun's longitude is designSunLon
-  // (Sun moves ~0.985°/day, so 88° ≈ 89.3 days. Refine via bisection.)
   let designDate = new Date(utcDate.getTime() - 89 * 86400 * 1000);
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < 8; i++) {
     const currentLon = getEclipticLongitude("Sun", designDate);
     let diff = currentLon - designSunLon;
-    // Wrap to [-180, 180]
-    if (diff > 180) diff -= 360;
+    if (diff > 180)  diff -= 360;
     if (diff < -180) diff += 360;
-    // Adjust by diff/0.985 days
     const correctionMs = (diff / 0.985) * 86400 * 1000;
     designDate = new Date(designDate.getTime() - correctionMs);
-    if (Math.abs(diff) < 0.001) break;
+    if (Math.abs(diff) < 0.0001) break; // tighter convergence vs previous 0.001
   }
 
   const des = {};
@@ -273,7 +359,7 @@ export function calcHDServer({ day, month, year, hour = 12, minute = 0, tz = 1 }
     des[p] = { lon, ...longitudeToGateLine(lon) };
   }
 
-  // ── Active gates (union of pers + des) ──────────────────────────────────
+  // ── Active gates ─────────────────────────────────────────────────────────
   const allGatesSet = new Set();
   for (const p of HD_PLANETS) {
     allGatesSet.add(pers[p].gate);
@@ -298,10 +384,10 @@ export function calcHDServer({ day, month, year, hour = 12, minute = 0, tz = 1 }
   const { type, strat, sig, notSelf } = determineType(definedCenters);
   const auth = determineAuthority(definedCenters, type);
 
-  // ── Profile ──────────────────────────────────────────────────────────────
+  // ── Profile (conscious Sun line / unconscious Sun line) ──────────────────
   const profile = `${pers.Sun.line}/${des.Sun.line}`;
 
-  // ── Incarnation Cross (4 gates: pers Sun, pers Earth, des Sun, des Earth) ─
+  // ── Incarnation Cross ────────────────────────────────────────────────────
   const cross = `${pers.Sun.gate} / ${pers.Earth.gate} / ${des.Sun.gate} / ${des.Earth.gate}`;
 
   return {
@@ -312,8 +398,9 @@ export function calcHDServer({ day, month, year, hour = 12, minute = 0, tz = 1 }
     allGates,
     pers,
     des,
-    // Metadata
     _computedAt: new Date().toISOString(),
-    _engine: "astronomy-engine v2 (server-side)",
+    _engine: usingSweph
+      ? "swisseph (Moshier built-in, true node)"
+      : "astronomy-engine v2 (fallback)",
   };
 }
