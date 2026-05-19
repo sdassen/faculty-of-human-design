@@ -405,22 +405,7 @@ function drawCover(doc, order, sections) {
   doc.rect(0, 0, W, 4).fill(CLR.gold);
   doc.rect(0, H - 4, W, 4).fill(CLR.gold);
 
-  // ── Bodygraph watermark — this person's actual chart, ghosted behind text.
-  //    bodygraph.cjs resets graphics state internally so opacity must be set
-  //    via a full-page overlay after rendering. Full-page avoids visible edges.
-  if (chart.type) {
-    const wmScale = 0.78;
-    const wmSize  = bodygraphSize(wmScale);
-    const wmX = (W - wmSize.width)  / 2;
-    const wmY = (H - wmSize.height) / 2 - 30;
-    drawBodygraph(doc, chart, { x: wmX, y: wmY, scale: wmScale });
-    // Full-page overlay — no rectangle boundary, uniform ghosting
-    doc.save();
-    doc.rect(0, 0, W, H).fillOpacity(0.94).fill(CLR.dark);
-    doc.restore();
-  }
-
-  // ── Subtle geometric ring decoration — layered on top of bodygraph watermark
+  // ── Geometric decoration
   drawCoverDecoration(doc, 290);
 
   // ── Institution label
