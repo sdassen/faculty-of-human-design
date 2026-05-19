@@ -1714,14 +1714,28 @@ function getUTCOffsetHours(ianaTimezone, year, month, day, hour = 12, minute = 0
   } catch { return null; }
 }
 
+// ─── COUNTRY → TIMEZONE FALLBACK ─────────────────────────────────────────────
+const COUNTRY_TZ = {
+  nl:"Europe/Amsterdam", be:"Europe/Brussels", de:"Europe/Berlin", at:"Europe/Vienna",
+  ch:"Europe/Zurich", fr:"Europe/Paris", es:"Europe/Madrid", pt:"Europe/Lisbon",
+  it:"Europe/Rome", gb:"Europe/London", ie:"Europe/Dublin", dk:"Europe/Copenhagen",
+  se:"Europe/Stockholm", no:"Europe/Oslo", fi:"Europe/Helsinki", pl:"Europe/Warsaw",
+  cz:"Europe/Prague", sk:"Europe/Bratislava", hu:"Europe/Budapest", ro:"Europe/Bucharest",
+  gr:"Europe/Athens", tr:"Europe/Istanbul", ru:"Europe/Moscow", ua:"Europe/Kiev",
+  us:"America/New_York", ca:"America/Toronto", mx:"America/Mexico_City",
+  br:"America/Sao_Paulo", ar:"America/Argentina/Buenos_Aires",
+  au:"Australia/Sydney", nz:"Pacific/Auckland", jp:"Asia/Tokyo",
+  cn:"Asia/Shanghai", in:"Asia/Kolkata", za:"Africa/Johannesburg",
+  ae:"Asia/Dubai", sg:"Asia/Singapore", id:"Asia/Jakarta",
+};
+
 // ─── PLACE AUTOCOMPLETE ───────────────────────────────────────────────────────
-function PlaceAutocomplete({ value, onSelect, placeholder, label }) {
+function PlaceAutocomplete({ value, onSelect, placeholder }) {
   const [query, setQuery] = useState(value || "");
   const [suggestions, setSuggestions] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
-  const [loadingTz, setLoadingTz] = useState(false);
   const [open, setOpen] = useState(false);
-  const [tzInfo, setTzInfo] = useState(null); // { timezone, offset, error }
+  const [tzInfo, setTzInfo] = useState(null); // { timezone } or null
   const debounceRef = useState(null);
   const wrapRef = useState(null);
 
@@ -1750,13 +1764,15 @@ function PlaceAutocomplete({ value, onSelect, placeholder, label }) {
           const a = d.address || {};
           const city = a.city || a.town || a.village || a.hamlet || a.county || a.state || d.name;
           const country = a.country || "";
+          const countryCode = (a.country_code || "").toLowerCase();
           return {
             shortLabel: [city, country].filter(Boolean).join(", "),
             fullLabel: d.display_name,
             lat: parseFloat(d.lat),
             lon: parseFloat(d.lon),
+            countryCode,
           };
-        }).filter((v, i, arr) => arr.findIndex(x => x.shortLabel === v.shortLabel) === i); // dedupe
+        }).filter((v, i, arr) => arr.findIndex(x => x.shortLabel === v.shortLabel) === i);
         setSuggestions(items);
         setOpen(items.length > 0);
       } catch { /* network error — silent */ }
@@ -1764,30 +1780,30 @@ function PlaceAutocomplete({ value, onSelect, placeholder, label }) {
     }, 400);
   };
 
-  const fetchTimezone = async (lat, lon) => {
-    setLoadingTz(true);
-    setTzInfo(null);
+  const resolveTimezone = async (lat, lon, countryCode) => {
+    // 1. Try timezonefinder API (may be blocked by CORS — catch silently)
     try {
       const res = await fetch(
-        "https://timezonefinder.michelfe.it/api/0?lat=" + lat + "&lng=" + lon
+        "https://timezonefinder.michelfe.it/api/0?lat=" + lat + "&lng=" + lon,
+        { signal: AbortSignal.timeout(3000) }
       );
       const data = await res.json();
-      if (data.timezone) {
-        setTzInfo({ timezone: data.timezone, offset: null }); // offset computed later per birth date
-        return data.timezone;
-      }
-      setTzInfo({ error: "Tijdzone niet gevonden" });
-      return null;
-    } catch {
-      setTzInfo({ error: "Tijdzone niet beschikbaar" });
-      return null;
-    } finally { setLoadingTz(false); }
+      if (data.timezone) return data.timezone;
+    } catch { /* CORS or timeout — fall through */ }
+
+    // 2. Fallback: country code → timezone
+    if (countryCode && COUNTRY_TZ[countryCode]) return COUNTRY_TZ[countryCode];
+
+    // 3. No timezone found
+    return null;
   };
 
   const select = async (item) => {
     setQuery(item.shortLabel);
     setOpen(false);
-    const timezone = await fetchTimezone(item.lat, item.lon);
+    setTzInfo(null);
+    const timezone = await resolveTimezone(item.lat, item.lon, item.countryCode);
+    setTzInfo(timezone ? { timezone } : { error: true });
     onSelect({ place: item.shortLabel, lat: item.lat, lon: item.lon, timezone: timezone || "" });
   };
 
@@ -1796,7 +1812,12 @@ function PlaceAutocomplete({ value, onSelect, placeholder, label }) {
       <input
         className={"form-input" + (loadingSearch ? " loading" : "")}
         value={query}
-        onChange={e => { setQuery(e.target.value); search(e.target.value); onSelect({ place: e.target.value, lat: null, lon: null, timezone: "" }); setTzInfo(null); }}
+        onChange={e => {
+          setQuery(e.target.value);
+          search(e.target.value);
+          setTzInfo(null); // reset tz when user types manually
+          onSelect({ place: e.target.value, lat: null, lon: null, timezone: "" });
+        }}
         onFocus={() => { if (suggestions.length > 0) setOpen(true); }}
         placeholder={placeholder || "Stad, land"}
         autoComplete="off"
@@ -1813,13 +1834,11 @@ function PlaceAutocomplete({ value, onSelect, placeholder, label }) {
           ))}
         </div>
       )}
-      {loadingTz && (
-        <div className="place-tz"><div className="place-tz-dot" style={{background:"var(--text-light)"}}/>Tijdzone ophalen…</div>
-      )}
-      {tzInfo && !loadingTz && (
+      {/* Only show tz feedback after a dropdown selection, not while typing */}
+      {tzInfo && !open && (
         <div className={"place-tz" + (tzInfo.error ? " place-tz-error" : "")}>
           {tzInfo.error ? (
-            <>{tzInfo.error} — vul tijdzone handmatig in</>
+            <>Tijdzone onbekend — chart wordt berekend zonder UTC-correctie</>
           ) : (
             <><div className="place-tz-dot"/>{tzInfo.timezone}</>
           )}
