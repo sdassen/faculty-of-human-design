@@ -263,38 +263,40 @@ Preserve the tone, structure and paragraph breaks exactly.
 Output only the translated article text — no title, no preamble.
 Paragraphs separated by a blank line.`;
 
+        async function claudeTranslate(text, maxTokens, systemPrompt) {
+          const r = await fetch("https://api.anthropic.com/v1/messages", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
+            body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: maxTokens, system: systemPrompt, messages: [{ role: "user", content: text }] }),
+          });
+          if (!r.ok) throw new Error(`Claude API ${r.status}: ${await r.text().then(t => t.slice(0,100))}`);
+          const d = await r.json();
+          const out = d.content?.find((b) => b.type === "text")?.text?.trim();
+          if (!out) throw new Error(`Empty response from Claude (type=${d.type}, stop=${d.stop_reason})`);
+          return out;
+        }
+
         const results = [];
         for (const article of articles) {
           try {
-            const [bodyRes, titleRes] = await Promise.all([
-              fetch("https://api.anthropic.com/v1/messages", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
-                body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 3000, system: TRANSLATE_SYSTEM, messages: [{ role: "user", content: article.body }] }),
-              }),
-              fetch("https://api.anthropic.com/v1/messages", {
-                method: "POST",
-                headers: { "Content-Type": "application/json", "x-api-key": ANTHROPIC_KEY, "anthropic-version": "2023-06-01" },
-                body: JSON.stringify({ model: "claude-sonnet-4-20250514", max_tokens: 100, system: "Translate this Dutch article title to English. Output only the translated title, nothing else.", messages: [{ role: "user", content: article.title }] }),
-              }),
-            ]);
-            const bodyData = await bodyRes.json();
-            const titleData = await titleRes.json();
-            const bodyEn = bodyData.content?.find((b) => b.type === "text")?.text?.trim() || "";
-            const titleEn = titleData.content?.find((b) => b.type === "text")?.text?.trim() || article.title;
+            // Sequential to avoid rate limiting
+            const bodyEn = await claudeTranslate(article.body, 3000, TRANSLATE_SYSTEM);
+            const titleEn = await claudeTranslate(article.title, 100, "Translate this Dutch article title to English. Output only the translated title, nothing else.");
             const firstPara = bodyEn.split("\n\n")[0] || "";
             const excerptEn = firstPara.length > 220 ? firstPara.slice(0, 217).trim() + "..." : firstPara.trim();
-            await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${article.id}`, {
+            const patchRes = await fetch(`${SUPABASE_URL}/rest/v1/articles?id=eq.${article.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json", apikey: KEY, Authorization: "Bearer " + KEY, Prefer: "return=minimal" },
               body: JSON.stringify({ title_en: titleEn, excerpt_en: excerptEn, body_en: bodyEn }),
             });
+            if (!patchRes.ok) throw new Error(`DB PATCH failed: ${patchRes.status}`);
             results.push({ id: article.id, title_en: titleEn, status: "ok" });
           } catch (e) {
+            console.error(`[backfill] "${article.title}" failed:`, e.message);
             results.push({ id: article.id, title: article.title, status: "error", error: e.message });
           }
         }
-        return { translated: results.length, results };
+        return { translated: results.filter(r => r.status === "ok").length, results };
       });
     }
 
