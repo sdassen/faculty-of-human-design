@@ -199,44 +199,45 @@ function buildChartContext(order) {
   const { birth_data, report_title, customer_name } = order;
   const bd = birth_data || {};
   const chart = bd.chart || {};
+  const isEN = order.language === "en";
 
   const lines = [
-    `Rapport: ${report_title}`,
-    `Klant: ${customer_name}`,
+    `${isEN ? "Report" : "Rapport"}: ${report_title}`,
+    `${isEN ? "Client" : "Klant"}: ${customer_name}`,
   ];
-  if (bd.day)           lines.push(`Geboortedatum: ${bd.day}-${bd.month}-${bd.year}`);
-  if (bd.hour != null)  lines.push(`Geboortetijd: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
-  if (bd.place)         lines.push(`Geboorteplaats: ${bd.place}`);
+  if (bd.day)           lines.push(`${isEN ? "Date of birth" : "Geboortedatum"}: ${bd.day}-${bd.month}-${bd.year}`);
+  if (bd.hour != null)  lines.push(`${isEN ? "Time of birth" : "Geboortetijd"}: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
+  if (bd.place)         lines.push(`${isEN ? "Place of birth" : "Geboorteplaats"}: ${bd.place}`);
 
   if (chart.type)    lines.push(`HD Type: ${chart.type}`);
-  if (chart.strat)   lines.push(`Strategie: ${chart.strat}`);
-  if (chart.auth)    lines.push(`Autoriteit: ${chart.auth}`);
-  if (chart.profile) lines.push(`Profiel: ${chart.profile}`);
-  if (chart.sig)     lines.push(`Signatuur: ${chart.sig}`);
-  if (chart.notSelf) lines.push(`Not-Self thema: ${chart.notSelf}`);
-  if (chart.cross)   lines.push(`Inkarnatie-Kruis poorten: ${chart.cross}`);
+  if (chart.strat)   lines.push(`${isEN ? "Strategy" : "Strategie"}: ${chart.strat}`);
+  if (chart.auth)    lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
+  if (chart.profile) lines.push(`${isEN ? "Profile" : "Profiel"}: ${chart.profile}`);
+  if (chart.sig)     lines.push(`${isEN ? "Signature" : "Signatuur"}: ${chart.sig}`);
+  if (chart.notSelf) lines.push(`${isEN ? "Not-Self theme" : "Not-Self thema"}: ${chart.notSelf}`);
+  if (chart.cross)   lines.push(`${isEN ? "Incarnation Cross gates" : "Inkarnatie-Kruis poorten"}: ${chart.cross}`);
 
   if (chart.definedCenters?.length)
-    lines.push(`Gedefinieerde centra: ${chart.definedCenters.join(", ")}`);
+    lines.push(`${isEN ? "Defined centers" : "Gedefinieerde centra"}: ${chart.definedCenters.join(", ")}`);
   if (chart.openCenters?.length)
-    lines.push(`Open centra: ${chart.openCenters.join(", ")}`);
+    lines.push(`${isEN ? "Open centers" : "Open centra"}: ${chart.openCenters.join(", ")}`);
   if (chart.channels?.length)
-    lines.push(`Actieve kanalen: ${chart.channels.map((c) => `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`).join(", ")}`);
+    lines.push(`${isEN ? "Active channels" : "Actieve kanalen"}: ${chart.channels.map((c) => `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`).join(", ")}`);
   if (chart.allGates?.length)
-    lines.push(`Alle actieve poorten: ${chart.allGates.join(", ")}`);
+    lines.push(`${isEN ? "All active gates" : "Alle actieve poorten"}: ${chart.allGates.join(", ")}`);
 
-  if (chart.lp)       lines.push(`Levenspadgetal: ${chart.lp}`);
-  if (chart.exp)      lines.push(`Uitdrukkingsgetal: ${chart.exp}`);
-  if (chart.sun_sign) lines.push(`Zonneteken: ${chart.sun_sign}`);
+  if (chart.lp)       lines.push(`${isEN ? "Life Path number" : "Levenspadgetal"}: ${chart.lp}`);
+  if (chart.exp)      lines.push(`${isEN ? "Expression number" : "Uitdrukkingsgetal"}: ${chart.exp}`);
+  if (chart.sun_sign) lines.push(`${isEN ? "Sun sign" : "Zonneteken"}: ${chart.sun_sign}`);
 
   if (order.partner_birth_data) {
     const p = order.partner_birth_data;
     const pc = p.chart || {};
-    lines.push(`\nPartner/tweede persoon: ${p.name || "Partner"}, geboren ${p.day}-${p.month}-${p.year}`);
-    if (pc.type)    lines.push(`Partner HD Type: ${pc.type}`);
-    if (pc.auth)    lines.push(`Partner Autoriteit: ${pc.auth}`);
-    if (pc.profile) lines.push(`Partner Profiel: ${pc.profile}`);
-    if (pc.definedCenters?.length) lines.push(`Partner gedefinieerde centra: ${pc.definedCenters.join(", ")}`);
+    lines.push(`\n${isEN ? "Partner/second person" : "Partner/tweede persoon"}: ${p.name || "Partner"}, ${isEN ? "born" : "geboren"} ${p.day}-${p.month}-${p.year}`);
+    if (pc.type)    lines.push(`${isEN ? "Partner HD Type" : "Partner HD Type"}: ${pc.type}`);
+    if (pc.auth)    lines.push(`${isEN ? "Partner Authority" : "Partner Autoriteit"}: ${pc.auth}`);
+    if (pc.profile) lines.push(`${isEN ? "Partner Profile" : "Partner Profiel"}: ${pc.profile}`);
+    if (pc.definedCenters?.length) lines.push(`${isEN ? "Partner defined centers" : "Partner gedefinieerde centra"}: ${pc.definedCenters.join(", ")}`);
   }
 
   return lines.join("\n");
@@ -249,9 +250,18 @@ function buildChartContext(order) {
  */
 function previousSectionsSummary(previousSections) {
   if (!previousSections.length) return null;
-  return previousSections
-    .map((s) => `[${s.title}]\n${(s.text || "").slice(0, 280).trim()}...`)
+  const sectionSummaries = previousSections
+    .map((s) => `[${s.title}]\n${(s.text || "").slice(0, 500).trim()}...`)
     .join("\n\n");
+
+  // Extract all channel references to explicitly forbid repetition
+  const allText = previousSections.map((s) => s.text || "").join(" ");
+  const channelRefs = [...new Set((allText.match(/\b\d{1,2}-\d{1,2}\b/g) || []))];
+  const channelNote = channelRefs.length
+    ? `\n\nCHANNELS/GATES ALREADY COVERED (do not repeat full descriptions): ${channelRefs.slice(0, 20).join(", ")}`
+    : "";
+
+  return sectionSummaries + channelNote;
 }
 
 // ─── SINGLE CLAUDE CALL ───────────────────────────────────────────────────────
@@ -315,12 +325,16 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   // ── Previous sections (avoid repetition) ─────────────────────────────────
   const prevSummary = previousSectionsSummary(previousSections);
   const prevBlock = prevSummary
-    ? `\n\nEERDER GESCHREVEN SECTIES (niet herhalen, alleen kort terugverwijzen waar nodig):\n${prevSummary}`
+    ? (lang === "en"
+        ? `\n\nPREVIOUSLY WRITTEN SECTIONS (do NOT repeat — only briefly refer back if needed):\n${prevSummary}`
+        : `\n\nEERDER GESCHREVEN SECTIES (niet herhalen, alleen kort terugverwijzen waar nodig):\n${prevSummary}`)
     : "";
 
   // ── Retry context ────────────────────────────────────────────────────────
   const retryBlock = (attempt > 0 && lastIssues.length)
-    ? `\n\nHERSCHRIJVEN — vorige versie miste op:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix deze punten in deze versie.`
+    ? (lang === "en"
+        ? `\n\nREWRITE — previous version failed on:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix all these points in this version.`
+        : `\n\nHERSCHRIJVEN — vorige versie miste op:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix deze punten in deze versie.`)
     : "";
 
   const prompt = lang === "en"
@@ -335,11 +349,13 @@ RULES (strict):
 - Moon cycle always exactly "28 days"
 - Incarnation Cross: use only the names from the canon reference above
 - Anchor EVERY paragraph in concrete chart data from the chart context
+- STRICT word limit: core analysis max 500 words. Quality over quantity. Every sentence must earn its place.
+- Do NOT repeat any channel, center, or profile description already covered in a previous section — only a brief callback reference is allowed.
 
 Format:
 1. "In your chart:" with 3–5 concrete bullets (• Bullet) with data from THIS chart.
-2. Core analysis: 3–5 sub-paragraphs with sub-headings, max ~600 words, each paragraph anchored in chart data.
-3. Four closing blocks in this order: "Pitfalls:" / "Practice:" / "This week:" / "Reflection questions:" — each exactly 3 items.
+2. Core analysis: 3–5 sub-paragraphs with sub-headings, max 500 words total, each paragraph anchored in chart data.
+3. Four closing blocks in this order: "Pitfalls:" / "Practice:" / "This week:" / "Reflection questions:" — each exactly 3 items (short, concrete).
 
 End the core analysis with a complete, rounded sentence.`
     : `${chartCtx}${canonBlock}${prevBlock}${retryBlock}
@@ -353,11 +369,13 @@ REGELS (strikt):
 - Maancyclus altijd exact "28 dagen"
 - Inkarnatie-Kruis: gebruik alleen de namen uit de canon-referentie hierboven
 - Veranker ELKE alinea in concrete chartdata uit de chart context
+- STRIKTE woordgrens: kernuitleg max 500 woorden. Kwaliteit boven kwantiteit. Elke zin moet zijn plek verdienen.
+- Herhaal GEEN kanaal-, centrum- of profiel-beschrijving die al in een eerdere sectie staat — alleen een korte terugverwijzing is toegestaan.
 
 Format:
 1. "In jouw chart:" met 3–5 concrete bullets (• Bullet) met data uit DEZE chart.
-2. Kernuitleg: 3–5 subparagrafen met subkopjes, max ~600 woorden, elke paragraaf verankerd in chartdata.
-3. Vier slotblokken in deze volgorde: "Valkuilen:" / "Praktijk:" / "Deze week:" / "Reflectievragen:" — elk exact 3 items.
+2. Kernuitleg: 3–5 subparagrafen met subkopjes, max 500 woorden totaal, elke paragraaf verankerd in chartdata.
+3. Vier slotblokken in deze volgorde: "Valkuilen:" / "Praktijk:" / "Deze week:" / "Reflectievragen:" — elk exact 3 items (kort en concreet).
 
 Sluit de kernuitleg af met een volledige, afgeronde zin.`;
 
@@ -378,6 +396,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin.`;
  */
 async function generateScoredSection(sectionTitle, order, previousSections) {
   const chart = (order.birth_data || {}).chart || {};
+  const lang  = order.language || "nl";
   let bestText = "";
   let bestScore = -1;
   let lastIssues = [];
@@ -391,7 +410,7 @@ async function generateScoredSection(sectionTitle, order, previousSections) {
       continue;
     }
 
-    const result = await scoreSection(text, sectionTitle, chart);
+    const result = await scoreSection(text, sectionTitle, chart, lang);
     console.log(`[QA] "${sectionTitle}" attempt ${attempt}: score ${result.total}/40 (${result.passed ? "PASS" : "FAIL"})`);
 
     if (result.total > bestScore) {

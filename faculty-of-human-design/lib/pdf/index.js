@@ -44,14 +44,20 @@ const PMX = ML + 4;          // prose margin left  (4pt extra indent)
 const PMW = TW - 8;          // prose text width    (narrower column)
 
 const BODY_SIZE     = 11;    // body text size (pt)
-const BODY_GAP      = 5;     // lineGap within a paragraph
-const BODY_PARA_SEP = 16;    // space after a body paragraph
+const BODY_GAP      = 6;     // lineGap within a paragraph (was 5 — more air)
+const BODY_PARA_SEP = 13;    // space after a body paragraph (was 16 — tighter)
 const SUB_SIZE      = 13.5;  // subhead size (pt)
-const SUB_BEFORE    = 12;    // space added before a subhead
-const SUB_AFTER     = 8;     // space added after a subhead
+const SUB_BEFORE    = 10;    // space added before a subhead (was 12)
+const SUB_AFTER     = 7;     // space added after a subhead (was 8)
 
 // ─── FORBIDDEN / QA STRINGS ──────────────────────────────────────────────────
 const FORBIDDEN_STRINGS = ["**", "* ", "*\n", "##", "###", "---\n"];
+
+// ─── i18n HELPER ─────────────────────────────────────────────────────────────
+// Returns nl string for NL orders, en string for EN orders.
+function ui(order, nl, en) {
+  return (order && order.language === "en") ? en : nl;
+}
 
 // ─── MARKDOWN STRIPPER ───────────────────────────────────────────────────────
 function stripMd(text) {
@@ -103,12 +109,13 @@ function adjustSectionTitles(sections, order) {
 }
 
 // ─── BLOCK DETECTION ─────────────────────────────────────────────────────────
+// labels[0] = NL, labels[1] = EN — both are recognised in parseSection()
 const BLOCKS = [
-  { key: "chart",  label: "In jouw chart",   tint: CLR.tintChart,  accent: CLR.accentChart },
-  { key: "val",    label: "Valkuilen",        tint: CLR.tintVal,    accent: CLR.accentVal   },
-  { key: "prakt",  label: "Praktijk",         tint: CLR.tintPrakt,  accent: CLR.accentPrakt },
-  { key: "week",   label: "Deze week",        tint: CLR.tintWeek,   accent: CLR.accentWeek  },
-  { key: "refl",   label: "Reflectievragen",  tint: CLR.tintRefl,   accent: CLR.accentRefl  },
+  { key: "chart",  labels: ["In jouw chart",   "In your chart"],         tint: CLR.tintChart,  accent: CLR.accentChart },
+  { key: "val",    labels: ["Valkuilen",        "Pitfalls"],              tint: CLR.tintVal,    accent: CLR.accentVal   },
+  { key: "prakt",  labels: ["Praktijk",         "Practice"],              tint: CLR.tintPrakt,  accent: CLR.accentPrakt },
+  { key: "week",   labels: ["Deze week",        "This week"],             tint: CLR.tintWeek,   accent: CLR.accentWeek  },
+  { key: "refl",   labels: ["Reflectievragen",  "Reflection questions"],  tint: CLR.tintRefl,   accent: CLR.accentRefl  },
 ];
 
 // Draw a small decorative symbol (5×5pt) at position (sx, sy).
@@ -161,8 +168,10 @@ function parseSection(text) {
     const line = raw.trimEnd();
 
     const matchedBlock = BLOCKS.find(function(b) {
-      return line.trim().toLowerCase().startsWith(b.label.toLowerCase() + ":")
-        || line.trim().toLowerCase() === b.label.toLowerCase();
+      return b.labels.some(function(lbl) {
+        return line.trim().toLowerCase().startsWith(lbl.toLowerCase() + ":")
+          || line.trim().toLowerCase() === lbl.toLowerCase();
+      });
     });
 
     if (matchedBlock) {
@@ -229,10 +238,10 @@ function drawBodygraphPage(doc, order, chart) {
   doc.rect(0, 0, 4, 4).fill(CLR.gold); // gold corner accent (consistent with content pages)
 
   doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
-    .text("JOUW BODYGRAPH", ML, 22, { characterSpacing: 3, width: TW });
+    .text(ui(order, "JOUW BODYGRAPH", "YOUR BODYGRAPH"), ML, 22, { characterSpacing: 3, width: TW });
 
   doc.font(FONT.displaySemiBold).fontSize(22).fillColor(CLR.dark)
-    .text("Het visuele kaartwerk van jouw ontwerp", ML, 36, { width: TW });
+    .text(ui(order, "Het visuele kaartwerk van jouw ontwerp", "The visual map of your design"), ML, 36, { width: TW });
 
   doc.rect(ML, 78, 48, 1).fill(CLR.gold);
   doc.save();
@@ -247,15 +256,15 @@ function drawBodygraphPage(doc, order, chart) {
 
   const dataY = bgY + bgSize.height + 26;
   doc.font(FONT.body).fontSize(6.5).fillColor(CLR.goldWarm)
-    .text("DE KERNDATA VAN DEZE CHART", ML, dataY, { characterSpacing: 2.5 });
+    .text(ui(order, "DE KERNDATA VAN DEZE CHART", "THE CORE DATA OF THIS CHART"), ML, dataY, { characterSpacing: 2.5 });
 
   const items = [
-    chart.type    ? { label: "Type",       value: chart.type }    : null,
-    chart.strat   ? { label: "Strategie",  value: chart.strat }   : null,
-    chart.auth    ? { label: "Autoriteit", value: chart.auth }    : null,
-    chart.profile ? { label: "Profiel",    value: chart.profile } : null,
-    chart.sig     ? { label: "Signatuur",  value: chart.sig }     : null,
-    chart.notSelf ? { label: "Not-Self",   value: chart.notSelf } : null,
+    chart.type    ? { label: ui(order, "Type",       "Type"),       value: chart.type }    : null,
+    chart.strat   ? { label: ui(order, "Strategie",  "Strategy"),   value: chart.strat }   : null,
+    chart.auth    ? { label: ui(order, "Autoriteit", "Authority"),  value: chart.auth }    : null,
+    chart.profile ? { label: ui(order, "Profiel",    "Profile"),    value: chart.profile } : null,
+    chart.sig     ? { label: ui(order, "Signatuur",  "Signature"),  value: chart.sig }     : null,
+    chart.notSelf ? { label: "Not-Self",                            value: chart.notSelf } : null,
   ].filter(Boolean);
 
   const colW = TW / 2;
@@ -280,15 +289,15 @@ function drawBodygraphPage(doc, order, chart) {
   const legY = FY - 60;
   doc.rect(ML, legY, TW, 0.5).fill(CLR.border);
   doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
-    .text("LEGENDA", ML, legY + 10, { characterSpacing: 2 });
+    .text(ui(order, "LEGENDA", "LEGEND"), ML, legY + 10, { characterSpacing: 2 });
 
   doc.rect(ML, legY + 24, 12, 8).fillAndStroke("#876B4A", "#2A2620");
   doc.font(FONT.body).fontSize(8).fillColor(CLR.text)
-    .text("Gedefinieerd centrum — vaste eigen energie", ML + 18, legY + 26);
+    .text(ui(order, "Gedefinieerd centrum — vaste eigen energie", "Defined center — fixed own energy"), ML + 18, legY + 26);
 
   doc.rect(ML + 200, legY + 24, 12, 8).fillAndStroke("#FFFFFF", "#2A2620");
   doc.font(FONT.body).fontSize(8).fillColor(CLR.text)
-    .text("Open centrum — neemt op uit omgeving", ML + 218, legY + 26);
+    .text(ui(order, "Open centrum — neemt op uit omgeving", "Open center — receives from environment"), ML + 218, legY + 26);
 
   drawFooter(doc, order);
 }
@@ -405,9 +414,10 @@ function drawCover(doc, order, sections) {
     iy = doc.y + 5;
   }
   if (chart.type) {
+    const profilePrefix = ui(order, "Profiel", "Profile");
     const cparts = [
       chart.type,
-      chart.profile ? "Profiel " + chart.profile : null,
+      chart.profile ? profilePrefix + " " + chart.profile : null,
       chart.auth    || null,
     ].filter(Boolean);
     doc.font(FONT.body).fontSize(8).fillColor(CLR.goldWarm)
@@ -416,16 +426,16 @@ function drawCover(doc, order, sections) {
 
   // ── Chart data grid  (2 columns × up to 4 rows — label above, value below)
   const gridItems = [
-    chart.type    ? { label: "TYPE",            value: chart.type    } : null,
-    chart.strat   ? { label: "STRATEGIE",       value: chart.strat   } : null,
-    chart.auth    ? { label: "AUTORITEIT",      value: chart.auth    } : null,
-    chart.profile ? { label: "PROFIEL",         value: chart.profile } : null,
-    chart.sig     ? { label: "SIGNATUUR",       value: chart.sig     } : null,
-    chart.notSelf ? { label: "NOT-SELF THEMA",  value: chart.notSelf } : null,
+    chart.type    ? { label: "TYPE",                                          value: chart.type    } : null,
+    chart.strat   ? { label: ui(order, "STRATEGIE",       "STRATEGY"),       value: chart.strat   } : null,
+    chart.auth    ? { label: ui(order, "AUTORITEIT",      "AUTHORITY"),      value: chart.auth    } : null,
+    chart.profile ? { label: ui(order, "PROFIEL",         "PROFILE"),        value: chart.profile } : null,
+    chart.sig     ? { label: ui(order, "SIGNATUUR",       "SIGNATURE"),      value: chart.sig     } : null,
+    chart.notSelf ? { label: ui(order, "NOT-SELF THEMA",  "NOT-SELF THEME"), value: chart.notSelf } : null,
     (chart.definedCenters && chart.definedCenters.length)
-      ? { label: "GEDEFINIEERD",
+      ? { label: ui(order, "GEDEFINIEERD",     "DEFINED"),
           value: chart.definedCenters.join(", ") } : null,
-    chart.cross   ? { label: "INKARNATIE-KRUIS", value: chart.cross  } : null,
+    chart.cross   ? { label: ui(order, "INKARNATIE-KRUIS", "INCARNATION CROSS"), value: chart.cross } : null,
   ].filter(Boolean);
 
   if (gridItems.length) {
@@ -438,7 +448,7 @@ function drawCover(doc, order, sections) {
     doc.rect(ML, gridY - 14, TW, 0.5).fillOpacity(0.25).fill(CLR.gold);
     doc.restore();
     doc.font(FONT.bodyLight).fontSize(5.5).fillColor("#5A5438")
-      .text("JOUW MENSELIJK ONTWERP", ML, gridY - 8, { characterSpacing: 3 });
+      .text(ui(order, "JOUW MENSELIJK ONTWERP", "YOUR HUMAN DESIGN"), ML, gridY - 8, { characterSpacing: 3 });
 
     gridItems.slice(0, 8).forEach(function(item, i) {
       const col  = i % 2;
@@ -471,7 +481,7 @@ function drawCover(doc, order, sections) {
   const tocY = Math.max(gridItems.length ? 420 + 12 + Math.ceil(gridItems.length / 2) * 38 + 20 : 600, H * 0.72);
   if (tocY < H - 100 && sections.length) {
     doc.font(FONT.bodyLight).fontSize(5.5).fillColor("#5A5438")
-      .text("INHOUD", ML, tocY, { characterSpacing: 3 });
+      .text(ui(order, "INHOUD", "CONTENTS"), ML, tocY, { characterSpacing: 3 });
 
     const midToc = ML + Math.floor(sections.length / 2) * 0; // single column
     const colWToc = (TW - 12) / 2;
@@ -491,16 +501,16 @@ function drawCover(doc, order, sections) {
 
   // ── Copyright
   doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#2C2A26")
-    .text("© 2026 Faculty of Human Design — Ibiza, Spanje", 0, H - 26, {
+    .text(ui(order, "© 2026 Faculty of Human Design — Ibiza, Spanje", "© 2026 Faculty of Human Design — Ibiza, Spain"), 0, H - 26, {
       align: "center", width: W,
     });
 }
 
 // ─── SECTION HEADER ──────────────────────────────────────────────────────────
 // Returns the y-position where content should begin (below the opener band).
-const HEADER_H = 224; // height of the dark opener band
+const HEADER_H = 190; // height of the dark opener band (was 224 — 34pt more content space)
 
-function drawSectionHeader(doc, section, idx) {
+function drawSectionHeader(doc, section, idx, order) {
   // ── Dark opener band (top portion of page)
   doc.rect(0, 0, W, HEADER_H).fill(CLR.dark);
 
@@ -524,9 +534,10 @@ function drawSectionHeader(doc, section, idx) {
     });
   doc.fillOpacity(1); // reset
 
-  // "ONDERDEEL XX" label
+  // "ONDERDEEL XX" / "PART XX" label — language-aware
+  const partLabel = ui(order, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
   doc.font(FONT.body).fontSize(6.5).fillColor(CLR.goldWarm)
-    .text("ONDERDEEL  " + String(idx + 1).padStart(2, "0"), ML + 16, 28, {
+    .text(partLabel, ML + 16, 28, {
       characterSpacing: 3,
     });
 
@@ -599,8 +610,9 @@ function drawBlock(doc, order, block, lines, y) {
   const symY  = y + PAD + 5;          // vertically centered in label row
   drawBlockSymbol(doc, block.key, symX, symY, block.accent);
 
+  const blockLabel = (order.language === "en" && block.labels[1]) ? block.labels[1] : block.labels[0];
   doc.font(FONT.displaySemiBold).fontSize(12).fillColor(block.accent)
-    .text(block.label, ML + GAP + 10, y + PAD, {
+    .text(blockLabel, ML + GAP + 10, y + PAD, {
       width: innerW - 10, lineBreak: false,
     });
 
@@ -669,6 +681,11 @@ const CENTER_NL   = {
   "Heart": "Hart", "Spleen": "Milt", "Sacral": "Sacraal",
   "Solar Plexus": "Zonnevlecht", "Root": "Wortel",
 };
+const CENTER_EN   = {
+  "Head": "Head", "Ajna": "Ajna", "Throat": "Throat", "G": "G",
+  "Heart": "Heart", "Spleen": "Spleen", "Sacral": "Sacral",
+  "Solar Plexus": "Sol.Plex.", "Root": "Root",
+};
 
 function drawProfilePage(doc, order, chart) {
   doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
@@ -679,7 +696,7 @@ function drawProfilePage(doc, order, chart) {
 
   // ── Page label
   doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
-    .text("JOUW MENSELIJK ONTWERP", ML, 18, { characterSpacing: 2.5 });
+    .text(ui(order, "JOUW MENSELIJK ONTWERP", "YOUR HUMAN DESIGN"), ML, 18, { characterSpacing: 2.5 });
 
   // ── Name + birth data (right-aligned)
   const bd = order.birth_data || {};
@@ -711,7 +728,7 @@ function drawProfilePage(doc, order, chart) {
 
   // TYPE label
   doc.font(FONT.body).fontSize(6.5).fillColor(accent.bar)
-    .text("ENERGIE TYPE", ML + 16, heroY + 14, { characterSpacing: 2 });
+    .text(ui(order, "ENERGIE TYPE", "ENERGY TYPE"), ML + 16, heroY + 14, { characterSpacing: 2 });
 
   // TYPE value — large Cormorant Italic
   doc.font(FONT.display).fontSize(48).fillColor(accent.fg)
@@ -722,9 +739,9 @@ function drawProfilePage(doc, order, chart) {
   const col3  = TW / 3;
 
   const row1 = [
-    { label: "STRATEGIE",  value: chart.strat   || "—" },
-    { label: "AUTORITEIT", value: chart.auth    || "—" },
-    { label: "PROFIEL",    value: chart.profile || "—" },
+    { label: ui(order, "STRATEGIE",  "STRATEGY"),  value: chart.strat   || "—" },
+    { label: ui(order, "AUTORITEIT", "AUTHORITY"), value: chart.auth    || "—" },
+    { label: ui(order, "PROFIEL",    "PROFILE"),   value: chart.profile || "—" },
   ];
 
   // Thin gold top rule
@@ -750,8 +767,8 @@ function drawProfilePage(doc, order, chart) {
   doc.rect(ML, row2Y - 12, TW, 0.5).fill(CLR.border);
 
   const row2 = [
-    { label: "SIGNATUUR",      value: chart.sig     || "—" },
-    { label: "NOT-SELF THEMA", value: chart.notSelf || "—" },
+    { label: ui(order, "SIGNATUUR",      "SIGNATURE"),       value: chart.sig     || "—" },
+    { label: ui(order, "NOT-SELF THEMA", "NOT-SELF THEME"),  value: chart.notSelf || "—" },
   ];
   row2.forEach(function(item, i) {
     const cx = ML + i * col2;
@@ -771,7 +788,7 @@ function drawProfilePage(doc, order, chart) {
   doc.rect(ML, centersY - 12, TW, 0.75).fill(CLR.gold);
 
   doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
-    .text("ENERGIECENTRA", ML, centersY, { characterSpacing: 1.5 });
+    .text(ui(order, "ENERGIECENTRA", "ENERGY CENTERS"), ML, centersY, { characterSpacing: 1.5 });
 
   const defined = new Set((chart.definedCenters || []).map(function(c) { return c.trim(); }));
 
@@ -782,17 +799,20 @@ function drawProfilePage(doc, order, chart) {
   let   nodeX     = startX;
   let   nodeY     = centersY + 14;
 
+  const CENTER_MAP = (order.language === "en") ? CENTER_EN : CENTER_NL;
+
   ALL_CENTERS.forEach(function(center, i) {
     if (i > 0 && i % perRow === 0) {
       nodeX  = startX;
       nodeY += nodeSize + nodeGap + 12;
     }
     const isDef = defined.has(center);
+    const centerLabel = CENTER_MAP[center] || center;
 
     if (isDef) {
       doc.rect(nodeX, nodeY, nodeSize, nodeSize).fill(CLR.brand);
       doc.font(FONT.bodyLight).fontSize(6).fillColor("#FFFFFF")
-        .text(CENTER_NL[center] || center, nodeX, nodeY + 10, {
+        .text(centerLabel, nodeX, nodeY + 10, {
           width: nodeSize, align: "center", lineBreak: false,
         });
     } else {
@@ -801,7 +821,7 @@ function drawProfilePage(doc, order, chart) {
         .rect(nodeX, nodeY, nodeSize, nodeSize).stroke();
       doc.restore();
       doc.font(FONT.bodyLight).fontSize(6).fillColor(CLR.textLight)
-        .text(CENTER_NL[center] || center, nodeX, nodeY + 10, {
+        .text(centerLabel, nodeX, nodeY + 10, {
           width: nodeSize, align: "center", lineBreak: false,
         });
     }
@@ -813,20 +833,20 @@ function drawProfilePage(doc, order, chart) {
   const legY = nodeY + nodeSize + 14;
   doc.rect(ML, legY, nodeSize, 8).fill(CLR.brand);
   doc.font(FONT.bodyLight).fontSize(7).fillColor(CLR.textMuted)
-    .text("Gedefinieerd — vaste eigen energie", ML + nodeSize + 6, legY + 1);
+    .text(ui(order, "Gedefinieerd — vaste eigen energie", "Defined — fixed own energy"), ML + nodeSize + 6, legY + 1);
 
   doc.save();
   doc.lineWidth(0.75).strokeColor(CLR.border).rect(ML + 130, legY, nodeSize, 8).stroke();
   doc.restore();
   doc.font(FONT.bodyLight).fontSize(7).fillColor(CLR.textMuted)
-    .text("Open — ontvangt uit omgeving", ML + 130 + nodeSize + 6, legY + 1);
+    .text(ui(order, "Open — ontvangt uit omgeving", "Open — receives from environment"), ML + 130 + nodeSize + 6, legY + 1);
 
   // ── INCARNATION CROSS
   if (chart.cross) {
     const crossY = legY + 28;
     doc.rect(ML, crossY - 12, TW, 0.5).fill(CLR.border);
     doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
-      .text("INKARNATIE-KRUIS", ML, crossY, { characterSpacing: 1.5 });
+      .text(ui(order, "INKARNATIE-KRUIS", "INCARNATION CROSS"), ML, crossY, { characterSpacing: 1.5 });
     doc.font(FONT.displayRegular).fontSize(13).fillColor(CLR.dark)
       .text(chart.cross, ML, crossY + 10, { width: TW });
   }
@@ -887,7 +907,7 @@ export async function generatePDF({ order, sections }) {
       qaSection(cleanText, section.title);
 
       doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
-      drawSectionHeader(doc, section, idx);
+      drawSectionHeader(doc, section, idx, order);
       // Content starts after the dark opener band + transition strip
       let y = HEADER_H + 24;
       drawFooter(doc, order);
@@ -975,7 +995,7 @@ export async function generatePDF({ order, sections }) {
 
     // ── Main message
     doc.font(FONT.display).fontSize(34).fillColor("#FFFFFF")
-      .text("Met dank voor je vertrouwen.", ML, 76, { align: "center", width: TW, lineGap: 8 });
+      .text(ui(order, "Met dank voor je vertrouwen.", "Thank you for your trust."), ML, 76, { align: "center", width: TW, lineGap: 8 });
 
     // Gold triple-line ornament
     const ornY = doc.y + 20;
@@ -993,14 +1013,18 @@ export async function generatePDF({ order, sections }) {
         .text(order.customer_name, 0, ornY + 18, { align: "center", width: W });
     }
     if (chart2.type) {
-      const typeStr = [chart2.type, chart2.profile ? "Profiel " + chart2.profile : null]
+      const typeStr = [chart2.type, chart2.profile ? ui(order, "Profiel ", "Profile ") + chart2.profile : null]
         .filter(Boolean).join("  ·  ");
       doc.font(FONT.body).fontSize(8).fillColor(CLR.goldWarm)
         .text(typeStr, 0, doc.y + 5, { align: "center", width: W });
     }
 
-    // ── Three brand pillars (concise, inspiring)
-    const pillars = [
+    // ── Three brand pillars (concise, inspiring) — language-aware
+    const pillars = order.language === "en" ? [
+      { num: "I",   text: "Stay curious about your design — it deepens as you live with it." },
+      { num: "II",  text: "Trust your strategy and authority. They are your personal navigation system." },
+      { num: "III", text: "This report is a starting point, not a destination. You are the expert on yourself." },
+    ] : [
       { num: "I",   text: "Blijf nieuwsgierig naar je ontwerp — het verdiept zich naarmate je er meer mee leeft." },
       { num: "II",  text: "Vertrouw op je strategie en autoriteit. Zij zijn jouw persoonlijke navigatiesysteem." },
       { num: "III", text: "Dit rapport is een startpunt, geen eindbestemming. Jij bent de expert op jezelf." },
@@ -1039,7 +1063,7 @@ export async function generatePDF({ order, sections }) {
 
     // ── Contact block (centered)
     doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#484440")
-      .text("Vragen of een persoonlijk gesprek?", 0, contSepY + 14, { align: "center", width: W });
+      .text(ui(order, "Vragen of een persoonlijk gesprek?", "Questions or a personal conversation?"), 0, contSepY + 14, { align: "center", width: W });
 
     doc.font(FONT.displayRegular).fontSize(13).fillColor("#7A6840")
       .text("info@facultyhd.com", 0, contSepY + 26, { align: "center", width: W });
@@ -1049,7 +1073,7 @@ export async function generatePDF({ order, sections }) {
 
     // ── Copyright
     doc.font(FONT.bodyLight).fontSize(6).fillColor("#282420")
-      .text("© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", 0, H - 24, {
+      .text(ui(order, "© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", "© 2026 Faculty of Human Design — Ibiza, Spain  ·  All rights reserved"), 0, H - 24, {
         align: "center", width: W,
       });
 

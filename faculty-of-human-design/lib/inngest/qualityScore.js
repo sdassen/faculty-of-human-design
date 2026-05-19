@@ -18,62 +18,94 @@ export const MAX_RETRIES = 2;
 // ─── DETERMINISTIC CHECKS (free, fast) ────────────────────────────────────────
 /**
  * Run cheap regex/string checks before involving Haiku.
+ * @param {string} text — generated section content
+ * @param {string} [lang] — "nl" (default) or "en"
  * Returns { passed: boolean, issues: string[], score: 0-10 }
  */
-export function quickCheck(text) {
+export function quickCheck(text, lang = "nl") {
+  const isEN = lang === "en";
   const issues = [];
   let score = 10;
 
   if (!text || text.trim().length < 400) {
-    issues.push("Tekst is te kort (<400 chars)");
+    issues.push(isEN ? "Text too short (<400 chars)" : "Tekst is te kort (<400 chars)");
     score -= 5;
   }
 
-  if (text.length > 8000) {
-    issues.push("Tekst is te lang (>8000 chars)");
+  // Word count cap — too long hurts PDF layout and dilutes quality
+  const wordCount = (text || "").trim().split(/\s+/).length;
+  if (wordCount > 700) {
+    issues.push(isEN
+      ? `Section too long: ${wordCount} words (max 700). Trim to core insights.`
+      : `Sectie te lang: ${wordCount} woorden (max 700). Reduceer naar kernpunten.`
+    );
+    score -= 4;  // heavy penalty → triggers retry
+  } else if (wordCount > 600) {
+    issues.push(isEN
+      ? `Section slightly long: ${wordCount} words — aim for under 600.`
+      : `Sectie iets te lang: ${wordCount} woorden — streef naar onder 600.`
+    );
     score -= 2;
   }
 
   // Forbidden markdown
   if (/\*{2}/.test(text)) {
-    issues.push("Bevat ** markdown (bold)");
+    issues.push(isEN ? "Contains ** markdown (bold)" : "Bevat ** markdown (bold)");
     score -= 2;
   }
   if (/^#{1,6}\s/m.test(text)) {
-    issues.push("Bevat # markdown (heading)");
+    issues.push(isEN ? "Contains # markdown (heading)" : "Bevat # markdown (heading)");
     score -= 2;
   }
 
-  // u/uw usage (formal — forbidden)
-  const uMatches = text.match(/\b[Uu](?:w)?\b/g) || [];
-  // filter out common false positives
-  const realU = uMatches.filter((m) => /^[Uu]w?$/.test(m));
-  if (realU.length > 0) {
-    issues.push(`Bevat ${realU.length}× formeel "u"/"uw" — moet "je"/"jouw" zijn`);
-    score -= 3;
+  // u/uw usage (formal Dutch — forbidden for NL only)
+  if (!isEN) {
+    const uMatches = text.match(/\b[Uu](?:w)?\b/g) || [];
+    const realU = uMatches.filter((m) => /^[Uu]w?$/.test(m));
+    if (realU.length > 0) {
+      issues.push(`Bevat ${realU.length}× formeel "u"/"uw" — moet "je"/"jouw" zijn`);
+      score -= 3;
+    }
   }
 
-  // Required blocks
-  const hasChart = /^in jouw chart:/im.test(text);
-  const hasVal   = /^valkuilen:/im.test(text);
-  const hasPrakt = /^praktijk:/im.test(text);
-  const hasWeek  = /^deze week:/im.test(text);
-  const hasRefl  = /^reflectievragen:/im.test(text);
+  // Required blocks — check both NL and EN labels
+  const hasChart = isEN ? /^in your chart:/im.test(text) : /^in jouw chart:/im.test(text);
+  const hasVal   = isEN ? /^pitfalls:/im.test(text)      : /^valkuilen:/im.test(text);
+  const hasPrakt = isEN ? /^practice:/im.test(text)      : /^praktijk:/im.test(text);
+  const hasWeek  = isEN ? /^this week:/im.test(text)     : /^deze week:/im.test(text);
+  const hasRefl  = isEN ? /^reflection questions:/im.test(text) : /^reflectievragen:/im.test(text);
+
+  const chartLbl = isEN ? "In your chart"         : "In jouw chart";
+  const valLbl   = isEN ? "Pitfalls"              : "Valkuilen";
+  const praktLbl = isEN ? "Practice"              : "Praktijk";
+  const weekLbl  = isEN ? "This week"             : "Deze week";
+  const reflLbl  = isEN ? "Reflection questions"  : "Reflectievragen";
+
   const missing  = [];
-  if (!hasChart) missing.push("In jouw chart");
-  if (!hasVal)   missing.push("Valkuilen");
-  if (!hasPrakt) missing.push("Praktijk");
-  if (!hasWeek)  missing.push("Deze week");
-  if (!hasRefl)  missing.push("Reflectievragen");
+  if (!hasChart) missing.push(chartLbl);
+  if (!hasVal)   missing.push(valLbl);
+  if (!hasPrakt) missing.push(praktLbl);
+  if (!hasWeek)  missing.push(weekLbl);
+  if (!hasRefl)  missing.push(reflLbl);
   if (missing.length) {
-    issues.push(`Ontbrekende blokken: ${missing.join(", ")}`);
+    issues.push(isEN
+      ? `Missing required blocks: ${missing.join(", ")}`
+      : `Ontbrekende blokken: ${missing.join(", ")}`
+    );
     score -= missing.length;
   }
 
   // Moon cycle consistency
-  if (/28[\s-]of[\s-]29\s*dagen|28[\s-]tot[\s-]29\s*dagen/i.test(text)) {
-    issues.push('Inconsistente maancyclus — moet exact "28 dagen" zijn');
-    score -= 1;
+  if (isEN) {
+    if (/28[\s-]or[\s-]29\s*days|28[\s-]to[\s-]29\s*days/i.test(text)) {
+      issues.push('Inconsistent moon cycle — must be exactly "28 days"');
+      score -= 1;
+    }
+  } else {
+    if (/28[\s-]of[\s-]29\s*dagen|28[\s-]tot[\s-]29\s*dagen/i.test(text)) {
+      issues.push('Inconsistente maancyclus — moet exact "28 dagen" zijn');
+      score -= 1;
+    }
   }
 
   return {
@@ -161,8 +193,8 @@ Antwoord ALLEEN met JSON, geen prose. Format:
  * Run both deterministic + content scoring.
  * Returns total score (max 40), all issues, and a pass/fail flag.
  */
-export async function scoreSection(text, sectionTitle, chart) {
-  const q = quickCheck(text);
+export async function scoreSection(text, sectionTitle, chart, lang = "nl") {
+  const q = quickCheck(text, lang);
   const c = await contentScore(text, sectionTitle, chart);
 
   const total = q.score + c.score;
