@@ -153,9 +153,10 @@ function needsNewPage(doc, y, needed) {
 
 function addContentPage(doc, order) {
   doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
-  doc.rect(0, 0, W, 3).fill(CLR.dark);
+  doc.rect(0, 0, W, 4).fill(CLR.dark);
+  doc.rect(0, 0, 4, 4).fill(CLR.gold); // small gold corner dot
   drawFooter(doc, order);
-  return 24;
+  return 28;
 }
 
 function drawFooter(doc, order) {
@@ -439,18 +440,53 @@ function drawCover(doc, order, sections) {
 }
 
 // ─── SECTION HEADER ──────────────────────────────────────────────────────────
+// Returns the y-position where content should begin (below the opener band).
+const HEADER_H = 224; // height of the dark opener band
+
 function drawSectionHeader(doc, section, idx) {
-  doc.rect(0, 0, W, 3).fill(CLR.dark);
-  doc.rect(ML - 16, 10, 2, 52).fill(CLR.gold);
+  // ── Dark opener band (top portion of page)
+  doc.rect(0, 0, W, HEADER_H).fill(CLR.dark);
 
-  doc.font(FONT.body).fontSize(8).fillColor(CLR.goldWarm)
-    .text(String(idx + 1).padStart(2, "0"), ML, 14, { characterSpacing: 1 });
+  // Left gold accent bar — full height
+  doc.rect(0, 0, 4, HEADER_H).fill(CLR.gold);
 
-  doc.font(FONT.displaySemiBold).fontSize(22).fillColor(CLR.dark)
-    .text(section.title, ML, 26, { width: TW });
+  // Faint diagonal decoration (geometric — evokes the bodygraph grid)
+  doc.save();
+  doc.strokeColor(CLR.gold).strokeOpacity(0.04).lineWidth(0.5);
+  for (let i = 0; i < 6; i++) {
+    const ox = W - 220 + i * 34;
+    doc.moveTo(ox, 0).lineTo(ox - HEADER_H, HEADER_H).stroke();
+  }
+  doc.restore();
 
-  const uy = doc.y + 6;
-  doc.rect(ML, uy, 32, 1.5).fill(CLR.gold);
+  // Section number — large, faint, decorative
+  doc.font(FONT.display).fontSize(110).fillColor(CLR.gold)
+    .fillOpacity(0.06)
+    .text(String(idx + 1).padStart(2, "0"), W - 200, -18, {
+      width: 200, align: "right", lineBreak: false,
+    });
+  doc.fillOpacity(1); // reset
+
+  // "ONDERDEEL XX" label
+  doc.font(FONT.body).fontSize(6.5).fillColor(CLR.goldWarm)
+    .text("ONDERDEEL  " + String(idx + 1).padStart(2, "0"), ML + 16, 28, {
+      characterSpacing: 3,
+    });
+
+  // Section title — large Cormorant SemiBold
+  doc.font(FONT.displaySemiBold).fontSize(30).fillColor("#FFFFFF")
+    .text(section.title, ML + 16, 54, { width: TW - 40, lineGap: 6 });
+
+  // Gold ornament line below title
+  const titleBottom = doc.y + 14;
+  doc.rect(ML + 16, titleBottom, 48, 1).fill(CLR.gold);
+  doc.save();
+  doc.rect(ML + 16 + 48, titleBottom, 24, 0.5).fillOpacity(0.4).fill(CLR.gold);
+  doc.restore();
+
+  // ── Light transition zone — subtle strip between dark and content
+  doc.rect(0, HEADER_H, W, 8).fill(CLR.bgMuted);
+  doc.rect(0, HEADER_H + 7, W, 1).fill(CLR.border);
 }
 
 // ─── BLOCK RENDERER ──────────────────────────────────────────────────────────
@@ -647,7 +683,10 @@ function drawProfilePage(doc, order, chart) {
           width: nodeSize, align: "center", lineBreak: false,
         });
     } else {
-      doc.rect(nodeX, nodeY, nodeSize, nodeSize).stroke(CLR.border).lineWidth(0.75);
+      doc.save();
+      doc.lineWidth(0.75).strokeColor(CLR.border)
+        .rect(nodeX, nodeY, nodeSize, nodeSize).stroke();
+      doc.restore();
       doc.font(FONT.bodyLight).fontSize(6).fillColor(CLR.textLight)
         .text(CENTER_NL[center] || center, nodeX, nodeY + 10, {
           width: nodeSize, align: "center", lineBreak: false,
@@ -663,7 +702,9 @@ function drawProfilePage(doc, order, chart) {
   doc.font(FONT.bodyLight).fontSize(7).fillColor(CLR.textMuted)
     .text("Gedefinieerd — vaste eigen energie", ML + nodeSize + 6, legY + 1);
 
-  doc.rect(ML + 130, legY, nodeSize, 8).stroke(CLR.border).lineWidth(0.75);
+  doc.save();
+  doc.lineWidth(0.75).strokeColor(CLR.border).rect(ML + 130, legY, nodeSize, 8).stroke();
+  doc.restore();
   doc.font(FONT.bodyLight).fontSize(7).fillColor(CLR.textMuted)
     .text("Open — ontvangt uit omgeving", ML + 130 + nodeSize + 6, legY + 1);
 
@@ -734,7 +775,8 @@ export async function generatePDF({ order, sections }) {
 
       doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
       drawSectionHeader(doc, section, idx);
-      let y = doc.y + 18;  // capture y BEFORE footer (footer sets doc.y to page bottom)
+      // Content starts after the dark opener band + transition strip
+      let y = HEADER_H + 24;
       drawFooter(doc, order);
       const segments = parseSection(cleanText);
       let pageHasContent = false;
