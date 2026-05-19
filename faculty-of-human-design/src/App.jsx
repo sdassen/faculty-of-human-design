@@ -3460,7 +3460,7 @@ function ContactPage(){
             <div>
               <div className="label" style={{marginBottom:12}}>Contactgegevens</div>
               <h2 className="h2" style={{marginBottom:28}}>Faculty of Human Design</h2>
-              {[["Locatie","Ibiza, Spanje"],["E-mail","info@facultyhd.com"],["Reactietijd","Binnen 1 werkdag"],["Rapporten","Direct beschikbaar na bestelling"]].map(([l,v])=>(
+              {[["E-mail","info@facultyhd.com"],["Reactietijd","Binnen 1 werkdag"],["Rapporten","Bezorgd binnen 1 werkdag na betaling"]].map(([l,v])=>(
                 <div key={l} style={{marginBottom:20}}><div className="label" style={{marginBottom:5}}>{l}</div><div className="body-md">{v}</div></div>
               ))}
             </div>
