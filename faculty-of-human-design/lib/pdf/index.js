@@ -208,10 +208,16 @@ function addContentPage(doc, order) {
 
 function drawFooter(doc, order) {
   doc.save();
-  doc.rect(ML, FY - 8, TW, 0.5).fill(CLR.border);
-  doc.font(FONT.body).fontSize(7).fillColor(CLR.textLight)
+  // Footer rule — gold tinted
+  doc.rect(ML, FY - 9, TW, 0.5).fill(CLR.border);
+  doc.rect(ML, FY - 9, 16, 0.5).fill(CLR.gold); // short gold accent on rule start
+
+  // Left: report title
+  doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
     .text(order.report_title || "", ML, FY, { width: TW / 2 });
-  doc.font(FONT.body).fontSize(7).fillColor(CLR.textLight)
+
+  // Right: brand name
+  doc.font(FONT.bodyLight).fontSize(6.5).fillColor(CLR.textLight)
     .text("Faculty of Human Design", ML, FY, { width: TW, align: "right" });
   doc.restore();
 }
@@ -219,20 +225,24 @@ function drawFooter(doc, order) {
 // ─── BODYGRAPH PAGE ──────────────────────────────────────────────────────────
 function drawBodygraphPage(doc, order, chart) {
   doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
-  doc.rect(0, 0, W, 3).fill(CLR.dark);
+  doc.rect(0, 0, W, 4).fill(CLR.dark);
+  doc.rect(0, 0, 4, 4).fill(CLR.gold); // gold corner accent (consistent with content pages)
 
   doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
-    .text("JOUW BODYGRAPH", ML, 28, { characterSpacing: 3, width: TW });
+    .text("JOUW BODYGRAPH", ML, 22, { characterSpacing: 3, width: TW });
 
-  doc.font(FONT.display).fontSize(22).fillColor(CLR.dark)
-    .text("Het visuele kaartwerk van jouw ontwerp", ML, 46, { width: TW });
+  doc.font(FONT.displaySemiBold).fontSize(22).fillColor(CLR.dark)
+    .text("Het visuele kaartwerk van jouw ontwerp", ML, 36, { width: TW });
 
-  doc.rect(ML, 92, 32, 1.5).fill(CLR.gold);
+  doc.rect(ML, 78, 48, 1).fill(CLR.gold);
+  doc.save();
+  doc.rect(ML + 48, 78, 24, 0.5).fillOpacity(0.4).fill(CLR.gold);
+  doc.restore();
 
-  const bgScale = 0.95;
+  const bgScale = 0.92;
   const bgSize  = bodygraphSize(bgScale);
   const bgX = (W - bgSize.width) / 2;
-  const bgY = 110;
+  const bgY = 96;
   drawBodygraph(doc, chart, { x: bgX, y: bgY, scale: bgScale });
 
   const dataY = bgY + bgSize.height + 26;
@@ -948,45 +958,98 @@ export async function generatePDF({ order, sections }) {
       y += 8;
     });
 
+    // ── CLOSING PAGE
     doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
     doc.rect(0, 0, W, H).fill(CLR.dark);
     doc.rect(0, 0, W, 4).fill(CLR.gold);
     doc.rect(0, H - 4, W, 4).fill(CLR.gold);
 
-    // Subtle closing decoration — same motif as cover, centered lower
-    drawCoverDecoration(doc, H / 2 + 40);
+    // Geometric decoration (faint, centered lower half)
+    drawCoverDecoration(doc, H * 0.62);
 
+    // ── Institution label
     doc.font(FONT.bodyLight).fontSize(6).fillColor("#5A5438")
-      .text("FACULTY OF HUMAN DESIGN", 0, 36, {
+      .text("FACULTY OF HUMAN DESIGN  ·  IBIZA", 0, 28, {
         align: "center", width: W, characterSpacing: 4,
       });
 
-    doc.font(FONT.display).fontSize(30).fillColor("#FFFFFF")
-      .text("Met dank voor je vertrouwen.", ML, H / 2 - 100, { align: "center", width: TW });
+    // ── Main message
+    doc.font(FONT.display).fontSize(34).fillColor("#FFFFFF")
+      .text("Met dank voor je vertrouwen.", ML, 76, { align: "center", width: TW, lineGap: 8 });
 
-    // Gold ornament
-    const ry = doc.y + 18;
+    // Gold triple-line ornament
+    const ornY = doc.y + 20;
     doc.save();
-    doc.rect(W / 2 - 40, ry, 80, 0.75).fill(CLR.gold);
-    doc.fillOpacity(0.3).rect(W / 2 - 80, ry, 40, 0.5).fill(CLR.gold);
-    doc.fillOpacity(0.3).rect(W / 2 + 40, ry, 40, 0.5).fill(CLR.gold);
+    doc.rect(W / 2 - 48, ornY, 96, 0.75).fill(CLR.gold);
+    doc.fillOpacity(0.35).rect(W / 2 - 80, ornY, 32, 0.5).fill(CLR.gold);
+    doc.fillOpacity(0.35).rect(W / 2 + 48, ornY, 32, 0.5).fill(CLR.gold);
     doc.restore();
 
-    const bd2 = order.birth_data || {};
-    const closingPlace = bd2.place ? " — geboren in " + bd2.place : "";
-    const closing = "Dit rapport is persoonlijk samengesteld op basis van de exacte geboortedata van "
-      + (order.customer_name || "jou") + closingPlace
-      + ". Human Design verdiept zich naarmate je er meer mee leeft. Neem de tijd.";
+    // ── Personal identity recap (name + type)
+    const bd2    = order.birth_data || {};
+    const chart2 = bd2.chart || {};
+    if (order.customer_name) {
+      doc.font(FONT.displayLight).fontSize(18).fillColor("#C4B898")
+        .text(order.customer_name, 0, ornY + 18, { align: "center", width: W });
+    }
+    if (chart2.type) {
+      const typeStr = [chart2.type, chart2.profile ? "Profiel " + chart2.profile : null]
+        .filter(Boolean).join("  ·  ");
+      doc.font(FONT.body).fontSize(8).fillColor(CLR.goldWarm)
+        .text(typeStr, 0, doc.y + 5, { align: "center", width: W });
+    }
 
-    doc.font(FONT.body).fontSize(9.5).fillColor("#6A6460")
-      .text(closing, ML + 32, ry + 18, { align: "center", width: TW - 64, lineGap: 5 });
+    // ── Three brand pillars (concise, inspiring)
+    const pillars = [
+      { num: "I",   text: "Blijf nieuwsgierig naar je ontwerp — het verdiept zich naarmate je er meer mee leeft." },
+      { num: "II",  text: "Vertrouw op je strategie en autoriteit. Zij zijn jouw persoonlijke navigatiesysteem." },
+      { num: "III", text: "Dit rapport is een startpunt, geen eindbestemming. Jij bent de expert op jezelf." },
+    ];
 
-    const contactY = doc.y + 32;
-    doc.font(FONT.body).fontSize(8).fillColor("#484440")
-      .text("info@facultyhd.com", 0, contactY, { align: "center", width: W });
+    const pillarY = doc.y + 36;
+    const pColW   = (TW - 32) / 3;
 
-    doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#282420")
-      .text("© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", 0, H - 26, {
+    // Subtle separator
+    doc.save();
+    doc.rect(ML, pillarY - 12, TW, 0.5).fillOpacity(0.15).fill(CLR.gold);
+    doc.restore();
+
+    pillars.forEach(function(p, i) {
+      const px = ML + i * (pColW + 16);
+
+      // Roman numeral
+      doc.font(FONT.display).fontSize(14).fillColor(CLR.gold)
+        .text(p.num, px, pillarY, { width: pColW, align: "center" });
+
+      // Short divider
+      doc.save();
+      doc.rect(px + pColW / 2 - 10, doc.y + 3, 20, 0.5).fillOpacity(0.4).fill(CLR.gold);
+      doc.restore();
+
+      // Text
+      doc.font(FONT.bodyLight).fontSize(8).fillColor("#6A6460")
+        .text(p.text, px, doc.y + 8, { width: pColW, align: "center", lineGap: 3 });
+    });
+
+    // ── Separator before contact
+    const contSepY = Math.max(doc.y + 36, H * 0.74);
+    doc.save();
+    doc.rect(ML, contSepY, TW, 0.5).fillOpacity(0.15).fill(CLR.gold);
+    doc.restore();
+
+    // ── Contact block (centered)
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#484440")
+      .text("Vragen of een persoonlijk gesprek?", 0, contSepY + 14, { align: "center", width: W });
+
+    doc.font(FONT.displayRegular).fontSize(13).fillColor("#7A6840")
+      .text("info@facultyhd.com", 0, contSepY + 26, { align: "center", width: W });
+
+    doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#383430")
+      .text("www.facultyhd.com", 0, contSepY + 42, { align: "center", width: W });
+
+    // ── Copyright
+    doc.font(FONT.bodyLight).fontSize(6).fillColor("#282420")
+      .text("© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", 0, H - 24, {
         align: "center", width: W,
       });
 
