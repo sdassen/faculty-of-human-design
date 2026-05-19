@@ -161,9 +161,9 @@ function addContentPage(doc, order) {
 function drawFooter(doc, order) {
   doc.save();
   doc.rect(ML, FY - 8, TW, 0.5).fill(CLR.border);
-  doc.font("Helvetica").fontSize(7).fillColor(CLR.textLight)
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.textLight)
     .text(order.report_title || "", ML, FY, { width: TW / 2 });
-  doc.font("Helvetica").fontSize(7).fillColor(CLR.textLight)
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.textLight)
     .text("Faculty of Human Design", ML, FY, { width: TW, align: "right" });
   doc.restore();
 }
@@ -173,7 +173,7 @@ function drawBodygraphPage(doc, order, chart) {
   doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
   doc.rect(0, 0, W, 3).fill(CLR.dark);
 
-  doc.font("Helvetica").fontSize(7).fillColor(CLR.goldWarm)
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
     .text("JOUW BODYGRAPH", ML, 28, { characterSpacing: 3, width: TW });
 
   doc.font(FONT.display).fontSize(22).fillColor(CLR.dark)
@@ -188,7 +188,7 @@ function drawBodygraphPage(doc, order, chart) {
   drawBodygraph(doc, chart, { x: bgX, y: bgY, scale: bgScale });
 
   const dataY = bgY + bgSize.height + 26;
-  doc.font("Helvetica").fontSize(6.5).fillColor(CLR.goldWarm)
+  doc.font(FONT.body).fontSize(6.5).fillColor(CLR.goldWarm)
     .text("DE KERNDATA VAN DEZE CHART", ML, dataY, { characterSpacing: 2.5 });
 
   const items = [
@@ -207,7 +207,7 @@ function drawBodygraphPage(doc, order, chart) {
     const row  = Math.floor(i / 2);
     const itemX = ML + col * colW;
     const itemY = cy + row * 26;
-    doc.font("Helvetica").fontSize(7).fillColor(CLR.textMuted)
+    doc.font(FONT.body).fontSize(7).fillColor(CLR.textMuted)
        .text(it.label.toUpperCase(), itemX, itemY, { characterSpacing: 1.5 });
     doc.font(FONT.displayRegular).fontSize(12).fillColor(CLR.dark)
        .text(it.value, itemX, itemY + 10);
@@ -215,15 +215,15 @@ function drawBodygraphPage(doc, order, chart) {
 
   const legY = FY - 60;
   doc.rect(ML, legY, TW, 0.5).fill(CLR.border);
-  doc.font("Helvetica").fontSize(7).fillColor(CLR.goldWarm)
+  doc.font(FONT.body).fontSize(7).fillColor(CLR.goldWarm)
     .text("LEGENDA", ML, legY + 10, { characterSpacing: 2 });
 
   doc.rect(ML, legY + 24, 12, 8).fillAndStroke("#876B4A", "#2A2620");
-  doc.font("Helvetica").fontSize(8).fillColor(CLR.text)
+  doc.font(FONT.body).fontSize(8).fillColor(CLR.text)
     .text("Gedefinieerd centrum — vaste eigen energie", ML + 18, legY + 26);
 
   doc.rect(ML + 200, legY + 24, 12, 8).fillAndStroke("#FFFFFF", "#2A2620");
-  doc.font("Helvetica").fontSize(8).fillColor(CLR.text)
+  doc.font(FONT.body).fontSize(8).fillColor(CLR.text)
     .text("Open centrum — neemt op uit omgeving", ML + 218, legY + 26);
 
   drawFooter(doc, order);
@@ -235,25 +235,25 @@ function drawCover(doc, order, sections) {
   doc.rect(0, 0, W, 3).fill(CLR.gold);
   doc.rect(0, H - 3, W, 3).fill(CLR.gold);
 
-  doc.font("Helvetica").fontSize(6.5).fillColor("#7A6840")
+  doc.font(FONT.bodyLight).fontSize(6.5).fillColor("#7A6840")
     .text("FACULTY OF HUMAN DESIGN  ·  IBIZA  ·  EST. 2014", 0, 64, {
       align: "center", width: W, characterSpacing: 3.5,
     });
 
-  doc.font(FONT.display).fontSize(28).fillColor("#FFFFFF")
+  doc.font(FONT.display).fontSize(34).fillColor("#FFFFFF")
     .text(order.report_title || "Persoonlijk Rapport", ML, 140, {
-      align: "center", width: TW, lineGap: 6,
+      align: "center", width: TW, lineGap: 8,
     });
 
   const gy = doc.y + 20;
   doc.rect(W / 2 - 24, gy, 48, 1).fill(CLR.gold);
 
-  doc.font("Helvetica").fontSize(13).fillColor("#B8A880")
+  doc.font(FONT.displayLight).fontSize(16).fillColor("#B8A880")
     .text(order.customer_name || "", 0, gy + 16, { align: "center", width: W });
 
   const bd    = order.birth_data || {};
   const chart = bd.chart || {};
-  let iy = gy + 40;
+  let iy = gy + 44;
 
   if (bd.day) {
     const parts = [
@@ -261,7 +261,7 @@ function drawCover(doc, order, sections) {
       bd.hour != null ? bd.hour + ":" + String(bd.minute || 0).padStart(2, "0") : null,
       bd.place || null,
     ].filter(Boolean);
-    doc.font("Helvetica").fontSize(8.5).fillColor("#504C48")
+    doc.font(FONT.bodyLight).fontSize(8.5).fillColor("#504C48")
       .text(parts.join("  ·  "), 0, iy, { align: "center", width: W });
     iy += 18;
   }
@@ -272,7 +272,7 @@ function drawCover(doc, order, sections) {
       chart.profile ? "Profiel " + chart.profile : null,
       chart.auth || null,
     ].filter(Boolean);
-    doc.font("Helvetica").fontSize(8.5).fillColor(CLR.goldWarm)
+    doc.font(FONT.body).fontSize(8.5).fillColor(CLR.goldWarm)
       .text(cparts.join("  ·  "), 0, iy, { align: "center", width: W });
     iy += 16;
   }
@@ -292,13 +292,13 @@ function drawCover(doc, order, sections) {
 
   if (sumItems.length) {
     doc.rect(ML, sumY - 8, TW, 1).fill("#2A2620");
-    doc.font("Helvetica").fontSize(6).fillColor("#7A6840")
+    doc.font(FONT.bodyLight).fontSize(6).fillColor("#7A6840")
       .text("JOUW ONTWERP — KERNDATA", ML, sumY + 2, { characterSpacing: 2.5 });
     let sy = sumY + 16;
     for (const item of sumItems.slice(0, 8)) {
       if (sy > H - 100) break;
       doc.rect(ML, sy + 3, 3, 8).fill(CLR.gold);
-      doc.font("Helvetica").fontSize(8.5).fillColor("#A09880")
+      doc.font(FONT.body).fontSize(8.5).fillColor("#A09880")
         .text(item, ML + 10, sy, { width: TW - 10 });
       sy += 16;
     }
@@ -307,19 +307,19 @@ function drawCover(doc, order, sections) {
 
   const tocY = Math.max(doc.y + 32, H * 0.68);
   if (tocY < H - 100) {
-    doc.font("Helvetica").fontSize(6).fillColor("#3A3630")
+    doc.font(FONT.bodyLight).fontSize(6).fillColor("#3A3630")
       .text("INHOUD", ML, tocY, { characterSpacing: 2.5 });
     let ly = tocY + 16;
     sections.forEach(function(s, i) {
       if (ly < H - 52) {
-        doc.font("Helvetica").fontSize(8).fillColor("#4A4640")
+        doc.font(FONT.body).fontSize(8).fillColor("#4A4640")
           .text(String(i + 1).padStart(2, "0") + "  " + s.title, ML + 10, ly);
         ly += 14;
       }
     });
   }
 
-  doc.font("Helvetica").fontSize(7).fillColor("#2A2620")
+  doc.font(FONT.bodyLight).fontSize(7).fillColor("#2A2620")
     .text("© 2026 Faculty of Human Design — Ibiza, Spanje", 0, H - 30, {
       align: "center", width: W,
     });
@@ -330,10 +330,10 @@ function drawSectionHeader(doc, section, idx) {
   doc.rect(0, 0, W, 3).fill(CLR.dark);
   doc.rect(ML - 16, 10, 2, 52).fill(CLR.gold);
 
-  doc.font("Helvetica").fontSize(8).fillColor(CLR.goldWarm)
+  doc.font(FONT.body).fontSize(8).fillColor(CLR.goldWarm)
     .text(String(idx + 1).padStart(2, "0"), ML, 14, { characterSpacing: 1 });
 
-  doc.font(FONT.displayRegular).fontSize(20).fillColor(CLR.dark)
+  doc.font(FONT.displaySemiBold).fontSize(22).fillColor(CLR.dark)
     .text(section.title, ML, 26, { width: TW });
 
   const uy = doc.y + 6;
@@ -368,7 +368,7 @@ function drawBlock(doc, order, block, lines, y) {
   doc.rect(ML, y, TW, bH).fill(block.tint);
   doc.rect(ML, y, 3, bH).fill(block.accent);
 
-  doc.font("Helvetica").fontSize(7).fillColor(block.accent)
+  doc.font(FONT.bodyMedium).fontSize(7).fillColor(block.accent)
     .text(block.label.toUpperCase(), ML + PAD, y + PAD, {
       width: innerW, characterSpacing: 1.5,
     });
@@ -378,9 +378,9 @@ function drawBlock(doc, order, block, lines, y) {
   for (let i = 0; i < items.length; i++) {
     const item   = items[i];
     const bullet = block.key === "refl" ? (i + 1) + "." : "•";
-    doc.font("Helvetica").fontSize(9.5).fillColor(block.accent)
+    doc.font(FONT.bodyMedium).fontSize(9.5).fillColor(block.accent)
       .text(bullet, ML + PAD + 2, iy, { width: 12, lineBreak: false });
-    doc.font("Helvetica").fontSize(9.5).fillColor(CLR.text)
+    doc.font(FONT.body).fontSize(9.5).fillColor(CLR.text)
       .text(item, ML + PAD + 16, iy, { width: innerW - 14, lineGap: 2 });
     iy = doc.y + 6;
   }
@@ -469,13 +469,13 @@ export async function generatePDF({ order, sections }) {
           }
 
           if (isSubhead) {
-            doc.font(FONT.displayRegular).fontSize(12.5).fillColor(CLR.navy)
+            doc.font(FONT.displaySemiBold).fontSize(13).fillColor(CLR.navy)
               .text(para, ML, y, opts);
           } else {
-            doc.font("Helvetica").fontSize(10.5).fillColor(CLR.text)
+            doc.font(FONT.body).fontSize(10.5).fillColor(CLR.text)
               .text(para, ML, y, opts);
           }
-          y = doc.y + (isSubhead ? 6 : 13);
+          y = doc.y + (isSubhead ? 8 : 13);
           pageHasContent = true;
         }
       }
@@ -492,7 +492,7 @@ export async function generatePDF({ order, sections }) {
     doc.rect(0, 0, W, 3).fill(CLR.gold);
     doc.rect(0, H - 3, W, 3).fill(CLR.gold);
 
-    doc.font(FONT.display).fontSize(22).fillColor("#FFFFFF")
+    doc.font(FONT.display).fontSize(26).fillColor("#FFFFFF")
       .text("Met dank voor je vertrouwen.", ML, 180, { align: "center", width: TW });
 
     const bd2 = order.birth_data || {};
@@ -501,16 +501,16 @@ export async function generatePDF({ order, sections }) {
       + " geboortedata van " + (order.customer_name || "jou") + closingPlace
       + ". Human Design verdiept zich naarmate je er meer mee leeft. Neem de tijd.";
 
-    doc.font("Helvetica").fontSize(9.5).fillColor("#7A7470")
-      .text(closing, ML + 24, 230, { align: "center", width: TW - 48, lineGap: 4 });
+    doc.font(FONT.body).fontSize(9.5).fillColor("#7A7470")
+      .text(closing, ML + 24, 234, { align: "center", width: TW - 48, lineGap: 5 });
 
     const ry = doc.y + 28;
     doc.rect(W / 2 - 20, ry, 40, 1).fill(CLR.gold);
 
-    doc.font("Helvetica").fontSize(8).fillColor("#504C48")
+    doc.font(FONT.body).fontSize(8).fillColor("#504C48")
       .text("Vragen of opmerkingen? info@facultyhd.com", 0, ry + 14, { align: "center", width: W });
 
-    doc.font("Helvetica").fontSize(7).fillColor("#2A2620")
+    doc.font(FONT.bodyLight).fontSize(7).fillColor("#2A2620")
       .text("© 2026 Faculty of Human Design — Ibiza, Spanje  ·  Alle rechten voorbehouden", 0, H - 30, {
         align: "center", width: W,
       });
