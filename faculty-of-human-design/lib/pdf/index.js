@@ -761,6 +761,59 @@ function groupClosingBlocks(segments) {
   return result;
 }
 
+// ─── SECTION CLOSING PAGE ─────────────────────────────────────────────────────
+// The 4 closing blocks (Valkuilen/Praktijk/Deze week/Reflectievragen) always get
+// their own dedicated page. This prevents the "accidentally blank" continuation
+// page that appears when the grid overflows the prose page with only a fraction
+// of the blocks visible against a mostly-white background.
+//
+// Visual treatment: warm cream background (contrasts with the dark opener),
+// thin dark top stripe with section identity, then the 2×2 block grid.
+function drawSectionClosingPage(doc, order, sectionTitle, sectionIdx, blocks) {
+  doc.addPage({ margins: { top: 0, bottom: 0, left: 0, right: 0 } });
+
+  // Warm cream background — contrasts with the dark section header page
+  doc.rect(0, 0, W, H).fill(CLR.bg);
+
+  // Thin dark top stripe with section identity
+  const STRIPE_H = 40;
+  doc.rect(0, 0, W, STRIPE_H).fill(CLR.dark);
+  doc.rect(0, 0, 3, STRIPE_H).fill(CLR.gold);   // left gold accent bar
+
+  const partLabel = ui(order, "ONDERDEEL", "PART") + "  " + String(sectionIdx + 1).padStart(2, "0");
+  doc.font(FONT.body).fontSize(6).fillColor(CLR.goldWarm)
+    .text(partLabel, ML + 12, 10, { characterSpacing: 2, width: TW - 24, lineBreak: false });
+
+  doc.font(FONT.displaySemiBold).fontSize(13).fillColor("#FFFFFF")
+    .text(sectionTitle, ML + 12, 20, { width: TW - 120, lineBreak: false });
+
+  // Right-aligned label: "INZICHTEN & PRAKTIJK" / "INSIGHTS & PRACTICE"
+  const insightsLabel = ui(order, "INZICHTEN & PRAKTIJK", "INSIGHTS & PRACTICE");
+  doc.font(FONT.bodyLight).fontSize(6).fillColor(CLR.gold)
+    .text(insightsLabel, 0, 22, { width: W - ML - 12, align: "right", characterSpacing: 1.5 });
+
+  drawFooter(doc, order);
+
+  // ── Block grid
+  const GRID_GAP = 8;
+  const colW = (TW - GRID_GAP) / 2;
+  let y = STRIPE_H + 16;
+
+  for (let i = 0; i < blocks.length; i += 2) {
+    const left  = blocks[i];
+    const right = blocks[i + 1];
+
+    if (!right) {
+      y = drawBlock(doc, order, left.block, left.lines, y, ML, TW);
+    } else {
+      const leftY  = drawBlock(doc, order, left.block,  left.lines,  y, ML,                  colW);
+      const rightY = drawBlock(doc, order, right.block, right.lines, y, ML + colW + GRID_GAP, colW);
+      y = Math.max(leftY, rightY) + 16;
+    }
+  }
+}
+
+// Keep drawBlockGrid for any non-section-closing uses (defensive)
 function drawBlockGrid(doc, order, blocks, y) {
   const GRID_GAP = 8;
   const colW = (TW - GRID_GAP) / 2;
@@ -770,12 +823,10 @@ function drawBlockGrid(doc, order, blocks, y) {
     const right = blocks[i + 1];
 
     if (!right) {
-      // Odd block — render full width
       y = drawBlock(doc, order, left.block, left.lines, y, ML, TW);
       continue;
     }
 
-    // Accurate height check using the same logic as drawBlock (no rendering)
     const leftH  = blockHeight(doc, left.block,  left.lines,  colW);
     const rightH = blockHeight(doc, right.block, right.lines, colW);
     const estH   = Math.max(leftH, rightH);
@@ -787,7 +838,7 @@ function drawBlockGrid(doc, order, blocks, y) {
 
     const leftY  = drawBlock(doc, order, left.block,  left.lines,  y, ML,                  colW);
     const rightY = drawBlock(doc, order, right.block, right.lines, y, ML + colW + GRID_GAP, colW);
-    y = Math.max(leftY, rightY) + 16; // gap after each grid row
+    y = Math.max(leftY, rightY) + 16;
   }
 
   return y;
@@ -1061,9 +1112,10 @@ export async function generatePDF({ order, sections }) {
         }
 
         if (seg.type === "block-grid") {
-          const prevY = y;
-          y = drawBlockGrid(doc, order, seg.blocks, y);
-          if (y !== prevY) pageHasContent = true;
+          // Always render closing blocks on their own designed page —
+          // this prevents accidentally sparse white continuation pages.
+          drawSectionClosingPage(doc, order, section.title, idx, seg.blocks);
+          pageHasContent = true;
           continue;
         }
 
