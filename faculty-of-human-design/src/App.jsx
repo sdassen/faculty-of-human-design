@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { LANG, t, tl, switchLang, langPath, stripLangPrefix } from './i18n.js';
 
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');`;
 
@@ -668,8 +669,8 @@ function productLD(rpt) {
   return {
     "@context": "https://schema.org",
     "@type": "Product",
-    "name": rpt.title,
-    "description": rpt.intro,
+    "name": tl(rpt.title),
+    "description": tl(rpt.intro),
     "brand": { "@type": "Brand", "name": "Faculty of Human Design" },
     "offers": {
       "@type": "Offer",
@@ -722,16 +723,21 @@ function breadcrumbLD(items) {
 // ─── REPORTS ──────────────────────────────────────────────────────────────────
 const REPORTS = [
   {
-    id:"volledig", icon:"✦", tag:"Meest gekozen",
-    title:"Volledig Human Design Rapport",
-    price:"€75", priceNum:75, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Begrijp eindelijk wie je werkelijk bent",
-    tagline:"Je complete persoonlijke blauwdruk",
-    intro:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.",
+    id:"volledig", icon:"✦",
+    tag:{ nl:"Meest gekozen", en:"Most popular" },
+    title:{ nl:"Volledig Human Design Rapport", en:"Complete Human Design Report" },
+    price:"€75", priceNum:75,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Begrijp eindelijk wie je werkelijk bent", en:"Finally understand who you truly are" },
+    tagline:{ nl:"Je complete persoonlijke blauwdruk", en:"Your complete personal blueprint" },
+    intro:{ nl:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.", en:"The most comprehensive report we offer. A complete analysis of your Human Design chart — from Type and Authority to Incarnation Cross and practical life guidance." },
     includes:["Type, Strategie & Signature","Autoriteit — hoe je beslissingen neemt","Profiel — het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — je natuurlijke kwaliteiten","Inkarnatie-Kruis — je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2026–2028"],
-    for:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.",
+    for:{ nl:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.", en:"For everyone seeking deep and complete insight into their Human Design." },
     sections:12, pages:"40+",
-    prompt_extra:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2026-2028\n### 12. Slotanalyse",
+    prompt_extra:{
+      nl:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2026-2028\n### 12. Slotanalyse",
+      en:"### 1. Your Energetic Blueprint\n### 2. Type & Life Strategy\n### 3. Authority\n### 4. Profile\n### 5. Defined Centers\n### 6. Open Centers & Conditioning\n### 7. Active Channels\n### 8. Your Gates\n### 9. Incarnation Cross\n### 10. Relationships & Connection\n### 11. Practical Guidance 2026-2028\n### 12. Closing Analysis",
+    },
     reviews:[
       ["Ik had al eerder iets gelezen over Human Design maar dit rapport bracht het echt tot leven. De sectie over mijn open centra was confronterend en bevrijdend tegelijk — ik herkende zo veel conditionering die ik als 'mezelf' had aangenomen. Drie maanden later lees ik het nog steeds.","Marieke V., Amsterdam"],
       ["Precies wat ik zocht. Geen vage spirituele teksten maar concrete analyse van wie ik ben en hoe ik het beste functioneer.","Thomas D., Antwerpen"],
@@ -740,15 +746,20 @@ const REPORTS = [
   },
   {
     id:"relatie_liefde", icon:"◎", tag:"",
-    title:"Relatierapport — Liefde",
-    price:"€95", priceNum:95, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Meer rust en begrip in je romantische verbinding",
-    tagline:"Twee designs in romantische verbinding",
-    intro:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel — waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?",
+    title:{ nl:"Relatierapport — Liefde", en:"Relationship Report — Love" },
+    price:"€95", priceNum:95,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Meer rust en begrip in je romantische verbinding", en:"More peace and understanding in your romantic connection" },
+    tagline:{ nl:"Twee designs in romantische verbinding", en:"Two designs in romantic connection" },
+    intro:{ nl:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel — waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?", en:"An in-depth analysis of your and your partner's Human Design charts. How do you function energetically as a couple — where do you strengthen each other, where is the friction, and how do you grow together?" },
     includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatie & intimiteitsstijl","Seksuele energie & aantrekking","Beslissingen nemen als stel","Conflictpatronen & doorbraken","Gezamenlijk groeipad","Praktisch advies voor harmonie"],
-    for:"Voor koppels die hun romantische verbinding dieper willen begrijpen en versterken.",
-    sections:9, pages:"28+", needsPartner:true, partnerLabel:"Partner",
-    prompt_extra:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Partners Design\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit & Aantrekking\n### 6. Communicatie & Intimiteit\n### 7. Spanningsvelden & Doorbraken\n### 8. Gezamenlijk Groeipad\n### 9. Praktisch Advies voor Harmonie",
+    for:{ nl:"Voor koppels die hun romantische verbinding dieper willen begrijpen en versterken.", en:"For couples who want to deepen their understanding of their romantic connection." },
+    sections:9, pages:"28+", needsPartner:true,
+    partnerLabel:{ nl:"Partner", en:"Partner" },
+    prompt_extra:{
+      nl:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Partners Design\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit & Aantrekking\n### 6. Communicatie & Intimiteit\n### 7. Spanningsvelden & Doorbraken\n### 8. Gezamenlijk Groeipad\n### 9. Praktisch Advies voor Harmonie",
+      en:"### 1. The Energy of Your Connection\n### 2. Chart Analysis — Your Design\n### 3. Chart Analysis — Partner's Design\n### 4. Electromagnetic Connections\n### 5. Compatibility & Attraction\n### 6. Communication & Intimacy\n### 7. Tension Points & Breakthroughs\n### 8. Shared Growth Path\n### 9. Practical Advice for Harmony",
+    },
     reviews:[
       ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom — onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
       ["Ik had dit als verrassing voor mijn partner besteld. We hebben het samen gelezen en waren allebei stil bij hoe accuraat de beschrijving van onze dynamiek was.","Roos & Tim, Amsterdam"],
@@ -757,15 +768,20 @@ const REPORTS = [
   },
   {
     id:"relatie_business", icon:"◈", tag:"",
-    title:"Relatierapport — Business",
-    price:"€85", priceNum:85, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Samenwerking die werkt voor jullie allebei",
-    tagline:"Twee designs in zakelijke samenwerking",
-    intro:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten — en hoe bouwen jullie een samenwerking die werkt voor beiden?",
+    title:{ nl:"Relatierapport — Business", en:"Relationship Report — Business" },
+    price:"€85", priceNum:85,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Samenwerking die werkt voor jullie allebei", en:"Collaboration that works for both of you" },
+    tagline:{ nl:"Twee designs in zakelijke samenwerking", en:"Two designs in professional partnership" },
+    intro:{ nl:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten — en hoe bouwen jullie een samenwerking die werkt voor beiden?", en:"An analysis of two Human Design charts from a professional perspective. Who leads, who decides, where are the complementarities — and how do you build a collaboration that works for both?" },
     includes:["Beide charts volledig geanalyseerd","Besluitvormingsdynamieken","Complementariteit van Types","Leiderschapsstijl per chart","Werkenergieën & ritmes","Communicatiepatronen op de werkvloer","Conflictpatronen & oplossingen","Rolverdeling & verantwoordelijkheden","Praktisch advies voor optimale samenwerking"],
-    for:"Voor zakenpartners, compagnons of collega's die hun samenwerking bewust willen verbeteren.",
-    sections:9, pages:"24+", needsPartner:true, partnerLabel:"Zakenpartner",
-    prompt_extra:"### 1. De Energie van Jullie Samenwerking\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Zakenpartner Design\n### 4. Besluitvormingsdynamieken\n### 5. Complementariteit & Sterktes\n### 6. Leiderschapsstijl & Rolverdeling\n### 7. Communicatie & Conflictpatronen\n### 8. Gezamenlijke Visie & Richting\n### 9. Praktisch Advies voor Samenwerking",
+    for:{ nl:"Voor zakenpartners, compagnons of collega's die hun samenwerking bewust willen verbeteren.", en:"For business partners, co-founders or colleagues who want to consciously improve their collaboration." },
+    sections:9, pages:"24+", needsPartner:true,
+    partnerLabel:{ nl:"Zakenpartner", en:"Business Partner" },
+    prompt_extra:{
+      nl:"### 1. De Energie van Jullie Samenwerking\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Zakenpartner Design\n### 4. Besluitvormingsdynamieken\n### 5. Complementariteit & Sterktes\n### 6. Leiderschapsstijl & Rolverdeling\n### 7. Communicatie & Conflictpatronen\n### 8. Gezamenlijke Visie & Richting\n### 9. Praktisch Advies voor Samenwerking",
+      en:"### 1. The Energy of Your Partnership\n### 2. Chart Analysis — Your Design\n### 3. Chart Analysis — Business Partner's Design\n### 4. Decision-Making Dynamics\n### 5. Complementarity & Strengths\n### 6. Leadership Style & Role Division\n### 7. Communication & Conflict Patterns\n### 8. Shared Vision & Direction\n### 9. Practical Advice for Collaboration",
+    },
     reviews:[
       ["Ik had dit met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
       ["Het rapport liet zien dat mijn partner een Manifestor is en ik een Generator. Dat verklaarde zoveel van onze samenwerking — nu gaan we er bewust mee om.","Lars M., Utrecht"],
@@ -774,15 +790,20 @@ const REPORTS = [
   },
   {
     id:"relatie_familie", icon:"◇", tag:"",
-    title:"Relatierapport — Familie",
-    price:"€75", priceNum:75, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Meer begrip en verbinding in het gezin",
-    tagline:"Twee designs in familieverband",
-    intro:"Een analyse van twee familieleden — ouder en kind, broer en zus, of een andere gezinsrelatie. Hoe opereren jullie designs samen en hoe creëer je meer begrip, verbinding en ruimte?",
+    title:{ nl:"Relatierapport — Familie", en:"Relationship Report — Family" },
+    price:"€75", priceNum:75,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Meer begrip en verbinding in het gezin", en:"More understanding and connection in the family" },
+    tagline:{ nl:"Twee designs in familieverband", en:"Two designs in family connection" },
+    intro:{ nl:"Een analyse van twee familieleden — ouder en kind, broer en zus, of een andere gezinsrelatie. Hoe opereren jullie designs samen en hoe creëer je meer begrip, verbinding en ruimte?", en:"An analysis of two family members — parent and child, siblings, or another family relationship. How do your designs operate together and how do you create more understanding, connection and space?" },
     includes:["Beider charts geanalyseerd","Energetische dynamieken in het gezin","Communicatiestijlen per type","Groeimogelijkheden voor beiden","Patronen van conflict en verbinding","Rolverdeling binnen de familie","Opvoedings- en begeleidingstips","Praktische guidance voor meer begrip","Slotanalyse"],
-    for:"Voor ouders met kinderen, broers en zussen of andere gezinsleden die meer inzicht willen in hun dynamiek.",
-    sections:9, pages:"24+", needsPartner:true, partnerLabel:"Familielid",
-    prompt_extra:"### 1. De Energie van Jullie Familiebinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Familielid\n### 4. Familiedynamieken & Patronen\n### 5. Communicatiestijlen & Begrip\n### 6. Groeimogelijkheden voor Beiden\n### 7. Spanningsvelden & Oplossingen\n### 8. Guidance voor Meer Verbinding\n### 9. Slotanalyse",
+    for:{ nl:"Voor ouders met kinderen, broers en zussen of andere gezinsleden die meer inzicht willen in hun dynamiek.", en:"For parents with children, siblings or other family members seeking more insight into their dynamic." },
+    sections:9, pages:"24+", needsPartner:true,
+    partnerLabel:{ nl:"Familielid", en:"Family Member" },
+    prompt_extra:{
+      nl:"### 1. De Energie van Jullie Familiebinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Familielid\n### 4. Familiedynamieken & Patronen\n### 5. Communicatiestijlen & Begrip\n### 6. Groeimogelijkheden voor Beiden\n### 7. Spanningsvelden & Oplossingen\n### 8. Guidance voor Meer Verbinding\n### 9. Slotanalyse",
+      en:"### 1. The Energy of Your Family Bond\n### 2. Chart Analysis — Your Design\n### 3. Chart Analysis — Family Member's Design\n### 4. Family Dynamics & Patterns\n### 5. Communication Styles & Understanding\n### 6. Growth Opportunities for Both\n### 7. Tension Points & Solutions\n### 8. Guidance for More Connection\n### 9. Closing Analysis",
+    },
     reviews:[
       ["Mijn dochter en ik hebben het rapport samen besproken. Voor het eerst begreep ik écht waarom zij reageert zoals ze reageert — dat heeft onze verhouding veranderd.","Karin V., Den Haag"],
       ["Het inzicht in hoe mijn moeder en ik anders communiceren was een openbaring. Niet alleen voor mijn begrip van haar, maar ook voor hoe ik mezelf in die relatie gedraag.","Thomas B., Antwerpen"],
@@ -791,15 +812,19 @@ const REPORTS = [
   },
   {
     id:"jaar", icon:"◈", tag:"",
-    title:"Jaarrapport 2026",
-    price:"€55", priceNum:55, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Weet wat er dit jaar van je gevraagd wordt",
-    tagline:"De energetische thema's van je jaar",
-    intro:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?",
+    title:{ nl:"Jaarrapport 2026", en:"Annual Report 2026" },
+    price:"€55", priceNum:55,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Weet wat er dit jaar van je gevraagd wordt", en:"Know what is asked of you this year" },
+    tagline:{ nl:"De energetische thema's van je jaar", en:"The energetic themes of your year" },
+    intro:{ nl:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?", en:"Based on your Solar Return — the planetary positions on your birthday this year. What are the dominant themes and opportunities?" },
     includes:["Solar Return analyse","Dominante thema's voor 2026","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op je chart","Kansen en aandachtspunten","Intentie voor het jaar"],
-    for:"Voor wie het jaar bewust en gericht wil ingaan.",
+    for:{ nl:"Voor wie het jaar bewust en gericht wil ingaan.", en:"For those who want to enter the year consciously and with direction." },
     sections:9, pages:"22+",
-    prompt_extra:"### 1. Energie van Je Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
+    prompt_extra:{
+      nl:"### 1. Energie van Je Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
+      en:"### 1. Energy of Your New Personal Year\n### 2. Solar Return Analysis\n### 3. Dominant Themes\n### 4. Quarter 1\n### 5. Quarter 2\n### 6. Quarter 3\n### 7. Quarter 4\n### 8. Opportunities & Challenges\n### 9. Intention for the Year",
+    },
     reviews:[
       ["Ik bestel dit elk jaar rond mijn verjaardag. Het kwartaaloverzicht gebruik ik echt als leidraad — niet als agenda maar als bewustzijn van wat er op me afkomt. Dit jaar klopte het weer opvallend goed.","Roos B., Utrecht"],
       ["Het rapport beschreef een thema van 'loslaten en vertrouwen' voor het derde kwartaal. Ik was sceptisch, maar er gebeurde inderdaad iets in die periode wat ik niet had zien aankomen. Achteraf paste het precies in dat verhaal.","Joost V., Den Haag"],
@@ -808,15 +833,19 @@ const REPORTS = [
   },
   {
     id:"kind", icon:"◇", tag:"",
-    title:"Kinderrapport",
-    price:"€45", priceNum:45, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Begeleid je kind vanuit wie het werkelijk is",
-    tagline:"Je kind begrijpen vanuit zijn of haar design",
-    intro:"Een rapport voor ouders. Hoe gebruik je kind energie en hoe leert het het beste?",
+    title:{ nl:"Kinderrapport", en:"Child Report" },
+    price:"€45", priceNum:45,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Begeleid je kind vanuit wie het werkelijk is", en:"Guide your child from who they truly are" },
+    tagline:{ nl:"Je kind begrijpen vanuit zijn of haar design", en:"Understanding your child through their design" },
+    intro:{ nl:"Een rapport voor ouders. Hoe gebruik je kind energie en hoe leert het het beste?", en:"A report for parents. How does your child use energy and how do they learn best?" },
     includes:["Type & energiegebruik","Hoe je kind beslissingen neemt","Leerstijl & communicatie","Behoeften & grenzen","Opvoedtips op maat","Gaven & talenten"],
-    for:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.",
+    for:{ nl:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.", en:"For parents who want to guide their child based on who they truly are." },
     sections:10, pages:"24+", needsChild:true,
-    prompt_extra:"### 1. Het Unieke Design van Je Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Je Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
+    prompt_extra:{
+      nl:"### 1. Het Unieke Design van Je Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Je Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
+      en:"### 1. Your Child's Unique Design\n### 2. Type & Energy\n### 3. Making Decisions\n### 4. How Your Child Learns\n### 5. Needs & Boundaries\n### 6. Centers Analysis\n### 7. Parenting Tips Tailored to Your Child\n### 8. Gifts & Talents\n### 9. Parent-Child Relationship\n### 10. Closing Analysis",
+    },
     reviews:[
       ["Mijn dochter van 9 werd altijd gezien als 'druk' of 'moeilijk'. Het rapport legde uit dat zij een Manifestor is en dat haar behoefte om dingen zelf te initiëren volkomen logisch is. Sindsdien botsen we veel minder.","Sandra P., Haarlem"],
       ["Ik was aanvankelijk sceptisch — mijn kind is nog maar 6. Maar de beschrijving van zijn leerstijl klopte zo precies dat mijn man en ik allebei stil werden.","Femke J., Eindhoven"],
@@ -825,15 +854,19 @@ const REPORTS = [
   },
   {
     id:"loopbaan", icon:"◆", tag:"",
-    title:"Loopbaan & Geld Rapport",
-    price:"€65", priceNum:65, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Verdien geld op een manier die bij je past",
-    tagline:"Werk en financiën vanuit je design",
-    intro:"Hoe maakt je geld op een manier die bij jou past? Welke werkomgeving geeft je energie?",
+    title:{ nl:"Loopbaan & Geld Rapport", en:"Career & Money Report" },
+    price:"€65", priceNum:65,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Verdien geld op een manier die bij je past", en:"Earn money in a way that suits you" },
+    tagline:{ nl:"Werk en financiën vanuit je design", en:"Work and finances through your design" },
+    intro:{ nl:"Hoe maakt je geld op een manier die bij jou past? Welke werkomgeving geeft je energie?", en:"How do you make money in a way that suits you? What work environment gives you energy?" },
     includes:["Ideale werkomgeving","Hoe je geld aantrekt","Je professionele kracht","Samenwerking & leiderschap","Valkuilen op de werkvloer","Ondernemen vs. loondienst","Financiële strategie op maat"],
-    for:"Voor iedereen die wil werken en verdienen in lijn met wie zij zijn.",
+    for:{ nl:"Voor iedereen die wil werken en verdienen in lijn met wie zij zijn.", en:"For everyone who wants to work and earn in alignment with who they are." },
     sections:9, pages:"24+",
-    prompt_extra:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe Je Geld Aantrekt\n### 4. Je Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
+    prompt_extra:{
+      nl:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe Je Geld Aantrekt\n### 4. Je Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
+      en:"### 1. Professional Blueprint\n### 2. Ideal Work Environment\n### 3. How You Attract Money\n### 4. Your Professional Strengths\n### 5. Collaboration & Leadership\n### 6. Pitfalls\n### 7. Self-Employment vs. Employment\n### 8. Financial Strategy\n### 9. Your Next Step",
+    },
     reviews:[
       ["Na twaalf jaar in loondienst twijfelde ik of ik voor mezelf moest beginnen. Het rapport was heel helder: mijn type en profiel passen beter bij zelfstandig werken, en het legde ook uit waarom ik me in teamverband altijd een beetje gevangen voel. Twee maanden later had ik mijn eerste eigen klant.","Laura M., Amsterdam"],
       ["Het stuk over 'hoe ik geld aantrek' klonk in eerste instantie zweverig maar de uitleg was verrassend praktisch — het gaat over hoe je je werk aanbiedt en op welk moment je ja of nee zegt.","Kevin T., Antwerpen"],
@@ -842,15 +875,19 @@ const REPORTS = [
   },
   {
     id:"numerologie", icon:"∞", tag:"",
-    title:"Numerologie Rapport",
-    price:"€65", priceNum:65, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Begrijp de patronen achter je levensverhaal",
-    tagline:"De getallen achter je naam en geboortedag",
-    intro:"Op basis van je volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van je aard en levensdoel.",
+    title:{ nl:"Numerologie Rapport", en:"Numerology Report" },
+    price:"€65", priceNum:65,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Begrijp de patronen achter je levensverhaal", en:"Understand the patterns behind your life story" },
+    tagline:{ nl:"De getallen achter je naam en geboortedag", en:"The numbers behind your name and birthday" },
+    intro:{ nl:"Op basis van je volledige naam en geboortedatum berekenen wij 8 kerngetallen die samen een diepgaand beeld geven van je aard en levensdoel.", en:"Based on your full name and date of birth, we calculate 8 core numbers that together give an in-depth picture of your nature and life purpose." },
     includes:["Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk jaar 2026","Rijpingsgetal","Mastergetallen indien aanwezig"],
-    for:"Voor iedereen die de diepere betekenis van naam en geboortedag wil begrijpen.",
+    for:{ nl:"Voor iedereen die de diepere betekenis van naam en geboortedag wil begrijpen.", en:"For everyone who wants to understand the deeper meaning of their name and date of birth." },
     sections:12, pages:"30+",
-    prompt_extra:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2026\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
+    prompt_extra:{
+      nl:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2026\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
+      en:"### 1. Your Numerological Blueprint\n### 2. Life Path Number\n### 3. Expression Number\n### 4. Soul Urge Number\n### 5. Personality Number\n### 6. Birthday Number\n### 7. Personal Year 2026\n### 8. Maturity Number\n### 9. Master Numbers\n### 10. How Your Numbers Work Together\n### 11. Guidance 2026-2028\n### 12. Closing Analysis",
+    },
     reviews:[
       ["Ik heb een levenspadgetal 11 en had altijd het gevoel anders te zijn. Voor het eerst las ik een uitleg die dat niet pathologiseerde maar als een gave behandelde. Dat deed iets met me.","Vera N., Nijmegen"],
       ["Ik was benieuwd of numerologie iets zou toevoegen naast mijn Human Design rapport. Het bleek een andere invalshoek die elkaar goed aanvult — het ene gaat over energie, het andere over levenslessen en patronen.","Frank O., Den Bosch"],
@@ -859,15 +896,19 @@ const REPORTS = [
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
-    title:"Geboortehoroscoop",
-    price:"€75", priceNum:75, sub:"Eenmalig · Bezorgd binnen 1 werkdag",
-    outcome:"Je planeetstanden als persoonlijk kompas",
-    tagline:"Je complete astrologische chart",
-    intro:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.",
+    title:{ nl:"Geboortehoroscoop", en:"Birth Horoscope" },
+    price:"€75", priceNum:75,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Je planeetstanden als persoonlijk kompas", en:"Your planetary positions as a personal compass" },
+    tagline:{ nl:"Je complete astrologische chart", en:"Your complete astrological chart" },
+    intro:{ nl:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.", en:"A complete birth horoscope based on the exact positions of all planets at the moment of your birth." },
     includes:["Zonneteken","Ascendant","Maan — je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — je roeping","Dominant element & modaliteit"],
-    for:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.",
+    for:{ nl:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.", en:"For those who want to understand how the stars were positioned at their birth moment." },
     sections:12, pages:"32+",
-    prompt_extra:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
+    prompt_extra:{
+      nl:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
+      en:"### 1. Your Astrological Blueprint\n### 2. Sun Sign\n### 3. Ascendant\n### 4. The Moon\n### 5. Mercury, Venus & Mars\n### 6. Jupiter & Saturn\n### 7. Outer Planets\n### 8. The Houses\n### 9. Aspects\n### 10. Midheaven\n### 11. Guidance 2026-2028\n### 12. Closing Analysis",
+    },
     reviews:[
       ["Ik heb veel horoscopen gelezen maar dit was de eerste die écht inging op de spanning tussen mijn Maan en Ascendant. Dat is precies waar ik mijn leven lang mee worstel. Het voelde alsof iemand mij eindelijk begreep.","Charlotte B., Leiden"],
       ["Diepgaander dan ik had verwacht. Niet alleen de zonnetekens maar alle huizen, aspecten, de Midhemel — een volledig portret. Ik heb het met mijn therapeut gedeeld als extra context.","Bart V., Gent"],
@@ -875,16 +916,21 @@ const REPORTS = [
     ],
   },
   {
-    id:"maandelijks", icon:"◯", tag:"Abonnement",
-    title:"Maandelijkse Guidance",
-    price:"€19/mnd", priceNum:19, sub:"Maandelijks opzegbaar",
-    outcome:"Elke maand bewust leven vanuit je design",
-    tagline:"Elke maand je persoonlijke energiegids",
-    intro:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart.",
+    id:"maandelijks", icon:"◯",
+    tag:{ nl:"Abonnement", en:"Subscription" },
+    title:{ nl:"Maandelijkse Guidance", en:"Monthly Guidance" },
+    price:"€19/mnd", priceNum:19,
+    sub:{ nl:"Maandelijks opzegbaar", en:"Cancel anytime" },
+    outcome:{ nl:"Elke maand bewust leven vanuit je design", en:"Live each month consciously in alignment with your design" },
+    tagline:{ nl:"Elke maand je persoonlijke energiegids", en:"Your personal energy guide every month" },
+    intro:{ nl:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart.", en:"A personal report every month about the energetic themes of that month, aligned with your Human Design chart." },
     includes:["Energie & thema's van de maand","Planetaire invloeden","Kansen & aandachtspunten","Praktisch advies","Intentie voor de maand"],
-    for:"Voor wie maandelijks bewust wil leven in lijn met hun design.",
+    for:{ nl:"Voor wie maandelijks bewust wil leven in lijn met hun design.", en:"For those who want to live each month consciously in alignment with their design." },
     sections:6, pages:"12+",
-    prompt_extra:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van jou Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
+    prompt_extra:{
+      nl:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van jou Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
+      en:"### 1. Energy of This Month\n### 2. Planetary Influences\n### 3. What Is Asked of You\n### 4. Opportunities\n### 5. Points of Attention\n### 6. Intention for the Month",
+    },
     reviews:[
       ["Ik ben nu acht maanden abonnee. Elke maand lees ik het rapport in de eerste week en gebruik ik de intentie als anker. Het is bescheiden in omvang maar precies genoeg.","Noor A., Amsterdam"],
       ["Wat ik fijn vind is dat het niet overlaadt met informatie. Eén duidelijke intentie voor de maand, een paar aandachtspunten — dat is genoeg om bewust mee te leven.","Tom S., Breda"],
@@ -895,77 +941,168 @@ const REPORTS = [
 
 
 // ─── PER-RAPPORT FAQS ────────────────────────────────────────────────────────
+// Each report: { nl: [[q,a], ...], en: [[q,a], ...] }
 const REPORT_FAQS = {
-  volledig:[
-    ["Heb ik mijn exacte geboortetijd nodig?","Ja, voor de meest nauwkeurige berekening. De geboortetijd bepaalt je profiel en sommige centra. Als je de exacte tijd niet weet, kijk dan op je geboorteakte. Zelfs zonder exacte tijd zijn je Type en Autoriteit in de meeste gevallen correct."],
-    ["Hoe nauwkeurig is de chartberekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele HD-software — tot op de graad nauwkeurig. De berekening is gebaseerd op je exacte geboortedatum, -tijd en -plaats."],
-    ["Is het rapport echt persoonlijk?","Elk rapport wordt volledig op maat samengesteld op basis van jouw specifieke combinatie van Type, Autoriteit, Profiel, centra en poorten. Geen twee rapporten zijn identiek."],
-    ["Wat is het verschil met een gratis HD-overzicht?","Gratis tools geven een technische samenvatting van je chart. Dit rapport geeft diepgaande, gepersonaliseerde analyse per sectie — specifiek afgestemd op jouw unieke combinatie, niet op je type in het algemeen."],
-    ["Hoe ontvang ik het rapport?","Als PDF per e-mail, binnen 1 werkdag na betaling. Je kunt het meerdere keren lezen — en wij raden dat aan."],
-  ],
-  relatie_liefde:[
-    ["Hebben we beiden een account nodig?","Nee. Je bestelt het rapport voor twee personen tegelijk. Je voert de geboortedata van jullie beiden in tijdens het bestelproces."],
-    ["Hoe nauwkeurig moet de geboortetijd van mijn partner zijn?","Zo nauwkeurig mogelijk — de geboortetijd bepaalt het profiel en sommige centra. Als je de exacte tijd van je partner niet weet, kun je een schatting gebruiken. De kern van de analyse blijft accuraat."],
-    ["Is dit rapport ook geschikt aan het begin van een relatie?","Ja. Veel mensen bestellen dit juist aan het begin — om patronen vroeg te herkennen en communicatie bewust te starten. Het is net zo waardevol voor koppels die al jaren samen zijn."],
-    ["Hoe persoonlijk is het rapport voor ons specifiek?","Het rapport is volledig gebaseerd op jullie twee specifieke charts. De elektromagnetische verbindingen en compatibiliteitsdynamieken zijn uniek voor jullie combinatie."],
-    ["Hoe snel ontvangen we het?","Binnen 1 werkdag na betaling, als PDF per e-mail. Wij raden aan het samen te lezen."],
-  ],
-  relatie_business:[
-    ["Werkt dit ook voor een online samenwerking?","Ja. Human Design kijkt naar energetische patronen — die zijn onafhankelijk van fysieke nabijheid. Het rapport werkt voor online en offline samenwerkingen."],
-    ["Is dit alleen voor gelijkwaardige partners, of ook voor leidinggevende en medewerker?","Het rapport analyseert elke combinatie van twee mensen. De dynamieken zijn relevant voor compagnons, oprichters, maar ook voor leidinggevenden en teamleden."],
-    ["Hoe concreet zijn de adviezen?","De adviezen zijn gebaseerd op jullie specifieke type-combinatie: wie van nature leidt, hoe jullie beslissingen het best neemt, en hoe de communicatiestijlen op elkaar aansluiten."],
-    ["Is het rapport geschikt als we net starten of al jaren samenwerken?","Beide. Bij een nieuwe samenwerking helpt het patronen vroeg te begrijpen. In een bestaande samenwerking biedt het verklaring voor terugkerende dynamieken."],
-    ["Hoe snel ontvangen we het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  relatie_familie:[
-    ["Voor welke familierelaties is dit geschikt?","Voor ouder en kind, broer en zus, of andere gezinsleden. Het rapport analyseert de specifieke energetische dynamiek tussen twee personen — ongeacht de familierelatie."],
-    ["Is het rapport ook geschikt voor volwassen kinderen?","Ja. Veel mensen bestellen dit juist later, wanneer patronen al jaren spelen en pas nu begrepen worden. Het werkt voor kinderen van alle leeftijden."],
-    ["Heb ik de exacte geboortetijd van het familielid nodig?","Zo nauwkeurig mogelijk. Als de exacte tijd onbekend is, kun je een schatting gebruiken — de kern van de analyse blijft relevant."],
-    ["Is het rapport ook bruikbaar als de ander er niet van weet?","Ja. Je kunt het rapport lezen vanuit je eigen perspectief. Inzicht in de ander begint bij inzicht in jezelf."],
-    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  jaar:[
-    ["Op welke periode is het jaarrapport gebaseerd?","Op je Solar Return — de posities van de planeten op je verjaardag in 2026. Dit markeert het begin van een nieuw persoonlijk jaar en vormt de basis voor de analyse van de komende twaalf maanden."],
-    ["Is dit voor het kalenderjaar 2026 of mijn persoonlijk jaar?","Je persoonlijk jaar, dat begint op je verjaardag. Als je in september jarig bent, loopt het van september 2026 tot september 2027."],
-    ["Hoe concreet zijn de kwartaaladviezen?","De kwartaaladviezen zijn gebaseerd op planetaire invloeden specifiek voor jouw chart — geen dagkalender, maar een bewust energetisch kader per kwartaal."],
-    ["Heb ik ook een Volledig Rapport nodig om dit te begrijpen?","Nee, het jaarrapport is op zichzelf staand. Als je ook een Volledig Rapport hebt, vullen ze elkaar goed aan."],
-    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  kind:[
-    ["Vanaf welke leeftijd is dit rapport nuttig?","Vanaf de geboorte. Het rapport helpt ouders begrijpen hoe hun kind van nature functioneert — ongeacht leeftijd. Veel ouders bestellen het voor baby's, peuters én tieners."],
-    ["Is het rapport bedoeld voor het kind zelf of voor de ouder?","Primair voor de ouder. Het rapport geeft inzicht in hoe je kind energie gebruikt, beslissingen neemt en het best begeleid wordt. Oudere kinderen kunnen het ook zelf lezen."],
-    ["Heb ik de exacte geboortetijd van mijn kind nodig?","Ja, zo nauwkeurig mogelijk — de geboortetijd staat op de geboorteakte. Ook zonder exacte tijd is de kern van het rapport accuraat."],
-    ["Is dit anders dan een opvoedboek?","Ja. Dit rapport is volledig gebaseerd op het unieke design van jouw kind. Geen generieke opvoedtips, maar begeleiding afgestemd op hoe jouw kind van nature werkt."],
-    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  loopbaan:[
-    ["Is dit ook geschikt als ik al weet wat ik wil doen?","Ja — en dan is het vaak het meest waardevol. Het rapport legt uit hoe je jouw werk het best inricht, welke omgeving bij je past en hoe je geld aantrekt op een manier die aansluit bij jouw design."],
-    ["Geeft het rapport concrete carrièreadviezen?","Het rapport is concreet en toepasbaar: werkomgeving, besluitvormingsstijl, samenwerking, en of loondienst of ondernemerschap beter past bij jouw energiesysteem."],
-    ["Werkt dit ook als ik ondernemer ben?","Ja. Het rapport behandelt specifiek de vraag ondernemen versus loondienst — op basis van jouw type, profiel en centra. Voor ondernemers is de sectie over hoe je geld aantrekt bijzonder relevant."],
-    ["Is dit een vervanging voor loopbaanbegeleiding?","Nee — het is een aanvulling. Het rapport geeft een energetisch perspectief op werk en financiën. Veel mensen combineren het met praktische loopbaanbegeleiding."],
-    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  numerologie:[
-    ["Heb ik een geboortetijd nodig voor numerologie?","Nee. Numerologie werkt uitsluitend op basis van je volledige naam en geboortedatum. Geboortetijd is niet vereist."],
-    ["Welke naam gebruik je voor de berekening?","Je geboortenaam — de naam zoals die op je geboorteakte staat. Als je een andere naam gebruikt of je naam heeft veranderd, vermeld dan je volledige geboortenaam."],
-    ["Wat is het verschil tussen numerologie en Human Design?","Fundamenteel. Numerologie werkt met getalswaarden van je naam en geboortedatum en beschrijft levenspatronen en talenten. Human Design werkt met planetaire posities en beschrijft je energetisch mechanisme. Ze vullen elkaar aan."],
-    ["Is dit rapport ook nuttig als ik al een HD rapport heb?","Absoluut. Numerologie en Human Design belichten verschillende lagen van dezelfde persoon. Veel klanten bestellen beide als aanvullend portret."],
-    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  horoscoop:[
-    ["Is dit anders dan een daghoroscoop?","Ja, fundamenteel. Een daghoroscoop is generiek voor iedereen met hetzelfde zonneteken. Een geboortehoroscoop is gebaseerd op de exacte posities van alle tien planeten op jouw geboortemoment — specifiek voor jou."],
-    ["Heb ik mijn exacte geboortetijd nodig?","Ja, voor de meest nauwkeurige berekening. De geboortetijd bepaalt je Ascendant, Midhemel en de huisindeling. Als je de tijd niet weet, zijn de planeetposities en tekens nog steeds correct."],
-    ["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige schatting die je heeft, of controleer je geboorteakte. Zonder geboortetijd berekenen wij de chart op 12:00 uur — de planetaire posities zijn dan correct, alleen de Ascendant en huizen zijn minder nauwkeurig."],
-    ["Is dit rapport ook nuttig in combinatie met Human Design?","Ja. Astrologie beschrijft de kwaliteiten van je planetaire bezetting; HD beschrijft je energetisch mechanisme. Samen geven ze een completer portret."],
-    ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
-  ],
-  maandelijks:[
-    ["Wanneer ontvang ik mijn eerste maandrapport?","Binnen 1 werkdag na je eerste betaling. Daarna ontvang je elke maand een nieuw rapport — afgestemd op de energetische thema's van die specifieke maand en jouw chart."],
-    ["Hoe opzegbaar is het abonnement?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Je kunt op elk moment stoppen."],
-    ["Is elk maandrapport anders?","Ja. Elk rapport is gebaseerd op de planetaire invloeden van die specifieke maand in relatie tot jouw persoonlijke chart. Thema's, kansen en aandachtspunten wisselen elke maand."],
-    ["Heb ik ook een Volledig Rapport nodig?","Het maandabonnement is op zichzelf staand. Als je ook een Volledig Rapport hebt, is de maandelijkse guidance nog rijker — omdat je de context van je eigen chart al kent."],
-    ["Hoeveel pagina's is een maandrapport?","Gemiddeld 12 pagina's — compact en gericht op de thema's van die maand."],
-  ],
+  volledig:{
+    nl:[
+      ["Heb ik mijn exacte geboortetijd nodig?","Ja, voor de meest nauwkeurige berekening. De geboortetijd bepaalt je profiel en sommige centra. Als je de exacte tijd niet weet, kijk dan op je geboorteakte. Zelfs zonder exacte tijd zijn je Type en Autoriteit in de meeste gevallen correct."],
+      ["Hoe nauwkeurig is de chartberekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele HD-software — tot op de graad nauwkeurig. De berekening is gebaseerd op je exacte geboortedatum, -tijd en -plaats."],
+      ["Is het rapport echt persoonlijk?","Elk rapport wordt volledig op maat samengesteld op basis van jouw specifieke combinatie van Type, Autoriteit, Profiel, centra en poorten. Geen twee rapporten zijn identiek."],
+      ["Wat is het verschil met een gratis HD-overzicht?","Gratis tools geven een technische samenvatting van je chart. Dit rapport geeft diepgaande, gepersonaliseerde analyse per sectie — specifiek afgestemd op jouw unieke combinatie, niet op je type in het algemeen."],
+      ["Hoe ontvang ik het rapport?","Als PDF per e-mail, binnen 1 werkdag na betaling. Je kunt het meerdere keren lezen — en wij raden dat aan."],
+    ],
+    en:[
+      ["Do I need my exact birth time?","Yes, for the most accurate calculation. Birth time determines your profile and some centers. If you don't know the exact time, check your birth certificate. Even without an exact time, your Type and Authority are correct in most cases."],
+      ["How accurate is the chart calculation?","We use the same astronomical algorithms as professional HD software — accurate to the degree. The calculation is based on your exact date, time and place of birth."],
+      ["Is the report truly personal?","Every report is fully tailored based on your specific combination of Type, Authority, Profile, centers and gates. No two reports are identical."],
+      ["What is the difference from a free HD overview?","Free tools give a technical summary of your chart. This report provides in-depth, personalised analysis per section — specifically tailored to your unique combination, not your type in general."],
+      ["How do I receive the report?","As a PDF by email, within 1 business day after payment. You can read it multiple times — and we encourage that."],
+    ],
+  },
+  relatie_liefde:{
+    nl:[
+      ["Hebben we beiden een account nodig?","Nee. Je bestelt het rapport voor twee personen tegelijk. Je voert de geboortedata van jullie beiden in tijdens het bestelproces."],
+      ["Hoe nauwkeurig moet de geboortetijd van mijn partner zijn?","Zo nauwkeurig mogelijk — de geboortetijd bepaalt het profiel en sommige centra. Als je de exacte tijd van je partner niet weet, kun je een schatting gebruiken. De kern van de analyse blijft accuraat."],
+      ["Is dit rapport ook geschikt aan het begin van een relatie?","Ja. Veel mensen bestellen dit juist aan het begin — om patronen vroeg te herkennen en communicatie bewust te starten. Het is net zo waardevol voor koppels die al jaren samen zijn."],
+      ["Hoe persoonlijk is het rapport voor ons specifiek?","Het rapport is volledig gebaseerd op jullie twee specifieke charts. De elektromagnetische verbindingen en compatibiliteitsdynamieken zijn uniek voor jullie combinatie."],
+      ["Hoe snel ontvangen we het?","Binnen 1 werkdag na betaling, als PDF per e-mail. Wij raden aan het samen te lezen."],
+    ],
+    en:[
+      ["Do we both need an account?","No. You order the report for two people at once. You enter both birth details during the order process."],
+      ["How accurate does my partner's birth time need to be?","As accurate as possible — birth time determines the profile and some centers. If you don't know your partner's exact time, you can use an estimate. The core of the analysis remains accurate."],
+      ["Is this report also suitable at the beginning of a relationship?","Yes. Many people order this at the start — to recognise patterns early and begin communication consciously. It is equally valuable for couples who have been together for years."],
+      ["How personal is the report for us specifically?","The report is entirely based on your two specific charts. The electromagnetic connections and compatibility dynamics are unique to your combination."],
+      ["How quickly do we receive it?","Within 1 business day after payment, as a PDF by email. We recommend reading it together."],
+    ],
+  },
+  relatie_business:{
+    nl:[
+      ["Werkt dit ook voor een online samenwerking?","Ja. Human Design kijkt naar energetische patronen — die zijn onafhankelijk van fysieke nabijheid. Het rapport werkt voor online en offline samenwerkingen."],
+      ["Is dit alleen voor gelijkwaardige partners, of ook voor leidinggevende en medewerker?","Het rapport analyseert elke combinatie van twee mensen. De dynamieken zijn relevant voor compagnons, oprichters, maar ook voor leidinggevenden en teamleden."],
+      ["Hoe concreet zijn de adviezen?","De adviezen zijn gebaseerd op jullie specifieke type-combinatie: wie van nature leidt, hoe jullie beslissingen het best neemt, en hoe de communicatiestijlen op elkaar aansluiten."],
+      ["Is het rapport geschikt als we net starten of al jaren samenwerken?","Beide. Bij een nieuwe samenwerking helpt het patronen vroeg te begrijpen. In een bestaande samenwerking biedt het verklaring voor terugkerende dynamieken."],
+      ["Hoe snel ontvangen we het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["Does this work for online collaboration?","Yes. Human Design looks at energetic patterns — which are independent of physical proximity. The report works for online and offline collaborations."],
+      ["Is this only for equal partners, or also for manager and employee?","The report analyses any combination of two people. The dynamics are relevant for co-founders, business partners, but also for managers and team members."],
+      ["How concrete are the recommendations?","The advice is based on your specific type combination: who naturally leads, how you best make decisions, and how your communication styles align."],
+      ["Is the report suitable if we are just starting or have worked together for years?","Both. In a new collaboration it helps you understand patterns early. In an existing collaboration it provides explanation for recurring dynamics."],
+      ["How quickly do we receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  relatie_familie:{
+    nl:[
+      ["Voor welke familierelaties is dit geschikt?","Voor ouder en kind, broer en zus, of andere gezinsleden. Het rapport analyseert de specifieke energetische dynamiek tussen twee personen — ongeacht de familierelatie."],
+      ["Is het rapport ook geschikt voor volwassen kinderen?","Ja. Veel mensen bestellen dit juist later, wanneer patronen al jaren spelen en pas nu begrepen worden. Het werkt voor kinderen van alle leeftijden."],
+      ["Heb ik de exacte geboortetijd van het familielid nodig?","Zo nauwkeurig mogelijk. Als de exacte tijd onbekend is, kun je een schatting gebruiken — de kern van de analyse blijft relevant."],
+      ["Is het rapport ook bruikbaar als de ander er niet van weet?","Ja. Je kunt het rapport lezen vanuit je eigen perspectief. Inzicht in de ander begint bij inzicht in jezelf."],
+      ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["Which family relationships is this suitable for?","For parent and child, siblings, or other family members. The report analyses the specific energetic dynamic between two people — regardless of the family relationship."],
+      ["Is the report also suitable for adult children?","Yes. Many people order this later, when patterns have been playing out for years and are only now being understood. It works for children of all ages."],
+      ["Do I need the exact birth time of my family member?","As accurate as possible. If the exact time is unknown, you can use an estimate — the core of the analysis remains relevant."],
+      ["Can the report be useful if the other person doesn't know about it?","Yes. You can read the report from your own perspective. Understanding the other begins with understanding yourself."],
+      ["How quickly do I receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  jaar:{
+    nl:[
+      ["Op welke periode is het jaarrapport gebaseerd?","Op je Solar Return — de posities van de planeten op je verjaardag in 2026. Dit markeert het begin van een nieuw persoonlijk jaar en vormt de basis voor de analyse van de komende twaalf maanden."],
+      ["Is dit voor het kalenderjaar 2026 of mijn persoonlijk jaar?","Je persoonlijk jaar, dat begint op je verjaardag. Als je in september jarig bent, loopt het van september 2026 tot september 2027."],
+      ["Hoe concreet zijn de kwartaaladviezen?","De kwartaaladviezen zijn gebaseerd op planetaire invloeden specifiek voor jouw chart — geen dagkalender, maar een bewust energetisch kader per kwartaal."],
+      ["Heb ik ook een Volledig Rapport nodig om dit te begrijpen?","Nee, het jaarrapport is op zichzelf staand. Als je ook een Volledig Rapport hebt, vullen ze elkaar goed aan."],
+      ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["What period is the annual report based on?","Your Solar Return — the planetary positions on your birthday in 2026. This marks the beginning of a new personal year and forms the basis for the analysis of the coming twelve months."],
+      ["Is this for calendar year 2026 or my personal year?","Your personal year, which begins on your birthday. If your birthday is in September, it runs from September 2026 to September 2027."],
+      ["How concrete are the quarterly insights?","The quarterly insights are based on planetary influences specific to your chart — not a day calendar, but a conscious energetic framework per quarter."],
+      ["Do I also need a Complete Report to understand this?","No, the annual report stands on its own. If you also have a Complete Report, they complement each other well."],
+      ["How quickly do I receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  kind:{
+    nl:[
+      ["Vanaf welke leeftijd is dit rapport nuttig?","Vanaf de geboorte. Het rapport helpt ouders begrijpen hoe hun kind van nature functioneert — ongeacht leeftijd. Veel ouders bestellen het voor baby's, peuters én tieners."],
+      ["Is het rapport bedoeld voor het kind zelf of voor de ouder?","Primair voor de ouder. Het rapport geeft inzicht in hoe je kind energie gebruikt, beslissingen neemt en het best begeleid wordt. Oudere kinderen kunnen het ook zelf lezen."],
+      ["Heb ik de exacte geboortetijd van mijn kind nodig?","Ja, zo nauwkeurig mogelijk — de geboortetijd staat op de geboorteakte. Ook zonder exacte tijd is de kern van het rapport accuraat."],
+      ["Is dit anders dan een opvoedboek?","Ja. Dit rapport is volledig gebaseerd op het unieke design van jouw kind. Geen generieke opvoedtips, maar begeleiding afgestemd op hoe jouw kind van nature werkt."],
+      ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["From what age is this report useful?","From birth. The report helps parents understand how their child naturally functions — regardless of age. Many parents order it for babies, toddlers and teenagers."],
+      ["Is the report intended for the child or for the parent?","Primarily for the parent. The report gives insight into how your child uses energy, makes decisions and is best guided. Older children can read it themselves too."],
+      ["Do I need my child's exact birth time?","Yes, as accurate as possible — the birth time is on the birth certificate. Even without an exact time, the core of the report is accurate."],
+      ["Is this different from a parenting book?","Yes. This report is entirely based on the unique design of your child. No generic parenting tips, but guidance tailored to how your child naturally works."],
+      ["How quickly do I receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  loopbaan:{
+    nl:[
+      ["Is dit ook geschikt als ik al weet wat ik wil doen?","Ja — en dan is het vaak het meest waardevol. Het rapport legt uit hoe je jouw werk het best inricht, welke omgeving bij je past en hoe je geld aantrekt op een manier die aansluit bij jouw design."],
+      ["Geeft het rapport concrete carrièreadviezen?","Het rapport is concreet en toepasbaar: werkomgeving, besluitvormingsstijl, samenwerking, en of loondienst of ondernemerschap beter past bij jouw energiesysteem."],
+      ["Werkt dit ook als ik ondernemer ben?","Ja. Het rapport behandelt specifiek de vraag ondernemen versus loondienst — op basis van jouw type, profiel en centra. Voor ondernemers is de sectie over hoe je geld aantrekt bijzonder relevant."],
+      ["Is dit een vervanging voor loopbaanbegeleiding?","Nee — het is een aanvulling. Het rapport geeft een energetisch perspectief op werk en financiën. Veel mensen combineren het met praktische loopbaanbegeleiding."],
+      ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["Is this also suitable if I already know what I want to do?","Yes — and that is often when it is most valuable. The report explains how to best structure your work, which environment suits you and how you attract money in a way that aligns with your design."],
+      ["Does the report provide concrete career advice?","The report is concrete and actionable: work environment, decision-making style, collaboration, and whether employment or self-employment better suits your energy system."],
+      ["Does this work if I am self-employed?","Yes. The report specifically addresses the question of self-employment versus employment — based on your type, profile and centers. For entrepreneurs, the section on how you attract money is particularly relevant."],
+      ["Is this a replacement for career coaching?","No — it is a complement. The report provides an energetic perspective on work and finances. Many people combine it with practical career coaching."],
+      ["How quickly do I receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  numerologie:{
+    nl:[
+      ["Heb ik een geboortetijd nodig voor numerologie?","Nee. Numerologie werkt uitsluitend op basis van je volledige naam en geboortedatum. Geboortetijd is niet vereist."],
+      ["Welke naam gebruik je voor de berekening?","Je geboortenaam — de naam zoals die op je geboorteakte staat. Als je een andere naam gebruikt of je naam heeft veranderd, vermeld dan je volledige geboortenaam."],
+      ["Wat is het verschil tussen numerologie en Human Design?","Fundamenteel. Numerologie werkt met getalswaarden van je naam en geboortedatum en beschrijft levenspatronen en talenten. Human Design werkt met planetaire posities en beschrijft je energetisch mechanisme. Ze vullen elkaar aan."],
+      ["Is dit rapport ook nuttig als ik al een HD rapport heb?","Absoluut. Numerologie en Human Design belichten verschillende lagen van dezelfde persoon. Veel klanten bestellen beide als aanvullend portret."],
+      ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["Do I need a birth time for numerology?","No. Numerology works exclusively based on your full name and date of birth. Birth time is not required."],
+      ["Which name do you use for the calculation?","Your birth name — the name as it appears on your birth certificate. If you use a different name or have changed your name, please provide your full birth name."],
+      ["What is the difference between numerology and Human Design?","Fundamental. Numerology works with numerical values of your name and date of birth and describes life patterns and talents. Human Design works with planetary positions and describes your energetic mechanism. They complement each other."],
+      ["Is this report also useful if I already have an HD report?","Absolutely. Numerology and Human Design illuminate different layers of the same person. Many clients order both as a complementary portrait."],
+      ["How quickly do I receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  horoscoop:{
+    nl:[
+      ["Is dit anders dan een daghoroscoop?","Ja, fundamenteel. Een daghoroscoop is generiek voor iedereen met hetzelfde zonneteken. Een geboortehoroscoop is gebaseerd op de exacte posities van alle tien planeten op jouw geboortemoment — specifiek voor jou."],
+      ["Heb ik mijn exacte geboortetijd nodig?","Ja, voor de meest nauwkeurige berekening. De geboortetijd bepaalt je Ascendant, Midhemel en de huisindeling. Als je de tijd niet weet, zijn de planeetposities en tekens nog steeds correct."],
+      ["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige schatting die je heeft, of controleer je geboorteakte. Zonder geboortetijd berekenen wij de chart op 12:00 uur — de planetaire posities zijn dan correct, alleen de Ascendant en huizen zijn minder nauwkeurig."],
+      ["Is dit rapport ook nuttig in combinatie met Human Design?","Ja. Astrologie beschrijft de kwaliteiten van je planetaire bezetting; HD beschrijft je energetisch mechanisme. Samen geven ze een completer portret."],
+      ["Hoe snel ontvang ik het?","Binnen 1 werkdag na betaling, als PDF per e-mail."],
+    ],
+    en:[
+      ["Is this different from a daily horoscope?","Yes, fundamentally. A daily horoscope is generic for everyone with the same sun sign. A birth horoscope is based on the exact positions of all ten planets at your birth moment — specific to you."],
+      ["Do I need my exact birth time?","Yes, for the most accurate calculation. Birth time determines your Ascendant, Midheaven and house division. If you don't know the time, the planetary positions and signs are still correct."],
+      ["What if I don't know my birth time?","Use the most accurate estimate you have, or check your birth certificate. Without a birth time we calculate the chart at 12:00 — the planetary positions are then correct, only the Ascendant and houses are less precise."],
+      ["Is this report also useful in combination with Human Design?","Yes. Astrology describes the qualities of your planetary placements; HD describes your energetic mechanism. Together they give a more complete portrait."],
+      ["How quickly do I receive it?","Within 1 business day after payment, as a PDF by email."],
+    ],
+  },
+  maandelijks:{
+    nl:[
+      ["Wanneer ontvang ik mijn eerste maandrapport?","Binnen 1 werkdag na je eerste betaling. Daarna ontvang je elke maand een nieuw rapport — afgestemd op de energetische thema's van die specifieke maand en jouw chart."],
+      ["Hoe opzegbaar is het abonnement?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Je kunt op elk moment stoppen."],
+      ["Is elk maandrapport anders?","Ja. Elk rapport is gebaseerd op de planetaire invloeden van die specifieke maand in relatie tot jouw persoonlijke chart. Thema's, kansen en aandachtspunten wisselen elke maand."],
+      ["Heb ik ook een Volledig Rapport nodig?","Het maandabonnement is op zichzelf staand. Als je ook een Volledig Rapport hebt, is de maandelijkse guidance nog rijker — omdat je de context van je eigen chart al kent."],
+      ["Hoeveel pagina's is een maandrapport?","Gemiddeld 12 pagina's — compact en gericht op de thema's van die maand."],
+    ],
+    en:[
+      ["When do I receive my first monthly report?","Within 1 business day after your first payment. After that you receive a new report every month — aligned with the energetic themes of that specific month and your chart."],
+      ["How easy is it to cancel the subscription?","Cancel monthly, without notice period or hidden costs. You can stop at any time."],
+      ["Is each monthly report different?","Yes. Each report is based on the planetary influences of that specific month in relation to your personal chart. Themes, opportunities and points of attention change every month."],
+      ["Do I also need a Complete Report?","The monthly subscription stands on its own. If you also have a Complete Report, the monthly guidance is even richer — because you already know the context of your own chart."],
+      ["How many pages is a monthly report?","On average 12 pages — compact and focused on the themes of that month."],
+    ],
+  },
 };
 
 // ─── STRIPE PAYMENT LINKS ─────────────────────────────────────────────────────
@@ -992,8 +1129,11 @@ async function goToStripe(rptId, chartData, formData) {
   // ── Step 1: Pre-create order in Supabase (persists birth data + email) ──
   let orderId = null;
   try {
-    const sections = rpt?.prompt_extra
-      ? rpt.prompt_extra.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").trim())
+    const promptExtraForOrder = (typeof rpt?.prompt_extra === "object" && rpt?.prompt_extra !== null)
+      ? (rpt.prompt_extra[LANG] ?? rpt.prompt_extra.nl ?? "")
+      : (rpt?.prompt_extra || "");
+    const sections = promptExtraForOrder
+      ? promptExtraForOrder.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").trim())
       : [];
 
     const orderRes = await fetch("/api/create-order", {
@@ -1001,7 +1141,8 @@ async function goToStripe(rptId, chartData, formData) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         reportId: rptId,
-        reportTitle: rpt?.title || rptId,
+        reportTitle: tl(rpt?.title) || rptId,
+        language: LANG,
         price: rpt?.priceNum || 75,
         customerName: formData.name,
         customerEmail: formData.email,
@@ -1035,14 +1176,14 @@ async function goToStripe(rptId, chartData, formData) {
     try {
       orderData = await orderRes.json();
     } catch (_) {
-      throw new Error("Server niet bereikbaar. Probeer het later opnieuw.");
+      throw new Error(LANG==="en"?"Server unreachable. Please try again later.":"Server niet bereikbaar. Probeer het later opnieuw.");
     }
     if (!orderRes.ok || !orderData.orderId) {
-      throw new Error(orderData.error || "Order aanmaken mislukt");
+      throw new Error(orderData.error || (LANG==="en"?"Order creation failed":"Order aanmaken mislukt"));
     }
     orderId = orderData.orderId;
   } catch (e) {
-    alert("Bestelling kon niet worden aangemaakt: " + e.message + "\n\nProbeer het opnieuw of neem contact op.");
+    alert((LANG==="en"?"Order could not be created: ":"Bestelling kon niet worden aangemaakt: ") + e.message + (LANG==="en"?"\n\nPlease try again or contact us.":"\n\nProbeer het opnieuw of neem contact op."));
     return;
   }
 
@@ -1054,7 +1195,7 @@ async function goToStripe(rptId, chartData, formData) {
       body: JSON.stringify({
         orderId,
         rptId,
-        title: rpt?.title || rptId,
+        title: tl(rpt?.title) || rptId,
         price: rpt?.priceNum || 75,
         isSubscription: rptId === "maandelijks",
       }),
@@ -1064,10 +1205,10 @@ async function goToStripe(rptId, chartData, formData) {
     if (data.url) {
       window.location.href = data.url;
     } else {
-      alert("Betaling kon niet worden gestart: " + (data.error || "onbekende fout"));
+      alert((LANG==="en"?"Payment could not be started: ":"Betaling kon niet worden gestart: ") + (data.error || (LANG==="en"?"unknown error":"onbekende fout")));
     }
   } catch (e) {
-    alert("Betaling kon niet worden gestart. Probeer opnieuw.");
+    alert(LANG==="en"?"Payment could not be started. Please try again.":"Betaling kon niet worden gestart. Probeer opnieuw.");
   }
 }
 
@@ -1083,7 +1224,9 @@ const GS=[41,19,13,49,30,55,37,63,22,36,25,17,21,51,42,3,27,24,2,23,8,20,16,35,4
 const PLANETS_HD=["Sun","Moon","Mercury","Venus","Mars","Jupiter","Saturn","Uranus","Neptune","Pluto"];
 const ALL_C=["Head","Ajna","Throat","G/Self","Heart/Ego","Sacral","Solar Plexus","Spleen","Root"];
 const CH={"64-47":["Head","Ajna"],"61-24":["Head","Ajna"],"63-4":["Head","Ajna"],"17-62":["Ajna","Throat"],"43-23":["Ajna","Throat"],"11-56":["Ajna","Throat"],"35-36":["Throat","Solar Plexus"],"12-22":["Throat","Solar Plexus"],"45-21":["Throat","Heart/Ego"],"33-13":["Throat","G/Self"],"8-1":["Throat","G/Self"],"31-7":["Throat","G/Self"],"20-10":["Throat","G/Self"],"20-34":["Throat","Sacral"],"16-48":["Throat","Spleen"],"25-51":["G/Self","Heart/Ego"],"46-29":["G/Self","Sacral"],"2-14":["G/Self","Sacral"],"15-5":["G/Self","Sacral"],"10-34":["G/Self","Sacral"],"10-57":["G/Self","Spleen"],"26-44":["Heart/Ego","Spleen"],"40-37":["Heart/Ego","Solar Plexus"],"51-25":["Heart/Ego","G/Self"],"21-45":["Heart/Ego","Throat"],"5-15":["Sacral","G/Self"],"14-2":["Sacral","G/Self"],"29-46":["Sacral","G/Self"],"34-10":["Sacral","G/Self"],"34-20":["Sacral","Throat"],"34-57":["Sacral","Spleen"],"59-6":["Sacral","Solar Plexus"],"9-52":["Sacral","Root"],"3-60":["Sacral","Root"],"42-53":["Sacral","Root"],"27-50":["Sacral","Spleen"],"36-35":["Solar Plexus","Throat"],"22-12":["Solar Plexus","Throat"],"37-40":["Solar Plexus","Heart/Ego"],"6-59":["Solar Plexus","Sacral"],"49-19":["Solar Plexus","Root"],"55-39":["Solar Plexus","Root"],"30-41":["Solar Plexus","Root"],"48-16":["Spleen","Throat"],"57-34":["Spleen","Sacral"],"57-10":["Spleen","G/Self"],"44-26":["Spleen","Heart/Ego"],"50-27":["Spleen","Sacral"],"32-54":["Spleen","Root"],"28-38":["Spleen","Root"],"18-58":["Spleen","Root"],"53-42":["Root","Sacral"],"60-3":["Root","Sacral"],"52-9":["Root","Sacral"],"19-49":["Root","Solar Plexus"],"39-55":["Root","Solar Plexus"],"41-30":["Root","Solar Plexus"],"38-28":["Root","Spleen"],"54-32":["Root","Spleen"],"58-18":["Root","Spleen"]};
-const PROFS={"1-2":"1/2 Onderzoeker/Kluizenaar","1-3":"1/3 Onderzoeker/Martelaar","2-4":"2/4 Kluizenaar/Opportunist","2-5":"2/5 Kluizenaar/Ketter","3-5":"3/5 Martelaar/Ketter","3-6":"3/6 Martelaar/Rolmodel","4-6":"4/6 Opportunist/Rolmodel","4-1":"4/1 Opportunist/Onderzoeker","5-1":"5/1 Ketter/Onderzoeker","5-2":"5/2 Ketter/Kluizenaar","6-2":"6/2 Rolmodel/Kluizenaar","6-3":"6/3 Rolmodel/Martelaar"};
+const PROFS_NL={"1-2":"1/2 Onderzoeker/Kluizenaar","1-3":"1/3 Onderzoeker/Martelaar","2-4":"2/4 Kluizenaar/Opportunist","2-5":"2/5 Kluizenaar/Ketter","3-5":"3/5 Martelaar/Ketter","3-6":"3/6 Martelaar/Rolmodel","4-6":"4/6 Opportunist/Rolmodel","4-1":"4/1 Opportunist/Onderzoeker","5-1":"5/1 Ketter/Onderzoeker","5-2":"5/2 Ketter/Kluizenaar","6-2":"6/2 Rolmodel/Kluizenaar","6-3":"6/3 Rolmodel/Martelaar"};
+const PROFS_EN={"1-2":"1/2 Investigator/Hermit","1-3":"1/3 Investigator/Martyr","2-4":"2/4 Hermit/Opportunist","2-5":"2/5 Hermit/Heretic","3-5":"3/5 Martyr/Heretic","3-6":"3/6 Martyr/Role Model","4-6":"4/6 Opportunist/Role Model","4-1":"4/1 Opportunist/Investigator","5-1":"5/1 Heretic/Investigator","5-2":"5/2 Heretic/Hermit","6-2":"6/2 Role Model/Hermit","6-3":"6/3 Role Model/Martyr"};
+const PROFS=LANG==="en"?PROFS_EN:PROFS_NL;
 
 function lonToGL(lon){lon=((lon%360)+360)%360;const gs=360/64,idx=Math.floor(lon/gs),gate=GS[idx%64],line=Math.min(Math.floor(((lon%gs)/gs)*6)+1,6);return[gate,line];}
 
@@ -1114,7 +1257,9 @@ function calcHD(y,m,d,h,min,tz=0){
 // ─── NUMEROLOGY ───────────────────────────────────────────────────────────────
 const PYTH={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,I:9,J:1,K:2,L:3,M:4,N:5,O:6,P:7,Q:8,R:9,S:1,T:2,U:3,V:4,W:5,X:6,Y:7,Z:8};
 const VOWELS_SET=new Set(["A","E","I","O","U"]);
-const NUM_NAMES={1:"De Leider",2:"De Diplomaat",3:"De Creatieveling",4:"De Bouwer",5:"De Avonturier",6:"De Verzorger",7:"De Zoeker",8:"De Zakenman",9:"De Mensheid",11:"De Meester Intuïtief",22:"De Meester Bouwer",33:"De Meester Leraar"};
+const NUM_NAMES_NL={1:"De Leider",2:"De Diplomaat",3:"De Creatieveling",4:"De Bouwer",5:"De Avonturier",6:"De Verzorger",7:"De Zoeker",8:"De Zakenman",9:"De Mensheid",11:"De Meester Intuïtief",22:"De Meester Bouwer",33:"De Meester Leraar"};
+const NUM_NAMES_EN={1:"The Leader",2:"The Diplomat",3:"The Creative",4:"The Builder",5:"The Adventurer",6:"The Nurturer",7:"The Seeker",8:"The Achiever",9:"The Humanitarian",11:"The Master Intuitive",22:"The Master Builder",33:"The Master Teacher"};
+const NUM_NAMES=LANG==="en"?NUM_NAMES_EN:NUM_NAMES_NL;
 function numReduce(n){while(n>9){if(n===11||n===22||n===33)break;n=[...String(n)].reduce((a,d)=>a+parseInt(d),0);}return n;}
 function nameSum(str){return[...str.toUpperCase()].reduce((a,c)=>a+(PYTH[c]||0),0);}
 function calcNumerology(fullName,day,month,year){
@@ -1133,39 +1278,55 @@ function calcNumerology(fullName,day,month,year){
 
 // ─── ASTROLOGY ────────────────────────────────────────────────────────────────
 const SIGNS_NL=["Ram","Stier","Tweelingen","Kreeft","Leeuw","Maagd","Weegschaal","Schorpioen","Boogschutter","Steenbok","Waterman","Vissen"];
-const EL_MAP_A={"Ram":"Vuur","Stier":"Aarde","Tweelingen":"Lucht","Kreeft":"Water","Leeuw":"Vuur","Maagd":"Aarde","Weegschaal":"Lucht","Schorpioen":"Water","Boogschutter":"Vuur","Steenbok":"Aarde","Waterman":"Lucht","Vissen":"Water"};
-function lonToSign_A(lon){lon=((lon%360)+360)%360;const idx=Math.floor(lon/30)%12;return{sign:SIGNS_NL[idx],degree:Math.round((lon%30)*10)/10};}
+const SIGNS_EN=["Aries","Taurus","Gemini","Cancer","Leo","Virgo","Libra","Scorpio","Sagittarius","Capricorn","Aquarius","Pisces"];
+const SIGNS=LANG==="en"?SIGNS_EN:SIGNS_NL;
+const EL_MAP_A=LANG==="en"
+  ?{"Aries":"Fire","Taurus":"Earth","Gemini":"Air","Cancer":"Water","Leo":"Fire","Virgo":"Earth","Libra":"Air","Scorpio":"Water","Sagittarius":"Fire","Capricorn":"Earth","Aquarius":"Air","Pisces":"Water"}
+  :{"Ram":"Vuur","Stier":"Aarde","Tweelingen":"Lucht","Kreeft":"Water","Leeuw":"Vuur","Maagd":"Aarde","Weegschaal":"Lucht","Schorpioen":"Water","Boogschutter":"Vuur","Steenbok":"Aarde","Waterman":"Lucht","Vissen":"Water"};
+function lonToSign_A(lon){lon=((lon%360)+360)%360;const idx=Math.floor(lon/30)%12;return{sign:SIGNS[idx],degree:Math.round((lon%30)*10)/10};}
 function calcHoroscoop(y,m,d,h,min,tz=0){
   const jdP=jday(y,m,d,h+min/60-(tz||0));
-  const pDefs={Zon:"Sun",Maan:"Moon",Mercurius:"Mercury",Venus:"Venus",Mars:"Mars",Jupiter:"Jupiter",Saturnus:"Saturn",Uranus:"Uranus",Neptunus:"Neptune",Pluto:"Pluto"};
+  const pDefs=LANG==="en"
+    ?{Sun:"Sun",Moon:"Moon",Mercury:"Mercury",Venus:"Venus",Mars:"Mars",Jupiter:"Jupiter",Saturn:"Saturn",Uranus:"Uranus",Neptune:"Neptune",Pluto:"Pluto"}
+    :{Zon:"Sun",Maan:"Moon",Mercurius:"Mercury",Venus:"Venus",Mars:"Mars",Jupiter:"Jupiter",Saturnus:"Saturn",Uranus:"Uranus",Neptunus:"Neptune",Pluto:"Pluto"};
+  const sunKey=LANG==="en"?"Sun":"Zon";
   const planets={};
-  for(const[nl,en]of Object.entries(pDefs)){const lon=getPL(jdP,en);const pos=lonToSign_A(lon);planets[nl]={...pos,house:Math.floor((lon%360)/30)%12+1,longitude:Math.round(lon*100)/100};}
+  for(const[lbl,en]of Object.entries(pDefs)){const lon=getPL(jdP,en);const pos=lonToSign_A(lon);planets[lbl]={...pos,house:Math.floor((lon%360)/30)%12+1,longitude:Math.round(lon*100)/100};}
   const lst=((280.46061837+360.98564736629*(jdP-2451545))%360+360)%360;
   const asc=lonToSign_A((lst+90)%360);
   const mc=lonToSign_A(lst%360);
   const elements={};
   for(const[,d]of Object.entries(planets)){const el=EL_MAP_A[d.sign]||"";elements[el]=(elements[el]||0)+1;}
   const domEl=Object.entries(elements).sort((a,b)=>b[1]-a[1])[0]?.[0]||"";
-  return{ascendant:asc,mc,sun_sign:planets["Zon"]?.sign||"",planets,dom_element:domEl,isHoroscoop:true};
+  return{ascendant:asc,mc,sun_sign:planets[sunKey]?.sign||"",planets,dom_element:domEl,isHoroscoop:true};
 }
 
 // ─── PROMPT BUILDER ───────────────────────────────────────────────────────────
-const MONTHS=["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
-const LSTEPS=["Inleiding schrijven","Type & Strategie","Autoriteit analyseren","Profiel uitwerken","Centra beschrijven","Conditionering","Poorten in detail","Inkarnatie-Kruis","Relaties","Werk & Financien","Guidance 2026-2028","Slotanalyse"];
+const MONTHS_NL=["Januari","Februari","Maart","April","Mei","Juni","Juli","Augustus","September","Oktober","November","December"];
+const MONTHS_EN=["January","February","March","April","May","June","July","August","September","October","November","December"];
+const MONTHS=LANG==="en"?MONTHS_EN:MONTHS_NL;
+const LSTEPS=LANG==="en"
+  ?["Writing introduction","Type & Strategy","Analysing authority","Working out profile","Describing centres","Conditioning","Gates in detail","Incarnation Cross","Relationships","Work & Finances","Guidance 2026-2028","Closing analysis"]
+  :["Inleiding schrijven","Type & Strategie","Autoriteit analyseren","Profiel uitwerken","Centra beschrijven","Conditionering","Poorten in detail","Inkarnatie-Kruis","Relaties","Werk & Financien","Guidance 2026-2028","Slotanalyse"];
 
 function buildPrompt(chart,form,rpt){
+  // Pick the correct language version of prompt_extra
+  const promptExtra = (typeof rpt.prompt_extra === "object" && rpt.prompt_extra !== null)
+    ? (rpt.prompt_extra[LANG] ?? rpt.prompt_extra.nl ?? "")
+    : (rpt.prompt_extra || "");
+
   if(rpt.id==="numerologie"){
     const num=calcNumerology(form.name,parseInt(form.day),parseInt(form.month),parseInt(form.year));
-    return["NUMEROLOGIE voor "+form.name,"Naam: "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2026: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",rpt.prompt_extra].join("\n");
+    return["NUMEROLOGIE voor "+form.name,"Naam: "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2026: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",promptExtra].join("\n");
   }
   if(rpt.id==="horoscoop"){
     const h=calcHoroscoop(parseInt(form.year),parseInt(form.month),parseInt(form.day),parseInt(form.hour),parseInt(form.minute||"0"));
     const pStr=Object.entries(h.planets).map(([p,d])=>p+": "+d.degree+"° "+d.sign+" H"+d.house).join(", ");
-    return["HOROSCOOP voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",rpt.prompt_extra].join("\n");
+    return["HOROSCOOP voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",promptExtra].join("\n");
   }
   // Relatie rapporten — twee volledige HD charts berekenen en naast elkaar zetten
   if(rpt.id.startsWith("relatie_")){
-    const lbl=rpt.partnerLabel||"Partner";
+    const lbl=tl(rpt.partnerLabel)||"Partner";
     const c1=chart;
     const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
     const chartLine=(c,name)=>c?[
@@ -1180,7 +1341,7 @@ function buildPrompt(chart,form,rpt){
     const gedeeld=c1&&c2?c1.allGates.filter(g=>c2.allGates.includes(g)):[];
     const emcKanalen=c1&&c2?c1.channels.filter(ch=>c2.channels.some(ch2=>ch2.g1===ch.g1&&ch2.g2===ch.g2)).map(c=>c.g1+"-"+c.g2):[];
     return[
-      "RELATIERAPPORT — "+rpt.title,
+      "RELATIERAPPORT — "+tl(rpt.title),
       "",
       "PERSOON 1: "+form.name,
       "Geboortedatum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),
@@ -1196,13 +1357,13 @@ function buildPrompt(chart,form,rpt){
       "Gedeelde poorten: "+(gedeeld.length?gedeeld.join(", "):"geen"),
       "Gedeelde kanalen: "+(emcKanalen.length?emcKanalen.join(", "):"geen"),
       "",
-      rpt.prompt_extra,
+      promptExtra,
     ].join("\n");
   }
   // Standaard HD chart
   const pStr=Object.entries(chart.pers).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
   const dStr=Object.entries(chart.des).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
-  return["HD CHART voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),"Plaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerd: "+(chart.definedCenters.join(", ")||"geen"),"Open: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",rpt.prompt_extra].join("\n");
+  return["HD CHART voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),"Plaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerd: "+(chart.definedCenters.join(", ")||"geen"),"Open: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",promptExtra].join("\n");
 }
 
 
@@ -1334,7 +1495,7 @@ function Bodygraph({chart,name}){
       {/* Hover tooltip */}
       {hov&&(()=>{
         const pos=CP[hov],d=def.has(hov);
-        const label=CENTER_NL[hov]+(d?" — gedefinieerd":" — open");
+        const label=(LANG==="en"?hov:CENTER_NL[hov])+(d?(LANG==="en"?" — defined":" — gedefinieerd"):(LANG==="en"?" — open":" — open"));
         const tw=label.length*6+16;
         const tx=Math.min(Math.max(pos.cx-tw/2,8),632-tw);
         const ty=pos.cy>300?pos.cy-64:pos.cy+56;
@@ -1409,13 +1570,13 @@ function CompositeBodygraph({chart1,chart2,name1,name2}){
   function centerFill(s){if(s==="both")return"url(#cg-em)";if(s==="p1")return"url(#cg1)";if(s==="p2")return"url(#cg2)";return"white";}
   function centerStrokeC(s){if(s==="both")return CE;if(s==="p1")return C1;if(s==="p2")return C2;return"#D0C8BE";}
 
-  const n1=name1||"Persoon 1",n2=name2||"Persoon 2";
+  const n1=name1||(LANG==="en"?"Person 1":"Persoon 1"),n2=name2||(LANG==="en"?"Person 2":"Persoon 2");
 
   return(
     <div>
       {/* Legend */}
       <div style={{display:"flex",justifyContent:"center",gap:20,marginBottom:12,flexWrap:"wrap"}}>
-        {[{c:C1,l:n1},{c:C2,l:n2},{c:CE,l:"Elektromagnetisch / beide"}].map(({c,l})=>(
+        {[{c:C1,l:n1},{c:C2,l:n2},{c:CE,l:LANG==="en"?"Electromagnetic / both":"Elektromagnetisch / beide"}].map(({c,l})=>(
           <div key={l} style={{display:"flex",alignItems:"center",gap:6,fontSize:".75rem",fontFamily:"var(--font-sans)"}}>
             <div style={{width:16,height:4,borderRadius:2,background:c}}/>
             <span style={{color:"var(--text-muted)"}}>{l}</span>
@@ -1491,8 +1652,9 @@ function CompositeBodygraph({chart1,chart2,name1,name2}){
         {/* Tooltip */}
         {hov&&(()=>{
           const pos=CP[hov],state=centerState(hov);
-          const stateNl=state==="open"?"open":state==="both"?"beiden gedefinieerd":state==="p1"?n1+" — gedefinieerd":n2+" — gedefinieerd";
-          const label=CENTER_NL[hov]+" — "+stateNl;
+          const stateLabel=state==="open"?(LANG==="en"?"open":"open"):state==="both"?(LANG==="en"?"both defined":"beiden gedefinieerd"):state==="p1"?n1+(LANG==="en"?" — defined":" — gedefinieerd"):n2+(LANG==="en"?" — defined":" — gedefinieerd");
+          const centerLabel=LANG==="en"?hov:CENTER_NL[hov];
+          const label=centerLabel+" — "+stateLabel;
           const tw=label.length*5.6+16;
           const tx=Math.min(Math.max(pos.cx-tw/2,8),632-tw);
           const ty=pos.cy>300?pos.cy-64:pos.cy+56;
@@ -1508,7 +1670,7 @@ function CompositeBodygraph({chart1,chart2,name1,name2}){
         {/* Footer */}
         <text x="160" y="598" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill={C1} fontStyle="italic">{n1}</text>
         <text x="480" y="598" textAnchor="middle" fontFamily="Cormorant Garamond,serif" fontSize="13" fill={C2} fontStyle="italic">{n2}</text>
-        <text x="320" y="613" textAnchor="middle" fontFamily="Jost,sans-serif" fontSize="7" letterSpacing="1.5" fill="rgba(10,26,47,.25)">GECOMBINEERDE CHART</text>
+        <text x="320" y="613" textAnchor="middle" fontFamily="Jost,sans-serif" fontSize="7" letterSpacing="1.5" fill="rgba(10,26,47,.25)">{t("form.comboChartLabel")}</text>
       </svg>
     </div>
   );
@@ -1516,21 +1678,51 @@ function CompositeBodygraph({chart1,chart2,name1,name2}){
 
 // ─── CHART DASHBOARD ──────────────────────────────────────────────────────────
 const TYPE_DESC={
-  "Generator":"Bouwt voort op sacrale energie — duurzame levenspotentie",
-  "Manifesting Generator":"Snel, multi-passioneel, wacht op sacrale respons",
-  "Manifestor":"Initieert en zet dingen in beweging — informeer anderen",
-  "Projector":"Leidt vanuit inzicht — wacht op de juiste uitnodiging",
-  "Reflector":"Spiegel van de omgeving — verbonden met de maancyclus",
+  nl:{
+    "Generator":"Bouwt voort op sacrale energie — duurzame levenspotentie",
+    "Manifesting Generator":"Snel, multi-passioneel, wacht op sacrale respons",
+    "Manifestor":"Initieert en zet dingen in beweging — informeer anderen",
+    "Projector":"Leidt vanuit inzicht — wacht op de juiste uitnodiging",
+    "Reflector":"Spiegel van de omgeving — verbonden met de maancyclus",
+  },
+  en:{
+    "Generator":"Builds on sacral energy — sustainable life force",
+    "Manifesting Generator":"Fast, multi-passionate, waits for sacral response",
+    "Manifestor":"Initiates and sets things in motion — inform others",
+    "Projector":"Guides through insight — waits for the right invitation",
+    "Reflector":"Mirror of the environment — connected to the lunar cycle",
+  },
 };
 const AUTH_DESC={
-  "Emotioneel":"Wacht op emotionele helderheid voordat je beslist",
-  "Sacraal":"Volg het directe gut-gevoel van je lichaam",
-  "Splenisch":"Vertrouw de instantane intuïtieve flits van het moment",
-  "Ego":"Vertrouw op je wilskracht en wat je oprecht wil beloven",
-  "G/Self":"Je identiteitsgevoel en richting leiden je beslissingen",
-  "Mentaal":"Gebruik gesprekken met vertrouwde mensen als klankbord",
-  "Maancyclus":"Neem 28 dagen de tijd voor grote beslissingen",
+  nl:{
+    "Emotioneel":"Wacht op emotionele helderheid voordat je beslist",
+    "Sacraal":"Volg het directe gut-gevoel van je lichaam",
+    "Splenisch":"Vertrouw de instantane intuïtieve flits van het moment",
+    "Ego":"Vertrouw op je wilskracht en wat je oprecht wil beloven",
+    "G/Self":"Je identiteitsgevoel en richting leiden je beslissingen",
+    "Mentaal":"Gebruik gesprekken met vertrouwde mensen als klankbord",
+    "Maancyclus":"Neem 28 dagen de tijd voor grote beslissingen",
+  },
+  en:{
+    "Emotioneel":"Wait for emotional clarity before deciding",
+    "Sacraal":"Follow the immediate gut response of your body",
+    "Splenisch":"Trust the instantaneous intuitive flash of the moment",
+    "Ego":"Trust your willpower and what you genuinely want to commit to",
+    "G/Self":"Your sense of identity and direction guide your decisions",
+    "Mentaal":"Use conversations with trusted people as a sounding board",
+    "Maancyclus":"Take 28 days for major decisions",
+  },
 };
+
+// Translation maps for chart values shown in UI
+const AUTH_EN={"Emotioneel":"Emotional","Sacraal":"Sacral","Splenisch":"Splenic","Ego":"Ego","G/Self":"G/Self","Mentaal":"Mental","Maancyclus":"Lunar"};
+const STRAT_EN={"Wacht om te reageren":"Wait to respond","Informeer, reageer dan vanuit het sacraal":"Inform, then respond","Informeer voor jou handelt":"Inform before acting","Wacht op de uitnodiging":"Wait for the invitation","Wacht een maancyclus":"Wait a lunar cycle"};
+const SIG_EN={"Bevrediging":"Satisfaction","Bevrediging & Vrede":"Satisfaction & Peace","Vrede":"Peace","Succes":"Success","Verrassing":"Surprise"};
+const NOTSELF_EN={"Frustratie":"Frustration","Frustratie & Woede":"Frustration & Anger","Woede":"Anger","Bitterheid":"Bitterness","Teleurstelling":"Disappointment"};
+function xlateAuth(v){return LANG==="en"?(AUTH_EN[v]||v):v;}
+function xlateStrat(v){return LANG==="en"?(STRAT_EN[v]||v):v;}
+function xlateSig(v){return LANG==="en"?(SIG_EN[v]||v):v;}
+function xlateNotSelf(v){return LANG==="en"?(NOTSELF_EN[v]||v):v;}
 
 function InsightCard({label,value,desc,icon,accentColor}){
   return(
@@ -1567,11 +1759,11 @@ function BlueprintPanel({chart,name,onCta}){
         <circle cx="220" cy="290" r="72" fill="none" stroke="rgba(201,168,92,.055)" strokeWidth="1.5"/>
         <circle cx="220" cy="290" r="40" fill="none" stroke="rgba(201,168,92,.04)" strokeWidth="1"/>
       </svg>
-      <div className="cd-bp-lbl">De Blauwdruk · Jouw Human Design</div>
+      <div className="cd-bp-lbl">{t("form.blueprintLabel")}</div>
       <Bodygraph chart={chart} name={name}/>
       <div className="cd-bp-cta">
         <button className="cd-pill" onClick={onCta}>
-          Bekijk volledige blauwdruk →
+          {t("form.chartCta")}
         </button>
       </div>
     </div>
@@ -1579,18 +1771,22 @@ function BlueprintPanel({chart,name,onCta}){
 }
 
 function ChartDashboard({chart,name,onOrder}){
-  const typeDesc=TYPE_DESC[chart.type]||"";
-  const authDesc=AUTH_DESC[chart.auth]||"";
+  const typeDesc=(TYPE_DESC[LANG]||TYPE_DESC.nl)[chart.type]||"";
+  const authDesc=(AUTH_DESC[LANG]||AUTH_DESC.nl)[chart.auth]||"";
   const nDef=chart.definedCenters?.length||0;
   const nCh=chart.channels?.length||0;
-  const defText=nDef===0?"Volledig open — geen definitie":nCh===1?`${nDef} centra gedefinieerd, ${nCh} actief kanaal`:`${nDef} centra gedefinieerd, ${nCh} actieve kanalen`;
+  const defText=nDef===0
+    ?t("form.definitionNone")
+    :nCh===1
+      ?t("form.definitionOne",{nDef,nCh})
+      :t("form.definitionMany",{nDef,nCh});
   return(
     <div className="cd">
       {/* Header */}
       <div className="cd-hdr">
         <div>
-          <div className="cd-eyebrow">Jouw Human Design Profiel</div>
-          <div className="cd-title">De blauwdruk</div>
+          <div className="cd-eyebrow">{t("form.chartEyebrow")}</div>
+          <div className="cd-title">{t("form.chartHeaderTitle")}</div>
           <div className="cd-name">{name}</div>
         </div>
         <div style={{textAlign:"right",flexShrink:0}}>
@@ -1605,41 +1801,41 @@ function ChartDashboard({chart,name,onOrder}){
           <BlueprintPanel chart={chart} name={name} onCta={onOrder}/>
         </div>
         <div className="cd-right">
-          <InsightCard label="TYPE" value={chart.type} desc={typeDesc} icon="◈" accentColor="#1C2E4A"/>
-          <InsightCard label="AUTORITEIT" value={chart.auth} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
-          <InsightCard label="STRATEGIE" value={chart.strat} desc={"Handtekening: "+chart.sig} icon="◇" accentColor="#9A8050"/>
-          <InsightCard label="PROFIEL" value={chart.profile} desc="Jouw archetype en levensverhaal" icon="✦" accentColor="#3D2C5E"/>
+          <InsightCard label={t("form.typeLabel")} value={chart.type} desc={typeDesc} icon="◈" accentColor="#1C2E4A"/>
+          <InsightCard label={t("form.authorityLabel")} value={xlateAuth(chart.auth)} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
+          <InsightCard label={t("form.strategyLabel")} value={xlateStrat(chart.strat)} desc={t("form.signaturePrefix")+xlateSig(chart.sig)} icon="◇" accentColor="#9A8050"/>
+          <InsightCard label={t("form.profileLabel")} value={chart.profile} desc={t("form.profileDesc")} icon="✦" accentColor="#3D2C5E"/>
         </div>
       </div>
 
       {/* Integrations */}
       <div className="cd-int">
         <div className="cd-int-hdr">
-          <div className="cd-int-ttl">Diepere integraties</div>
-          <div className="cd-int-lnk" onClick={onOrder}>Volledige analyse →</div>
+          <div className="cd-int-ttl">{t("form.deeperLabel")}</div>
+          <div className="cd-int-lnk" onClick={onOrder}>{t("form.deeperLink")}</div>
         </div>
         <div className="cd-int-row">
           <IntegrationCard
-            label="SIGNATURE"
-            value={chart.sig}
-            desc="De staat die aangeeft dat je in lijn leeft met je ware design"
+            label={t("form.signatureLabel")}
+            value={xlateSig(chart.sig)}
+            desc={t("form.signatureDesc")}
           />
           <IntegrationCard
-            label="NOT-SELF THEMA"
-            value={chart.notSelf}
-            desc="Het signaal dat je conditionering ervaart — niet je ware zelf"
+            label={t("form.notSelfLabel")}
+            value={xlateNotSelf(chart.notSelf)}
+            desc={t("form.notSelfDesc")}
           />
           <IntegrationCard
-            label="DEFINITIE"
+            label={t("form.definitionLabel")}
             value={defText}
-            desc="Hoe jouw energetische centra verbonden en actief zijn"
+            desc={t("form.definitionDesc")}
           />
         </div>
       </div>
 
       {/* Footer */}
       <div className="cd-foot">
-        <div className="cd-foot-tag">Spiritueel inzicht, wetenschappelijk berekend.</div>
+        <div className="cd-foot-tag">{t("form.chartFooter")}</div>
       </div>
     </div>
   );
@@ -1648,9 +1844,10 @@ function ChartDashboard({chart,name,onOrder}){
 // ─── SHARED COMPONENTS ────────────────────────────────────────────────────────
 function TrustStrip({light}){
   const col=light?"rgba(255,255,255,.5)":"var(--text-muted)";
+  const items=[t("trust.payment"),t("trust.personal"),t("trust.delivery"),t("trust.noGeneric"),t("trust.language")];
   return(
     <div className="trust-strip">
-      {[["Veilige betaling"],["Persoonlijke PDF"],["Bezorgd binnen 1 werkdag"],["Geen generieke profielen"],["Nederlandstalig"]].map(([txt])=>(
+      {items.map(txt=>(
         <div key={txt} className="trust-item" style={{color:col}}><span style={{color:light?"rgba(201,168,92,.55)":"var(--gold)",fontSize:".55rem"}}>✦</span><span>{txt}</span></div>
       ))}
     </div>
@@ -1660,22 +1857,24 @@ function TrustStrip({light}){
 function ReportCard({rpt,onClick}){
   const imgKey="r_"+rpt.id;
   const imgSrc=IMGS[imgKey]||IMGS.hero;
+  const promptExtraStr=(typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)?(rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??""):(rpt.prompt_extra||"");
+  const sectionCount=promptExtraStr.split("\n").filter(l=>l.startsWith("###")).length;
   return(
     <div className="rcard" onClick={()=>{track("report_card_click",{report:rpt.id,price:rpt.priceNum});onClick();}}>
       <div className="rcard-img">
-        <img src={imgSrc} alt={rpt.title} loading="lazy"/>
+        <img src={imgSrc} alt={tl(rpt.title)} loading="lazy"/>
         <div className="rcard-img-ov"/>
-        {rpt.tag&&<div className="rcard-img-badge">{rpt.tag}</div>}
+        {rpt.tag&&<div className="rcard-img-badge">{tl(rpt.tag)}</div>}
         <div className="rcard-img-price">{rpt.price}</div>
       </div>
       <div className="rcard-body">
         <div className="rcard-icon">{rpt.icon}</div>
-        <div className="rcard-title">{rpt.title}</div>
-        {rpt.outcome&&<div className="rcard-outcome">{rpt.outcome}</div>}
-        <div className="rcard-tagline">{rpt.tagline}</div>
+        <div className="rcard-title">{tl(rpt.title)}</div>
+        {rpt.outcome&&<div className="rcard-outcome">{tl(rpt.outcome)}</div>}
+        <div className="rcard-tagline">{tl(rpt.tagline)}</div>
         <div className="rcard-footer">
-          <div className="rcard-meta">{rpt.pages} pag. · {rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).length} secties</div>
-          <div className="rcard-cta">Start met dit rapport</div>
+          <div className="rcard-meta">{rpt.pages} {t("report.pages")} · {sectionCount} {t("report.sections")}</div>
+          <div className="rcard-cta">{t("report.startCta")}</div>
         </div>
       </div>
     </div>
@@ -1692,14 +1891,21 @@ function StepCard({num,title,desc}){
 }
 
 function Nav({page,go,menuOpen,setMenuOpen}){
-  const links=[["home","Home"],["wat","Wat is Human Design"],["rapporten","Rapporten"],["blog","Inzichten"],["over","Over ons"],["contact","Contact"]];
+  const links=[
+    ["home",   t("nav.home")],
+    ["wat",    t("nav.wat")],
+    ["rapporten", t("nav.reports")],
+    ["blog",   t("nav.insights")],
+    ["over",   t("nav.about")],
+    ["contact",t("nav.contact")],
+  ];
   return(
     <>
       <nav className="nav">
         <div className="nav-inner">
           <div className="nav-logo" onClick={()=>go("home")}>
             <div className="nav-logo-main">Faculty of Human Design</div>
-            <div className="nav-logo-sub">Ibiza — Est. 2014</div>
+            <div className="nav-logo-sub">{t("nav.logoSub")}</div>
           </div>
           <div className="nav-links">
             {links.map(([id,label])=>(
@@ -1707,7 +1913,21 @@ function Nav({page,go,menuOpen,setMenuOpen}){
             ))}
           </div>
           <div style={{display:"flex",gap:8,alignItems:"center"}} className="nav-cta-wrap">
-            <button className="btn btn-primary btn-sm" onClick={()=>{track("hero_cta_click",{location:"nav"});go("rapporten");}}>Rapporten</button>
+            {/* Language switcher */}
+            <div style={{display:"flex",gap:4,marginRight:4}}>
+              {["nl","en"].map(lng=>(
+                <button key={lng} onClick={()=>switchLang(lng)} style={{
+                  background:LANG===lng?"var(--brand)":"transparent",
+                  color:LANG===lng?"white":"var(--text-muted)",
+                  border:LANG===lng?"1px solid var(--brand)":"1px solid var(--border)",
+                  borderRadius:"var(--radius-sm)",
+                  padding:"4px 9px",fontSize:".62rem",fontWeight:600,letterSpacing:".08em",
+                  cursor:LANG===lng?"default":"pointer",textTransform:"uppercase",
+                  transition:"all 150ms",
+                }}>{lng.toUpperCase()}</button>
+              ))}
+            </div>
+            <button className="btn btn-primary btn-sm" onClick={()=>{track("hero_cta_click",{location:"nav"});go("rapporten");}}>{t("nav.cta")}</button>
           </div>
           <button className="menu-btn mobile-nav" style={{display:"flex",alignItems:"center"}} onClick={()=>setMenuOpen(!menuOpen)}>
             <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect y="4" width="22" height="2" rx="1" fill="currentColor"/><rect y="10" width="22" height="2" rx="1" fill="currentColor"/><rect y="16" width="22" height="2" rx="1" fill="currentColor"/></svg>
@@ -1722,8 +1942,21 @@ function Nav({page,go,menuOpen,setMenuOpen}){
           {links.map(([id,label])=>(
             <div key={id} className="mobile-menu-link" onClick={()=>{go(id);setMenuOpen(false);}}>{label}</div>
           ))}
+          {/* Mobile language switcher */}
+          <div style={{display:"flex",gap:8,padding:"16px 0",borderBottom:"1px solid var(--border)"}}>
+            {["nl","en"].map(lng=>(
+              <button key={lng} onClick={()=>switchLang(lng)} style={{
+                background:LANG===lng?"var(--brand)":"transparent",
+                color:LANG===lng?"white":"var(--text-muted)",
+                border:LANG===lng?"1px solid var(--brand)":"1px solid var(--border)",
+                borderRadius:"var(--radius-sm)",padding:"6px 14px",
+                fontSize:".7rem",fontWeight:600,letterSpacing:".08em",
+                cursor:LANG===lng?"default":"pointer",textTransform:"uppercase",
+              }}>{lng.toUpperCase()}</button>
+            ))}
+          </div>
           <div style={{marginTop:16}}>
-            <button className="btn btn-primary btn-full" onClick={()=>{go("rapporten");setMenuOpen(false);}}>Rapporten bekijken</button>
+            <button className="btn btn-primary btn-full" onClick={()=>{go("rapporten");setMenuOpen(false);}}>{t("nav.mobileCta")}</button>
           </div>
         </div>
       )}
@@ -1738,33 +1971,33 @@ function Footer({go}){
         <div className="footer-top">
           <div>
             <div className="footer-logo-main">Faculty of Human Design</div>
-            <div className="footer-logo-sub">Ibiza, Spanje — Est. 2014</div>
-            <p className="footer-desc">Persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie. Berekend op exacte astronomische data.</p>
+            <div className="footer-logo-sub">{t("footer.logoSub")}</div>
+            <p className="footer-desc">{t("footer.desc")}</p>
           </div>
           <div>
-            <div className="footer-col-title">Rapporten</div>
-            {REPORTS.slice(0,4).map(r=><span key={r.id} className="footer-link" onClick={()=>go("rapport-"+r.id)}>{r.title}</span>)}
+            <div className="footer-col-title">{t("footer.reportsCol")}</div>
+            {REPORTS.slice(0,4).map(r=><span key={r.id} className="footer-link" onClick={()=>go("rapport-"+r.id)}>{tl(r.title)}</span>)}
           </div>
           <div>
-            <div className="footer-col-title">Informatie</div>
-            {[["wat","Wat is Human Design"],["over","Over ons"],["blog","Inzichten"],["contact","Contact"]].map(([id,l])=>(
+            <div className="footer-col-title">{t("footer.infoCol")}</div>
+            {[["wat",t("footer.wat")],["over",t("footer.about")],["blog",t("footer.insights")],["contact",t("footer.contact")]].map(([id,l])=>(
               <span key={id} className="footer-link" onClick={()=>go(id)}>{l}</span>
             ))}
           </div>
           <div>
-            <div className="footer-col-title">Vertrouwen</div>
-            <span className="footer-link">Veilige betaling</span>
-            <span className="footer-link">Persoonlijke PDF</span>
-            <span className="footer-link">Direct beschikbaar</span>
-            <span className="footer-link">info@facultyhd.com</span>
+            <div className="footer-col-title">{t("footer.trustCol")}</div>
+            <span className="footer-link">{t("footer.safePayment")}</span>
+            <span className="footer-link">{t("footer.personalPdf")}</span>
+            <span className="footer-link">{t("footer.directDelivery")}</span>
+            <span className="footer-link">{t("footer.email")}</span>
           </div>
         </div>
         <div className="footer-bottom">
-          <div className="footer-copy">© 2026 Faculty of Human Design. Alle rechten voorbehouden.</div>
+          <div className="footer-copy">{t("footer.copy")}</div>
           <div className="footer-trust">
-            <span className="footer-trust-item" style={{cursor:"pointer"}} onClick={()=>go("voorwaarden")}>Algemene Voorwaarden & Privacy</span>
-            <div className="footer-trust-item">SSL beveiligd</div>
-            <div className="footer-trust-item">iDEAL beschikbaar</div>
+            <span className="footer-trust-item" style={{cursor:"pointer"}} onClick={()=>go("voorwaarden")}>{t("footer.terms")}</span>
+            <div className="footer-trust-item">{t("footer.ssl")}</div>
+            <div className="footer-trust-item">{t("footer.ideal")}</div>
           </div>
         </div>
       </div>
@@ -1831,7 +2064,7 @@ function PlaceAutocomplete({ value, onSelect, placeholder }) {
         const res = await fetch(
           "https://nominatim.openstreetmap.org/search?q=" + encodeURIComponent(q) +
           "&format=json&limit=6&addressdetails=1",
-          { headers: { "Accept-Language": "nl,en" } }
+          { headers: { "Accept-Language": LANG==="en"?"en,nl":"nl,en" } }
         );
         const data = await res.json();
         const items = data.map(d => {
@@ -1912,7 +2145,7 @@ function PlaceAutocomplete({ value, onSelect, placeholder }) {
       {tzInfo && !open && (
         <div className={"place-tz" + (tzInfo.error ? " place-tz-error" : "")}>
           {tzInfo.error ? (
-            <>Tijdzone onbekend — chart wordt berekend zonder UTC-correctie</>
+            <>{LANG==="en"?"Timezone unknown — chart calculated without UTC correction":"Tijdzone onbekend — chart wordt berekend zonder UTC-correctie"}</>
           ) : (
             <><div className="place-tz-dot"/>{tzInfo.timezone}</>
           )}
@@ -1943,11 +2176,12 @@ function ReportForm({rpt,onDone,postPayment}){
   const isRelatie=rpt.id.startsWith("relatie_");
   const partnerOk=!isRelatie||(form.pname&&form.pday&&form.pmonth&&form.pyear);
   const ok=form.name&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
-  const sections=rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
+  const promptExtraStr=(typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)?(rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??""):(rpt.prompt_extra||"");
+  const sections=promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
 
   const doChart=()=>{
     const y=parseInt(form.year),m=parseInt(form.month),d=parseInt(form.day);
-    if(!form.name||!d||!m||!y){alert("Vul alle verplichte velden in.");return;}
+    if(!form.name||!d||!m||!y){alert(LANG==="en"?"Please fill in all required fields.":"Vul alle verplichte velden in.");return;}
     if(isNum){const num=calcNumerology(form.name,d,m,y);setChart({...num,isNumerology:true});}
     else{
       const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
@@ -1964,7 +2198,50 @@ function ReportForm({rpt,onDone,postPayment}){
     track("checkout_started",{report:rpt.id,price:rpt.priceNum});
     const hdChart=(!isNum&&!isHoro)?chart:null;
     const chartContext=buildPrompt(hdChart,form,rpt).split("\n\n")[0];
-    const SYSTEM=`Je bent een senior analist van de Faculty of Human Design op Ibiza. Je schrijft diepgaande, gepersonaliseerde rapporten in het Nederlands.
+    const SYSTEM=LANG==="en"
+      ?`You are a senior analyst at Faculty of Human Design on Ibiza. You write in-depth, personalised reports in English.
+
+VOICE & STYLE:
+- Always address the reader as "you" and "your".
+- Use the client's first name at most once per section.
+- Tone: calm, premium, warm-spiritual, precise and trustworthy. No clichés, no superlatives.
+- Begin each section directly with relevance — forbidden openers: "It is important to...", "In today's society...", "Let us first...".
+- Short sentences; prefer more paragraphs over long blocks.
+
+CONTENT:
+- Anchor every paragraph in the chart data: type, strategy, authority, profile, centres, channels, gates.
+- No generic psychology without connection to this specific design.
+- No biographical assumptions — only patterns as working hypotheses.
+
+STRUCTURE — every section follows exactly this format:
+
+In your chart:
+• [3–5 concrete facts specific to THIS chart]
+
+[Core explanation: 3–5 sub-paragraphs with subheadings, max ~800 words, anchored in chart data]
+
+Pitfalls:
+• [3 concrete bullets]
+• [...]
+• [...]
+
+Practice:
+• [3 actionable bullets]
+• [...]
+• [...]
+
+This week:
+• [3 time-bound micro-actions]
+• [...]
+• [...]
+
+Reflection questions:
+1. [Question]
+2. [Question]
+3. [Question]
+
+Close the core explanation with a complete, rounded sentence. No section title in the text.`
+      :`Je bent een senior analist van de Faculty of Human Design op Ibiza. Je schrijft diepgaande, gepersonaliseerde rapporten in het Nederlands.
 
 STEM & STIJL:
 - Spreek de lezer altijd aan met "je" en "jouw" — nooit "u" of "uw", nooit wisselen.
@@ -2011,7 +2288,9 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
       for(let i=0;i<sections.length;i++){
         const sec=sections[i];
         setLs(Math.min(i,LSTEPS.length-1));setPr(Math.round((i/sections.length)*95));
-        const prompt=chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+form.name+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
+        const prompt=LANG==="en"
+          ?chartContext+"\n\nWrite section \""+sec+"\" for "+form.name+".\n\nUse exactly the prescribed format:\n1. Start with \"In your chart:\" followed by 3–5 concrete bullets with specific chart data.\n2. Write the core explanation (3–5 sub-paragraphs with subheadings, max ~800 words, each paragraph anchored in chart data).\n3. End with: \"Pitfalls:\", \"Practice:\", \"This week:\", \"Reflection questions:\" — each with exactly 3 items.\n\nNo section title in the text. Close the core explanation with a complete sentence."
+          :chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+form.name+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
         const res=await fetch("/api/generate-report",{
           method:"POST",headers:{"Content-Type":"application/json"},
           body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2400,system:SYSTEM,
@@ -2024,26 +2303,26 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
       setPr(100);
       track("checkout_completed",{report:rpt.id,price:rpt.priceNum});
       setTimeout(()=>{setLoading(false);onDone(chart,form,allText.trim(),rpt);},400);
-    }catch(e){setLoading(false);onDone(chart,form,"Er is iets misgegaan: "+e.message,rpt);}
+    }catch(e){setLoading(false);onDone(chart,form,(LANG==="en"?"Something went wrong: ":"Er is iets misgegaan: ")+e.message,rpt);}
   };
 
   if(loading)return(
     <div className="loading-overlay">
       <div className="loading-icon">✦</div>
-      <div className="loading-title">Je blauwdruk wordt samengesteld</div>
-      <div className="loading-counter">Analyse {Math.min(ls+1,sections.length)} van {sections.length}</div>
+      <div className="loading-title">{LANG==="en"?"Your blueprint is being assembled":"Je blauwdruk wordt samengesteld"}</div>
+      <div className="loading-counter">{LANG==="en"?`Analysis ${Math.min(ls+1,sections.length)} of ${sections.length}`:`Analyse ${Math.min(ls+1,sections.length)} van ${sections.length}`}</div>
       <div className="loading-steps">
         {sections.map((step,i)=>(
           <div key={i} className="loading-step" style={{opacity:i<ls?.35:i===ls?1:.18}}>
             <div className="loading-step-dot" style={{background:i<ls?"#9A8050":i===ls?"#fff":"#444"}}/>
             <div className="loading-step-text" style={{color:i===ls?"#fff":"rgba(255,255,255,.4)"}}>{step}</div>
-            {i===ls&&<div className="loading-step-badge">bezig...</div>}
+            {i===ls&&<div className="loading-step-badge">{LANG==="en"?"working...":"bezig..."}</div>}
             {i<ls&&<div className="loading-step-badge">✓</div>}
           </div>
         ))}
       </div>
       <div className="loading-bar-wrap"><div className="loading-bar-fill" style={{width:pr+"%"}}/></div>
-      <p style={{marginTop:18,fontSize:".72rem",color:"rgba(255,255,255,.15)",letterSpacing:".1em"}}>Bezorgd per e-mail binnen 1 werkdag</p>
+      <p style={{marginTop:18,fontSize:".72rem",color:"rgba(255,255,255,.15)",letterSpacing:".1em"}}>{LANG==="en"?"Delivered by email within 1 business day":"Bezorgd per e-mail binnen 1 werkdag"}</p>
     </div>
   );
 
@@ -2051,44 +2330,44 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
     <div>
       <div className="section bg-muted" id="bestel">
         <div className="container-sm">
-          <div className="label" style={{marginBottom:8}}>Stap 1 — Gegevens invoeren</div>
-          <h2 className="h2" style={{marginBottom:8}}>Vul je geboortegegevens in</h2>
-          <p className="body-md" style={{marginBottom:32}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
+          <div className="label" style={{marginBottom:8}}>{LANG==="en"?"Step 1 — Enter your details":"Stap 1 — Gegevens invoeren"}</div>
+          <h2 className="h2" style={{marginBottom:8}}>{LANG==="en"?"Enter your birth details":"Vul je geboortegegevens in"}</h2>
+          <p className="body-md" style={{marginBottom:32}}>{LANG==="en"?"Your chart is calculated immediately for free. You only pay after viewing your chart.":"Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart."}</p>
           <div className="form-wrap">
             <div style={{marginBottom:20}}>
-              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:4}}>{rpt.title}</div>
-              <div style={{fontSize:".82rem",color:"var(--text-light)"}}>{isNum?"Geen geboortetijd nodig.":"Vul alle velden zo nauwkeurig mogelijk in."}</div>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:4}}>{tl(rpt.title)}</div>
+              <div style={{fontSize:".82rem",color:"var(--text-light)"}}>{isNum?(LANG==="en"?"No birth time needed.":"Geen geboortetijd nodig."):(LANG==="en"?"Fill in all fields as accurately as possible.":"Vul alle velden zo nauwkeurig mogelijk in.")}</div>
             </div>
             <div className="form-grid">
-              <div className="form-group full"><label className="form-label">Volledige naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Voor- en achternaam"/></div>
-              <div className="form-group full"><label className="form-label">E-mailadres <span style={{color:"var(--gold)",fontSize:".6rem"}}>— rapport wordt hierheen verstuurd</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder="uw@email.nl" required/></div>
-              <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="day" min="1" max={maxDay()} value={form.day} onChange={ch} onBlur={numBlur("day",1,maxDay())} placeholder="15"/></div>
-              <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-              <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="year" min="1900" max={new Date().getFullYear()} value={form.year} onChange={ch} onBlur={numBlur("year",1900,new Date().getFullYear())} placeholder="1990"/></div>
-              {needsTime&&<div className="form-group"><label className="form-label">Geboortetijd</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} onBlur={numBlur("hour",0,23)} placeholder="uur"/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} onBlur={numBlur("minute",0,59)} placeholder="min"/></div></div>}
+              <div className="form-group full"><label className="form-label">{LANG==="en"?"Full name":"Volledige naam"}</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder={LANG==="en"?"First and last name":"Voor- en achternaam"}/></div>
+              <div className="form-group full"><label className="form-label">{t("form.email")} <span style={{color:"var(--gold)",fontSize:".6rem"}}>{LANG==="en"?"— report will be sent here":"— rapport wordt hierheen verstuurd"}</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder={t("form.emailPlaceholder")} required/></div>
+              <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="day" min="1" max={maxDay()} value={form.day} onChange={ch} onBlur={numBlur("day",1,maxDay())} placeholder="15"/></div>
+              <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
+              <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="year" min="1900" max={new Date().getFullYear()} value={form.year} onChange={ch} onBlur={numBlur("year",1900,new Date().getFullYear())} placeholder="1990"/></div>
+              {needsTime&&<div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} onBlur={numBlur("hour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} onBlur={numBlur("minute",0,59)} placeholder={t("form.minute")}/></div></div>}
               <div className="form-group full">
-                <label className="form-label">Geboorteplaats</label>
+                <label className="form-label">{t("form.birthPlace")}</label>
                 <PlaceAutocomplete
                   value={form.place}
-                  placeholder="Amsterdam, Nederland"
+                  placeholder={LANG==="en"?"Amsterdam, Netherlands":"Amsterdam, Nederland"}
                   onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,place,lat:lat||"",lon:lon||"",timezone:timezone||"",tz:""}))}
                 />
               </div>
             </div>
             {rpt.needsPartner&&<>
               <div className="form-divider"/>
-              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens {rpt.partnerLabel||"partner"}</div>
+              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{t("form.partnerSection",{label:rpt.partnerLabel||(LANG==="en"?"partner":"partner")})}</div>
               <div className="form-grid">
-                <div className="form-group full"><label className="form-label">Naam {rpt.partnerLabel||"partner"}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={"Naam "+(rpt.partnerLabel||"partner")}/></div>
-                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
-                <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
-                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} onBlur={numBlur("phour",0,23)} placeholder="uur"/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} onBlur={numBlur("pminute",0,59)} placeholder="min"/></div></div>
+                <div className="form-group full"><label className="form-label">{LANG==="en"?"Name":"Naam"} {rpt.partnerLabel||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={(LANG==="en"?"Name ":"Naam ")+(rpt.partnerLabel||(LANG==="en"?"partner":"partner"))}/></div>
+                <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
+                <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
+                <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
+                <div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} onBlur={numBlur("phour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} onBlur={numBlur("pminute",0,59)} placeholder={t("form.minute")}/></div></div>
                 <div className="form-group full">
-                  <label className="form-label">Geboorteplaats {rpt.partnerLabel||"partner"}</label>
+                  <label className="form-label">{t("form.birthPlace")} {rpt.partnerLabel||(LANG==="en"?"partner":"partner")}</label>
                   <PlaceAutocomplete
                     value={form.pplace}
-                    placeholder="Stad, land"
+                    placeholder={t("form.placePlaceholder")}
                     onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,pplace:place,plat:lat||"",plon:lon||"",ptimezone:timezone||"",ptz:""}))}
                   />
                 </div>
@@ -2096,25 +2375,25 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
             </>}
             {rpt.needsChild&&<>
               <div className="form-divider"/>
-              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>Gegevens kind</div>
+              <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{LANG==="en"?"Child's details":"Gegevens kind"}</div>
               <div className="form-grid">
-                <div className="form-group full"><label className="form-label">Naam kind</label><input className="form-input" name="cname" value={form.cname} onChange={ch} placeholder="Naam kind"/></div>
-                <div className="form-group"><label className="form-label">Dag</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch} onBlur={numBlur("cday",1,31)}/></div>
-                <div className="form-group"><label className="form-label">Maand</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">maand</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="form-group"><label className="form-label">Jaar</label><input className="form-input" type="number" name="cyear" min="1900" max={new Date().getFullYear()} value={form.cyear} onChange={ch} onBlur={numBlur("cyear",1900,new Date().getFullYear())}/></div>
-                <div className="form-group"><label className="form-label">Tijd</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} onBlur={numBlur("chour",0,23)} placeholder="uur"/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} onBlur={numBlur("cminute",0,59)} placeholder="min"/></div></div>
+                <div className="form-group full"><label className="form-label">{LANG==="en"?"Child's name":"Naam kind"}</label><input className="form-input" name="cname" value={form.cname} onChange={ch} placeholder={LANG==="en"?"Child's name":"Naam kind"}/></div>
+                <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch} onBlur={numBlur("cday",1,31)}/></div>
+                <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
+                <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="cyear" min="1900" max={new Date().getFullYear()} value={form.cyear} onChange={ch} onBlur={numBlur("cyear",1900,new Date().getFullYear())}/></div>
+                <div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} onBlur={numBlur("chour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} onBlur={numBlur("cminute",0,59)} placeholder={t("form.minute")}/></div></div>
                 <div className="form-group full">
-                  <label className="form-label">Geboorteplaats kind</label>
+                  <label className="form-label">{LANG==="en"?"Child's place of birth":"Geboorteplaats kind"}</label>
                   <PlaceAutocomplete
                     value={form.cplace}
-                    placeholder="Stad, land"
+                    placeholder={t("form.placePlaceholder")}
                     onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,cplace:place,clat:lat||"",clon:lon||"",ctimezone:timezone||"",ctz:""}))}
                   />
                 </div>
               </div>
             </>}
-            <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={doChart} disabled={!ok}>Bereken mijn chart gratis</button>
-            <p className="form-note">Gratis berekening — geen betaling vereist om je chart te zien.<br/>Je gegevens worden vertrouwelijk behandeld.</p>
+            <button className="btn btn-primary btn-full" style={{marginTop:20}} onClick={doChart} disabled={!ok}>{t("form.calculate")}</button>
+            <p className="form-note">{LANG==="en"?"Free calculation — no payment required to view your chart. Your data is kept confidential.":"Gratis berekening — geen betaling vereist om je chart te zien. Je gegevens worden vertrouwelijk behandeld."}</p>
           </div>
         </div>
       </div>
@@ -2122,8 +2401,8 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
       {chart&&(
         <div className="section bg-white" id="chart-res">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:8}}>Stap 2 — Je chart</div>
-            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?"Je kerngetallen":chart.isHoroscoop?"Je planeetstanden":(rpt.id.startsWith("relatie_")||rpt.needsChild)?"Gecombineerde Human Design chart":"Je Human Design chart"}</h2>
+            <div className="label" style={{marginBottom:8}}>{LANG==="en"?"Step 2 — Your chart":"Stap 2 — Je chart"}</div>
+            <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?(LANG==="en"?"Your core numbers":"Je kerngetallen"):chart.isHoroscoop?(LANG==="en"?"Your planet positions":"Je planeetstanden"):(rpt.id.startsWith("relatie_")||rpt.needsChild)?(LANG==="en"?"Combined Human Design chart":"Gecombineerde Human Design chart"):(LANG==="en"?"Your Human Design chart":"Je Human Design chart")}</h2>
             {/* ── Relatie: gecombineerde bodygraph + twee compacte tabellen ── */}
             {rpt.id.startsWith("relatie_")&&(()=>{
               const lbl=rpt.partnerLabel||"Partner";
@@ -2135,11 +2414,11 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{name}</div>
                   <table className="chart-table"><tbody>
                     <tr><td>Type</td><td><strong>{c.type}</strong></td></tr>
-                    <tr><td>Strategie</td><td>{c.strat}</td></tr>
-                    <tr><td>Autoriteit</td><td>{c.auth}</td></tr>
-                    <tr><td>Profiel</td><td>{c.profile}</td></tr>
-                    <tr><td>Gedefinieerd</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
-                    <tr><td>Poorten</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
+                    <tr><td>{LANG==="en"?"Strategy":"Strategie"}</td><td>{xlateStrat(c.strat)}</td></tr>
+                    <tr><td>{LANG==="en"?"Authority":"Autoriteit"}</td><td>{xlateAuth(c.auth)}</td></tr>
+                    <tr><td>{LANG==="en"?"Profile":"Profiel"}</td><td>{c.profile}</td></tr>
+                    <tr><td>{LANG==="en"?"Defined":"Gedefinieerd"}</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"none":"geen"}</span>}</div></td></tr>
+                    <tr><td>{LANG==="en"?"Gates":"Poorten"}</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
                   </tbody></table>
                 </div>
               );
@@ -2148,18 +2427,18 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                   {c2
                     ?<CompositeBodygraph chart1={chart} chart2={c2} name1={form.name} name2={form.pname||lbl}/>
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
-                      <p className="body-sm" style={{color:"var(--text-light)"}}>Vul de gegevens van de {lbl.toLowerCase()} in om de gecombineerde chart te zien</p>
+                      <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details to see the combined chart`:`Vul de gegevens van de ${lbl.toLowerCase()} in om de gecombineerde chart te zien`}</p>
                     </div>}
                   <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
                     <HDRow c={chart} name={form.name}/>
                     {c2?<HDRow c={c2} name={form.pname||lbl}/>:
                       <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
-                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>Vul de gegevens van de {lbl.toLowerCase()} in</p>
+                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details`:`Vul de gegevens van de ${lbl.toLowerCase()} in`}</p>
                       </div>}
                   </div>
                   {c2&&gedeeld.length>0&&(
                     <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"14px 18px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:16}}>
-                      <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:6}}>Gedeelde poorten — elektromagnetische verbindingen</div>
+                      <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:6}}>{LANG==="en"?"Shared gates — electromagnetic connections":"Gedeelde poorten — elektromagnetische verbindingen"}</div>
                       <div className="tags">{gedeeld.map(g=><span key={g} className="tag-def">{g}</span>)}</div>
                     </div>
                   )}
@@ -2175,26 +2454,27 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{name}</div>
                   <table className="chart-table"><tbody>
                     <tr><td>Type</td><td><strong>{c.type}</strong></td></tr>
-                    <tr><td>Strategie</td><td>{c.strat}</td></tr>
-                    <tr><td>Autoriteit</td><td>{c.auth}</td></tr>
-                    <tr><td>Profiel</td><td>{c.profile}</td></tr>
-                    <tr><td>Gedefinieerd</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>geen</span>}</div></td></tr>
-                    <tr><td>Poorten</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
+                    <tr><td>{LANG==="en"?"Strategy":"Strategie"}</td><td>{xlateStrat(c.strat)}</td></tr>
+                    <tr><td>{LANG==="en"?"Authority":"Autoriteit"}</td><td>{xlateAuth(c.auth)}</td></tr>
+                    <tr><td>{LANG==="en"?"Profile":"Profiel"}</td><td>{c.profile}</td></tr>
+                    <tr><td>{LANG==="en"?"Defined":"Gedefinieerd"}</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"none":"geen"}</span>}</div></td></tr>
+                    <tr><td>{LANG==="en"?"Gates":"Poorten"}</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
                   </tbody></table>
                 </div>
               );
+              const childLabel=LANG==="en"?"Child":"Kind";
               return(
                 <>
                   {childChart
-                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.name} name2={form.cname||"Kind"}/>
+                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.name} name2={form.cname||childLabel}/>
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
-                      <p className="body-sm" style={{color:"var(--text-light)"}}>Vul de gegevens van het kind in om de gecombineerde chart te zien</p>
+                      <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details to see the combined chart":"Vul de gegevens van het kind in om de gecombineerde chart te zien"}</p>
                     </div>}
                   <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
                     <HDRow c={chart} name={form.name}/>
-                    {childChart?<HDRow c={childChart} name={form.cname||"Kind"}/>:
+                    {childChart?<HDRow c={childChart} name={form.cname||childLabel}/>:
                       <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
-                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>Vul de gegevens van het kind in</p>
+                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details":"Vul de gegevens van het kind in"}</p>
                       </div>}
                   </div>
                 </>
@@ -2213,20 +2493,23 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
             <div className="grid-2" style={{gap:28}}>
               <div>
                 <div className="chart-result">
-                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>{chart.isNumerology?"Numerologie":"Horoscoop"}</div>
+                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>{chart.isNumerology?(LANG==="en"?"Numerology":"Numerologie"):(LANG==="en"?"Horoscope":"Horoscoop")}</div>
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{form.name}</div>
                   {chart.isNumerology?(
                     <table className="chart-table"><tbody>
-                      {[["Levenspad",chart.lp+" — "+chart.lpName],["Uitdrukking",chart.exp+" — "+chart.expName],["Ziel",chart.soul],["Persoonlijkheid",chart.pers],["Verjaardag",chart.bday],["Pers. Jaar 2026",chart.py],["Rijping",chart.mat]].map(([l,v])=>(
+                      {(LANG==="en"
+                        ?[["Life Path",chart.lp+" — "+chart.lpName],["Expression",chart.exp+" — "+chart.expName],["Soul",chart.soul],["Personality",chart.pers],["Birthday",chart.bday],["Pers. Year 2026",chart.py],["Maturity",chart.mat]]
+                        :[["Levenspad",chart.lp+" — "+chart.lpName],["Uitdrukking",chart.exp+" — "+chart.expName],["Ziel",chart.soul],["Persoonlijkheid",chart.pers],["Verjaardag",chart.bday],["Pers. Jaar 2026",chart.py],["Rijping",chart.mat]]
+                      ).map(([l,v])=>(
                         <tr key={l}><td>{l}</td><td>{v}{(v===11||v===22||v===33)&&<span style={{fontSize:".6rem",color:"var(--gold)",marginLeft:6,textTransform:"uppercase"}}>MASTER</span>}</td></tr>
                       ))}
                     </tbody></table>
                   ):(
                     <table className="chart-table"><tbody>
-                      <tr><td>Zonneteken</td><td>{chart.sun_sign}</td></tr>
+                      <tr><td>{LANG==="en"?"Sun sign":"Zonneteken"}</td><td>{chart.sun_sign}</td></tr>
                       <tr><td>Ascendant</td><td>{chart.ascendant?.degree}° {chart.ascendant?.sign}</td></tr>
-                      <tr><td>Midhemel</td><td>{chart.mc?.degree}° {chart.mc?.sign}</td></tr>
-                      <tr><td>Dom. element</td><td>{chart.dom_element}</td></tr>
+                      <tr><td>{LANG==="en"?"Midheaven":"Midhemel"}</td><td>{chart.mc?.degree}° {chart.mc?.sign}</td></tr>
+                      <tr><td>{LANG==="en"?"Dom. element":"Dom. element"}</td><td>{chart.dom_element}</td></tr>
                     </tbody></table>
                   )}
                 </div>
@@ -2234,16 +2517,16 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div>
                 <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",border:"1px solid var(--border)",padding:32,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:12,minHeight:200}}>
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"3rem",color:"rgba(61,44,94,.15)"}}>{chart.isNumerology?"∞":"☽"}</div>
-                  <div className="label">{chart.isNumerology?"Numerologische berekening":"Astrologische berekening"}</div>
-                  <p className="body-sm">Berekend op basis van je exacte geboortedata.</p>
+                  <div className="label">{chart.isNumerology?(LANG==="en"?"Numerological calculation":"Numerologische berekening"):(LANG==="en"?"Astrological calculation":"Astrologische berekening")}</div>
+                  <p className="body-sm">{LANG==="en"?"Calculated based on your exact birth data.":"Berekend op basis van je exacte geboortedata."}</p>
                 </div>
               </div>
             </div>
             )}
             <div className="order-block" style={{marginTop:24}}>
-              <div className="order-block-title">Stap 3 — Ontvang je gepersonaliseerde digitale blauwdruk</div>
-              <div className="order-block-sub">Chart berekend. Je blauwdruk bevat {rpt.pages} pagina's diepgaande persoonlijke analyse — op maat samengesteld en bezorgd per e-mail binnen 1 werkdag.</div>
-              <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>Blauwdruk bestellen — {rpt.price}</button>
+              <div className="order-block-title">{LANG==="en"?"Step 3 — Receive your personalised digital blueprint":"Stap 3 — Ontvang je gepersonaliseerde digitale blauwdruk"}</div>
+              <div className="order-block-sub">{LANG==="en"?`Chart calculated. Your blueprint contains ${rpt.pages} pages of in-depth personal analysis — custom-assembled and delivered by email within 1 business day.`:`Chart berekend. Je blauwdruk bevat ${rpt.pages} pagina's diepgaande persoonlijke analyse — op maat samengesteld en bezorgd per e-mail binnen 1 werkdag.`}</div>
+              <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>{t("report.orderBtn",{price:rpt.price})}</button>
               <div style={{marginTop:10}}><TrustStrip light/></div>
             </div>
           </div>
@@ -2256,16 +2539,16 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
 // ─── PAGES ────────────────────────────────────────────────────────────────────
 function HomePage({go}){
   useSEO({
-    title:"Human Design Rapport — Persoonlijk & Diepgaand",
-    description:"Ontvang een diepgaand, persoonlijk Human Design rapport op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, direct als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
+    title:LANG==="en"?"Human Design Report — Personal & In-Depth":"Human Design Rapport — Persoonlijk & Diepgaand",
+    description:LANG==="en"?"Receive an in-depth, personal Human Design report based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.":"Ontvang een diepgaand, persoonlijk Human Design rapport op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, direct als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
     canonical:SITE+"/",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
-      "name":"Human Design Rapporten — Faculty of Human Design",
-      "description":"Diepgaande persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "name":LANG==="en"?"Human Design Reports — Faculty of Human Design":"Human Design Rapporten — Faculty of Human Design",
+      "description":LANG==="en"?"In-depth personal reports based on Human Design, Numerology and Astrology.":"Diepgaande persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
       "itemListElement": REPORTS.slice(0,4).map((r,i)=>({
         "@type":"ListItem","position":i+1,
-        "name":r.title,"description":r.tagline,
+        "name":tl(r.title),"description":tl(r.tagline),
         "url":SITE+"/#rapport-"+r.id
       }))
     }
@@ -2286,23 +2569,23 @@ function HomePage({go}){
         <div style={{position:"absolute",bottom:0,left:0,right:0,height:"35%",background:"linear-gradient(to top, rgba(12,10,23,.65) 0%, transparent 100%)",pointerEvents:"none",zIndex:1}}/>
         <div className="hero-content">
           <div className="hero-text">
-            <div className="hero-eyebrow">Faculty of Human Design — Ibiza, Spanje</div>
-            <h1 className="h1-hero">Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></h1>
-            <p className="hero-subtitle">Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata.</p>
+            <div className="hero-eyebrow">{LANG==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
+            <h1 className="h1-hero">{LANG==="en"?<>Your personal<br/>blueprint, <em>calculated<br/>on the stars</em></>:<>Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></>}</h1>
+            <p className="hero-subtitle">{LANG==="en"?"Spiritual in insight. Scientific in calculation. Personal based on your exact birth data.":"Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
-                Ontvang mijn persoonlijke rapport
+                {t("home.heroCta")}
               </button>
-              <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button>
+              <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>{t("home.viewAll")}</button>
             </div>
             <div className="hero-trust">
               {[
-                "Veilige betaling",
-                "Persoonlijke PDF · bezorgd binnen 1 werkdag",
-                "Swiss Ephemeris — planeetposities tot op de graad",
-                "Opgericht 2014 · Ibiza",
-              ].map(t=>(
-                <div key={t} className="hero-trust-item">{t}</div>
+                t("trust.payment"),
+                t("trust.personal")+" · "+t("trust.delivery").toLowerCase(),
+                "Swiss Ephemeris — "+( LANG==="en"?"planet positions to the degree":"planeetposities tot op de graad"),
+                (LANG==="en"?"Founded 2014 · Ibiza":"Opgericht 2014 · Ibiza"),
+              ].map(item=>(
+                <div key={item} className="hero-trust-item">{item}</div>
               ))}
             </div>
           </div>
@@ -2316,7 +2599,10 @@ function HomePage({go}){
       {/* ── STAT ROW ─────────────────────────────────────────────────────── */}
       <div className="stat-row">
         <div className="stat-row-inner">
-          {[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
+          {(LANG==="en"
+            ?[["2,400+","Reports delivered"],["4.9 / 5","Average rating"],["2014","Founded in Ibiza"]]
+            :[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]]
+          ).map(([n,l])=>(
             <div key={l} className="stat-row-item">
               <div className="stat-row-n">{n}</div>
               <div className="stat-row-l">{l}</div>
@@ -2324,8 +2610,8 @@ function HomePage({go}){
           ))}
           <div className="stat-row-item" style={{position:"relative"}}>
             <div className="stat-row-n" style={{fontSize:"1.2rem",letterSpacing:".04em"}}>Swiss Ephemeris</div>
-            <div className="stat-row-l">Professionele standaard</div>
-            <div className="stat-row-ephemeris-desc" style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:172,lineHeight:1.55}}>Planeetposities tot op de graad nauwkeurig</div>
+            <div className="stat-row-l">{LANG==="en"?"Professional standard":"Professionele standaard"}</div>
+            <div className="stat-row-ephemeris-desc" style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:172,lineHeight:1.55}}>{LANG==="en"?"Planetary positions accurate to the degree":"Planeetposities tot op de graad nauwkeurig"}</div>
           </div>
         </div>
       </div>
@@ -2334,15 +2620,19 @@ function HomePage({go}){
       <section className="section-md bg-white">
         <div className="container">
           <div className="text-center" style={{marginBottom:52}}>
-            <div className="label" style={{marginBottom:14}}>Waarom Faculty of Human Design</div>
-            <h2 className="h2" style={{marginBottom:0}}>Niet generiek. Niet vaag.<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>Precies jouw chart.</em></h2>
+            <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
+            <h2 className="h2" style={{marginBottom:0}}>{t("home.waaromTitle")}</h2>
           </div>
           <div className="grid-3">
-            {[
+            {(LANG==="en"?[
+              [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris — the professional standard for exact planetary positions to the degree. No rounded tables, no averages."],
+              [IMGS.w_depth,    "In-depth analysis",     "40+ pages",      "No bullet points, no generic texts. Extensive paragraphs tailored to your unique combination of Type, Authority and Profile."],
+              [IMGS.w_ibiza,    "Ibiza as origin",       "Est. 2014",      "Founded on the island where Ra Uru Hu received the Human Design system in 1987. Every report carries the clarity of that origin."],
+            ]:[
               [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — de professionele standaard voor exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
               [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide alinea's afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
               [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Elk rapport draagt de helderheid van die oorsprong."],
-            ].map(([img,title,badge,desc])=>(
+            ]).map(([img,title,badge,desc])=>(
               <div className="waarom-card" key={title}>
                 <div className="waarom-card-img">
                   <img src={img} alt={`Faculty of Human Design — ${title}`} loading="lazy"/>
@@ -2362,9 +2652,9 @@ function HomePage({go}){
       {/* ── MEEST GEKOZEN — feature split ───────────────────────────────── */}
       <div className="feature-split">
         <div className="feature-content">
-          <div className="label" style={{marginBottom:14}}>Meest gekozen rapport</div>
-          <h2 className="h2" style={{marginBottom:18}}>Volledig Human Design Rapport</h2>
-          <p className="body-lg" style={{marginBottom:24}}>Je complete persoonlijke blauwdruk — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance voor 2026–2028.</p>
+          <div className="label" style={{marginBottom:14}}>{t("home.featuredBadge")}</div>
+          <h2 className="h2" style={{marginBottom:18}}>{tl(REPORTS[0].title)}</h2>
+          <p className="body-lg" style={{marginBottom:24}}>{tl(REPORTS[0].tagline)}</p>
           <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:10,marginBottom:32}}>
             {REPORTS[0].includes.slice(0,6).map((item,i)=>(
               <li key={i} style={{display:"flex",gap:12,alignItems:"flex-start",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)"}}>
@@ -2374,9 +2664,9 @@ function HomePage({go}){
           </ul>
           <div style={{display:"flex",gap:14,flexWrap:"wrap",alignItems:"center"}}>
             <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
-              Blauwdruk bestellen — €75
+              {t("report.orderBtn",{price:"€75"})}
             </button>
-            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>40+ pagina's · Bezorgd binnen 1 werkdag</span>
+            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"40+ pages · Delivered within 1 business day":"40+ pagina's · Bezorgd binnen 1 werkdag"}</span>
           </div>
         </div>
         <div className="feature-image-wrap ph">
@@ -2386,21 +2676,21 @@ function HomePage({go}){
             <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
               <div>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"2.4rem",fontWeight:300,color:"white",lineHeight:1}}>€75</div>
-                <div style={{fontSize:".62rem",color:"rgba(255,255,255,.4)",marginTop:4,textTransform:"uppercase",letterSpacing:".08em"}}>Eenmalig · Binnen 1 werkdag</div>
+                <div style={{fontSize:".62rem",color:"rgba(255,255,255,.4)",marginTop:4,textTransform:"uppercase",letterSpacing:".08em"}}>{LANG==="en"?"One-time · Within 1 business day":"Eenmalig · Binnen 1 werkdag"}</div>
               </div>
               <div style={{textAlign:"right"}}>
-                <div style={{fontSize:".6rem",fontWeight:600,color:"rgba(201,168,92,.8)",textTransform:"uppercase",letterSpacing:".1em"}}>40+ paginas</div>
-                <div style={{fontSize:".6rem",color:"rgba(255,255,255,.35)",marginTop:2}}>{REPORTS[0].prompt_extra.split("\n").filter(l=>l.startsWith("###")).length} secties</div>
+                <div style={{fontSize:".6rem",fontWeight:600,color:"rgba(201,168,92,.8)",textTransform:"uppercase",letterSpacing:".1em"}}>{LANG==="en"?"40+ pages":"40+ pagina's"}</div>
+                <div style={{fontSize:".6rem",color:"rgba(255,255,255,.35)",marginTop:2}}>{((typeof REPORTS[0].prompt_extra==="object"?REPORTS[0].prompt_extra[LANG]??REPORTS[0].prompt_extra.nl:REPORTS[0].prompt_extra)||"").split("\n").filter(l=>l.startsWith("###")).length} {t("report.sections")}</div>
               </div>
             </div>
-            {[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching & Kabbalah","64 poorten · 9 centra"]].map(([t,d])=>(
+            {(LANG==="en"?[["Exact birth data","Date, time and place"],["Swiss Ephemeris","Astronomical precision"],["I Ching & Kabbalah","64 gates · 9 centers"]]:[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching & Kabbalah","64 poorten · 9 centra"]]).map(([t,d])=>(
               <div key={t} style={{borderTop:"1px solid rgba(255,255,255,.08)",padding:"10px 0",display:"flex",justifyContent:"space-between"}}>
                 <span style={{fontSize:".82rem",fontWeight:300,color:"rgba(255,255,255,.82)"}}>{t}</span>
                 <span style={{fontSize:".72rem",color:"rgba(255,255,255,.38)"}}>{d}</span>
               </div>
             ))}
             <button className="btn btn-white btn-full" style={{marginTop:16}} onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"feature_card"});go("rapport-volledig");}}>
-              Ontvang mijn persoonlijke rapport
+              {t("home.ctaBtn")}
             </button>
           </div>
         </div>
@@ -2415,9 +2705,9 @@ function HomePage({go}){
         </div>
         <div className="container" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>Alle rapporten</div>
-            <h2 className="h2" style={{marginBottom:16}}>Kies je persoonlijke rapport</h2>
-            <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen — elk document uniek samengesteld op jouw chart.</p>
+            <div className="label" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
+            <h2 className="h2" style={{marginBottom:16}}>{t("rapporten.title")}</h2>
+            <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>{t("rapporten.sub")}</p>
           </div>
           <div className="grid-3">
             {REPORTS.filter(r=>["relatie_liefde","jaar","loopbaan"].includes(r.id)).map(r=>(
@@ -2425,8 +2715,8 @@ function HomePage({go}){
             ))}
           </div>
           <div style={{display:"flex",gap:28,justifyContent:"center",alignItems:"center",marginTop:40,flexWrap:"wrap"}}>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button>
-            <span style={{fontSize:".78rem",color:"var(--text-light)"}}>Numerologie · Astrologie · Relatierapport · en meer</span>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("home.viewAll")}</button>
+            <span style={{fontSize:".78rem",color:"var(--text-light)"}}>{LANG==="en"?"Numerology · Astrology · Relationship · and more":"Numerologie · Astrologie · Relatierapport · en meer"}</span>
           </div>
         </div>
       </section>
@@ -2438,12 +2728,12 @@ function HomePage({go}){
         </div>
         <div className="origin-content">
           <div>
-            <div className="label-light" style={{marginBottom:16}}>Het instituut</div>
-            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>Opgericht op het eiland<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.45)"}}>waar het begon</em></h2>
-            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,maxWidth:460,marginBottom:28}}>De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse.</p>
-            <button className="btn btn-ghost" onClick={()=>go("over")}>Over ons instituut</button>
+            <div className="label-light" style={{marginBottom:16}}>{LANG==="en"?"The institute":"Het instituut"}</div>
+            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>{LANG==="en"?"Founded on the island":"Opgericht op het eiland"}<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.45)"}}>{LANG==="en"?"where it began":"waar het begon"}</em></h2>
+            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,maxWidth:460,marginBottom:28}}>{LANG==="en"?"The Faculty of Human Design was founded in 2014 on Ibiza — the island where Ra Uru Hu received the Human Design system in 1987. Exact astronomical calculation. Personal, in-depth analysis.":"De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse."}</p>
+            <button className="btn btn-ghost" onClick={()=>go("over")}>{LANG==="en"?"About our institute":"Over ons instituut"}</button>
             <div className="origin-stat">
-              {[["2014","Opgericht"],["2.400+","Rapporten"],["4.9","Beoordeling"]].map(([n,l])=>(
+              {(LANG==="en"?[["2014","Founded"],["2,400+","Reports"],["4.9","Rating"]]:[["2014","Opgericht"],["2.400+","Rapporten"],["4.9","Beoordeling"]]).map(([n,l])=>(
                 <div key={l}>
                   <div className="origin-stat-n">{n}</div>
                   <div className="origin-stat-l">{l}</div>
@@ -2463,13 +2753,13 @@ function HomePage({go}){
         </div>
         <div className="container-md" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>Hoe het werkt</div>
-            <h2 className="h2">In drie stappen je rapport</h2>
+            <div className="label" style={{marginBottom:14}}>{t("home.howLabel")}</div>
+            <h2 className="h2">{t("home.howSub")}</h2>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:28,maxWidth:620,margin:"0 auto"}}>
-            <StepCard num="1" title="Voer je geboortegegevens in" desc="Naam, geboortedatum, -tijd en -plaats. Je chart wordt direct gratis berekend en zichtbaar als bodygraph."/>
-            <StepCard num="2" title="Bekijk je chart gratis" desc="Zie direct je Type, Autoriteit, Profiel en gedefinieerde centra. Volledig gratis, zonder betaling."/>
-            <StepCard num="3" title="Ontvang je gepersonaliseerde digitale blauwdruk" desc="Na betaling ontvang je een gepersonaliseerde digitale blauwdruk van 40+ pagina's — diepgaand, persoonlijk en bezorgd per e-mail binnen 1 werkdag."/>
+            <StepCard num="1" title={t("home.step1")} desc={t("home.step1desc")}/>
+            <StepCard num="2" title={t("home.step2")} desc={t("home.step2desc")}/>
+            <StepCard num="3" title={t("home.step3")} desc={t("home.step3desc")}/>
           </div>
         </div>
       </section>
@@ -2482,15 +2772,19 @@ function HomePage({go}){
         </div>
         <div className="container" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>Ervaringen</div>
-            <h2 className="h2">Wat onze klanten zeggen</h2>
+            <div className="label" style={{marginBottom:14}}>{t("home.testimonialsLabel")}</div>
+            <h2 className="h2">{t("home.testimonialsTitle")}</h2>
           </div>
           <div className="grid-3">
-            {[
+            {(LANG==="en"?[
+              ["The section about my open centres was confronting and liberating at the same time. Three months later I still read it.","M. van den Berg, Amsterdam","Full Report","More self-insight in 48 hours"],
+              ["We finally understand the dynamics between us. Not just 'you complement each other' but concrete patterns — including where the friction comes from.","T. and E. Dubois, Antwerp","Relationship Report","Communication improved directly"],
+              ["The combination of HD and Numerology gave a complete picture I found nowhere else. Two disciplines that perfectly complement each other.","S. Muller, Utrecht","Full & Numerology","Confirmation of a life choice"],
+            ]:[
               ["De sectie over mijn open centra was confronterend en bevrijdend tegelijk. Drie maanden later lees ik het nog steeds.","M. van den Berg, Amsterdam","Volledig Rapport","Meer zelfinzicht in 48 uur"],
               ["Eindelijk begrijpen wij de dynamieken tussen ons. Niet alleen 'jullie vullen elkaar aan' maar concrete patronen — inclusief waar de wrijving vandaan komt.","T. en E. Dubois, Antwerpen","Relatierapport","Communicatie direct verbeterd"],
               ["De combinatie van HD en Numerologie gaf een compleet beeld dat ik nergens anders vond. Twee disciplines die elkaar perfect aanvullen.","S. Muller, Utrecht","Volledig & Numerologie","Bevestiging van een levenskeuze"],
-            ].map(([q,n,r,result])=>(
+            ]).map(([q,n,r,result])=>(
               <div className="tcard" key={n}>
                 <div className="stars">★★★★★</div>
                 <div style={{display:"inline-flex",alignItems:"center",gap:5,background:"rgba(61,44,94,.06)",border:"1px solid rgba(61,44,94,.1)",borderRadius:100,padding:"3px 10px",marginBottom:14}}>
@@ -2515,22 +2809,22 @@ function HomePage({go}){
             </div>
             <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:36}}>
               <div style={{maxWidth:520}}>
-                <div className="label-light" style={{marginBottom:14}}>Maandabonnement</div>
-                <h2 className="h2" style={{color:"white",marginBottom:14}}>Maandelijkse Guidance</h2>
-                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.78}}>Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart. Maandelijks opzegbaar.</p>
+                <div className="label-light" style={{marginBottom:14}}>{LANG==="en"?"Monthly subscription":"Maandabonnement"}</div>
+                <h2 className="h2" style={{color:"white",marginBottom:14}}>{t("report.monthlyOffer")}</h2>
+                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.78}}>{LANG==="en"?"Every month a personal report on the energetic themes of that month, tailored to your Human Design chart. Cancel anytime.":"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart. Maandelijks opzegbaar."}</p>
               </div>
               <div style={{textAlign:"center",flexShrink:0}}>
                 <div className="sub-price">€19</div>
-                <div className="sub-price-period">per maand</div>
+                <div className="sub-price-period">{LANG==="en"?"per month":"per maand"}</div>
                 <div style={{display:"flex",flexDirection:"column",gap:6,margin:"14px 0 18px",textAlign:"left"}}>
                   <div style={{fontSize:".72rem",color:"rgba(255,255,255,.65)",display:"flex",alignItems:"flex-start",gap:7}}>
                     <span style={{color:"var(--gold-warm)",flexShrink:0,marginTop:1}}>✦</span>
-                    <span>Binnen 1 werkdag na betaling ontvang je je maandrapport als PDF</span>
+                    <span>{LANG==="en"?"Within 1 business day after payment you receive your monthly report as PDF":"Binnen 1 werkdag na betaling ontvang je je maandrapport als PDF"}</span>
                   </div>
-                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>Gemiddeld 11 maanden actief</div>
+                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>{LANG==="en"?"Average 11 months active":"Gemiddeld 11 maanden actief"}</div>
                 </div>
-                <button className="btn btn-gold btn-lg" onClick={()=>go("rapport-maandelijks")}>Start abonnement</button>
-                <div style={{fontSize:".66rem",color:"rgba(255,255,255,.32)",marginTop:10,lineHeight:1.5}}>Elk moment opzegbaar · geen verplichting</div>
+                <button className="btn btn-gold btn-lg" onClick={()=>go("rapport-maandelijks")}>{LANG==="en"?"Start subscription":"Start abonnement"}</button>
+                <div style={{fontSize:".66rem",color:"rgba(255,255,255,.32)",marginTop:10,lineHeight:1.5}}>{LANG==="en"?"Cancel anytime · no obligation":"Elk moment opzegbaar · geen verplichting"}</div>
               </div>
             </div>
           </div>
@@ -2544,13 +2838,13 @@ function HomePage({go}){
         </div>
         <div className="photo-cta-content">
           <div className="divider divider-center" style={{marginBottom:32}}/>
-          <h2 className="h2" style={{color:"white",marginBottom:18,maxWidth:600,margin:"0 auto 18px"}}>Klaar om je design te ontdekken?</h2>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.48)",maxWidth:460,margin:"0 auto 36px"}}>Je chart wordt direct gratis berekend. Je betaalt pas na het bekijken van je chart.</p>
+          <h2 className="h2" style={{color:"white",marginBottom:18,maxWidth:600,margin:"0 auto 18px"}}>{t("home.ctaTitle")}</h2>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.48)",maxWidth:460,margin:"0 auto 36px"}}>{t("home.ctaSub")}</p>
           <div style={{display:"flex",gap:16,justifyContent:"center",flexWrap:"wrap",marginBottom:36}}>
             <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>
-              Ontvang mijn persoonlijke rapport
+              {t("home.ctaBtn")}
             </button>
-            <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>Alle rapporten bekijken</button>
+            <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>{t("home.ctaBtnSecondary")}</button>
           </div>
           <TrustStrip light/>
         </div>
@@ -2559,10 +2853,10 @@ function HomePage({go}){
       <div className="sticky-cta">
         <div style={{display:"flex",gap:10,alignItems:"center",justifyContent:"space-between"}}>
           <div>
-            <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>Ontdek je Human Design</div>
-            <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>Vanaf €45 · Bezorgd binnen 1 werkdag</div>
+            <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>{LANG==="en"?"Discover your Human Design":"Ontdek je Human Design"}</div>
+            <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>{LANG==="en"?"From €45 · Delivered within 1 business day":"Vanaf €45 · Bezorgd binnen 1 werkdag"}</div>
           </div>
-          <button className="btn btn-primary" style={{flexShrink:0,whiteSpace:"nowrap"}} onClick={()=>{track("sticky_cta_click",{});go("rapporten");}}>Start nu →</button>
+          <button className="btn btn-primary" style={{flexShrink:0,whiteSpace:"nowrap"}} onClick={()=>{track("sticky_cta_click",{});go("rapporten");}}>{LANG==="en"?"Start now →":"Start nu →"}</button>
         </div>
       </div>
     </div>
@@ -2573,7 +2867,13 @@ function WatPage({go}){
   const[faq,setFaq]=useState(null);
   const[tab,setTab]=useState("hd");
 
-  const TYPES=[
+  const TYPES=LANG==="en"?[
+    ["Generator","37%","Wait to respond","Satisfaction","Frustration","The primary energy source of the world. Generators are designed to respond to external impulses — not to initiate. When a Generator acts from a genuine sacral response (an instinctive 'yes' or 'no' from the body), energy flows effortlessly. Acting from others' expectations or from the mind leads to frustration and energy drain."],
+    ["Manifesting Generator","33%","Inform, then respond","Satisfaction & Peace","Frustration & Anger","Fast, versatile and multi-dimensional. Manifesting Generators can do multiple things at once and jump non-linearly from step to step. That is not a lack of focus — it is their design. They inform others before acting, then respond to the sacral response, and move at lightning speed. Guilt about 'not finishing' does not fit this type."],
+    ["Projector","20%","Wait for the invitation","Success","Bitterness","Born to lead, guide and optimise systems — but only when invited. Projectors have a sharp ability to see through others and situations. Without an invitation their insight meets resistance; with an invitation they can make transformative impact. Their challenge: learning to wait and knowing themselves well before the invitation arrives."],
+    ["Manifestor","9%","Inform before acting","Peace","Anger","The only type that can naturally take initiative without first responding or waiting. Manifestors have a closed, compact aura that keeps others at a distance — which can cause resistance. By informing others about what they are about to do (not to ask permission, but to reduce resistance) their energy flows most powerfully."],
+    ["Reflector","1%","Wait a lunar cycle","Surprise","Disappointment","The rarest and most unique type. Reflectors have no fixed definition — they are a mirror for the people and environments around them. They experience the world by absorbing and reflecting back the energies of others. Major decisions require a full lunar cycle of 28 days to feel all perspectives."],
+  ]:[
     ["Generator","37%","Wacht om te reageren","Bevrediging","Frustratie","De primaire energiebron van de wereld. Generators zijn ontworpen om te reageren op impulsen van buitenaf — niet om te initiëren. Wanneer een Generator handelt vanuit een echte sacrale respons (een instinctief 'ja' of 'nee' vanuit het lichaam), stroomt energie moeiteloos. Handelt hij vanuit de verwachting van anderen of vanuit het hoofd, dan volgt frustratie en energieverlies."],
     ["Manifesting Generator","33%","Informeer, reageer dan","Bevrediging & Vrede","Frustratie & Woede","Snel, veelzijdig en multidimensionaal. Manifesting Generators kunnen meerdere dingen tegelijk en springen niet-lineair van stap naar stap. Dat is geen gebrek aan focus — het is hun design. Ze informeren andere mensen voor ze handelen, reageren dan op de sacrale respons, en bewegen razendsnel. Schuldgevoel over 'niet afmaken' past niet bij dit type."],
     ["Projector","20%","Wacht op de uitnodiging","Succes","Bitterheid","Geboren om te leiden, te begeleiden en systemen te optimaliseren — maar alleen wanneer uitgenodigd. Projectors hebben een scherp vermogen om anderen en situaties te doorgronden. Zonder uitnodiging leidt hun inzicht tot weerstand; met uitnodiging kunnen ze transformatieve impact maken. Hun uitdaging: leren wachten en zichzelf goed kennen voor de uitnodiging komt."],
@@ -2581,7 +2881,15 @@ function WatPage({go}){
     ["Reflector","1%","Wacht een maancyclus","Verrassing","Teleurstelling","De zeldzaamste en meest bijzondere type. Reflectors hebben geen vaste definitie — ze zijn een spiegel voor de mensen en omgevingen om hen heen. Ze ervaren de wereld door de energieën van anderen te absorberen en terug te reflecteren. Grote beslissingen vergen een volledige maancyclus van 28 dagen om alle perspectieven te doorvoelen."],
   ];
 
-  const AUTHORITIES=[
+  const AUTHORITIES=LANG==="en"?[
+    ["Emotional","Solar Plexus defined","Never make decisions in the moment. Wait for emotional clarity — that can take hours, sometimes days. 'Sleep on it' is literally the best advice for this type."],
+    ["Sacral","Sacral center defined, Solar Plexus open","Speaks through the body: an instinctive 'uh-huh' or 'unh-unh'. Test decisions through direct yes/no questions and listen to the bodily response, not the mind."],
+    ["Splenic","Spleen defined, above open","The quietest authority. Speaks once, in the moment. A soft whisper of instinct — trust that first signal, even if you cannot easily explain it."],
+    ["Ego / Heart","Heart center defined","Speaks through will and desire. The central question: 'Do I really want this?' Not what others expect, but what you choose from your deepest will."],
+    ["G / Self","G-center defined","Finds clarity by speaking aloud with someone you trust — not for advice, but to hear your own voice and feel what is right."],
+    ["Mental","Ajna defined, all motor centers open","Exclusive to certain Projectors. Calibrates through conversation and external reflection. Needs trusted people as sounding boards."],
+    ["Lunar","Reflectors","Needs a full lunar cycle of 28 days to feel the energy of a decision through all conditions."],
+  ]:[
     ["Emotioneel","Solar Plexus gedefinieerd","Neem nooit beslissingen in het moment. Wacht op emotionele helderheid — dat kan uren, soms dagen duren. 'Slaap er eens een nacht over' is voor dit type letterlijk het beste advies."],
     ["Sacraal","Sacraalcentrum gedefinieerd, Solar Plexus open","Spreekt via het lichaam: een instinctief 'uh-huh' of 'unh-unh'. Test beslissingen via directe ja/nee-vragen en luister naar de lichamelijke respons, niet naar het hoofd."],
     ["Splenisch","Milt gedefinieerd, bovenstaande open","De stilste autoriteit. Spreekt eenmalig, in het moment. Een zachte fluistering van instinct — vertrouw dat eerste signaal, ook al kun je het moeilijk verklaren."],
@@ -2591,7 +2899,14 @@ function WatPage({go}){
     ["Lunair","Reflectors","Heeft een volledige maancyclus van 28 dagen nodig om de energie van een beslissing door alle condities heen te voelen."],
   ];
 
-  const NUM_KERNGETALLEN=[
+  const NUM_KERNGETALLEN=LANG==="en"?[
+    ["Life Path Number","Calculated from date of birth","The thread running through your life — your central life lessons and the direction in which you naturally grow. The most fundamental number in your numerological profile."],
+    ["Expression Number","Calculated from full name","How you express your talents and gifts in the world. Describes your best contribution to others and to your work."],
+    ["Soul Number","Vowels in your name","What your deepest self desires — the inner motivation that is not always visible to the outside world but that strongly influences your choices."],
+    ["Personality Number","Consonants in your name","How others see and experience you. The impression you make, the facade you carry."],
+    ["Personal Year","Date of birth + current year","Each year has a different energetic quality. The personal year helps you understand which themes are central and when action or rest is appropriate."],
+    ["Maturity Number","Life Path + Expression","The number that increasingly influences the second half of your life — the destination toward which you are growing."],
+  ]:[
     ["Levenspadgetal","Berekend uit geboortedatum","De rode draad van je leven — je centrale levenslessen en de richting waarin je van nature groeit. Het meest fundamentele getal in je numerologisch profiel."],
     ["Uitdrukkingsgetal","Berekend uit volledige naam","Hoe jij je talenten en gaven uitdrukt in de wereld. Beschrijft je beste bijdrage aan anderen en aan je werk."],
     ["Zielsgetal","Klinkers in je naam","Wat je diepste zelf verlangt — de innerlijke motivatie die niet altijd zichtbaar is voor de buitenwereld maar die je keuzes sterk beïnvloedt."],
@@ -2600,7 +2915,14 @@ function WatPage({go}){
     ["Rijpingsgetal","Levenspad + Uitdrukking","Het getal dat je tweede helft van het leven steeds meer beïnvloedt — de bestemming waar je naartoe groeit."],
   ];
 
-  const ASTRO_LAGEN=[
+  const ASTRO_LAGEN=LANG==="en"?[
+    ["Sun — your conscious core","Your sun sign describes the core of your conscious self: how you experience and express your identity. It is the most well-known layer, but only one of ten."],
+    ["Ascendant — your first impression","The sign rising on the eastern horizon at your birth hour. Describes how you approach the world and how others first experience you."],
+    ["Moon — your emotional world","The planet of your inner life, your habitual patterns and your need for security. The Moon tells you what you need to feel emotionally at home."],
+    ["Mercury — thinking and communicating","How you think, process information and communicate. Essential for understanding your learning and communication style."],
+    ["Venus — love and values","What attracts you and what you find attractive in relationships, art and material things. Gives insight into how you give and receive love."],
+    ["Midheaven — your calling","The highest point of your chart describes your professional destination, your public role and what you want to contribute to the world."],
+  ]:[
     ["Zon — je bewuste kern","Je zonneteken beschrijft de kern van je bewuste zelf: hoe je je identiteit beleeft en uitdrukt. Het is de meest bekende laag, maar slechts één van de tien."],
     ["Ascendant — je eerste indruk","Het teken dat op je geboorteuur opkwam aan de oostelijke horizon. Beschrijft hoe je de wereld benadert en hoe anderen je als eerste ervaren."],
     ["Maan — je emotionele wereld","De planeet van je binnenste leven, je gewoontepatronen en je behoefte aan veiligheid. De Maan vertelt wat je nodig hebt om je emotioneel thuis te voelen."],
@@ -2609,13 +2931,25 @@ function WatPage({go}){
     ["Midhemel — je roeping","Het hoogste punt van je chart beschrijft je professionele bestemming, je publieke rol en wat je wil bijdragen aan de wereld."],
   ];
 
-  const COMBO=[
+  const COMBO=LANG==="en"?[
+    ["Human Design","Energetic blueprint","Who you are at the level of energy and mechanisms. How you make decisions, how you live with others, what conditioning is and what is authentic.","✦"],
+    ["Numerology","Life lessons and patterns","Which themes run through your life, which talents you carry from your name and birth date, and which beliefs you need to overcome.","∞"],
+    ["Astrology","Timing and context","How planetary cycles colour the atmosphere of your life — from the character traits in your birth horoscope to the themes of a specific year.","☽"],
+  ]:[
     ["Human Design","Energetische blauwdruk","Wie je bent op het niveau van energie en mechanismen. Hoe je beslissingen neemt, hoe je leeft met anderen, wat conditionering is en wat authentiek.","✦"],
     ["Numerologie","Levenslessen en patronen","Welke thema's door je leven heen lopen, welke talenten je meedraagt vanuit je naam en geboortedatum, en welke overtuigingen je te overwinnen hebt.","∞"],
     ["Astrologie","Timing en context","Hoe planetaire cycli de sfeer van je leven kleuren — van de karaktereigenschappen in je geboortehoroscoop tot de thema's van een specifiek jaar.","☽"],
   ];
 
-  const faqs=[
+  const faqs=LANG==="en"?[
+    ["What is the basis for calculating a Human Design chart?","All HD charts are calculated using the Meeus ephemeris — the same astronomical algorithms as professional astronomical software. The calculation requires your exact date of birth, time of birth and place of birth."],
+    ["Is Human Design the same as a horoscope?","No. A horoscope works primarily with your sun sign and planetary positions at the time of your birth. Human Design uses that same astronomical data but combines it with the I Ching, the Kabbalistic Tree of Life and quantum physics principles into a fundamentally different system."],
+    ["What if I don't know my birth time?","The birth time affects some centers and your profile. Check your birth certificate for the most accurate calculation. Without an exact time, Type and Authority are usually still correct."],
+    ["Does a Numerology report differ from a Human Design report?","Yes, fundamentally. Numerology works with the numerical values of your name and birth date and describes life lessons, patterns and talents. Human Design works with planetary positions and describes your energetic mechanisms. Both are completely different disciplines that complement each other."],
+    ["What does a birth horoscope add to Human Design?","A birth horoscope goes deeper into planetary qualities, aspects and houses that are less central in Human Design. Where HD describes your energetic mechanism, the horoscope describes the qualities of your planetary placements — your Mercury, your Venus, your Moon — as additional layers."],
+    ["How quickly will I receive my blueprint?","Your personalised digital blueprint is fully assembled within 3 to 4 minutes based on your chart — and immediately available as a PDF."],
+    ["Is it a personal document or a template?","Every blueprint is fully customised based on your specific chart. No two blueprints are identical."],
+  ]:[
     ["Op basis waarvan wordt de Human Design chart berekend?","Alle HD charts worden berekend met de Meeus ephemeris — dezelfde astronomische algoritmen als professionele astronomische software. De berekening vereist je exacte geboortedatum, geboortetijd en geboorteplaats."],
     ["Is Human Design hetzelfde als een horoscoop?","Nee. Een horoscoop werkt primair met je zonneteken en planeetposities op je geboortemoment. Human Design gebruikt diezelfde astronomische data maar combineert deze met de I Ching, de Kabbalistische levensboom en kwantumfysische principes tot een fundamenteel ander systeem."],
     ["Wat als ik mijn geboortetijd niet weet?","De geboortetijd beïnvloedt sommige centra en je profiel. Controleer je geboorteakte voor de meest nauwkeurige berekening. Zonder exacte tijd zijn Type en Autoriteit in de meeste gevallen nog steeds correct."],
@@ -2638,8 +2972,8 @@ function WatPage({go}){
   );
 
   useSEO({
-    title:"Wat is Human Design? — Uitleg Typen, Autoriteit & Numerologie",
-    description:"Alles over Human Design, Numerologie en Astrologie. Leer de vijf typen, innerlijke autoriteit, de negen centra en hoe de drie disciplines samenhangen. Met diepgaande achtergrondinformatie.",
+    title:LANG==="en"?"What is Human Design? — Types, Authority & Numerology Explained":"Wat is Human Design? — Uitleg Typen, Autoriteit & Numerologie",
+    description:LANG==="en"?"Everything about Human Design, Numerology and Astrology. Learn the five types, inner authority, the nine centres and how the three disciplines connect. With in-depth background information.":"Alles over Human Design, Numerologie en Astrologie. Leer de vijf typen, innerlijke autoriteit, de negen centra en hoe de drie disciplines samenhangen. Met diepgaande achtergrondinformatie.",
     canonical:SITE+"/#wat",
     jsonLd: faqLD(faqs)
   });
@@ -2653,13 +2987,13 @@ function WatPage({go}){
           <img src={IMGS.hero} alt="Sterrenhemel" loading="eager"/>
         </div>
         <div className="page-hero-pad">
-          <div className="label-light" style={{marginBottom:14}}>Het kennissysteem</div>
-          <h1 className="h1" style={{color:"white",marginBottom:18,maxWidth:620}}>Human Design,<br/>Numerologie & Astrologie</h1>
-          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:540,lineHeight:1.82,marginBottom:32}}>Drie disciplines. Elk met een eigen methodologie, eigen oorsprong en eigen inzichten. Samen vormen ze een compleet portret van wie je bent.</p>
+          <div className="label-light" style={{marginBottom:14}}>{t("wat.eyebrow")}</div>
+          <h1 className="h1" style={{color:"white",marginBottom:18,maxWidth:620}}>Human Design,<br/>{LANG==="en"?"Numerology & Astrology":"Numerologie & Astrologie"}</h1>
+          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:540,lineHeight:1.82,marginBottom:32}}>{t("wat.sub")}</p>
           <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
             <button className="btn btn-ghost btn-sm" onClick={()=>setTab("hd")}>Human Design</button>
-            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("num")}>Numerologie</button>
-            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("astro")}>Astrologie</button>
+            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("num")}>{t("wat.tabNum")}</button>
+            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("astro")}>{t("wat.tabAstro")}</button>
           </div>
         </div>
       </div>
@@ -2669,9 +3003,9 @@ function WatPage({go}){
         <div className="tab-scroll">
           <div style={{maxWidth:1240,margin:"0 auto",display:"flex",gap:0,minWidth:"max-content"}}>
             <TabBtn id="hd" label="Human Design"/>
-            <TabBtn id="num" label="Numerologie"/>
-            <TabBtn id="astro" label="Astrologie"/>
-            <TabBtn id="combo" label="Hoe ze samenhangen"/>
+            <TabBtn id="num" label={t("wat.tabNum")}/>
+            <TabBtn id="astro" label={t("wat.tabAstro")}/>
+            <TabBtn id="combo" label={t("wat.tabCombo")}/>
           </div>
         </div>
       </div>
@@ -2684,17 +3018,22 @@ function WatPage({go}){
         {/* Intro */}
         <section className="section bg-white">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>Wat is Human Design?</div>
-            <h2 className="h2" style={{marginBottom:22}}>Een blauwdruk op basis van je geboortemoment</h2>
-            <p className="body-lg" style={{marginBottom:18}}>Human Design is een synthese van vier kennissystemen — de I Ching, de Kabbalistische levensboom, de westerse astrologie en de kwantumfysica — die samen een nauwkeurige kaart vormen van je energetische aard. Het systeem werd in 1987 ontvangen door Ra Uru Hu op Ibiza en is sindsdien wereldwijd verspreid.</p>
-            <p className="body-md" style={{marginBottom:32}}>Centraal in Human Design staan negen energiecentra, 64 poorten en 36 kanalen. De posities van de planeten op je geboortemoment — én op het moment 88 graden van de zon eerder (je zogenoemde Design datum) — bepalen welke centra gedefinieerd zijn en welke open. Die configuratie is uniek voor jou en verandert nooit.</p>
+            <div className="label" style={{marginBottom:14}}>{t("wat.hdIntroLabel")}</div>
+            <h2 className="h2" style={{marginBottom:22}}>{t("wat.hdIntroTitle")}</h2>
+            <p className="body-lg" style={{marginBottom:18}}>{t("wat.hdIntroBody1")}</p>
+            <p className="body-md" style={{marginBottom:32}}>{t("wat.hdIntroBody2")}</p>
             <div className="grid-2" style={{gap:20}}>
-              {[
+              {(LANG==="en"?[
+                ["I Ching","The 64 hexagrams of the Chinese I Ching form the backbone. Each hexagram corresponds to one of the 64 gates in your chart and describes a specific quality of consciousness or energy."],
+                ["Kabbalah","The Sefirot of the Jewish Kabbalah — the Tree of Life — provides the structure of the nine energy centers and their interconnections via 36 channels."],
+                ["Astrology","The positions of the planets on your birth day and your Design date activate specific gates in your chart. Without astronomical precision there is no accurate calculation."],
+                ["Quantum physics","The centers correspond to endocrine glands and neutrino streams. Ra Uru Hu used the discovery of the neutrino as the scientific foundation for information transfer."],
+              ]:[
                 ["I Ching","De 64 hexagrammen van de Chinese I Ching vormen de ruggengraat. Elk hexagram correspondeert met een van de 64 poorten in je chart en beschrijft een specifieke kwaliteit van bewustzijn of energie."],
                 ["Kabbalah","De Sefirot van de Joodse Kabbala — de levensboom — levert de structuur van de negen energiecentra en hun onderlinge verbindingen via 36 kanalen."],
                 ["Astrologie","De posities van de planeten op je geboortedag en je Design datum activeren specifieke poorten in je chart. Zonder astronomische precisie geen nauwkeurige berekening."],
                 ["Kwantumfysica","De centra corresponderen met hormoonklieren en neutrino-stromen. Ra Uru Hu gebruikte de ontdekking van het neutrino als wetenschappelijk fundament voor informatieoverdracht."],
-              ].map(([t,d])=>(
+              ]).map(([t,d])=>(
                 <div key={t} style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"24px 28px",borderLeft:"3px solid var(--brand)"}}>
                   <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:400,color:"var(--text)",marginBottom:8}}>{t}</div>
                   <p className="body-sm">{d}</p>
@@ -2707,19 +3046,19 @@ function WatPage({go}){
         {/* Types */}
         <section className="section bg-muted">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>De vijf types</div>
-            <h2 className="h2" style={{marginBottom:8}}>Welk type ben je?</h2>
-            <p className="body-md" style={{marginBottom:36}}>Je Type is je energetische aard — niet wat je doet, maar hoe je systeem van nature functioneert. Het staat vast vanaf je geboorte.</p>
-            {TYPES.map(([t,pct,strat,sig,notSelf,desc])=>(
-              <div key={t} style={{borderBottom:"1px solid var(--border)",padding:"28px 0"}}>
+            <div className="label" style={{marginBottom:14}}>{t("wat.hdTypesLabel")}</div>
+            <h2 className="h2" style={{marginBottom:8}}>{t("wat.hdTypesTitle")}</h2>
+            <p className="body-md" style={{marginBottom:36}}>{t("wat.hdTypesSub")}</p>
+            {TYPES.map(([typeName,pct,strat,sig,notSelf,desc])=>(
+              <div key={typeName} style={{borderBottom:"1px solid var(--border)",padding:"28px 0"}}>
                 <div className="split-row-lg">
                   <div>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:5}}>{t}</div>
-                    <div style={{fontSize:".62rem",fontWeight:600,color:"var(--gold)",letterSpacing:".1em",textTransform:"uppercase",marginBottom:10}}>{pct} van de bevolking</div>
+                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:5}}>{typeName}</div>
+                    <div style={{fontSize:".62rem",fontWeight:600,color:"var(--gold)",letterSpacing:".1em",textTransform:"uppercase",marginBottom:10}}>{t("wat.hdTypesPopulation",{pct})}</div>
                     <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"var(--brand)"}}>Strategie: </span>{strat}</div>
-                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"var(--brand)"}}>Signatuur: </span>{sig}</div>
-                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"#C05252"}}>Not-self: </span>{notSelf}</div>
+                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"var(--brand)"}}>{t("wat.hdTypesStrategy")}</span>{strat}</div>
+                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"var(--brand)"}}>{t("wat.hdTypesSignature")}</span>{sig}</div>
+                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"#C05252"}}>{t("wat.hdTypesNotSelf")}</span>{notSelf}</div>
                     </div>
                   </div>
                   <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
@@ -2727,8 +3066,8 @@ function WatPage({go}){
               </div>
             ))}
             <div style={{marginTop:36,display:"flex",gap:14,flexWrap:"wrap"}}>
-              <button className="btn btn-primary" onClick={()=>go("rapport-volledig")}>Ontdek je type via een rapport</button>
-              <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Alle rapporten</button>
+              <button className="btn btn-primary" onClick={()=>go("rapport-volledig")}>{t("wat.hdTypesCta")}</button>
+              <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("wat.hdTypesAllReports")}</button>
             </div>
           </div>
         </section>
@@ -2736,9 +3075,9 @@ function WatPage({go}){
         {/* Autoriteit */}
         <section className="section bg-white">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>Innerlijke autoriteit</div>
-            <h2 className="h2" style={{marginBottom:12}}>Hoe neem je je beste beslissingen?</h2>
-            <p className="body-lg" style={{marginBottom:36}}>Je innerlijke autoriteit is het centrum of mechanisme van waaruit jij het betrouwbaarst beslissingen neemt. Het hoofd is in Human Design geen beslisser — het is een uitstekend instrument om informatie te verzamelen, maar niet om de keuze te maken.</p>
+            <div className="label" style={{marginBottom:14}}>{t("wat.hdAuthLabel")}</div>
+            <h2 className="h2" style={{marginBottom:12}}>{t("wat.hdAuthTitle")}</h2>
+            <p className="body-lg" style={{marginBottom:36}}>{t("wat.hdAuthBody")}</p>
             <div style={{display:"flex",flexDirection:"column",gap:0}}>
               {AUTHORITIES.map(([name,condition,desc],i)=>(
                 <div key={name} className="split-row">
@@ -2756,11 +3095,11 @@ function WatPage({go}){
         {/* Centra kort */}
         <section className="section bg-muted">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>De negen centra</div>
-            <h2 className="h2" style={{marginBottom:12}}>Gedefinieerd of open?</h2>
-            <p className="body-lg" style={{marginBottom:28}}>Je chart heeft negen energiecentra. Gedefinieerde centra (gekleurd) produceren een consistente, betrouwbare energie. Open centra (wit) absorberen de energie van anderen — ze zijn niet zwak, maar ze zijn gevoelig voor conditionering.</p>
+            <div className="label" style={{marginBottom:14}}>{t("wat.hdCentersLabel")}</div>
+            <h2 className="h2" style={{marginBottom:12}}>{t("wat.hdCentersTitle")}</h2>
+            <p className="body-lg" style={{marginBottom:28}}>{t("wat.hdCentersBody")}</p>
             <div className="grid-4" style={{gap:16}}>
-              {[["Hoofd","Inspiratie en mentale druk"],["Ajna","Conceptualisering en zekerheid"],["Keel","Communicatie en manifestatie"],["G/Zelf","Identiteit, liefde en richting"],["Hart/Ego","Wil, ego en materieel succes"],["Sacraal","Levensenergie en voortplanting"],["Solar Plexus","Emoties en spirituele golf"],["Milt","Instinct, gezondheid en welzijn"],["Wortel","Adrenalinerush en druk"]].map(([c,d])=>(
+              {(LANG==="en"?[["Head","Inspiration and mental pressure"],["Ajna","Conceptualisation and certainty"],["Throat","Communication and manifestation"],["G/Self","Identity, love and direction"],["Heart/Ego","Will, ego and material success"],["Sacral","Life energy and reproduction"],["Solar Plexus","Emotions and the spiritual wave"],["Spleen","Instinct, health and wellbeing"],["Root","Adrenaline rush and pressure"]]:[["Hoofd","Inspiratie en mentale druk"],["Ajna","Conceptualisering en zekerheid"],["Keel","Communicatie en manifestatie"],["G/Zelf","Identiteit, liefde en richting"],["Hart/Ego","Wil, ego en materieel succes"],["Sacraal","Levensenergie en voortplanting"],["Solar Plexus","Emoties en spirituele golf"],["Milt","Instinct, gezondheid en welzijn"],["Wortel","Adrenalinerush en druk"]]).map(([c,d])=>(
                 <div key={c} style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-md)",padding:"18px 20px"}}>
                   <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:4}}>{c}</div>
                   <div style={{fontSize:".85rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.6}}>{d}</div>
@@ -2781,25 +3120,25 @@ function WatPage({go}){
           <div className="container">
             <div className="two-col-lg">
               <div>
-                <div className="label" style={{marginBottom:14}}>Wat is Numerologie?</div>
-                <h2 className="h2" style={{marginBottom:22}}>De taal van getallen achter je naam en geboortedatum</h2>
-                <p className="body-lg" style={{marginBottom:18}}>Numerologie is een eeuwenoud systeem dat ervan uitgaat dat getallen niet alleen hoeveelheden zijn maar ook kwaliteiten dragen. Elke letter van het alfabet heeft een numerieke waarde. Elke dag heeft een getal. En die getallen onthullen — wanneer je ze juist berekent — patronen die door je leven heen lopen.</p>
-                <p className="body-md" style={{marginBottom:18}}>Het meest gebruikte systeem is de Pythagoreïsche numerologie, vernoemd naar Pythagoras van Samos (ca. 570–495 v.Chr.), die het getal beschouwde als de fundamentele realiteit van het universum. Het systeem werkt met de negen basiscijfers 1–9 en drie bijzondere Mastergetallen: 11, 22 en 33.</p>
-                <p className="body-md" style={{marginBottom:28}}>Numerologie gaat niet over voorspellen. Het gaat over herkennen — patronen zien in je verleden, begrijpen wat er van je wordt gevraagd in het heden, en helderheid krijgen over de richting van je toekomst.</p>
-                <button className="btn btn-primary" onClick={()=>go("rapport-numerologie")}>Bekijk Numerologie rapport</button>
+                <div className="label" style={{marginBottom:14}}>{t("wat.numIntroLabel")}</div>
+                <h2 className="h2" style={{marginBottom:22}}>{t("wat.numIntroTitle")}</h2>
+                <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Numerology is an ancient system based on the idea that numbers carry not only quantities but also qualities. Every letter of the alphabet has a numerical value. Every day has a number. And those numbers reveal — when correctly calculated — patterns that run through your life.":"Numerologie is een eeuwenoud systeem dat ervan uitgaat dat getallen niet alleen hoeveelheden zijn maar ook kwaliteiten dragen. Elke letter van het alfabet heeft een numerieke waarde. Elke dag heeft een getal. En die getallen onthullen — wanneer je ze juist berekent — patronen die door je leven heen lopen."}</p>
+                <p className="body-md" style={{marginBottom:18}}>{LANG==="en"?"The most widely used system is Pythagorean numerology, named after Pythagoras of Samos (c. 570–495 BC), who considered number to be the fundamental reality of the universe. The system works with the nine base digits 1–9 and three special Master Numbers: 11, 22 and 33.":"Het meest gebruikte systeem is de Pythagoreïsche numerologie, vernoemd naar Pythagoras van Samos (ca. 570–495 v.Chr.), die het getal beschouwde als de fundamentele realiteit van het universum. Het systeem werkt met de negen basiscijfers 1–9 en drie bijzondere Mastergetallen: 11, 22 en 33."}</p>
+                <p className="body-md" style={{marginBottom:28}}>{LANG==="en"?"Numerology is not about predicting. It is about recognising — seeing patterns in your past, understanding what is asked of you in the present, and gaining clarity about the direction of your future.":"Numerologie gaat niet over voorspellen. Het gaat over herkennen — patronen zien in je verleden, begrijpen wat er van je wordt gevraagd in het heden, en helderheid krijgen over de richting van je toekomst."}</p>
+                <button className="btn btn-primary" onClick={()=>go("rapport-numerologie")}>{LANG==="en"?"View Numerology report":"Bekijk Numerologie rapport"}</button>
               </div>
               <div>
                 <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-lg)",aspectRatio:"4/3",position:"relative",marginBottom:24}}>
                   <img src={IMGS.r_numerologie} alt="Numerologie" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
                   <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(12,10,23,.7) 100%)"}}/>
                   <div style={{position:"absolute",bottom:22,left:24,right:24}}>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.6}}>"Getallen zijn het wezen van alle dingen."</div>
-                    <div style={{fontSize:".62rem",letterSpacing:".1em",color:"rgba(255,255,255,.4)",textTransform:"uppercase",marginTop:6}}>Pythagoras, ca. 500 v.Chr.</div>
+                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.6}}>{LANG==="en"?'"Numbers are the essence of all things."':'"Getallen zijn het wezen van alle dingen."'}</div>
+                    <div style={{fontSize:".62rem",letterSpacing:".1em",color:"rgba(255,255,255,.4)",textTransform:"uppercase",marginTop:6}}>Pythagoras, {LANG==="en"?"c. 500 BC":"ca. 500 v.Chr."}</div>
                   </div>
                 </div>
                 <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px"}}>
-                  <div className="label" style={{marginBottom:12}}>De Mastergetallen</div>
-                  {[["11","De Meester Intuïtief — hoge gevoeligheid, spirituele antenne, intensiteit"],["22","De Meester Bouwer — groot potentieel voor concrete impact op de wereld"],["33","De Meester Leraar — compassie, verantwoordelijkheid, dienend leiderschap"]].map(([n,d])=>(
+                  <div className="label" style={{marginBottom:12}}>{t("wat.numMasterLabel")} — {t("wat.numMasterTitle")}</div>
+                  {(LANG==="en"?[["11","The Master Intuitive — high sensitivity, spiritual antenna, intensity"],["22","The Master Builder — great potential for concrete impact on the world"],["33","The Master Teacher — compassion, responsibility, serving leadership"]]:[["11","De Meester Intuïtief — hoge gevoeligheid, spirituele antenne, intensiteit"],["22","De Meester Bouwer — groot potentieel voor concrete impact op de wereld"],["33","De Meester Leraar — compassie, verantwoordelijkheid, dienend leiderschap"]]).map(([n,d])=>(
                     <div key={n} style={{display:"flex",gap:14,padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
                       <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem",fontWeight:300,color:"var(--brand)",width:28,flexShrink:0,lineHeight:1}}>{n}</div>
                       <div style={{fontSize:".85rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65}}>{d}</div>
@@ -2813,9 +3152,9 @@ function WatPage({go}){
 
         <section className="section bg-muted">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>De kerngetallen</div>
-            <h2 className="h2" style={{marginBottom:12}}>Acht getallen die samen je portret vormen</h2>
-            <p className="body-md" style={{marginBottom:36}}>Een volledig numerologisch rapport berekent niet één getal maar acht. Elk beschrijft een andere laag van je persoonlijkheid, je leven en je timing.</p>
+            <div className="label" style={{marginBottom:14}}>{t("wat.numCoreLabel")}</div>
+            <h2 className="h2" style={{marginBottom:12}}>{t("wat.numCoreTitle")}</h2>
+            <p className="body-md" style={{marginBottom:36}}>{t("wat.numCoreSub")}</p>
             <div style={{display:"flex",flexDirection:"column",gap:0}}>
               {NUM_KERNGETALLEN.map(([naam,bron,desc])=>(
                 <div key={naam} className="split-row">
@@ -2828,7 +3167,7 @@ function WatPage({go}){
               ))}
             </div>
             <div style={{marginTop:36}}>
-              <button className="btn btn-primary" onClick={()=>go("rapport-numerologie")}>Bestel Numerologie Rapport — €65</button>
+              <button className="btn btn-primary" onClick={()=>go("rapport-numerologie")}>{LANG==="en"?"Order Numerology Report — €65":"Bestel Numerologie Rapport — €65"}</button>
             </div>
           </div>
         </section>
@@ -2844,12 +3183,12 @@ function WatPage({go}){
           <div className="container">
             <div className="two-col-lg">
               <div>
-                <div className="label" style={{marginBottom:14}}>Wat is Astrologie?</div>
-                <h2 className="h2" style={{marginBottom:22}}>De planeten als spiegel van je karakter</h2>
-                <p className="body-lg" style={{marginBottom:18}}>Westerse astrologie is het studie van de posities van de planeten op het moment van je geboorte en hun relatie tot elkaar, tot de tekens van de dierenriem en tot de twaalf huizen van je horoscoopkaart. Het uitgangspunt: de stand van de hemel op het moment dat je de wereld binnentrad, weerspiegelt het karakter waarmee je die wereld tegemoet treedt.</p>
-                <p className="body-md" style={{marginBottom:18}}>Astrologie is geen voorspellingskunst maar een systeem van symbolische correspondentie. Jupiter in Steenbok beschrijft iets anders dan Jupiter in Vissen. Een sterk bezette zevende huis vertelt iets anders dan een lege. Geen twee geboortehoroscopen zijn identiek — zelfs niet die van een tweeling, omdat de huisverdeling verschuift met elk voorbijgaand uur.</p>
-                <p className="body-md" style={{marginBottom:28}}>Onze geboortehoroscoop analyseert alle tien planeten, de twaalf huizen, de Ascendant, het Midhemel en de belangrijkste aspecten — de hoeken die planeten met elkaar maken. Dat geeft een compleet, gelaagd portret.</p>
-                <button className="btn btn-primary" onClick={()=>go("rapport-horoscoop")}>Bekijk Geboortehoroscoop rapport</button>
+                <div className="label" style={{marginBottom:14}}>{t("wat.astroIntroLabel")}</div>
+                <h2 className="h2" style={{marginBottom:22}}>{t("wat.astroIntroTitle")}</h2>
+                <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Western astrology is the study of the positions of the planets at the moment of your birth and their relationship to each other, to the signs of the zodiac and to the twelve houses of your horoscope chart. The premise: the position of the sky at the moment you entered the world reflects the character with which you meet that world.":"Westerse astrologie is het studie van de posities van de planeten op het moment van je geboorte en hun relatie tot elkaar, tot de tekens van de dierenriem en tot de twaalf huizen van je horoscoopkaart. Het uitgangspunt: de stand van de hemel op het moment dat je de wereld binnentrad, weerspiegelt het karakter waarmee je die wereld tegemoet treedt."}</p>
+                <p className="body-md" style={{marginBottom:18}}>{LANG==="en"?"Astrology is not a predictive art but a system of symbolic correspondence. Jupiter in Capricorn describes something different from Jupiter in Pisces. A strongly occupied seventh house tells something different from an empty one. No two birth horoscopes are identical — not even those of twins, because the house division shifts with every passing hour.":"Astrologie is geen voorspellingskunst maar een systeem van symbolische correspondentie. Jupiter in Steenbok beschrijft iets anders dan Jupiter in Vissen. Een sterk bezette zevende huis vertelt iets anders dan een lege. Geen twee geboortehoroscopen zijn identiek — zelfs niet die van een tweeling, omdat de huisverdeling verschuift met elk voorbijgaand uur."}</p>
+                <p className="body-md" style={{marginBottom:28}}>{LANG==="en"?"Our birth horoscope analyses all ten planets, the twelve houses, the Ascendant, the Midheaven and the most important aspects — the angles that planets make with each other. This gives a complete, layered portrait.":"Onze geboortehoroscoop analyseert alle tien planeten, de twaalf huizen, de Ascendant, het Midhemel en de belangrijkste aspecten — de hoeken die planeten met elkaar maken. Dat geeft een compleet, gelaagd portret."}</p>
+                <button className="btn btn-primary" onClick={()=>go("rapport-horoscoop")}>{LANG==="en"?"View Birth Horoscope report":"Bekijk Geboortehoroscoop rapport"}</button>
               </div>
               <div>
                 <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-lg)",aspectRatio:"4/3",position:"relative",marginBottom:24}}>
@@ -2861,8 +3200,8 @@ function WatPage({go}){
                   </div>
                 </div>
                 <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px"}}>
-                  <div className="label" style={{marginBottom:12}}>De drie sleutelelementen</div>
-                  {[["Tekens","De 12 tekens van de dierenriem geven kwaliteit aan de planeten die er in staan — Ram is actief en initiërend, Stier is geduldig en sensorisch, enzovoort."],["Huizen","De 12 huizen verdelen de horoscoopkaart in levensterreinen: huis 1 is identiteit en lichaam, huis 7 is partnerschappen, huis 10 is carrière en publieke rol."],["Aspecten","De hoeken tussen planeten — conjunctie, oppositie, trine, vierkant — beschrijven spanning of harmonie tussen de energieën die zij vertegenwoordigen."]].map(([n,d])=>(
+                  <div className="label" style={{marginBottom:12}}>{LANG==="en"?"The three key elements":"De drie sleutelelementen"}</div>
+                  {(LANG==="en"?[["Signs","The 12 signs of the zodiac give quality to the planets within them — Aries is active and initiating, Taurus is patient and sensory, and so on."],["Houses","The 12 houses divide the horoscope chart into areas of life: house 1 is identity and body, house 7 is partnerships, house 10 is career and public role."],["Aspects","The angles between planets — conjunction, opposition, trine, square — describe tension or harmony between the energies they represent."]]:[["Tekens","De 12 tekens van de dierenriem geven kwaliteit aan de planeten die er in staan — Ram is actief en initiërend, Stier is geduldig en sensorisch, enzovoort."],["Huizen","De 12 huizen verdelen de horoscoopkaart in levensterreinen: huis 1 is identiteit en lichaam, huis 7 is partnerschappen, huis 10 is carrière en publieke rol."],["Aspecten","De hoeken tussen planeten — conjunctie, oppositie, trine, vierkant — beschrijven spanning of harmonie tussen de energieën die zij vertegenwoordigen."]]).map(([n,d])=>(
                     <div key={n} style={{padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
                       <div style={{fontSize:".82rem",fontWeight:500,color:"var(--text)",marginBottom:4}}>{n}</div>
                       <div style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65}}>{d}</div>
@@ -2876,9 +3215,9 @@ function WatPage({go}){
 
         <section className="section bg-muted">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>De lagen van je horoscoop</div>
-            <h2 className="h2" style={{marginBottom:12}}>Meer dan je zonneteken</h2>
-            <p className="body-md" style={{marginBottom:36}}>De meeste mensen kennen hun zonneteken. Maar een geboortehoroscoop heeft tien planeten, elk in een teken en een huis. Elk van die planeten beschrijft een ander aspect van wie je bent.</p>
+            <div className="label" style={{marginBottom:14}}>{t("wat.astroLayersLabel")}</div>
+            <h2 className="h2" style={{marginBottom:12}}>{t("wat.astroLayersTitle")}</h2>
+            <p className="body-md" style={{marginBottom:36}}>{t("wat.astroLayersSub")}</p>
             <div style={{display:"flex",flexDirection:"column",gap:0}}>
               {ASTRO_LAGEN.map(([naam,desc])=>(
                 <div key={naam} className="split-row">
@@ -2888,7 +3227,7 @@ function WatPage({go}){
               ))}
             </div>
             <div style={{marginTop:36}}>
-              <button className="btn btn-primary" onClick={()=>go("rapport-horoscoop")}>Bestel Geboortehoroscoop — €75</button>
+              <button className="btn btn-primary" onClick={()=>go("rapport-horoscoop")}>{LANG==="en"?"Order Birth Horoscope — €75":"Bestel Geboortehoroscoop — €75"}</button>
             </div>
           </div>
         </section>
@@ -2902,10 +3241,10 @@ function WatPage({go}){
 
         <section className="section bg-white">
           <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>Drie disciplines, één portret</div>
-            <h2 className="h2" style={{marginBottom:22}}>Waarom ze elkaar aanvullen</h2>
-            <p className="body-lg" style={{marginBottom:18}}>Human Design, Numerologie en Astrologie zijn drie volledig zelfstandige disciplines met elk hun eigen methodologie, berekening en vocabulaire. Ze spreken niet dezelfde taal — en dat is precies hun kracht als je ze naast elkaar legt.</p>
-            <p className="body-md" style={{marginBottom:36}}>Elke discipline verlicht een andere laag van dezelfde persoon. Waar Human Design je energetisch mechanisme beschrijft, beschrijft Numerologie je levenslessen en Astrologie de kwaliteiten van je planetaire bezetting. Iemand die alle drie bestudeert, krijgt een portret met een diepte die geen enkel systeem afzonderlijk kan bieden.</p>
+            <div className="label" style={{marginBottom:14}}>{t("wat.comboDisciplinesLabel")}</div>
+            <h2 className="h2" style={{marginBottom:22}}>{t("wat.comboDisciplinesTitle")}</h2>
+            <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Human Design, Numerology and Astrology are three completely independent disciplines each with their own methodology, calculation and vocabulary. They do not speak the same language — and that is precisely their strength when you place them side by side.":"Human Design, Numerologie en Astrologie zijn drie volledig zelfstandige disciplines met elk hun eigen methodologie, berekening en vocabulaire. Ze spreken niet dezelfde taal — en dat is precies hun kracht als je ze naast elkaar legt."}</p>
+            <p className="body-md" style={{marginBottom:36}}>{LANG==="en"?"Each discipline illuminates a different layer of the same person. Where Human Design describes your energetic mechanism, Numerology describes your life lessons and Astrology the qualities of your planetary placements. Someone who studies all three gets a portrait with a depth that no single system can offer alone.":"Elke discipline verlicht een andere laag van dezelfde persoon. Waar Human Design je energetisch mechanisme beschrijft, beschrijft Numerologie je levenslessen en Astrologie de kwaliteiten van je planetaire bezetting. Iemand die alle drie bestudeert, krijgt een portret met een diepte die geen enkel systeem afzonderlijk kan bieden."}</p>
             <div style={{display:"flex",flexDirection:"column",gap:20,marginBottom:40}}>
               {COMBO.map(([naam,ondertitel,desc,ico])=>(
                 <div key={naam} style={{display:"flex",gap:24,padding:"24px",background:"var(--muted)",borderRadius:"var(--radius-lg)",alignItems:"flex-start"}}>
@@ -2921,11 +3260,11 @@ function WatPage({go}){
               ))}
             </div>
             <div style={{background:"var(--brand)",borderRadius:"var(--radius-xl)",padding:"36px",color:"white"}}>
-              <div className="label-light" style={{marginBottom:12}}>Praktisch voorbeeld</div>
-              <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.75)",lineHeight:1.85,marginBottom:20}}>Stel: je bent een Generator (HD) met een Levenspadgetal 7 (Numerologie) en een sterk bezette achtste huis (Astrologie). Human Design zegt dat je wacht op sacrale responsen. Numerologie zegt dat je diep onderzoek en teruggetrokkenheid nodig hebt om te gedijen. Astrologie zegt dat transformatie, verborgen kennis en diepgaande ervaringen centrale thema's zijn. Samen tekenen ze een profiel van iemand die niet zichtbaar actief hoeft te zijn om impact te maken — die zijn kracht haalt uit verdieping en respons, niet uit initiatief en zichtbaarheid.</p>
+              <div className="label-light" style={{marginBottom:12}}>{LANG==="en"?"Practical example":"Praktisch voorbeeld"}</div>
+              <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.75)",lineHeight:1.85,marginBottom:20}}>{LANG==="en"?"Consider: you are a Generator (HD) with a Life Path Number 7 (Numerology) and a strongly occupied eighth house (Astrology). Human Design says you wait for sacral responses. Numerology says you need deep research and withdrawal to thrive. Astrology says that transformation, hidden knowledge and profound experiences are central themes. Together they sketch a profile of someone who does not need to be visibly active to make impact — who draws their strength from depth and response, not from initiative and visibility.":"Stel: je bent een Generator (HD) met een Levenspadgetal 7 (Numerologie) en een sterk bezette achtste huis (Astrologie). Human Design zegt dat je wacht op sacrale responsen. Numerologie zegt dat je diep onderzoek en teruggetrokkenheid nodig hebt om te gedijen. Astrologie zegt dat transformatie, verborgen kennis en diepgaande ervaringen centrale thema's zijn. Samen tekenen ze een profiel van iemand die niet zichtbaar actief hoeft te zijn om impact te maken — die zijn kracht haalt uit verdieping en respons, niet uit initiatief en zichtbaarheid."}</p>
               <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-                <button className="btn btn-white" onClick={()=>go("rapport-volledig")}>Volledig HD Rapport</button>
-                <button className="btn btn-ghost" onClick={()=>go("rapporten")}>Alle rapporten</button>
+                <button className="btn btn-white" onClick={()=>go("rapport-volledig")}>{LANG==="en"?"Full HD Report":"Volledig HD Rapport"}</button>
+                <button className="btn btn-ghost" onClick={()=>go("rapporten")}>{LANG==="en"?"All reports":"Alle rapporten"}</button>
               </div>
             </div>
           </div>
@@ -2936,8 +3275,8 @@ function WatPage({go}){
       {/* ── FAQ ──────────────────────────────────────────────────────────── */}
       <section className="section bg-white">
         <div className="container-sm">
-          <div className="label" style={{marginBottom:14}}>Veelgestelde vragen</div>
-          <h2 className="h2" style={{marginBottom:36}}>Vragen over de drie disciplines</h2>
+          <div className="label" style={{marginBottom:14}}>{t("wat.faqLabel")}</div>
+          <h2 className="h2" style={{marginBottom:36}}>{t("wat.faqTitle")}</h2>
           {faqs.map(([q,a],i)=>(
             <div className="faq-item" key={i}>
               <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span className={"faq-toggle"+(faq===i?" open":"")}>+</span></div>
@@ -2950,12 +3289,12 @@ function WatPage({go}){
       {/* ── BOTTOM CTA ───────────────────────────────────────────────────── */}
       <section className="section bg-muted">
         <div className="container-md text-center">
-          <div className="label" style={{marginBottom:14}}>Klaar om te beginnen?</div>
-          <h2 className="h2" style={{marginBottom:18}}>Ontdek je persoonlijke blauwdruk</h2>
-          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>Je chart wordt direct gratis berekend. Pas na het bekijken van je chart beslis je of je het volledige rapport wilt.</p>
+          <div className="label" style={{marginBottom:14}}>{t("wat.faqCtaLabel")}</div>
+          <h2 className="h2" style={{marginBottom:18}}>{t("wat.faqCtaTitle")}</h2>
+          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>{t("wat.faqCtaBody")}</p>
           <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap"}}>
-            <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>Start met Human Design</button>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+            <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>{t("wat.faqCtaBtn")}</button>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("wat.faqCtaAll")}</button>
           </div>
         </div>
       </section>
@@ -2970,15 +3309,15 @@ function RapportenPage({go}){
   const other=REPORTS.filter(r=>["numerologie","horoscoop"].includes(r.id));
   const sub=REPORTS.find(r=>r.id==="maandelijks");
   useSEO({
-    title:"Human Design Rapporten — Kies je persoonlijke analyse",
-    description:"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
+    title:LANG==="en"?"Human Design Reports — Choose your personal analysis":"Human Design Rapporten — Kies je persoonlijke analyse",
+    description:LANG==="en"?"Choose from 10 in-depth reports: Full Human Design, Relationship Report, Career, Year, Child, Numerology and Birth Horoscope. Personal and delivered within 1 business day. From €45.":"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
     canonical:SITE+"/#rapporten",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
-      "name":"Human Design Rapporten",
+      "name":LANG==="en"?"Human Design Reports":"Human Design Rapporten",
       "itemListElement":REPORTS.map((r,i)=>({
         "@type":"ListItem","position":i+1,
-        "name":r.title,
+        "name":tl(r.title),
         "url":SITE+"/#rapport-"+r.id,
         "offers":{"@type":"Offer","price":r.priceNum,"priceCurrency":"EUR"}
       }))
@@ -2991,25 +3330,25 @@ function RapportenPage({go}){
           <img src={IMGS.cosmos} alt="Kosmos" loading="eager"/>
         </div>
         <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:72}}>
-          <div className="label-light" style={{marginBottom:14}}>Alle rapporten</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:580}}>Kies je persoonlijke rapport</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Elk rapport berekend op exacte astronomische data. Geen generieke profielen.</p>
+          <div className="label-light" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:580}}>{t("rapporten.title")}</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>{t("rapporten.sub")}</p>
         </div>
       </div>
       <section className="section bg-muted">
         <div className="container">
 
           {/* Human Design */}
-          <div className="label" style={{marginBottom:12}}>Human Design</div>
-          <h2 className="h2" style={{marginBottom:36}}>Human Design rapporten</h2>
+          <div className="label" style={{marginBottom:12}}>{t("rapporten.hdTitle")}</div>
+          <h2 className="h2" style={{marginBottom:36}}>{t("rapporten.hdTitle")}</h2>
           <div className="grid-3" style={{gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))"}}>{hdPure.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
 
           <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
 
           {/* Relatierapport trio */}
-          <div className="label" style={{marginBottom:12}}>Relatierapport</div>
-          <h2 className="h2" style={{marginBottom:8}}>Twee designs. Drie perspectieven.</h2>
-          <p className="body-md" style={{maxWidth:560,marginBottom:36,color:"var(--text-muted)"}}>Kies het perspectief dat past bij jullie relatie. Elk rapport analyseert twee volledige Human Design charts naast elkaar.</p>
+          <div className="label" style={{marginBottom:12}}>{t("rapporten.relatieTitle")}</div>
+          <h2 className="h2" style={{marginBottom:8}}>{t("rapporten.relatieTitle")}</h2>
+          <p className="body-md" style={{maxWidth:560,marginBottom:36,color:"var(--text-muted)"}}>{LANG==="en"?"Choose the perspective that suits your relationship. Each report analyses two complete Human Design charts side by side.":"Kies het perspectief dat past bij jullie relatie. Elk rapport analyseert twee volledige Human Design charts naast elkaar."}</p>
           <div className="grid-3">
             {relatie.map(r=>(
               <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
@@ -3019,25 +3358,25 @@ function RapportenPage({go}){
           <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
 
           {/* Aanvullende disciplines */}
-          <div className="label" style={{marginBottom:12}}>Numerologie en Astrologie</div>
-          <h2 className="h2" style={{marginBottom:36}}>Aanvullende disciplines</h2>
+          <div className="label" style={{marginBottom:12}}>{t("rapporten.andereTitle")}</div>
+          <h2 className="h2" style={{marginBottom:36}}>{t("rapporten.andereTitle")}</h2>
           <div className="grid-2" style={{maxWidth:780}}>{other.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
 
           {sub&&<>
             <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
             <div style={{maxWidth:760}}>
-              <div className="label" style={{marginBottom:12}}>Abonnement</div>
+              <div className="label" style={{marginBottom:12}}>{t("rapporten.subTitle")}</div>
               <div className="sub-card" style={{cursor:"pointer"}} onClick={()=>go("rapport-maandelijks")}>
                 <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:28}}>
                   <div>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",color:"white",marginBottom:10}}>{sub.tagline}</div>
-                    <p style={{fontSize:".92rem",color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{sub.intro}</p>
+                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",color:"white",marginBottom:10}}>{tl(sub.tagline)}</div>
+                    <p style={{fontSize:".92rem",color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{tl(sub.intro)}</p>
                   </div>
                   <div style={{textAlign:"center"}}>
                     <div className="sub-price">€19</div>
-                    <div className="sub-price-period">per maand</div>
+                    <div className="sub-price-period">{LANG==="en"?"per month":"per maand"}</div>
                     <div style={{height:14}}/>
-                    <div className="btn btn-gold btn-sm">Bekijken</div>
+                    <div className="btn btn-gold btn-sm">{t("report.monthlyViewBtn")}</div>
                   </div>
                 </div>
               </div>
@@ -3051,59 +3390,78 @@ function RapportenPage({go}){
 
 function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
-  const faqs = REPORT_FAQS[rpt.id] || [
+  const genericFaqs = LANG==="en" ? [
+    ["Do I need my exact birth time?","We use professional-grade astronomical algorithms. The more accurate the time, the more personal the result."],
+    ["Is the report truly personal?","Every report is uniquely compiled based on your specific chart. No two reports are identical."],
+    ["What format will I receive my report in?","As a PDF by email — save it to your archive or print it out. Delivered within 1 business day after payment."],
+    ["What if I don't know my birth time?","Use the most accurate time you have. Type and Authority are usually correct even with an approximate time."],
+  ] : [
     ["Hoe nauwkeurig is de berekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele software. De blauwdruk is gebaseerd op je exacte geboortedata."],
     ["Is de blauwdruk echt persoonlijk?","Elk rapport wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee rapporten zijn identiek."],
     ["In welk format ontvang ik mijn blauwdruk?","Als PDF per e-mail — bewaar hem in je archief of print hem uit. Bezorgd binnen 1 werkdag na betaling."],
     ["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."],
   ];
+  const faqs = REPORT_FAQS[rpt.id]?.[LANG] ?? REPORT_FAQS[rpt.id]?.nl ?? genericFaqs;
+  const promptExtraStr = (typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)
+    ? (rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??"")
+    : (rpt.prompt_extra||"");
+  const rptTitle=tl(rpt.title);
+  const rptOutcome=tl(rpt.outcome);
+  const rptTagline=tl(rpt.tagline);
+  const rptIntro=tl(rpt.intro);
+  const rptSub=tl(rpt.sub);
+  const rptFor=tl(rpt.for);
+  const sectionCount=promptExtraStr.split("\n").filter(l=>l.startsWith("###")).length;
   useSEO({
-    title:rpt.title+" — "+rpt.outcome,
-    description:rpt.title+" van Faculty of Human Design. "+rpt.intro.slice(0,160)+" "+rpt.pages+" pagina's. Bezorgd per e-mail binnen 1 werkdag. "+rpt.price+".",
+    title:rptTitle+" — "+rptOutcome,
+    description:rptTitle+" — Faculty of Human Design. "+rptIntro.slice(0,160)+" "+rpt.pages+" "+t("report.pages")+". "+t("trust.delivery")+". "+rpt.price+".",
     canonical:SITE+"/#rapport-"+rpt.id,
     jsonLd:{
       "@graph":[
         productLD(rpt),
         faqLD(faqs),
-        breadcrumbLD([["Home","/"],["Rapporten","/#rapporten"],[rpt.title,"/#rapport-"+rpt.id]])
+        breadcrumbLD([["Home","/"],[ LANG==="en"?"Reports":"Rapporten","/#rapporten"],[rptTitle,"/#rapport-"+rpt.id]])
       ]
     }
   });
   return(
     <div className="pg">
-      <div className="detail-hero" role="banner" aria-label={rpt.title}>
+      <div className="detail-hero" role="banner" aria-label={rptTitle}>
         <div className="detail-hero-bg">
-          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rpt.title+" — Faculty of Human Design persoonlijk rapport"} loading="eager"/>
+          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rptTitle+" — Faculty of Human Design "+t("report.personalBadge")} loading="eager"/>
         </div>
         <div className="detail-hero-inner">
           <div>
             <div className="detail-hero-badge">{rpt.icon} Faculty of Human Design — Est. 2014, Ibiza</div>
-            <h1 className="detail-hero-title">{rpt.title}</h1>
-            <div className="detail-hero-tagline">{rpt.outcome || rpt.tagline}</div>
+            <h1 className="detail-hero-title">{rptTitle}</h1>
+            <div className="detail-hero-tagline">{rptOutcome||rptTagline}</div>
             <div className="detail-hero-meta">
-              <span className="detail-hero-m">{rpt.pages} pagina's</span>
-              <span className="detail-hero-m">{rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).length} secties</span>
-              <span className="detail-hero-m">Gepersonaliseerde Digitale Blauwdruk</span>
-              <span className="detail-hero-m">{rpt.sub}</span>
+              <span className="detail-hero-m">{rpt.pages} {t("report.pages")}</span>
+              <span className="detail-hero-m">{sectionCount} {t("report.sections")}</span>
+              <span className="detail-hero-m">{t("report.personalBadge")}</span>
+              <span className="detail-hero-m">{rptSub}</span>
             </div>
           </div>
           <div className="price-box">
-            {rpt.outcome&&<div style={{fontSize:".68rem",fontWeight:500,color:"rgba(201,168,92,.85)",letterSpacing:".06em",marginBottom:14,lineHeight:1.5,borderBottom:"1px solid rgba(255,255,255,.08)",paddingBottom:14}}>→ {rpt.outcome}</div>}
+            {rptOutcome&&<div style={{fontSize:".68rem",fontWeight:500,color:"rgba(201,168,92,.85)",letterSpacing:".06em",marginBottom:14,lineHeight:1.5,borderBottom:"1px solid rgba(255,255,255,.08)",paddingBottom:14}}>→ {rptOutcome}</div>}
             <div className="price-box-amount">{rpt.price}</div>
-            <div className="price-box-period">{rpt.sub}</div>
+            <div className="price-box-period">{rptSub}</div>
             <div style={{display:"flex",flexDirection:"column",gap:7,margin:"14px 0 20px",textAlign:"left"}}>
-              {[["Chart gratis berekend","Betaal pas na het zien van je chart"],["Bezorgd per e-mail","Binnen 1 werkdag"],["Persoonlijk","Geen generieke profielen"]].map(([t,d])=>(
-                <div key={t} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
+              {(LANG==="en"
+                ?[["Chart calculated for free","Pay only after seeing your chart"],["Delivered by email","Within 1 business day"],["Personal","No generic profiles"]]
+                :[["Chart gratis berekend","Betaal pas na het zien van je chart"],["Bezorgd per e-mail","Binnen 1 werkdag"],["Persoonlijk","Geen generieke profielen"]]
+              ).map(([label,desc])=>(
+                <div key={label} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
                   <span style={{color:"rgba(201,168,92,.7)",fontSize:".55rem",flexShrink:0,marginTop:3}}>✦</span>
                   <div>
-                    <span style={{fontSize:".72rem",fontWeight:500,color:"rgba(255,255,255,.8)"}}>{t}</span>
-                    <span style={{fontSize:".72rem",fontWeight:300,color:"rgba(255,255,255,.38)"}}> — {d}</span>
+                    <span style={{fontSize:".72rem",fontWeight:500,color:"rgba(255,255,255,.8)"}}>{label}</span>
+                    <span style={{fontSize:".72rem",fontWeight:300,color:"rgba(255,255,255,.38)"}}> — {desc}</span>
                   </div>
                 </div>
               ))}
             </div>
             <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
-              Blauwdruk bestellen — {rpt.price}
+              {t("report.orderBtn",{price:rpt.price})}
             </button>
             <div style={{marginTop:12}}><TrustStrip light/></div>
           </div>
@@ -3111,9 +3469,12 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       </div>
 
       {/* ── SOCIAL PROOF BAR ─ immediately below hero, above the fold on mobile ── */}
-      <div className="stat-row" role="region" aria-label="Betrouwbaarheidsindicatoren">
+      <div className="stat-row" role="region" aria-label={t("trust.delivery")}>
         <div className="stat-row-inner">
-          {[["2.400+","Blauwdrukken uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["1 werkdag","Bezorgd per e-mail"],["2014","Opgericht op Ibiza"]].map(([n,l])=>(
+          {(LANG==="en"
+            ?[["2,400+","Blueprints delivered"],["4.9 / 5","Average rating"],["1 business day","Delivered by email"],["2014","Founded in Ibiza"]]
+            :[["2.400+","Blauwdrukken uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["1 werkdag","Bezorgd per e-mail"],["2014","Opgericht op Ibiza"]]
+          ).map(([n,l])=>(
             <div key={l} className="stat-row-item">
               <div className="stat-row-n" style={{fontSize:"1.5rem"}}>{n}</div>
               <div className="stat-row-l">{l}</div>
@@ -3126,27 +3487,30 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
         <div className="container">
           <div className="grid-2" style={{gap:56,alignItems:"start"}}>
             <div>
-              <div className="label" style={{marginBottom:12}}>Over deze blauwdruk</div>
-              <h2 className="h2" style={{marginBottom:16}}>{rpt.title}</h2>
-              <p className="body-lg" style={{marginBottom:20}}>{rpt.intro}</p>
+              <div className="label" style={{marginBottom:12}}>{LANG==="en"?"About this blueprint":"Over deze blauwdruk"}</div>
+              <h2 className="h2" style={{marginBottom:16}}>{rptTitle}</h2>
+              <p className="body-lg" style={{marginBottom:20}}>{rptIntro}</p>
               <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"16px 20px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:24}}>
-                <div className="label" style={{marginBottom:6}}>Voor wie</div>
-                <p className="body-sm">{rpt.for}</p>
+                <div className="label" style={{marginBottom:6}}>{t("report.suitableFor")}</div>
+                <p className="body-sm">{rptFor}</p>
               </div>
               <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
-                <div className="label" style={{marginBottom:14}}>Je gepersonaliseerde blauwdruk</div>
+                <div className="label" style={{marginBottom:14}}>{t("report.personalBadge")}</div>
                 <div className="grid-2" style={{gap:12}}>
-                  {[["Omvang",rpt.pages+" pagina's"],["Levering","Binnen 1 werkdag"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]].map(([l,v])=>(
+                  {(LANG==="en"
+                    ?[["Size",rpt.pages+" pages"],["Delivery","Within 1 business day"],["Format","Digital Blueprint · PDF"],["Language","English"]]
+                    :[["Omvang",rpt.pages+" pagina's"],["Levering","Binnen 1 werkdag"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]]
+                  ).map(([l,v])=>(
                     <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
                   ))}
                 </div>
               </div>
             </div>
             <div>
-              <div className="label" style={{marginBottom:12}}>Inhoudsopgave</div>
-              <h2 className="h2" style={{marginBottom:20}}>Dit staat erin</h2>
+              <div className="label" style={{marginBottom:12}}>{LANG==="en"?"Table of contents":"Inhoudsopgave"}</div>
+              <h2 className="h2" style={{marginBottom:20}}>{t("report.whatsIncluded")}</h2>
               <ul className="includes-list">
-                {rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*\d+\.\s*/,"").trim()).map((item,i)=>(
+                {promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*\d+\.\s*/,"").trim()).map((item,i)=>(
                   <li key={i} className="includes-item">
                     <div className="includes-num">{i+1}</div>{item}
                   </li>
@@ -3158,8 +3522,8 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       </section>
       <section className="section bg-white">
         <div className="container-sm">
-          <div className="label" style={{marginBottom:12}}>Ervaringen</div>
-          <h2 className="h2" style={{marginBottom:32}}>Wat klanten zeggen</h2>
+          <div className="label" style={{marginBottom:12}}>{t("home.testimonialsLabel")}</div>
+          <h2 className="h2" style={{marginBottom:32}}>{t("report.reviews")}</h2>
           <div className="grid-3">
             {(rpt.reviews||[]).map(([q,n])=>(
               <div className="tcard" key={n}><div className="stars">★★★★★</div><div className="tcard-quote">"{q}"</div><div className="tcard-author">{n}</div></div>
@@ -3169,8 +3533,8 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       </section>
       <section className="section bg-muted">
         <div className="container-sm">
-          <div className="label" style={{marginBottom:12}}>Veelgestelde vragen</div>
-          <h2 className="h2" style={{marginBottom:32}}>Vragen over dit rapport</h2>
+          <div className="label" style={{marginBottom:12}}>{t("report.faq")}</div>
+          <h2 className="h2" style={{marginBottom:32}}>{LANG==="en"?"Questions about this report":"Vragen over dit rapport"}</h2>
           {faqs.map(([q,a],i)=>(
             <div className="faq-item" key={i}>
               <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span className={"faq-toggle"+(faq===i?" open":"")}>+</span></div>
@@ -3182,7 +3546,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       <ReportForm rpt={rpt} onDone={onDone} postPayment={postPayment}/>
       <div className="sticky-cta">
         <button className="btn btn-primary btn-full" onClick={()=>{track("hero_cta_click",{location:"sticky",report:rpt.id});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
-          {rpt.title} bestellen — {rpt.price}
+          {t("report.orderBtn",{price:rpt.price})}
         </button>
       </div>
     </div>
@@ -3242,7 +3606,7 @@ function BlogPage({go}){
   // SEO for list view or single article
   useSEO(activeArticle ? {
     title: activeArticle.title,
-    description: activeArticle.excerpt || activeArticle.title + " — Lees het volledige artikel op Faculty of Human Design.",
+    description: activeArticle.excerpt || activeArticle.title + (LANG==="en"?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
     canonical: SITE + "/#blog",
     jsonLd: {
       "@context":"https://schema.org","@type":"Article",
@@ -3254,13 +3618,13 @@ function BlogPage({go}){
       "image": (activeArticle.images||[])[0]
     }
   } : {
-    title: "Inzichten over Human Design, Numerologie & Astrologie",
-    description: "Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
+    title: LANG==="en"?"Insights on Human Design, Numerology & Astrology":"Inzichten over Human Design, Numerologie & Astrologie",
+    description: LANG==="en"?"Articles on Human Design, Numerology and Astrology. Learn about Type, Strategy, Authority and the origin of Human Design on Ibiza.":"Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
     canonical: SITE + "/#blog",
     jsonLd: {
       "@context":"https://schema.org","@type":"Blog",
-      "name":"Faculty of Human Design — Inzichten",
-      "description":"Artikelen over Human Design, Numerologie en Astrologie.",
+      "name":LANG==="en"?"Faculty of Human Design — Insights":"Faculty of Human Design — Inzichten",
+      "description":LANG==="en"?"Articles on Human Design, Numerology and Astrology.":"Artikelen over Human Design, Numerologie en Astrologie.",
       "publisher":{"@type":"Organization","name":"Faculty of Human Design"}
     }
   });
@@ -3275,10 +3639,10 @@ function BlogPage({go}){
             <img src={IMGS.cosmos} alt="Kosmische sfeer — Faculty of Human Design inzichten" loading="eager"/>
           </div>
           <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:56}}>
-            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>← Terug naar inzichten</div>
+            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>{t("blog.backToList")}</div>
             <div className="label-light" style={{marginBottom:8}}>{post.tag}</div>
             <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{post.title}</h1>
-            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} leestijd</div>
+            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} {t("blog.readTime")}</div>
           </div>
         </div>
         <section className="section bg-white">
@@ -3296,7 +3660,7 @@ function BlogPage({go}){
               ));
             })()}
             <div style={{marginTop:40,paddingTop:28,borderTop:"1px solid var(--border)"}}>
-              <div className="label" style={{marginBottom:16}}>Meer lezen</div>
+              <div className="label" style={{marginBottom:16}}>{LANG==="en"?"More reading":"Meer lezen"}</div>
               <div className="grid-2">
                 {articles.filter(a=>String(a.id)!==String(activePost)).slice(0,2).map(a=>(
                   <div key={a.id} className="blog-card" onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
@@ -3306,7 +3670,7 @@ function BlogPage({go}){
                 ))}
               </div>
             </div>
-            <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>Bestel een rapport</button></div>
+            <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>{t("blog.orderCta")}</button></div>
           </div>
         </section>
       </div>
@@ -3320,15 +3684,15 @@ function BlogPage({go}){
           <img src={IMGS.cosmos} alt="Kosmische sfeer" loading="eager"/>
         </div>
         <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:72}}>
-          <div className="label-light" style={{marginBottom:14}}>Kennis</div>
-          <h1 className="h1" style={{color:"white",marginBottom:14}}>Inzichten en Achtergronden</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>Artikelen over Human Design, Numerologie en Astrologie. Elke twee weken een nieuw artikel.</p>
+          <div className="label-light" style={{marginBottom:14}}>{t("blog.eyebrow")}</div>
+          <h1 className="h1" style={{color:"white",marginBottom:14}}>{t("blog.title")}</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>{t("blog.sub")}</p>
         </div>
       </div>
       <section className="section bg-white">
         <div className="container-sm">
           {loading?(
-            <div style={{textAlign:"center",padding:"60px 0",color:"var(--text-light)",fontSize:".8rem",letterSpacing:".08em",textTransform:"uppercase"}}>Artikelen laden...</div>
+            <div style={{textAlign:"center",padding:"60px 0",color:"var(--text-light)",fontSize:".8rem",letterSpacing:".08em",textTransform:"uppercase"}}>{t("blog.loading")}</div>
           ):articles.map((p,i)=>(
             <div className="blog-card" key={i} onClick={()=>{setActivePost(String(p.id));window.scrollTo(0,0);}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"start",gap:16}}>
@@ -3336,9 +3700,9 @@ function BlogPage({go}){
                   <div className="blog-tag">{p.tag}</div>
                   <div className="blog-title">{p.title}</div>
                   <div className="blog-excerpt">{p.excerpt}</div>
-                  <div className="blog-more">Lees artikel</div>
+                  <div className="blog-more">{t("blog.readMore")}</div>
                 </div>
-                <div style={{fontSize:".65rem",letterSpacing:".06em",color:"var(--text-light)",textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{p.date}<br/>{p.readtime}</div>
+                <div style={{fontSize:".65rem",letterSpacing:".06em",color:"var(--text-light)",textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{p.date}<br/>{p.readtime} {t("blog.readTime")}</div>
               </div>
             </div>
           ))}
@@ -3350,15 +3714,15 @@ function BlogPage({go}){
 
 function OverPage({go}){
   useSEO({
-    title:"Over ons — Faculty of Human Design, Ibiza",
-    description:"Faculty of Human Design is opgericht op Ibiza in 2014. Gespecialiseerd in diepgaande persoonlijke analyses op basis van Human Design, Numerologie en Astrologie. 2.400+ blauwdrukken. 4.9/5 beoordeling.",
+    title:LANG==="en"?"About us — Faculty of Human Design, Ibiza":"Over ons — Faculty of Human Design, Ibiza",
+    description:LANG==="en"?"Faculty of Human Design was founded on Ibiza in 2014. Specialised in in-depth personal analyses based on Human Design, Numerology and Astrology. 2,400+ blueprints. 4.9/5 rating.":"Faculty of Human Design is opgericht op Ibiza in 2014. Gespecialiseerd in diepgaande persoonlijke analyses op basis van Human Design, Numerologie en Astrologie. 2.400+ blauwdrukken. 4.9/5 beoordeling.",
     canonical:SITE+"/#over",
     jsonLd:{
       "@context":"https://schema.org","@type":"AboutPage",
-      "name":"Over Faculty of Human Design",
-      "description":"Opgericht op Ibiza in 2014. Gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "name":LANG==="en"?"About Faculty of Human Design":"Over Faculty of Human Design",
+      "description":LANG==="en"?"Founded on Ibiza in 2014. Specialised in personal reports based on Human Design, Numerology and Astrology.":"Opgericht op Ibiza in 2014. Gespecialiseerd in persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
       "url":SITE+"/#over",
-      "author":{"@type":"Organization","name":"Faculty of Human Design","foundingDate":"2014","foundingLocation":"Ibiza, Spanje"}
+      "author":{"@type":"Organization","name":"Faculty of Human Design","foundingDate":"2014","foundingLocation":LANG==="en"?"Ibiza, Spain":"Ibiza, Spanje"}
     }
   });
   return(
@@ -3370,9 +3734,9 @@ function OverPage({go}){
           <img src={IMGS.ibiza} alt="Ibiza zonsondergang" loading="eager"/>
         </div>
         <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:96}}>
-          <div className="label-light" style={{marginBottom:14}}>Over ons — Est. 2014, Ibiza</div>
-          <h1 className="h1" style={{color:"white",marginBottom:20,maxWidth:620,lineHeight:1.06}}>De geschreven analyse<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>als eerste stap naar jezelf</em></h1>
-          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:520,lineHeight:1.84}}>Wij zijn gespecialiseerd in één ding: diepgaande, persoonlijke analyse van jouw chart. Geen cursussen, geen coaching — uitsluitend de geschreven blauwdruk die het begin vormt van bewuster leven.</p>
+          <div className="label-light" style={{marginBottom:14}}>{t("over.heroEyebrow")}</div>
+          <h1 className="h1" style={{color:"white",marginBottom:20,maxWidth:620,lineHeight:1.06}}>{t("over.heroTitle")}<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>{t("over.heroTitleItalic")}</em></h1>
+          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:520,lineHeight:1.84}}>{t("over.heroSub")}</p>
         </div>
       </div>
 
@@ -3381,16 +3745,16 @@ function OverPage({go}){
         <div className="container">
           <div className="grid-2" style={{gap:72,alignItems:"center"}}>
             <div>
-              <div className="label" style={{marginBottom:14}}>Waarom een blauwdruk</div>
-              <h2 className="h2" style={{marginBottom:22}}>Je kunt jezelf niet veranderen<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>zonder jezelf te kennen</em></h2>
-              <p className="body-lg" style={{marginBottom:18}}>De meeste mensen leven jarenlang vanuit aangeleerd gedrag, verwachtingen van anderen en aannames over wie ze zijn. Een gepersonaliseerde blauwdruk doorbreekt dat patroon — niet met adviezen van buitenaf, maar door te laten zien hoe jij van nature werkt.</p>
-              <p className="body-md" style={{marginBottom:18}}>Dat is de reden waarom wij ons uitsluitend richten op de geschreven analyse. De blauwdruk is geen eindpunt — het is het begin. Een document dat je terugpakt als je een beslissing moet nemen, een relatie begrijpen wilt, of simpelweg jezelf in het oog verliest.</p>
-              <p className="body-md" style={{marginBottom:32}}>Voor veel van onze klanten is de blauwdruk de eerste keer dat ze zichzelf echt herkend voelen — niet in wat ze doen, maar in wie ze zijn.</p>
+              <div className="label" style={{marginBottom:14}}>{t("over.firstStepLabel")}</div>
+              <h2 className="h2" style={{marginBottom:22}}>{t("over.firstStepTitle")}<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>{t("over.firstStepTitleItalic")}</em></h2>
+              <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Most people live for years from learned behaviour, the expectations of others and assumptions about who they are. A personalised blueprint breaks that pattern — not with advice from outside, but by showing how you naturally work.":"De meeste mensen leven jarenlang vanuit aangeleerd gedrag, verwachtingen van anderen en aannames over wie ze zijn. Een gepersonaliseerde blauwdruk doorbreekt dat patroon — niet met adviezen van buitenaf, maar door te laten zien hoe jij van nature werkt."}</p>
+              <p className="body-md" style={{marginBottom:18}}>{LANG==="en"?"That is why we focus exclusively on the written analysis. The blueprint is not an end point — it is the beginning. A document you return to when you need to make a decision, want to understand a relationship, or simply lose sight of yourself.":"Dat is de reden waarom wij ons uitsluitend richten op de geschreven analyse. De blauwdruk is geen eindpunt — het is het begin. Een document dat je terugpakt als je een beslissing moet nemen, een relatie begrijpen wilt, of simpelweg jezelf in het oog verliest."}</p>
+              <p className="body-md" style={{marginBottom:32}}>{LANG==="en"?"For many of our clients, the blueprint is the first time they truly recognise themselves — not in what they do, but in who they are.":"Voor veel van onze klanten is de blauwdruk de eerste keer dat ze zichzelf echt herkend voelen — niet in wat ze doen, maar in wie ze zijn."}</p>
               <div style={{borderLeft:"3px solid var(--gold)",paddingLeft:20,marginBottom:32}}>
-                <p style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"var(--text)",lineHeight:1.78}}>"Je ontvangt geen profiel. Je ontvangt een spiegel — nauwkeurig berekend op het moment dat jij ter wereld kwam."</p>
+                <p style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"var(--text)",lineHeight:1.78}}>{LANG==="en"?'"You do not receive a profile. You receive a mirror — accurately calculated at the moment you entered the world."':'"Je ontvangt geen profiel. Je ontvangt een spiegel — nauwkeurig berekend op het moment dat jij ter wereld kwam."'}</p>
               </div>
               <div style={{display:"flex",gap:40,flexWrap:"wrap"}}>
-                {[["2014","Opgericht op Ibiza"],["2.400+","Blauwdrukken samengesteld"],["4.9 / 5","Gemiddelde beoordeling"]].map(([n,l])=>(
+                {[["2014",LANG==="en"?"Founded on Ibiza":"Opgericht op Ibiza"],["2.400+",LANG==="en"?"Blueprints assembled":"Blauwdrukken samengesteld"],["4.9 / 5",LANG==="en"?"Average rating":"Gemiddelde beoordeling"]].map(([n,l])=>(
                   <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
                 ))}
               </div>
@@ -3401,7 +3765,7 @@ function OverPage({go}){
                 <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 45%,rgba(12,10,23,.72) 100%)"}}/>
                 <div style={{position:"absolute",bottom:24,left:24,right:24}}>
                   <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(201,168,92,.8)",marginBottom:8}}>Ibiza — 1987</div>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.65}}>Op dit eiland ontving Ra Uru Hu het Human Design systeem. Hier begon alles.</div>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.65}}>{LANG==="en"?"On this island Ra Uru Hu received the Human Design system. Here it all began.":"Op dit eiland ontving Ra Uru Hu het Human Design systeem. Hier begon alles."}</div>
                 </div>
               </div>
             </div>
@@ -3416,16 +3780,20 @@ function OverPage({go}){
         </div>
         <div className="container" style={{position:"relative",zIndex:1}}>
           <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>Onze specialisatie</div>
-            <h2 className="h2" style={{marginBottom:16}}>Eén focus. Uitgediept.</h2>
-            <p className="body-md" style={{maxWidth:520,margin:"0 auto"}}>Wij doen uitsluitend geschreven analyse. Dat maakt het mogelijk om elke discipline volledig te beheersen en elke blauwdruk op het hoogste niveau samen te stellen.</p>
+            <div className="label" style={{marginBottom:14}}>{t("over.specLabel")}</div>
+            <h2 className="h2" style={{marginBottom:16}}>{t("over.specTitle")}</h2>
+            <p className="body-md" style={{maxWidth:520,margin:"0 auto"}}>{t("over.specSub")}</p>
           </div>
           <div className="grid-3">
-            {[
+            {(LANG==="en"?[
+              ["✦","Astronomical precision","Swiss Ephemeris calculation","Every blueprint is based on the exact positions of the planets at your birth moment — accurate to the degree. The same standard as professional astronomical software. No rounded tables, no generic approximations."],
+              ["◎","Three disciplines, one portrait","Human Design · Numerology · Astrology","We analyse from three completely independent methodologies: Human Design (energetic mechanism), Numerology (life patterns and lessons) and Birth Astrology (planetary qualities). Each system illuminates a different layer of the same person."],
+              ["∞","In-depth written analysis","No templates. No generic.","Every blueprint is fully custom-assembled based on your unique combination of Type, Authority, Profile and active gates. No two blueprints are identical. The analysis is personal, concrete and directly applicable."],
+            ]:[
               ["✦","Astronomische precisie","Swiss Ephemeris berekening","Elke blauwdruk is gebaseerd op de exacte posities van de planeten op jouw geboortemoment — tot op de graad nauwkeurig. Dezelfde standaard als professionele astronomische software. Geen afgeronde tabellen, geen generieke benaderingen."],
               ["◎","Drie disciplines, één portret","Human Design · Numerologie · Astrologie","We analyseren vanuit drie volledig zelfstandige methodologieën: Human Design (energetisch mechanisme), Numerologie (levenspatronen en -lessen) en Geboorteastrologie (planetaire kwaliteiten). Elk systeem verlicht een andere laag van dezelfde persoon."],
               ["∞","Diepgaande geschreven analyse","Geen templates. Geen generiek.","Elke blauwdruk wordt volledig op maat samengesteld op basis van jouw unieke combinatie van Type, Autoriteit, Profiel en actieve poorten. Geen twee blauwdrukken zijn identiek. De analyse is persoonlijk, concreet en direct toepasbaar."],
-            ].map(([ico,title,sub,desc])=>(
+            ]).map(([ico,title,sub,desc])=>(
               <div key={title} style={{background:"white",borderRadius:"var(--radius-xl)",border:"1px solid var(--border)",padding:"36px 32px",display:"flex",flexDirection:"column",gap:0}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",color:"var(--brand)",opacity:.5,marginBottom:16,lineHeight:1}}>{ico}</div>
                 <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:8}}>{sub}</div>
@@ -3441,16 +3809,21 @@ function OverPage({go}){
       <section className="section bg-white">
         <div className="container-md">
           <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>De methode</div>
-            <h2 className="h2" style={{marginBottom:16}}>Van geboortemoment<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>naar persoonlijke blauwdruk</em></h2>
+            <div className="label" style={{marginBottom:14}}>{t("over.methodLabel")}</div>
+            <h2 className="h2" style={{marginBottom:16}}>{t("over.methodTitle")}<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>{t("over.methodTitleItalic")}</em></h2>
           </div>
           <div style={{display:"flex",flexDirection:"column",gap:0}}>
-            {[
+            {(LANG==="en"?[
+              ["01","Astronomical calculation","Based on your exact date, time and place of birth, we calculate the positions of all relevant planets and celestial bodies. This forms the astronomical basis of your blueprint — objective, accurate and unique to you."],
+              ["02","Chart composition","The calculation produces your personal chart: your Human Design type, authority, profile, defined centers, active channels and gates — or, for Numerology and Astrology, your core and planet numbers. This is the raw data on which the analysis is based."],
+              ["03","In-depth analysis","Each section of the blueprint is custom-assembled based on your specific combination. The analysis goes beyond definitions: it describes how your design works in daily life, where conditioning lies, and where your authentic strength resides."],
+              ["04","Your personalised blueprint","The result is a document of 24 to 40+ pages that gives back what was always present in you — now clearly described, recognisable and directly applicable. The first step in a process that can last a lifetime."],
+            ]:[
               ["01","Astronomische berekening","Op basis van je exacte geboortedatum, -tijd en -plaats berekenen wij de posities van alle relevante planeten en hemellichamen. Dit vormt de astronomische basis van je blauwdruk — objectief, nauwkeurig en uniek voor jou."],
               ["02","Chart samenstelling","De berekening levert je persoonlijke chart: je Human Design type, autoriteit, profiel, gedefinieerde centra, actieve kanalen en poorten — of, bij Numerologie en Astrologie, je kern- en planeetgetallen. Dit is de ruwe data waarop de analyse is gebaseerd."],
               ["03","Diepgaande analyse","Elke sectie van de blauwdruk wordt op maat samengesteld op basis van jouw specifieke combinatie. De analyse gaat verder dan definities: het beschrijft hoe jouw design in het dagelijks leven werkt, waar conditionering zit, en waar jouw authentieke kracht ligt."],
               ["04","Je gepersonaliseerde blauwdruk","Het resultaat is een document van 24 tot 40+ pagina's dat je teruggeeft wat altijd al in jou aanwezig was — nu helder beschreven, herkenbaar en direct toepasbaar. De eerste stap in een proces dat een leven lang kan duren."],
-            ].map(([num,title,desc],i,arr)=>(
+            ]).map(([num,title,desc],i,arr)=>(
               <div key={num} className="method-step" style={{borderBottom:i<arr.length-1?"1px solid var(--border)":"none"}}>
                 <div className="method-step-num">{num}</div>
                 <div style={{flex:1}}>
@@ -3470,12 +3843,12 @@ function OverPage({go}){
         </div>
         <div className="origin-content">
           <div>
-            <div className="label-light" style={{marginBottom:16}}>Het instituut</div>
-            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>Opgericht op het eiland<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>waar het begon</em></h2>
-            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.84,maxWidth:440}}>De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Die oorsprong bepaalt onze focus: geen oppervlakkige profielen, maar diepgaande analyse die recht doet aan de rijkheid van het systeem.</p>
+            <div className="label-light" style={{marginBottom:16}}>{t("over.originLabel")}</div>
+            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>{t("over.originTitle")}<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>{t("over.originTitleItalic")}</em></h2>
+            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.84,maxWidth:440}}>{LANG==="en"?"The Faculty of Human Design was founded in 2014 on Ibiza — the island where Ra Uru Hu received the Human Design system in 1987. That origin determines our focus: no superficial profiles, but in-depth analysis that does justice to the richness of the system.":"De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Die oorsprong bepaalt onze focus: geen oppervlakkige profielen, maar diepgaande analyse die recht doet aan de rijkheid van het systeem."}</p>
           </div>
           <div className="stats-2x2">
-            {[["2014","Jaar van oprichting"],["Ibiza","Thuisbasis"],["2.400+","Blauwdrukken"],["3","Disciplines"]].map(([n,l])=>(
+            {[["2014",LANG==="en"?"Year founded":"Jaar van oprichting"],["Ibiza",LANG==="en"?"Home base":"Thuisbasis"],["2.400+",LANG==="en"?"Blueprints":"Blauwdrukken"],["3",LANG==="en"?"Disciplines":"Disciplines"]].map(([n,l])=>(
               <div key={l} style={{background:"rgba(255,255,255,.06)",border:"1px solid rgba(255,255,255,.1)",borderRadius:"var(--radius-lg)",padding:"24px 20px"}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.7rem",fontWeight:300,color:"white",lineHeight:1,marginBottom:5}}>{n}</div>
                 <div style={{fontSize:".58rem",fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",color:"rgba(255,255,255,.3)"}}>{l}</div>
@@ -3488,12 +3861,12 @@ function OverPage({go}){
       {/* ── CTA ── */}
       <section className="section-md bg-muted">
         <div className="container-sm text-center">
-          <div className="label" style={{marginBottom:14}}>Begin hier</div>
-          <h2 className="h2" style={{marginBottom:18}}>De eerste stap begint<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>met jouw chart</em></h2>
-          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>Je chart wordt direct gratis berekend. Je blauwdruk wordt daarna binnen 1 werkdag per e-mail bezorgd — persoonlijk, diepgaand en als PDF.</p>
+          <div className="label" style={{marginBottom:14}}>{t("over.ctaLabel")}</div>
+          <h2 className="h2" style={{marginBottom:18}}>{t("over.ctaTitle")}<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>{t("over.ctaTitleItalic")}</em></h2>
+          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>{t("over.ctaSub")}</p>
           <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap",marginBottom:28}}>
-            <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>Start met mijn blauwdruk</button>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+            <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>{t("over.ctaBtn")}</button>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("over.ctaBtnSecondary")}</button>
           </div>
           <TrustStrip/>
         </div>
@@ -3508,7 +3881,7 @@ function ContactPage(){
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   useSEO({
     title:"Contact — Faculty of Human Design",
-    description:"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
+    description:LANG==="en"?"Contact Faculty of Human Design. Questions about reports, orders or Human Design? We respond within 1 business day. Email: info@facultyhd.com":"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
     canonical:SITE+"/#contact",
     jsonLd:{
       "@context":"https://schema.org","@type":"ContactPage",
@@ -3528,29 +3901,29 @@ function ContactPage(){
           <img src="/ibiza-es-vedra.jpg" alt="Es Vedrà bij schemering — Ibiza" loading="eager"/>
         </div>
         <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:80}}>
-          <div className="label-light" style={{marginBottom:14}}>Contact</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>Neem contact op</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>Vragen over een rapport of bestelling? Wij reageren binnen 1 werkdag.</p>
+          <div className="label-light" style={{marginBottom:14}}>{t("contact.eyebrow")}</div>
+          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>{t("contact.title")}</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{t("contact.sub")}</p>
         </div>
       </div>
       <section className="section bg-white">
         <div className="container-sm">
           <div className="grid-2" style={{gap:56,alignItems:"start"}}>
             <div>
-              <div className="label" style={{marginBottom:12}}>Contactgegevens</div>
-              <h2 className="h2" style={{marginBottom:28}}>Faculty of Human Design</h2>
-              {[["E-mail","info@facultyhd.com"],["Reactietijd","Binnen 1 werkdag"],["Rapporten","Bezorgd binnen 1 werkdag na betaling"]].map(([l,v])=>(
+              <div className="label" style={{marginBottom:12}}>{t("contact.infoTitle")}</div>
+              <h2 className="h2" style={{marginBottom:28}}>{t("contact.infoName")}</h2>
+              {[[t("contact.emailLabel"),"info@facultyhd.com"],[t("contact.responseLabel"),t("contact.responseVal")],[t("contact.deliveryLabel"),t("contact.deliveryVal")]].map(([l,v])=>(
                 <div key={l} style={{marginBottom:20}}><div className="label" style={{marginBottom:5}}>{l}</div><div className="body-md">{v}</div></div>
               ))}
             </div>
             <div className="form-wrap">
-              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:20}}>Stuur een bericht</div>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:20}}>{t("contact.formTitle")}</div>
               <div style={{display:"flex",flexDirection:"column",gap:14}}>
-                <div className="form-group"><label className="form-label">Naam</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder="Je naam"/></div>
-                <div className="form-group"><label className="form-label">E-mailadres</label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder="uw@email.nl"/></div>
-                <div className="form-group"><label className="form-label">Onderwerp</label><input className="form-input" name="subject" value={form.subject} onChange={ch} placeholder="Onderwerp"/></div>
-                <div className="form-group"><label className="form-label">Bericht</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder="Je vraag of opmerking" style={{resize:"vertical",minHeight:110}}/></div>
-                <button className="btn btn-primary" onClick={()=>alert("Bedankt voor je bericht. Wij reageren binnen 1 werkdag.")}>Verstuur bericht</button>
+                <div className="form-group"><label className="form-label">{t("contact.nameLabel")}</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder={t("contact.namePlaceholder")}/></div>
+                <div className="form-group"><label className="form-label">{t("contact.emailField")}</label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder={t("contact.emailPlaceholder")}/></div>
+                <div className="form-group"><label className="form-label">{t("contact.subjectLabel")}</label><input className="form-input" name="subject" value={form.subject} onChange={ch} placeholder={t("contact.subjectPlaceholder")}/></div>
+                <div className="form-group"><label className="form-label">{t("contact.msgLabel")}</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder={t("contact.msgPlaceholder")} style={{resize:"vertical",minHeight:110}}/></div>
+                <button className="btn btn-primary" onClick={()=>alert(t("contact.thankYou"))}>{t("contact.sendBtn")}</button>
               </div>
             </div>
           </div>
@@ -3568,32 +3941,42 @@ function ThankYouPage({result,go}){
 
   const dlPDF=()=>{
     const btn=document.getElementById("dlb");
-    if(btn){btn.textContent="PDF wordt voorbereid...";btn.disabled=true;}
+    if(btn){btn.textContent=LANG==="en"?"Preparing PDF...":"PDF wordt voorbereid...";btn.disabled=true;}
     const win=window.open("","_blank");
     const bh=secs.map(s=>"<h2>"+s.t+"</h2>"+s.b.split("\n").map(x=>x?"<p>"+x+"</p>":"").join("")).join("");
-    const metaObj=chart?.isNumerology?{Levenspad:chart.lp,Uitdrukking:chart.exp}:chart?.isHoroscoop?{Zonneteken:chart.sun_sign,Ascendant:chart.ascendant?.sign}:{Type:chart?.type,Strategie:chart?.strat,Autoriteit:chart?.auth,Profiel:chart?.profile};
+    const metaObj=chart?.isNumerology?(LANG==="en"?{"Life Path":chart.lp,"Expression":chart.exp}:{Levenspad:chart.lp,Uitdrukking:chart.exp}):chart?.isHoroscoop?(LANG==="en"?{"Sun sign":chart.sun_sign,"Ascendant":chart.ascendant?.sign}:{Zonneteken:chart.sun_sign,Ascendant:chart.ascendant?.sign}):(LANG==="en"?{Type:chart?.type,Strategy:xlateStrat(chart?.strat),Authority:xlateAuth(chart?.auth),Profile:chart?.profile}:{Type:chart?.type,Strategie:chart?.strat,Autoriteit:chart?.auth,Profiel:chart?.profile});
     const meta=Object.entries(metaObj||{}).map(([k,v])=>"<tr><td>"+k+"</td><td>"+v+"</td></tr>").join("");
-    win.document.write("<!DOCTYPE html><html><head><meta charset=UTF-8><title>"+rpt.title+" - "+form.name+"</title><link href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap' rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Jost,sans-serif;font-weight:300;background:#fff;color:#1C1917}.cover{min-height:100vh;background:#1C1917;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:72px;page-break-after:always}.ci{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:24px}.ct{font-family:Cormorant Garamond,serif;font-size:48px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}.cn{font-family:Cormorant Garamond,serif;font-size:26px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:32px}.cm{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;line-height:2.2}.content{max-width:720px;margin:0 auto;padding:56px}.mb{border-left:2px solid rgba(154,128,80,.35);padding:18px 22px;margin:0 0 40px;background:#f9f8f6}table{width:100%;border-collapse:collapse}td{padding:6px 12px 6px 0;font-size:12px;color:#444;border-bottom:1px solid #f0ede8}td:first-child{font-weight:600;color:#3D2C5E;width:160px}h2{font-family:Cormorant Garamond,serif;font-size:20px;font-weight:400;color:#1C1917;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid #e8e5e0;page-break-after:avoid}p{font-size:13px;line-height:2;color:#3a3a32;margin-bottom:12px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class=cover><div class=ci>Faculty of Human Design - Ibiza</div><div class=ct>"+rpt.title+"</div><div class=cn>"+form.name+"</div><div class=cm>Geboren "+form.day+"-"+form.month+"-"+form.year+"</div></div><div class=content><div class=mb><table>"+meta+"</table></div>"+bh+"</div><script>window.onload=function(){window.print();}<\/script></body></html>");
+    win.document.write("<!DOCTYPE html><html><head><meta charset=UTF-8><title>"+tl(rpt.title)+" - "+form.name+"</title><link href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap' rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Jost,sans-serif;font-weight:300;background:#fff;color:#1C1917}.cover{min-height:100vh;background:#1C1917;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:72px;page-break-after:always}.ci{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:24px}.ct{font-family:Cormorant Garamond,serif;font-size:48px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}.cn{font-family:Cormorant Garamond,serif;font-size:26px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:32px}.cm{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;line-height:2.2}.content{max-width:720px;margin:0 auto;padding:56px}.mb{border-left:2px solid rgba(154,128,80,.35);padding:18px 22px;margin:0 0 40px;background:#f9f8f6}table{width:100%;border-collapse:collapse}td{padding:6px 12px 6px 0;font-size:12px;color:#444;border-bottom:1px solid #f0ede8}td:first-child{font-weight:600;color:#3D2C5E;width:160px}h2{font-family:Cormorant Garamond,serif;font-size:20px;font-weight:400;color:#1C1917;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid #e8e5e0;page-break-after:avoid}p{font-size:13px;line-height:2;color:#3a3a32;margin-bottom:12px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class=cover><div class=ci>Faculty of Human Design - Ibiza</div><div class=ct>"+tl(rpt.title)+"</div><div class=cn>"+form.name+"</div><div class=cm>"+(LANG==="en"?"Born ":"Geboren ")+form.day+"-"+form.month+"-"+form.year+"</div></div><div class=content><div class=mb><table>"+meta+"</table></div>"+bh+"</div><script>window.onload=function(){window.print();}<\/script></body></html>");
     win.document.close();
     if(btn){btn.textContent="Download PDF";btn.disabled=false;}
   };
 
-  const barData=chart?.isNumerology?[["Levenspad",chart.lp],["Uitdrukking",chart.exp],["Ziel",chart.soul],["Pers. Jaar",chart.py],["Rijping",chart.mat],["Masters",chart.masters?.length>0?chart.masters.join(", "):"geen"]]:chart?.isHoroscoop?[["Zonneteken",chart.sun_sign],["Ascendant",chart.ascendant?.degree+"deg "+chart.ascendant?.sign],["Dom. element",chart.dom_element],["Midhemel",chart.mc?.sign],["Planeten","10 berekend"],["Aspecten","gevonden"]]:[["Type",chart?.type],["Strategie",chart?.strat],["Autoriteit",chart?.auth],["Profiel",chart?.profile],["Inkarnatie-Kruis","Poort "+(chart?.cross||"")],["Gedefinieerd",(chart?.definedCenters||[]).slice(0,2).join(", ")]];
+  const barData=chart?.isNumerology
+    ?(LANG==="en"
+      ?[["Life Path",chart.lp],["Expression",chart.exp],["Soul",chart.soul],["Pers. Year",chart.py],["Maturity",chart.mat],["Masters",chart.masters?.length>0?chart.masters.join(", "):"none"]]
+      :[["Levenspad",chart.lp],["Uitdrukking",chart.exp],["Ziel",chart.soul],["Pers. Jaar",chart.py],["Rijping",chart.mat],["Masters",chart.masters?.length>0?chart.masters.join(", "):"geen"]])
+    :chart?.isHoroscoop
+      ?(LANG==="en"
+        ?[["Sun sign",chart.sun_sign],["Ascendant",chart.ascendant?.degree+"deg "+chart.ascendant?.sign],["Dom. element",chart.dom_element],["Midheaven",chart.mc?.sign],["Planets","10 calculated"],["Aspects","found"]]
+        :[["Zonneteken",chart.sun_sign],["Ascendant",chart.ascendant?.degree+"deg "+chart.ascendant?.sign],["Dom. element",chart.dom_element],["Midhemel",chart.mc?.sign],["Planeten","10 berekend"],["Aspecten","gevonden"]])
+      :(LANG==="en"
+        ?[["Type",chart?.type],["Strategy",xlateStrat(chart?.strat)],["Authority",xlateAuth(chart?.auth)],["Profile",chart?.profile],["Incarnation Cross","Gate "+(chart?.cross||"")],["Defined",(chart?.definedCenters||[]).slice(0,2).join(", ")]]
+        :[["Type",chart?.type],["Strategie",chart?.strat],["Autoriteit",chart?.auth],["Profiel",chart?.profile],["Inkarnatie-Kruis","Poort "+(chart?.cross||"")],["Gedefinieerd",(chart?.definedCenters||[]).slice(0,2).join(", ")]]);
 
   return(
     <div>
       <div className="thankyou-hero">
         <div className="thankyou-icon">✓</div>
-        <div className="thankyou-title">Je rapport is klaar</div>
-        <div className="thankyou-sub">Je persoonlijke analyse staat hieronder. Download het als PDF voor je archief.</div>
+        <div className="thankyou-title">{t("thankYou.readyTitle")}</div>
+        <div className="thankyou-sub">{t("thankYou.readySub")}</div>
       </div>
       <div className="report-pg" style={{paddingTop:32}}>
         <div className="report-header">
           <div className="report-inst-label">Faculty of Human Design — Ibiza</div>
-          <div className="report-title">{rpt.title}</div>
+          <div className="report-title">{tl(rpt.title)}</div>
           <div className="report-meta">{form.name} — {form.day}-{form.month}-{form.year}{form.place?" — "+form.place:""}</div>
-          <button id="dlb" className="btn btn-primary" onClick={dlPDF}>Download als PDF</button>
-          <p style={{fontSize:".75rem",color:"var(--text-light)",marginTop:8}}>Opent printvenster — kies Opslaan als PDF</p>
+          <button id="dlb" className="btn btn-primary" onClick={dlPDF}>{t("thankYou.downloadBtn")}</button>
+          <p style={{fontSize:".75rem",color:"var(--text-light)",marginTop:8}}>{t("thankYou.downloadHint")}</p>
         </div>
         {chart&&<div className="report-summary"><div className="report-summary-grid">{barData.map(([l,v])=><div key={l}><div className="rsg-label">{l}</div><div className="rsg-value">{v}</div></div>)}</div></div>}
         <div className="report-body">
@@ -3601,27 +3984,27 @@ function ThankYouPage({result,go}){
         </div>
         <div style={{maxWidth:760,margin:"28px auto 0"}}>
           <div className="upsell-card">
-            <div className="upsell-label">Aanbevolen voor jou</div>
-            <div className="upsell-title">Verdiep je inzicht met {nextRpt.title}</div>
-            <div className="upsell-sub">Klanten die {rpt.title} bestellen kiezen daarna vaak voor dit rapport.</div>
+            <div className="upsell-label">{t("thankYou.upsellLabel")}</div>
+            <div className="upsell-title">{t("thankYou.upsellTitle",{title:tl(nextRpt.title)})}</div>
+            <div className="upsell-sub">{t("thankYou.upsellSub",{from:tl(rpt.title)})}</div>
             <div className="upsell-grid">
               {nextRpt.includes.slice(0,4).map((item,i)=>(
                 <div key={i} className="upsell-item"><span style={{color:"rgba(154,128,80,.8)",flexShrink:0}}>✓</span>{item}</div>
               ))}
             </div>
             <button className="btn btn-gold" onClick={()=>{track("upsell_accepted",{from:rpt.id,to:nextRpt.id,price:nextRpt.priceNum});go("rapport-"+nextRpt.id);}}>
-              {nextRpt.title} bestellen — {nextRpt.price}
+              {t("thankYou.orderBtn",{title:tl(nextRpt.title),price:nextRpt.price})}
             </button>
           </div>
           <div style={{marginTop:16,background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px 28px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:20}}>
-            <div><div className="label" style={{marginBottom:4}}>Maandelijkse Guidance</div><p className="body-sm">Elke maand een persoonlijk rapport — opzegbaar wanneer je wilt.</p></div>
+            <div><div className="label" style={{marginBottom:4}}>{t("report.monthlyOffer")}</div><p className="body-sm">{t("report.monthlyDesc")}</p></div>
             <div style={{display:"flex",gap:12,alignItems:"center",flexShrink:0}}>
-              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem"}}>19 euro per maand</div>
-              <button className="btn btn-secondary btn-sm" onClick={()=>{track("subscription_offer_viewed",{source:"thankyou"});go("rapport-maandelijks");}}>Bekijken</button>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem"}}>{t("report.monthlyPrice")}</div>
+              <button className="btn btn-secondary btn-sm" onClick={()=>{track("subscription_offer_viewed",{source:"thankyou"});go("rapport-maandelijks");}}>{t("report.monthlyViewBtn")}</button>
             </div>
           </div>
           <div style={{textAlign:"center",padding:"24px 0"}}>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("thankYou.allReportsBtn")}</button>
           </div>
         </div>
       </div>
@@ -3631,7 +4014,7 @@ function ThankYouPage({result,go}){
 
 // ─── ORDER CONFIRMATION PAGE ──────────────────────────────────────────────────
 function OrderConfirmationPage({result,go}){
-  useSEO({title:"Bestelling bevestigd",description:"Je bestelling is ontvangen. Je rapport wordt binnen 1 werkdag per e-mail bezorgd.",canonical:SITE+"/"});
+  useSEO({title:LANG==="en"?"Order confirmed":"Bestelling bevestigd",description:LANG==="en"?"Your order has been received. Your report will be delivered by email within 1 business day.":"Je bestelling is ontvangen. Je rapport wordt binnen 1 werkdag per e-mail bezorgd.",canonical:SITE+"/"});
   return(
     <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
       <div style={{maxWidth:560,width:"100%",textAlign:"center"}}>
@@ -3639,18 +4022,18 @@ function OrderConfirmationPage({result,go}){
         <div style={{width:72,height:72,borderRadius:"50%",background:"rgba(61,44,94,.08)",border:"1px solid rgba(61,44,94,.14)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 28px",fontSize:"1.6rem",color:"var(--brand)"}}>✓</div>
         {/* Heading */}
         <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.4rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>
-          Bestelling bevestigd
+          {t("confirmPage.title")}
         </div>
         <p style={{fontSize:".95rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32}}>
-          Bedankt voor je bestelling. We zijn bezig met het samenstellen van jouw persoonlijke blauwdruk.
+          {t("confirmPage.sub")}
         </p>
         {/* Delivery info card */}
         <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-xl)",padding:"28px 32px",marginBottom:28,textAlign:"left"}}>
           <div style={{display:"flex",flexDirection:"column",gap:18}}>
             {[
-              ["◎","Bevestigingsmail verstuurd","Controleer je inbox (en spam) — je ontvangt een bevestiging van je bestelling."],
-              ["◇","Levering binnen 1 werkdag","Jouw persoonlijke blauwdruk wordt samengesteld en als PDF per e-mail bezorgd — je hoeft niets te doen."],
-              ["✦","Beveiligde downloadlink","De e-mail bevat een persoonlijke downloadlink die 30 dagen geldig is."],
+              ["◎",t("confirmPage.check1title"),t("confirmPage.check1desc")],
+              ["◇",t("confirmPage.check2title"),t("confirmPage.check2desc")],
+              ["✦",t("confirmPage.check3title"),t("confirmPage.check3desc")],
             ].map(([icon,title,desc])=>(
               <div key={title} style={{display:"flex",gap:16,alignItems:"flex-start"}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,marginTop:1,opacity:.7}}>{icon}</div>
@@ -3664,10 +4047,10 @@ function OrderConfirmationPage({result,go}){
         </div>
         {/* Question? */}
         <p style={{fontSize:".78rem",color:"var(--text-light)",marginBottom:32}}>
-          Vragen? Stuur een bericht naar{" "}
+          {t("confirmPage.question")}{" "}
           <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>
         </p>
-        <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk alle rapporten</button>
+        <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("confirmPage.backBtn")}</button>
       </div>
     </div>
   );
@@ -3695,15 +4078,15 @@ function DownloadPage({token}){
       <div style={{maxWidth:480,width:"100%",textAlign:"center"}}>
         {status==="loading"&&(
           <>
-            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",fontWeight:300,color:"var(--text)",marginBottom:10}}>Rapport laden...</div>
-            <p style={{color:"var(--text-light)",fontSize:".85rem"}}>Even geduld.</p>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",fontWeight:300,color:"var(--text)",marginBottom:10}}>{t("downloadPage.loading")}</div>
+            <p style={{color:"var(--text-light)",fontSize:".85rem"}}>{t("downloadPage.loadingSub")}</p>
           </>
         )}
         {status==="ready"&&(
           <>
-            <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.2rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>Je blauwdruk is klaar</div>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.2rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>{t("downloadPage.readyTitle")}</div>
             <p style={{fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32}}>
-              Klik op de knop hieronder om je persoonlijke rapport te downloaden als PDF.
+              {t("downloadPage.readySub")}
             </p>
             <a
               href={"/api/get-download?token="+token}
@@ -3713,22 +4096,22 @@ function DownloadPage({token}){
               className="btn btn-primary btn-lg"
               style={{display:"inline-block",marginBottom:20,textDecoration:"none"}}
             >
-              Download rapport (PDF)
+              {t("downloadPage.downloadBtn")}
             </a>
             <p style={{fontSize:".72rem",color:"var(--text-light)"}}>
-              Sla het bestand op voor je archief — de link is 30 dagen geldig.
+              {LANG==="en"?"Save the file to your archive — the link is valid for 30 days.":"Sla het bestand op voor je archief — de link is 30 dagen geldig."}
             </p>
           </>
         )}
         {(status==="notfound"||status==="expired"||status==="error")&&(
           <>
             <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",fontWeight:300,color:"var(--text)",marginBottom:14}}>
-              {status==="expired"?"Link verlopen":"Link niet gevonden"}
+              {t("downloadPage.errorTitle")}
             </div>
             <p style={{fontSize:".9rem",color:"var(--text-muted)",lineHeight:1.7,marginBottom:24}}>
               {status==="expired"
-                ?"Deze downloadlink is verlopen (ouder dan 30 dagen). Stuur ons een bericht voor een nieuwe link."
-                :"Deze downloadlink bestaat niet of is ongeldig."}
+                ?t("downloadPage.expiredMsg")
+                :t("downloadPage.notFoundMsg")}
             </p>
             <p style={{fontSize:".8rem",color:"var(--text-light)"}}>
               <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",fontWeight:500,textDecoration:"none"}}>info@facultyhd.com</a>
@@ -3744,18 +4127,21 @@ function DownloadPage({token}){
 const ROUTABLE = new Set(["home","wat","rapporten","blog","over","contact","voorwaarden"]);
 
 function pathToPage(pathname) {
-  if (!pathname || pathname === "/") return "home";
-  const rapportMatch = pathname.match(/^\/rapport\/(.+)$/);
+  // Strip language prefix first (/en/... → /...)
+  const p = stripLangPrefix(pathname);
+  if (!p || p === "/") return "home";
+  const rapportMatch = p.match(/^\/rapport\/(.+)$/);
   if (rapportMatch) return "rapport-" + rapportMatch[1];
-  const seg = pathname.replace(/^\//, "").replace(/\/$/, "");
+  const seg = p.replace(/^\//, "").replace(/\/$/, "");
   if (ROUTABLE.has(seg)) return seg;
   return "home";
 }
 
 function pageToPath(page) {
-  if (page === "home") return "/";
-  if (page.startsWith("rapport-")) return "/rapport/" + page.slice("rapport-".length);
-  return "/" + page;
+  const prefix = LANG === "en" ? "/en" : "";
+  if (page === "home") return prefix + "/";
+  if (page.startsWith("rapport-")) return prefix + "/rapport/" + page.slice("rapport-".length);
+  return prefix + "/" + page;
 }
 
 // ─── TERMS & PRIVACY PAGE ─────────────────────────────────────────────────────
@@ -3969,12 +4355,19 @@ export default function App(){
     const isHoro=rpt.id==="horoscoop";
     const hdChart=(!isNum&&!isHoro)?chart:null;
     const fullPrompt=buildPrompt(hdChart,form,rpt);
-    const sections=rpt.prompt_extra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
-    const SYSTEM="Je bent een senior analist van de Faculty of Human Design op Ibiza. Schrijf nauwkeurige, diepgaande rapporten in het Nederlands. Schrijf vanuit het instituut. Geen bulletpoints — alleen alineas. Minimaal 800 woorden per sectie.";
+    const promptExtra=(typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)
+      ?(rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??"")
+      :(rpt.prompt_extra||"");
+    const sections=promptExtra.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
+    const SYSTEM=LANG==="en"
+      ?"You are a senior analyst at the Faculty of Human Design in Ibiza. Write accurate, in-depth reports in English. Write from the institute's perspective. No bullet points — paragraphs only. Minimum 800 words per section."
+      :"Je bent een senior analist van de Faculty of Human Design op Ibiza. Schrijf nauwkeurige, diepgaande rapporten in het Nederlands. Schrijf vanuit het instituut. Geen bulletpoints — alleen alineas. Minimaal 800 woorden per sectie.";
     let allText="";
     for(let i=0;i<sections.length;i++){
       const sec=sections[i];
-      const prompt=fullPrompt+"\n\nSchrijf nu uitsluitend sectie '"+sec+"'. Minimaal 800 woorden, in alineas, persoonlijk en concreet. Geen sectietitel in de tekst.";
+      const prompt=LANG==="en"
+        ?fullPrompt+"\n\nNow write only section '"+sec+"'. Minimum 800 words, in paragraphs, personal and concrete. No section title in the text."
+        :fullPrompt+"\n\nSchrijf nu uitsluitend sectie '"+sec+"'. Minimaal 800 woorden, in alineas, persoonlijk en concreet. Geen sectietitel in de tekst.";
       let retries=2;
       while(retries>=0){
         try{
@@ -3990,9 +4383,9 @@ export default function App(){
           retries--;
         }catch(e){console.error("Fetch error:",e);retries--;}
       }
-      if(!allText.includes("### "+sec)){allText+="### "+sec+"\n\n[Deze sectie kon niet worden gegenereerd. Neem contact op via info@facultyhd.com]\n\n";}
+      if(!allText.includes("### "+sec)){allText+="### "+sec+"\n\n"+(LANG==="en"?"[This section could not be generated. Contact us at info@facultyhd.com]":"[Deze sectie kon niet worden gegenereerd. Neem contact op via info@facultyhd.com]")+"\n\n";}
     }
-    return allText.trim()||"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyhd.com";
+    return allText.trim()||(LANG==="en"?"The report could not be generated. Contact us at info@facultyhd.com":"Het rapport kon niet worden gegenereerd. Neem contact op via info@facultyhd.com");
   }
   // Detect /download/<token> route
   const downloadToken=(()=>{const m=window.location.pathname.match(/^\/download\/([a-f0-9-]{36})$/i);return m?m[1]:null;})();
