@@ -1,6 +1,15 @@
 // Dynamic import so any module-init error is returned as JSON rather than
 // crashing the Lambda silently with FUNCTION_INVOCATION_FAILED.
 export default async function handler(req, res) {
+  // Temporary GET diagnostic — remove after env vars are confirmed
+  if (req.method === "GET") {
+    return res.json({
+      SUPABASE_URL: process.env.SUPABASE_URL ? "✅ set" : "❌ MISSING",
+      SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ? "✅ set" : "❌ MISSING",
+      STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? "✅ set" : "❌ MISSING",
+      ADMIN_SECRET: process.env.ADMIN_SECRET ? "✅ set" : "❌ MISSING",
+    });
+  }
   if (req.method !== "POST") return res.status(405).end();
 
   // ── Load Supabase (dynamic so import errors surface as JSON) ─────────────
