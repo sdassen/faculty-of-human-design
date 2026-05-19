@@ -937,7 +937,12 @@ async function goToStripe(rptId, chartData, formData) {
       }),
     });
 
-    const orderData = await orderRes.json();
+    let orderData;
+    try {
+      orderData = await orderRes.json();
+    } catch (_) {
+      throw new Error("Server niet bereikbaar. Probeer het later opnieuw.");
+    }
     if (!orderRes.ok || !orderData.orderId) {
       throw new Error(orderData.error || "Order aanmaken mislukt");
     }
