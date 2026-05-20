@@ -1,24 +1,21 @@
 // ─── CHROMIUM PDF RENDERER ────────────────────────────────────────────────────
-// Uses @sparticuz/chromium on Vercel, local Chrome for dev.
+// On Vercel: connects to Browserless managed Chrome (requires BROWSERLESS_TOKEN env var).
+// Local dev: launches system Chrome directly.
 // Receives a full HTML string, returns a PDF Buffer.
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 export async function renderPDF(html) {
+  const puppeteer = require("puppeteer-core");
   let browser;
 
-  if (process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME) {
-    const chromium  = require("@sparticuz/chromium");
-    const puppeteer = require("puppeteer-core");
-    browser = await puppeteer.launch({
-      args:            chromium.args,
-      defaultViewport: chromium.defaultViewport,
-      executablePath:  await chromium.executablePath(),
-      headless:        chromium.headless,
+  if (process.env.VERCEL || process.env.BROWSERLESS_TOKEN) {
+    const token = process.env.BROWSERLESS_TOKEN;
+    if (!token) throw new Error("BROWSERLESS_TOKEN env var is required on Vercel");
+    browser = await puppeteer.connect({
+      browserWSEndpoint: `wss://chrome.browserless.io?token=${token}`,
     });
   } else {
-    const puppeteer = require("puppeteer-core");
-    // Local dev: use system Chrome. Override with CHROMIUM_PATH env var if needed.
     const executablePath =
       process.env.CHROMIUM_PATH ||
       "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
@@ -32,16 +29,13 @@ export async function renderPDF(html) {
   try {
     const page = await browser.newPage();
 
-    // Wait for fonts and images to load before rendering
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
-
-    // Ensure custom fonts are fully loaded
     await page.evaluate(() => document.fonts.ready);
 
     const pdf = await page.pdf({
-      format:          "A4",
-      printBackground: true,
-      margin:          { top: "0mm", bottom: "0mm", left: "0mm", right: "0mm" },
+      format:            "A4",
+      printBackground:   true,
+      margin:            { top: "0mm", bottom: "0mm", left: "0mm", right: "0mm" },
       preferCSSPageSize: true,
     });
 
