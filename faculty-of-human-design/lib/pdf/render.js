@@ -1,34 +1,43 @@
-// ─── CHROMIUM PDF RENDERER ────────────────────────────────────────────────────
-// On Vercel: connects to Browserless managed Chrome (requires BROWSERLESS_TOKEN env var).
-// Local dev: launches system Chrome directly.
-// Receives a full HTML string, returns a PDF Buffer.
+// ─── PDF RENDERER ─────────────────────────────────────────────────────────────
+// On Vercel: delegates to Railway PDF microservice via HTTP (PDF_SERVICE_URL).
+// Local dev: launches system Chrome directly via puppeteer-core.
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
 export async function renderPDF(html) {
-  const puppeteer = require("puppeteer-core");
-  let browser;
+  // ── Vercel / production: call the Railway microservice
+  if (process.env.PDF_SERVICE_URL) {
+    const res = await fetch(`${process.env.PDF_SERVICE_URL}/pdf`, {
+      method:  "POST",
+      headers: {
+        "Content-Type":  "application/json",
+        ...(process.env.PDF_SECRET ? { "x-pdf-secret": process.env.PDF_SECRET } : {}),
+      },
+      body: JSON.stringify({ html }),
+    });
 
-  if (process.env.VERCEL || process.env.BROWSERLESS_TOKEN) {
-    const token = process.env.BROWSERLESS_TOKEN;
-    if (!token) throw new Error("BROWSERLESS_TOKEN env var is required on Vercel");
-    browser = await puppeteer.connect({
-      browserWSEndpoint: `wss://chrome.browserless.io?token=${token}`,
-    });
-  } else {
-    const executablePath =
-      process.env.CHROMIUM_PATH ||
-      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-    browser = await puppeteer.launch({
-      executablePath,
-      headless: "new",
-      args: ["--no-sandbox", "--disable-setuid-sandbox"],
-    });
+    if (!res.ok) {
+      const msg = await res.text().catch(() => res.statusText);
+      throw new Error(`PDF service ${res.status}: ${msg}`);
+    }
+
+    return Buffer.from(await res.arrayBuffer());
   }
+
+  // ── Local dev: system Chrome
+  const puppeteer = require("puppeteer-core");
+  const executablePath =
+    process.env.CHROMIUM_PATH ||
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+
+  const browser = await puppeteer.launch({
+    executablePath,
+    headless: "new",
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
 
   try {
     const page = await browser.newPage();
-
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 

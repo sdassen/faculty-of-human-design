@@ -1,0 +1,16 @@
+{
+  "name": "fhd-pdf-service",
+  "version": "1.0.0",
+  "description": "Headless Chrome PDF microservice for Faculty of Human Design",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.0",
+    "puppeteer-core": "^22.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
