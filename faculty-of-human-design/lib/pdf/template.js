@@ -665,6 +665,119 @@ function buildClosingPage(order) {
 </div>`;
 }
 
+// ─── GATE REFERENCE (NL / EN) ─────────────────────────────────────────────────
+const GATE_REF = {
+   1: { nl: "Zelfuitdrukking",          en: "Self-Expression" },
+   2: { nl: "Richting van het Zelf",    en: "Direction of the Higher" },
+   3: { nl: "Ordening",                 en: "Ordering" },
+   4: { nl: "Formulering",              en: "Formulization" },
+   5: { nl: "Vaste Patronen",           en: "Fixed Rhythms" },
+   6: { nl: "Wrijving",                 en: "Friction" },
+   7: { nl: "Rol van het Zelf",         en: "Role of the Self" },
+   8: { nl: "Bijdrage",                 en: "Contribution" },
+   9: { nl: "Focus",                    en: "Focus" },
+  10: { nl: "Gedrag van het Zelf",      en: "Behavior of the Self" },
+  11: { nl: "Ideeën",                   en: "Ideas" },
+  12: { nl: "Voorzichtigheid",          en: "Caution" },
+  13: { nl: "De Luisteraar",            en: "The Listener" },
+  14: { nl: "Kracht door Bezit",        en: "Power Skills" },
+  15: { nl: "Uitersten",                en: "Extremes" },
+  16: { nl: "Vaardigheden",             en: "Skills" },
+  17: { nl: "Meningen",                 en: "Opinions" },
+  18: { nl: "Correctie",                en: "Correction" },
+  19: { nl: "Behoefte",                 en: "Want" },
+  20: { nl: "Nu",                       en: "The Now" },
+  21: { nl: "De Jager",                 en: "The Hunter/Huntress" },
+  22: { nl: "Openheid",                 en: "Openness" },
+  23: { nl: "Assimilatie",              en: "Assimilation" },
+  24: { nl: "Rationalisatie",           en: "Rationalization" },
+  25: { nl: "Geest van het Zelf",       en: "Spirit of the Self" },
+  26: { nl: "De Egoist",                en: "The Egoist" },
+  27: { nl: "Zorg",                     en: "Caring" },
+  28: { nl: "De Speler",                en: "The Game Player" },
+  29: { nl: "Zeggen Ja",               en: "Perseverance" },
+  30: { nl: "Erkenning van Gevoelens",  en: "Feelings" },
+  31: { nl: "Leiderschap",              en: "Leadership" },
+  32: { nl: "Continuïteit",             en: "Continuity" },
+  33: { nl: "Privacy",                  en: "Privacy" },
+  34: { nl: "Kracht",                   en: "Power" },
+  35: { nl: "Verandering",              en: "Change" },
+  36: { nl: "Duisternis van het Licht", en: "Crisis" },
+  37: { nl: "Vriendelijkheid",          en: "Friendship" },
+  38: { nl: "De Strijder",              en: "The Fighter" },
+  39: { nl: "Provocateur",              en: "The Provocateur" },
+  40: { nl: "Eenzaamheid",              en: "Aloneness" },
+  41: { nl: "Contractie",               en: "Contraction" },
+  42: { nl: "Groei",                    en: "Growth" },
+  43: { nl: "Doorbraak",                en: "Insight" },
+  44: { nl: "Waarschuwing",             en: "Coming to Meet" },
+  45: { nl: "De Vergadering",           en: "The Gatherer" },
+  46: { nl: "Determinatie van het Zelf",en: "Determination of the Self" },
+  47: { nl: "Realisatie",               en: "Realization" },
+  48: { nl: "De Diepte",                en: "The Depth" },
+  49: { nl: "Principes",                en: "Principles" },
+  50: { nl: "Waarden",                  en: "Values" },
+  51: { nl: "Schok",                    en: "Shock" },
+  52: { nl: "Stilte",                   en: "Stillness" },
+  53: { nl: "Beginnen",                 en: "Beginnings" },
+  54: { nl: "De Drijfveer",             en: "Ambition" },
+  55: { nl: "Geest",                    en: "Spirit" },
+  56: { nl: "Stimulering",              en: "Stimulation" },
+  57: { nl: "Intuïtief Inzicht",        en: "Intuitive Clarity" },
+  58: { nl: "Levensenergie",            en: "Joy" },
+  59: { nl: "Seksualiteit",             en: "Sexuality" },
+  60: { nl: "Acceptatie",               en: "Acceptance" },
+  61: { nl: "Innerlijke Waarheid",      en: "Mystery" },
+  62: { nl: "Details",                  en: "Details" },
+  63: { nl: "Twijfel",                  en: "Doubt" },
+  64: { nl: "Verwarring",               en: "Confusion" },
+};
+
+// ─── PAGE: GATE APPENDIX ──────────────────────────────────────────────────────
+function buildGateAppendixPage(order) {
+  const lang  = order.language || "nl";
+  const chart = (order.birth_data || {}).chart || {};
+  const gates = (chart.allGates || []).slice().sort(function(a, b) { return a - b; });
+
+  if (!gates.length) return "";
+
+  const headerLabel = ui(lang, "APPENDIX", "APPENDIX");
+  const pageTitle   = ui(lang, "Jouw actieve poorten", "Your active gates");
+  const introText   = ui(lang,
+    "Onderstaande poorten zijn actief in jouw chart — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van jouw ontwerp.",
+    "The gates below are active in your chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your design."
+  );
+
+  const gateCards = gates.map(function(g) {
+    const ref  = GATE_REF[g] || { nl: "—", en: "—" };
+    const name = lang === "en" ? ref.en : ref.nl;
+    return `<div style="padding:10px 14px;border:0.5px solid #E5E0D8;background:#FFFFFF;break-inside:avoid;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18pt;font-weight:600;color:#C9A85C;line-height:1;">${g}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:400;color:#1A1715;margin-top:4px;line-height:1.35;">${esc(name)}</div>
+    </div>`;
+  }).join("");
+
+  const cols = gates.length <= 18 ? 3 : 4;
+
+  return `
+<div style="background:#F7F5F0;position:relative;break-before:page;padding:0 0 20mm;">
+  <div style="height:4px;background:#1A1715;"></div>
+  <div style="padding:10mm 20mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${esc(headerLabel)}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24pt;color:#1A1715;line-height:1.1;margin-bottom:8px;">${esc(pageTitle)}</div>
+    <div style="height:0.75px;background:#C9A85C;margin-bottom:12px;"></div>
+    <p style="font-family:'Inter',sans-serif;font-size:8.5pt;line-height:1.65;color:#6B6560;margin-bottom:16px;max-width:160mm;">${esc(introText)}</p>
+    <div style="display:grid;grid-template-columns:repeat(${cols},1fr);gap:8px;">
+      ${gateCards}
+    </div>
+  </div>
+  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
+  </div>
+</div>`;
+}
+
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
 export function buildHTML({ order, sections, svgBodygraph }) {
   const lang = order.language || "nl";
@@ -709,6 +822,7 @@ ${buildTOCPage(sections, order)}
 ${hasChart ? buildProfilePage(order) : ""}
 ${hasChart && svgBodygraph ? buildBodygraphPage(svgBodygraph, order) : ""}
 ${sectionPages}
+${hasChart ? buildGateAppendixPage(order) : ""}
 ${buildClosingPage(order)}
 </body>
 </html>`;
