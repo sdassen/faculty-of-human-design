@@ -22,7 +22,7 @@ async function renderTestPdf(orderId, res) {
   if (error || !order) return res.status(404).json({ error: "order not found" });
 
   const sections = (order.generated_sections || []).map(function(s) {
-    return { title: s.title, text: s.text };
+    return { title: s.title, ...s };
   });
   if (!sections.length) return res.status(400).json({ error: "no generated_sections for this order" });
 

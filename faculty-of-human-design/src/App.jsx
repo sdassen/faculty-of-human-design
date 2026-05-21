@@ -1133,7 +1133,7 @@ async function goToStripe(rptId, chartData, formData) {
       ? (rpt.prompt_extra[LANG] ?? rpt.prompt_extra.nl ?? "")
       : (rpt?.prompt_extra || "");
     const sections = promptExtraForOrder
-      ? promptExtraForOrder.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").trim())
+      ? promptExtraForOrder.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").replace(/^\d+\.\s*/, "").trim())
       : [];
 
     const orderRes = await fetch("/api/create-order", {

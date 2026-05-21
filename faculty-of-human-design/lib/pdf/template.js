@@ -217,6 +217,143 @@ function coverDecoration(cx, cy) {
   </svg>`;
 }
 
+// ─── TRANSITION QUOTE PAGE ───────────────────────────────────────────────────
+function buildTransitionPage(quoteNL, quoteEN, order) {
+  const lang  = order.language || "nl";
+  const quote = lang === "en" ? quoteEN : quoteNL;
+  return `
+<div style="width:210mm;height:285mm;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
+  <div style="padding:0 32mm;text-align:center;position:relative;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.35em;text-transform:uppercase;margin-bottom:24px;opacity:0.6;">— Faculty of Human Design —</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:22pt;color:#FFFFFF;line-height:1.55;letter-spacing:0.01em;">${esc(quote)}</div>
+  </div>
+</div>`;
+}
+
+// ─── PAGE: CINEMATIC INTRODUCTION ────────────────────────────────────────────
+function buildIntroPage(order) {
+  const lang = order.language || "nl";
+  const name = order.customer_name || "";
+
+  const contentNL = {
+    label:    "VOOR JOU",
+    headline: "Een woord vooraf",
+    body: [
+      `Dit rapport is niet geschreven om je te vertellen wie je zou moeten worden.`,
+      `Het is geschreven om je te herinneren wie je al was — voor de wereld je vroeg je aan te passen.`,
+      `Human Design is geen persoonlijkheidstest. Het is een kaart van de energie die door jou stroomt. Van de manier waarop jij beslissingen het best neemt. Van de patronen die jouw leven kleuren, zowel als ze in je voordeel werken als wanneer ze je uitputten.`,
+      `Dit rapport zal je niet veranderen. Maar het kan je wel iets teruggeven: herkenning. De stille bevestiging dat wat jij voelt — de twijfel, de kracht, de zoetheid van bepaalde momenten — niet toevallig is.`,
+      `Lees dit niet als een handleiding. Lees het als een spiegel.`,
+    ],
+    sign: "Met respect voor jouw ontwerp,",
+    org:  "Faculty of Human Design · Ibiza",
+  };
+
+  const contentEN = {
+    label:    "FOR YOU",
+    headline: "A word before we begin",
+    body: [
+      `This report was not written to tell you who you should become.`,
+      `It was written to remind you who you already were — before the world asked you to perform.`,
+      `Human Design is not a personality test. It is a map of the energy that moves through you. Of the way you make decisions best. Of the patterns that colour your life, both when they serve you and when they drain you.`,
+      `This report will not change you. But it can give something back: recognition. The quiet confirmation that what you feel — the doubt, the strength, the sweetness of certain moments — is not random.`,
+      `Read this not as a manual. Read it as a mirror.`,
+    ],
+    sign: "With respect for your design,",
+    org:  "Faculty of Human Design · Ibiza",
+  };
+
+  const c = lang === "en" ? contentEN : contentNL;
+
+  const parasHTML = c.body.map(function(p, i) {
+    if (i === 0) {
+      return `<p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16pt;font-weight:300;color:#1A1715;line-height:1.45;margin-bottom:20px;">${esc(p)}</p>`;
+    }
+    return `<p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;">${esc(p)}</p>`;
+  }).join("");
+
+  return `
+<div style="width:210mm;height:285mm;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;">
+  <div style="height:3px;background:#1A1715;"></div>
+  <div style="flex:1;padding:18mm 24mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:18px;">${esc(c.label)}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:28pt;font-weight:400;color:#1A1715;margin-bottom:6px;line-height:1.1;">${esc(c.headline)}</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:28px;"></div>
+    ${parasHTML}
+    <div style="margin-top:28px;padding-top:20px;border-top:0.4px solid #D8D4CC;">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10pt;color:#6B6560;margin-bottom:4px;">${esc(c.sign)}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:300;color:#A8A29E;letter-spacing:0.08em;">${esc(c.org)}</div>
+    </div>
+  </div>
+  <div style="padding:0 24mm 12mm;display:flex;justify-content:space-between;align-items:center;">
+    <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
+    ${name ? `<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9pt;color:#C9A85C;padding:0 14px;">${esc(name)}</div>` : ""}
+    <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
+  </div>
+</div>`;
+}
+
+// ─── PAGE: HOW TO READ ────────────────────────────────────────────────────────
+function buildHowToReadPage(order) {
+  const lang = order.language || "nl";
+
+  const contentNL = {
+    label:    "LEESWIJZER",
+    headline: "Hoe dit rapport het best tot je spreekt",
+    intro:    "Dit is geen rapport dat je snel doorleest. Het is een ervaring die vraagt om aanwezigheid. Neem de tijd — elke sectie is geschreven om iets in je wakker te maken.",
+    items: [
+      { num: "01", title: "Lees langzaam",           body: "Elke sectie is bedoeld voor rustige aandacht, niet voor snelle consumptie. Geef jezelf de ruimte." },
+      { num: "02", title: "Pauzeer bij herkenning",  body: "Als een zin iets in je raakt — stop. Schrijf het op, of laat het even gewoon landen." },
+      { num: "03", title: "Gebruik het journaal",    body: "Aan het einde van elke sectie staan drie reflectievragen. Ze zijn uitnodigingen, geen opdrachten." },
+      { num: "04", title: "Lees in stilte",          body: "Het liefst op een moment dat je niet gehaast bent. Een kop thee erbij is geen slecht idee." },
+      { num: "05", title: "Laat het rijpen",          body: "Niet alles hoeft direct te kloppen. Sommige inzichten krijgen pas na een paar dagen hun betekenis." },
+    ],
+  };
+
+  const contentEN = {
+    label:    "READING GUIDE",
+    headline: "How this report speaks best to you",
+    intro:    "This is not a report you read in a hurry. It is an experience that asks for presence. Take your time — each section is written to awaken something in you.",
+    items: [
+      { num: "01", title: "Read slowly",              body: "Each section is meant for quiet attention, not quick consumption. Give yourself the space." },
+      { num: "02", title: "Pause at recognition",     body: "If a sentence lands on something — stop. Write it down, or simply let it sit." },
+      { num: "03", title: "Use the journal prompts",  body: "At the end of each section there are three reflection questions. They are invitations, not assignments." },
+      { num: "04", title: "Read in silence",          body: "Ideally at a moment when you are not in a rush. A cup of tea alongside is not a bad idea." },
+      { num: "05", title: "Let it settle",            body: "Not everything needs to make sense immediately. Some insights take a few days to find their meaning." },
+    ],
+  };
+
+  const c = lang === "en" ? contentEN : contentNL;
+
+  const itemsHTML = c.items.map(function(item) {
+    return `<div style="display:flex;gap:18px;padding:14px 0;border-bottom:0.4px solid #E5E0D8;break-inside:avoid;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18pt;font-weight:400;color:#C9A85C;opacity:0.5;min-width:28px;line-height:1;padding-top:2px;">${esc(item.num)}</div>
+      <div>
+        <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13pt;color:#1A1715;margin-bottom:3px;line-height:1.2;">${esc(item.title)}</div>
+        <div style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#6B6560;line-height:1.65;">${esc(item.body)}</div>
+      </div>
+    </div>`;
+  }).join("");
+
+  return `
+<div style="width:210mm;height:285mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
+  <div style="height:3px;background:#1A1715;"></div>
+  <div style="padding:14mm 24mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">${esc(c.label)}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24pt;font-weight:400;color:#1A1715;line-height:1.1;margin-bottom:8px;">${esc(c.headline)}</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:16px;"></div>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#6B6560;line-height:1.72;margin-bottom:20px;max-width:150mm;">${esc(c.intro)}</p>
+    ${itemsHTML}
+  </div>
+  <div style="position:absolute;bottom:10mm;left:24mm;right:24mm;display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
+  </div>
+</div>`;
+}
+
 // ─── PAGE: COVER ──────────────────────────────────────────────────────────────
 function buildCoverPage(order) {
   const bd    = order.birth_data || {};
@@ -797,6 +934,18 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>`;
 
+  // Transition page quote — shown once, roughly halfway through the sections
+  const midTransition = buildTransitionPage(
+    "Afstemming is niet iemand anders worden.\nHet is onthouden wat jouw lichaam al weet.",
+    "Alignment is not becoming someone else.\nIt is remembering what your body already knows.",
+    order
+  );
+  const midIdx = Math.floor(sections.length / 2);
+  const sectionPagesWithTransition = sections.map(function(s, i) {
+    const page = buildSectionPages(s, i, order);
+    return i === midIdx && sections.length > 2 ? midTransition + page : page;
+  }).join("\n");
+
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
@@ -816,12 +965,14 @@ ${fontBlock}
 </head>
 <body>
 ${buildCoverPage(order)}
+${buildIntroPage(order)}
+${buildHowToReadPage(order)}
 ${hasChart ? buildExecutiveSummaryPage(order) : ""}
 ${buildMethodologyPage(order)}
 ${buildTOCPage(sections, order)}
 ${hasChart ? buildProfilePage(order) : ""}
 ${hasChart && svgBodygraph ? buildBodygraphPage(svgBodygraph, order) : ""}
-${sectionPages}
+${sectionPagesWithTransition}
 ${hasChart ? buildGateAppendixPage(order) : ""}
 ${buildClosingPage(order)}
 </body>

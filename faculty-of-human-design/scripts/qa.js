@@ -45,7 +45,7 @@ const HTML_FORBIDDEN = [
   { rx: /^reflection questions:/im, label: "English block label 'Reflection questions:'" },
 ];
 
-const MIN_PAGES = 8;   // minimum reasonable page count for a test with 2 sections
+const MIN_PAGES = 10;  // minimum reasonable page count for a test with 2 sections + intro pages
 const MAX_PAGES = 60;  // absolute ceiling
 
 // ─── HELPERS ──────────────────────────────────────────────────────────────────
