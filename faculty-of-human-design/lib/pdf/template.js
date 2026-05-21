@@ -477,7 +477,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;height:285mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
+<div style="width:210mm;min-height:297mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -581,7 +581,7 @@ function buildSectionClosingJSON(section, idx, order) {
   if (!hasAny) return "";
 
   return `
-<div style="background:#FFFFFF;position:relative;break-before:page;break-after:page;min-height:285mm;">
+<div style="background:#FFFFFF;position:relative;break-before:page;break-after:page;min-height:297mm;">
   <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:8mm 20mm 0 24mm;">
@@ -673,7 +673,7 @@ function buildSectionPagesJSON(section, idx, order) {
   // ── Breath page (adem) — minimalist pause before this section ────────────
   const ademText = (section.adem || "").trim();
   const ademPage = ademText
-    ? `<div style="break-before:page;height:285mm;background:#FAF8F4;display:flex;align-items:center;justify-content:center;position:relative;">
+    ? `<div style="break-before:page;min-height:297mm;background:#FAF8F4;display:flex;align-items:center;justify-content:center;position:relative;">
         <div style="max-width:120mm;text-align:center;padding:0 20mm;">
           <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:17pt;color:#1A1715;line-height:1.7;">${esc(ademText)}</div>
         </div>
