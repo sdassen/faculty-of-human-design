@@ -82,7 +82,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 
 /* TYPOGRAPHY */
 .h1 { font-family:var(--font-serif); font-size:clamp(2.4rem,5.5vw,4rem); font-weight:300; line-height:1.08; }
-.h1-hero { font-family:var(--font-serif); font-size:clamp(2.2rem,5vw,3.9rem); font-weight:300; line-height:1.1; color:white; letter-spacing:-.01em; }
+.h1-hero { font-family:var(--font-serif); font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:300; line-height:1.22; color:white; letter-spacing:.01em; }
 .h2 { font-family:var(--font-serif); font-size:clamp(1.9rem,3.8vw,2.95rem); font-weight:300; line-height:1.12; }
 .h3 { font-family:var(--font-serif); font-size:clamp(1.35rem,2.5vw,1.9rem); font-weight:400; line-height:1.2; }
 .label { font-size:.6rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase; color:var(--gold); }
@@ -262,7 +262,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .hero-text { max-width:660px; }
 .hero-eyebrow { font-size:.58rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:rgba(201,168,92,.8); margin-bottom:26px; display:flex; align-items:center; gap:14px; }
 .hero-eyebrow::before { content:""; display:block; width:28px; height:1px; background:rgba(201,168,92,.45); flex-shrink:0; }
-.hero-title em { color:rgba(255,255,255,.42); font-style:italic; }
+.hero-title em, .h1-hero em { color:rgba(255,255,255,.42); font-style:italic; }
 .hero-subtitle { font-size:1.05rem; font-weight:300; color:rgba(255,255,255,.5); line-height:1.84; margin:20px 0 36px; max-width:520px; }
 .hero-actions { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
 .hero-trust { display:flex; gap:24px; flex-wrap:wrap; }
@@ -2571,7 +2571,7 @@ function HomePage({go}){
         <div className="hero-content">
           <div className="hero-text">
             <div className="hero-eyebrow">{LANG==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
-            <h1 className="h1-hero">{LANG==="en"?<>Not here to be fixed.<br/><em>Only remembered.</em></>:<>Niet hier om gerepareerd te worden.<br/><em>Alleen herinnerd.</em></>}</h1>
+            <h1 className="h1-hero">{LANG==="en"?<>Your blueprint.<br/><em>Your truth.</em></>:<>Jouw blauwdruk.<br/><em>Jouw waarheid.</em></>}</h1>
             <p className="hero-subtitle">{LANG==="en"?"A personal report on who you truly are — in-depth, precise, delivered as PDF within 1 business day.":"Een persoonlijk rapport over wie jij werkelijk bent — diepgaand, precies, bezorgd als PDF binnen 1 werkdag."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
