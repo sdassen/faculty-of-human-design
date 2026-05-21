@@ -254,9 +254,10 @@ function buildTOCPage(sections, order) {
   const lang = order.language || "nl";
   const tocLabel = ui(lang, "INHOUD", "CONTENTS");
   const items = sections.map(function(s, i) {
-    return `<div style="display:flex;align-items:baseline;gap:8px;padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-      <span style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:10pt;color:#A8A29E;min-width:24px;">${String(i + 1).padStart(2, "0")}</span>
-      <span style="font-family:'Inter',sans-serif;font-size:10pt;color:#2A2820;flex:1;">${esc(s.title)}</span>
+    return `<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;">
+      <span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">${String(i + 1).padStart(2, "0")}</span>
+      <span style="flex:1;height:0.4px;background:#E5E0D8;max-width:0;"></span>
+      <span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;letter-spacing:0.01em;">${esc(s.title)}</span>
     </div>`;
   }).join("");
 
@@ -339,13 +340,13 @@ function buildBodygraphPage(svgBodygraph, order) {
   return `
 <div style="width:210mm;height:297mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
-  <div style="padding-top:14px;margin-bottom:6px;">
+  <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:18pt;color:#1A1715;margin-top:4px;">${ui(lang, "Het visuele kaartwerk van jouw ontwerp", "The visual map of your design")}</div>
-    <div style="width:48px;height:1px;background:#C9A85C;margin-top:8px;"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16pt;color:#1A1715;margin-top:3px;">${ui(lang, "Het visuele kaartwerk van jouw ontwerp", "The visual map of your design")}</div>
+    <div style="width:48px;height:1px;background:#C9A85C;margin-top:6px;"></div>
   </div>
-  <div style="display:flex;justify-content:center;margin-top:8px;">
-    <div style="width:164mm;height:190mm;">${svgBodygraph}</div>
+  <div style="display:flex;justify-content:center;margin-top:4px;">
+    <div style="width:170mm;aspect-ratio:360/500;">${svgBodygraph}</div>
   </div>
   <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;">
     <div style="height:0.5px;background:#E5E0D8;margin-bottom:8px;"></div>
