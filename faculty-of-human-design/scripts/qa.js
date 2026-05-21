@@ -153,8 +153,14 @@ try {
 }
 
 if (html) {
-  // Strip base64 data URIs before scanning (fonts are binary noise)
-  const scannable = html.replace(/data:[^;]+;base64,[A-Za-z0-9+/=]+/g, "[BASE64]");
+  // Strip noise before scanning:
+  // - base64 data URIs (font binary data)
+  // - <style> blocks (CSS selectors like *, *::before trigger false positives)
+  // - style="..." inline attributes (same reason)
+  const scannable = html
+    .replace(/data:[^;]+;base64,[A-Za-z0-9+/=]+/g, "[BASE64]")
+    .replace(/<style[\s\S]*?<\/style>/gi, "[STYLE]")
+    .replace(/\sstyle="[^"]*"/gi, "");
 
   for (const { rx, label } of HTML_FORBIDDEN) {
     if (rx.test(scannable)) {
