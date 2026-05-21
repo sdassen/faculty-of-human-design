@@ -1025,10 +1025,6 @@ export function buildHTML({ order, sections, svgBodygraph }) {
   const bd = order.birth_data || {};
   const chart = bd.chart || {};
 
-  const sectionPages = sections.map(function(s, i) {
-    return buildSectionPages(s, i, order);
-  }).join("\n");
-
   const hasChart = chart.type && Array.isArray(chart.definedCenters);
 
   const bundledFonts = buildFontCSS();
