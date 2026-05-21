@@ -20,7 +20,7 @@
   ],
   "functions": {
     "api/**/*.js": {
-      "includeFiles": "node_modules/pdfkit/**"
+      "includeFiles": "lib/pdf/bodygraph-svg.cjs"
     }
   }
 }
