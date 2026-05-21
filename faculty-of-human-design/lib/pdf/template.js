@@ -518,7 +518,7 @@ function sectionHeaderHTML(section, idx, order, pullQuote, chartBlockHTML, conte
     </div>
   </div>
   <div style="height:1px;background:#E5E0D8;"></div>
-  <div style="padding:6mm 20mm 0;">
+  <div style="padding:16mm 0 0;max-width:160mm;margin:0 auto;">
     ${chartBlockHTML}
     ${contentHTML}
   </div>
@@ -619,7 +619,7 @@ function buildSectionPagesJSON(section, idx, order) {
   // ── Pull quote strip (teaser) — prominent, between header and content ───
   const pullQuote = (section.teaser || "").trim();
   const pullQuoteStrip = pullQuote
-    ? `<div style="background:#FAF8F4;border-bottom:0.5px solid #E8E4DC;padding:9mm 24mm 7mm;">
+    ? `<div style="background:#FAF8F4;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;">
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">${esc(pullQuote)}</div>
         <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
       </div>`
@@ -670,9 +670,22 @@ function buildSectionPagesJSON(section, idx, order) {
       </div>`
     : "";
 
+  // ── Breath page (adem) — minimalist pause before this section ────────────
+  const ademText = (section.adem || "").trim();
+  const ademPage = ademText
+    ? `<div style="break-before:page;height:285mm;background:#FAF8F4;display:flex;align-items:center;justify-content:center;position:relative;">
+        <div style="max-width:120mm;text-align:center;padding:0 20mm;">
+          <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:17pt;color:#1A1715;line-height:1.7;">${esc(ademText)}</div>
+        </div>
+        <div style="position:absolute;bottom:10mm;left:0;right:0;text-align:center;">
+          <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#C8C4BC;letter-spacing:0.18em;text-transform:uppercase;">Faculty of Human Design</div>
+        </div>
+      </div>`
+    : "";
+
   // ── Build full page layout directly (no sectionHeaderHTML wrapper) ──────
   const page = `
-<div style="break-before:page;">
+${ademPage}<div style="break-before:page;">
   <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="position:absolute;right:16mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:72pt;font-weight:400;color:#C9A85C;opacity:0.05;line-height:1;padding-top:2mm;">${String(idx + 1).padStart(2, "0")}</div>
@@ -686,7 +699,7 @@ function buildSectionPagesJSON(section, idx, order) {
     </div>
   </div>
   ${pullQuoteStrip}
-  <div style="padding:8mm 24mm 12mm;">
+  <div style="padding:16mm 0 12mm;max-width:160mm;margin:0 auto;">
     ${kernHTML}
     ${microInzichtenHTML}
     ${chartBlockHTML}
