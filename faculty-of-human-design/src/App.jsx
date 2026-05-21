@@ -2571,8 +2571,8 @@ function HomePage({go}){
         <div className="hero-content">
           <div className="hero-text">
             <div className="hero-eyebrow">{LANG==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
-            <h1 className="h1-hero">{LANG==="en"?<>Your personal<br/>blueprint, <em>calculated<br/>on the stars</em></>:<>Je persoonlijke<br/>blauwdruk, <em>berekend<br/>op de sterren</em></>}</h1>
-            <p className="hero-subtitle">{LANG==="en"?"Spiritual in insight. Scientific in calculation. Personal based on your exact birth data.":"Spiritueel in inzicht. Wetenschappelijk in berekening. Persoonlijk op basis van je exacte geboortedata."}</p>
+            <h1 className="h1-hero">{LANG==="en"?<>There are parts of you<br/>that were never meant<br/>to be fixed.<br/><em>Only remembered.</em></>:<>Er zijn delen van jou<br/>die nooit bedoeld waren<br/>om gerepareerd te worden.<br/><em>Alleen herinnerd.</em></>}</h1>
+            <p className="hero-subtitle">{LANG==="en"?"A personal report on who you truly are — in-depth, precise, delivered as PDF within 1 business day.":"Een persoonlijk rapport over wie jij werkelijk bent — diepgaand, precies, bezorgd als PDF binnen 1 werkdag."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 {t("home.heroCta")}
@@ -2778,13 +2778,13 @@ function HomePage({go}){
           </div>
           <div className="grid-3">
             {(LANG==="en"?[
-              ["The section about my open centres was confronting and liberating at the same time. Three months later I still read it.","M. van den Berg, Amsterdam","Full Report","More self-insight in 48 hours"],
-              ["We finally understand the dynamics between us. Not just 'you complement each other' but concrete patterns — including where the friction comes from.","T. and E. Dubois, Antwerp","Relationship Report","Communication improved directly"],
-              ["The combination of HD and Numerology gave a complete picture I found nowhere else. Two disciplines that perfectly complement each other.","S. Muller, Utrecht","Full & Numerology","Confirmation of a life choice"],
+              ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report","Something in me settled"],
+              ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report","More understanding in one evening"],
+              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report","Read in a single breath"],
             ]:[
-              ["De sectie over mijn open centra was confronterend en bevrijdend tegelijk. Drie maanden later lees ik het nog steeds.","M. van den Berg, Amsterdam","Volledig Rapport","Meer zelfinzicht in 48 uur"],
-              ["Eindelijk begrijpen wij de dynamieken tussen ons. Niet alleen 'jullie vullen elkaar aan' maar concrete patronen — inclusief waar de wrijving vandaan komt.","T. en E. Dubois, Antwerpen","Relatierapport","Communicatie direct verbeterd"],
-              ["De combinatie van HD en Numerologie gaf een compleet beeld dat ik nergens anders vond. Twee disciplines die elkaar perfect aanvullen.","S. Muller, Utrecht","Volledig & Numerologie","Bevestiging van een levenskeuze"],
+              ["Ik voelde me eindelijk emotioneel erkend in plaats van geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Volledig Rapport","Iets in mij raakte op zijn plek"],
+              ["Wij hadden al jaren moeite om elkaar te begrijpen. Het rapport noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relatierapport","Meer begrip in één avond"],
+              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport","Gelezen in één adem"],
             ]).map(([q,n,r,result])=>(
               <div className="tcard" key={n}>
                 <div className="stars">★★★★★</div>
@@ -2854,7 +2854,7 @@ function HomePage({go}){
       <div className="sticky-cta">
         <div style={{display:"flex",gap:10,alignItems:"center",justifyContent:"space-between"}}>
           <div>
-            <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>{LANG==="en"?"Discover your Human Design":"Ontdek je Human Design"}</div>
+            <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>{LANG==="en"?"Begin your personal reading":"Begin je persoonlijke lezing"}</div>
             <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>{LANG==="en"?"From €45 · Delivered within 1 business day":"Vanaf €45 · Bezorgd binnen 1 werkdag"}</div>
           </div>
           <button className="btn btn-primary" style={{flexShrink:0,whiteSpace:"nowrap"}} onClick={()=>{track("sticky_cta_click",{});go("rapporten");}}>{LANG==="en"?"Start now →":"Start nu →"}</button>
