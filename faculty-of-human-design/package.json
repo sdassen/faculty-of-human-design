@@ -10,7 +10,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "qa": "node scripts/qa.js",
+    "qa:pdf": "node scripts/qa.js --pdf"
   },
   "dependencies": {
     "@fontsource/cormorant-garamond": "^5.0.0",
