@@ -1,6 +1,12 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazy — Resend constructor throws if RESEND_API_KEY is missing, which would
+// crash the module on cold start and break every /api/inngest request.
+let _resend = null;
+function getResend() {
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 const FROM = "Faculty of Human Design <noreply@facultyhd.com>";
 
@@ -12,7 +18,7 @@ export async function sendConfirmationEmail({ to, name, reportTitle, language })
     ? `Your payment has been received — we've started your analysis`
     : `Je betaling is ontvangen — we zijn gestart met jouw analyse`;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResend().emails.send({
     from: FROM,
     to,
     subject,
@@ -28,7 +34,7 @@ export async function sendDeliveryEmail({ to, name, reportTitle, downloadUrl, la
     ? `Your ${reportTitle} is ready`
     : `Jouw ${reportTitle} staat klaar`;
 
-  const { data, error } = await resend.emails.send({
+  const { data, error } = await getResend().emails.send({
     from: FROM,
     to,
     subject,
