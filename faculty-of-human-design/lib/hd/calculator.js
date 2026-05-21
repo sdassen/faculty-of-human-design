@@ -11,9 +11,12 @@
 // Run:  npm install   (swisseph is now in package.json)
 
 import { createRequire } from "module";
-import { Body, MakeTime, GeoVector, Ecliptic, GeoMoon } from "astronomy-engine";
 
 const _require = createRequire(import.meta.url);
+
+// Load via require() to avoid ESM named-import binding errors ("does not
+// provide an export named") that occur with certain bundled versions.
+const { Body, MakeTime, GeoVector, Ecliptic, GeoMoon } = _require("astronomy-engine");
 
 // ─── OPTIONAL SWISS EPHEMERIS LOADER ─────────────────────────────────────────
 let _sweph = null;
