@@ -2571,7 +2571,7 @@ function HomePage({go}){
         <div className="hero-content">
           <div className="hero-text">
             <div className="hero-eyebrow">{LANG==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
-            <h1 className="h1-hero">{LANG==="en"?<>There are parts of you<br/>that were never meant<br/>to be fixed.<br/><em>Only remembered.</em></>:<>Er zijn delen van jou<br/>die nooit bedoeld waren<br/>om gerepareerd te worden.<br/><em>Alleen herinnerd.</em></>}</h1>
+            <h1 className="h1-hero">{LANG==="en"?<>There are parts of you that were never meant to be fixed. <em>Only remembered.</em></>:<>Er zijn delen van jou die nooit bedoeld waren om gerepareerd te worden. <em>Alleen herinnerd.</em></>}</h1>
             <p className="hero-subtitle">{LANG==="en"?"A personal report on who you truly are — in-depth, precise, delivered as PDF within 1 business day.":"Een persoonlijk rapport over wie jij werkelijk bent — diepgaand, precies, bezorgd als PDF binnen 1 werkdag."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
