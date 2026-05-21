@@ -546,71 +546,138 @@ function sectionClosingHTML(section, idx, order, gridHTML) {
 </div>`;
 }
 
+// ─── CLOSING PAGE (JSON path) ─────────────────────────────────────────────────
+// Clean, retreat-style layout — no colored boxes, generous whitespace.
+function buildSectionClosingJSON(section, idx, order) {
+  const lang      = order.language || "nl";
+  const isEN      = lang === "en";
+  const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
+
+  function closingCol(labelNL, labelEN, items, isQuestions) {
+    if (!items || !items.length) return "";
+    const label = isEN ? labelEN : labelNL;
+    const itemsHTML = items.map(function(item, i) {
+      return isQuestions
+        ? `<div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;break-inside:avoid;">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">${i + 1}</span>
+            <span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">${esc(item)}</span>
+          </div>`
+        : `<div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;break-inside:avoid;">
+            <span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span>
+            <span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">${esc(item)}</span>
+          </div>`;
+    }).join("");
+    return `<div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">${esc(label)}</div>
+      ${itemsHTML}`;
+  }
+
+  const topLeft  = closingCol("Valkuilen",       "Pitfalls",            section.valkuilen,       false);
+  const topRight = closingCol("Praktijk",         "Practice",            section.praktijk,        false);
+  const botLeft  = closingCol("Deze week",        "This week",           section.dezeWeek,        false);
+  const botRight = closingCol("Reflectievragen",  "Reflection questions",section.reflectievragen, true);
+
+  const hasAny = topLeft || topRight || botLeft || botRight;
+  if (!hasAny) return "";
+
+  return `
+<div style="background:#FFFFFF;position:relative;break-before:page;break-after:page;min-height:285mm;">
+  <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="padding:8mm 20mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">${esc(partLabel)}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;font-weight:600;color:#FFFFFF;line-height:1.2;">${esc(section.title)}</div>
+    </div>
+  </div>
+
+  ${topLeft || topRight ? `
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:10mm 20mm 0;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">${topLeft}</div>
+    <div style="padding-left:22px;">${topRight}</div>
+  </div>` : ""}
+
+  ${(topLeft || topRight) && (botLeft || botRight) ? `<div style="margin:8mm 20mm;height:0.4px;background:#EBEBE6;"></div>` : ""}
+
+  ${botLeft || botRight ? `
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:${(topLeft || topRight) ? "0" : "10mm"} 20mm 0;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">${botLeft}</div>
+    <div style="padding-left:22px;">${botRight}</div>
+  </div>` : ""}
+
+  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#C8C4BC;">${esc(order.report_title || "")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#C8C4BC;">Faculty of Human Design</div>
+  </div>
+</div>`;
+}
+
 // JSON path — section has structured fields (inJouwChart, kern, valkuilen, etc.)
 function buildSectionPagesJSON(section, idx, order) {
-  const lang = order.language || "nl";
+  const lang      = order.language || "nl";
+  const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
 
-  // ── Pull quote (teaser field) ───────────────────────────────────────────
-  const pullQuote = section.teaser || "";
+  // ── Pull quote strip (teaser) — prominent, between header and content ───
+  const pullQuote = (section.teaser || "").trim();
+  const pullQuoteStrip = pullQuote
+    ? `<div style="background:#FAF8F4;border-bottom:0.5px solid #E8E4DC;padding:9mm 24mm 7mm;">
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">${esc(pullQuote)}</div>
+        <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
+      </div>`
+    : `<div style="height:1px;background:#E5E0D8;"></div>`;
 
-  // ── "In jouw chart" block ───────────────────────────────────────────────
-  const chartBlockDef = BLOCKS.find(function(b) { return b.key === "chart"; });
-  const chartLabel    = ui(lang, "In jouw chart", "In your chart");
-  const chartItems    = (section.inJouwChart || []).filter(Boolean);
+  // ── Kern (subheadings + paragraphs) — FIRST, emotional content ─────────
+  const kernHTML = (section.kern || []).map(function(block) {
+    const subkop = (block.subkop || "").trim();
+    const paras  = (block.paragraphs || []).filter(Boolean);
+    const subkopHTML = subkop
+      ? `<h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">${esc(subkop)}<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>`
+      : "";
+    const parasHTML = paras.map(function(p) {
+      return `<p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;break-inside:avoid;max-width:138mm;">${esc(p)}</p>`;
+    }).join("");
+    return subkopHTML + parasHTML;
+  }).join("");
+
+  // ── "In jouw chart" — AFTER kern, as grounding reference ───────────────
+  const chartLabel = ui(lang, "In jouw chart", "In your chart");
+  const chartItems = (section.inJouwChart || []).filter(Boolean);
   const chartBlockHTML = chartItems.length
-    ? `<div style="background:${chartBlockDef.tint};border-left:5px solid ${chartBlockDef.accent};padding:18px 20px 20px;break-inside:avoid;margin-bottom:4px;">
-        <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13pt;color:${chartBlockDef.accent};margin-bottom:10px;letter-spacing:0.01em;">${esc(chartLabel)}</div>
-        <div style="font-family:'Inter',sans-serif;font-size:10pt;color:#2A2820;">
+    ? `<div style="margin-top:22px;border-top:0.4px solid #E8E4DC;padding-top:14px;break-inside:avoid;">
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">${esc(chartLabel)}</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
           ${chartItems.map(function(item) {
-            return `<div style="display:flex;gap:6px;margin-bottom:7px;line-height:1.55;">
-              <span style="font-weight:500;color:${chartBlockDef.accent};min-width:14px;display:inline-block;">•</span>
-              <span>${esc(item)}</span>
+            return `<div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;">
+              <span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span>
+              <span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">${esc(item)}</span>
             </div>`;
           }).join("")}
         </div>
       </div>`
     : "";
 
-  // ── Kern (subheadings + paragraphs) ────────────────────────────────────
-  const kernHTML = (section.kern || []).map(function(block) {
-    const subkop = (block.subkop || "").trim();
-    const paras  = (block.paragraphs || []).filter(Boolean);
-    const subkopHTML = subkop
-      ? `<h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:18px 0 6px;break-after:avoid;line-height:1.3;">${esc(subkop)}<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>`
-      : "";
-    const parasHTML = paras.map(function(p) {
-      return `<p style="font-family:'Inter',sans-serif;font-size:11pt;line-height:1.72;color:#2A2820;margin-bottom:13px;break-inside:avoid;">${esc(p)}</p>`;
-    }).join("");
-    return subkopHTML + parasHTML;
-  }).join("");
+  // ── Build full page layout directly (no sectionHeaderHTML wrapper) ──────
+  const page = `
+<div style="break-before:page;">
+  <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="position:absolute;right:16mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:72pt;font-weight:400;color:#C9A85C;opacity:0.05;line-height:1;padding-top:2mm;">${String(idx + 1).padStart(2, "0")}</div>
+    <div style="padding:10mm 16mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#9A8050;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:6px;">${esc(partLabel)}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28pt;color:#FFFFFF;line-height:1.15;max-width:150mm;">${esc(section.title)}</div>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <div style="width:40px;height:0.75px;background:#C9A85C;"></div>
+        <div style="width:20px;height:0.4px;background:#C9A85C;opacity:0.35;"></div>
+      </div>
+    </div>
+  </div>
+  ${pullQuoteStrip}
+  <div style="padding:8mm 24mm 12mm;">
+    ${kernHTML}
+    ${chartBlockHTML}
+  </div>
+</div>`;
 
-  const headerPage = sectionHeaderHTML(section, idx, order, pullQuote, chartBlockHTML, kernHTML);
-
-  // ── Closing blocks grid ─────────────────────────────────────────────────
-  const closingDefs = [
-    { key: "valkuilen",       blockKey: "val"  },
-    { key: "praktijk",        blockKey: "prakt" },
-    { key: "dezeWeek",        blockKey: "week"  },
-    { key: "reflectievragen", blockKey: "refl"  },
-  ];
-  const closingPairs = [];
-  for (let i = 0; i < closingDefs.length; i += 2) {
-    closingPairs.push([closingDefs[i], closingDefs[i + 1]]);
-  }
-
-  const gridHTML = closingPairs.map(function(pair) {
-    const left  = pair[0] ? blockHTML(BLOCKS.find(function(b) { return b.key === pair[0].blockKey; }), section[pair[0].key] || [], true) : "";
-    const right = pair[1] ? blockHTML(BLOCKS.find(function(b) { return b.key === pair[1].blockKey; }), section[pair[1].key] || [], true) : "";
-    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
-      <div>${left}</div>
-      <div>${right}</div>
-    </div>`;
-  }).join("");
-
-  const hasClosing = closingDefs.some(function(d) { return (section[d.key] || []).length > 0; });
-  const closingPage = hasClosing ? sectionClosingHTML(section, idx, order, gridHTML) : "";
-
-  return headerPage + closingPage;
+  return page + buildSectionClosingJSON(section, idx, order);
 }
 
 // Legacy text path — section has a plain `text` string
