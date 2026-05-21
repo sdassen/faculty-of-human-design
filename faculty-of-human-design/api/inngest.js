@@ -1,32 +1,78 @@
 // Lazy-initialized Inngest serve handler.
-// Static imports are intentionally avoided — any module-level throw in the
-// import chain (e.g. missing env var in a constructor) would crash the entire
-// Lambda on cold start and return FUNCTION_INVOCATION_FAILED for every request.
-// Dynamic imports defer initialization to the first request, matching the
-// pattern used by api/webhooks/stripe.js and api/create-order.js.
+// Sequential imports with explicit logging — lets us identify exactly which
+// module in the chain throws during evaluation (previously truncated to
+// "file:///var/task/faculty-of..." in Vercel runtime logs).
 
 let _handler = null;
+let _initError = null;
 
 async function getHandler() {
   if (_handler) return _handler;
+  if (_initError) throw _initError;
 
-  const [{ serve }, { inngest }, { orderDelivery }, { articleGeneration }] =
-    await Promise.all([
-      import("inngest/next"),
-      import("../lib/inngest/client.js"),
-      import("../lib/inngest/orderDelivery.js"),
-      import("../lib/inngest/articleGeneration.js"),
-    ]);
+  let serve, inngest, orderDelivery, articleGeneration;
 
-  _handler = serve({
-    client: inngest,
-    functions: [orderDelivery, articleGeneration],
-  });
+  try {
+    console.log("[inngest-init] importing inngest/next...");
+    ({ serve } = await import("inngest/next"));
+    console.log("[inngest-init] inngest/next OK");
+  } catch (err) {
+    console.error("[inngest-init] FAILED at inngest/next:", err.message, err.stack);
+    _initError = err;
+    throw err;
+  }
 
-  return _handler;
+  try {
+    console.log("[inngest-init] importing client...");
+    ({ inngest } = await import("../lib/inngest/client.js"));
+    console.log("[inngest-init] client OK");
+  } catch (err) {
+    console.error("[inngest-init] FAILED at client:", err.message, err.stack);
+    _initError = err;
+    throw err;
+  }
+
+  try {
+    console.log("[inngest-init] importing orderDelivery...");
+    ({ orderDelivery } = await import("../lib/inngest/orderDelivery.js"));
+    console.log("[inngest-init] orderDelivery OK");
+  } catch (err) {
+    console.error("[inngest-init] FAILED at orderDelivery:", err.message, err.stack);
+    _initError = err;
+    throw err;
+  }
+
+  try {
+    console.log("[inngest-init] importing articleGeneration...");
+    ({ articleGeneration } = await import("../lib/inngest/articleGeneration.js"));
+    console.log("[inngest-init] articleGeneration OK");
+  } catch (err) {
+    console.error("[inngest-init] FAILED at articleGeneration:", err.message, err.stack);
+    _initError = err;
+    throw err;
+  }
+
+  try {
+    console.log("[inngest-init] calling serve()...");
+    _handler = serve({
+      client: inngest,
+      functions: [orderDelivery, articleGeneration],
+    });
+    console.log("[inngest-init] handler ready");
+    return _handler;
+  } catch (err) {
+    console.error("[inngest-init] FAILED at serve():", err.message, err.stack);
+    _initError = err;
+    throw err;
+  }
 }
 
 export default async function handler(req, res) {
-  const h = await getHandler();
-  return h(req, res);
+  try {
+    const h = await getHandler();
+    return h(req, res);
+  } catch (err) {
+    console.error("[inngest] request failed:", err.message);
+    res.status(500).json({ error: "inngest init failed", message: err.message });
+  }
 }
