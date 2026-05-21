@@ -119,31 +119,17 @@ export function quickCheck(text, lang = "nl", chart = null) {
     }
   }
 
-  // Required blocks — check both NL and EN labels
+  // inJouwChart is the only required structural block.
+  // Closing blocks (valkuilen, praktijk, dezeWeek, reflectievragen) are intentionally
+  // optional — structural asymmetry is a design choice, not a quality failure.
   const hasChart = isEN ? /^in your chart:/im.test(text) : /^in jouw chart:/im.test(text);
-  const hasVal   = isEN ? /^pitfalls:/im.test(text)      : /^valkuilen:/im.test(text);
-  const hasPrakt = isEN ? /^practice:/im.test(text)      : /^praktijk:/im.test(text);
-  const hasWeek  = isEN ? /^this week:/im.test(text)     : /^deze week:/im.test(text);
-  const hasRefl  = isEN ? /^reflection questions:/im.test(text) : /^reflectievragen:/im.test(text);
-
-  const chartLbl = isEN ? "In your chart"         : "In jouw chart";
-  const valLbl   = isEN ? "Pitfalls"              : "Valkuilen";
-  const praktLbl = isEN ? "Practice"              : "Praktijk";
-  const weekLbl  = isEN ? "This week"             : "Deze week";
-  const reflLbl  = isEN ? "Reflection questions"  : "Reflectievragen";
-
-  const missing  = [];
-  if (!hasChart) missing.push(chartLbl);
-  if (!hasVal)   missing.push(valLbl);
-  if (!hasPrakt) missing.push(praktLbl);
-  if (!hasWeek)  missing.push(weekLbl);
-  if (!hasRefl)  missing.push(reflLbl);
-  if (missing.length) {
+  if (!hasChart) {
+    const chartLbl = isEN ? "In your chart" : "In jouw chart";
     issues.push(isEN
-      ? `Missing required blocks: ${missing.join(", ")}`
-      : `Ontbrekende blokken: ${missing.join(", ")}`
+      ? `Missing required block: ${chartLbl}`
+      : `Ontbrekend verplicht blok: ${chartLbl}`
     );
-    score -= missing.length;
+    score -= 3;
   }
 
   // Moon cycle consistency
