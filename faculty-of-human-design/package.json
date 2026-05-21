@@ -13,6 +13,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource/cormorant-garamond": "^5.0.0",
+    "@fontsource/inter": "^5.0.0",
     "@supabase/supabase-js": "^2.45.0",
     "@vercel/blob": "^0.27.0",
     "astronomy-engine": "^2.1.19",

@@ -1,61 +1,60 @@
-// ─── PDF FONTS ────────────────────────────────────────────────────────────────
-// Optional custom font registration. Falls back silently to PDFKit's built-in
-// Helvetica + Times-Roman if anything goes wrong (file missing, fs error, etc).
-//
-// To activate premium typography, place TTF files in lib/pdf/fonts/:
-//   - CormorantGaramond-Regular.ttf
-//   - CormorantGaramond-Italic.ttf
-//   - Inter-Regular.ttf
-//   - Inter-Medium.ttf
-//
-// Download from: fonts.google.com
+// ─── BUNDLED FONT CSS ─────────────────────────────────────────────────────────
+// Reads Cormorant Garamond + Inter from node_modules/@fontsource/* and returns
+// inline @font-face CSS with base64-encoded woff2 data URIs.
+// Called once at process start; result is cached for all subsequent renders.
+// Returns empty string on any error — template falls back to Google Fonts CDN.
 
-import fs from "fs";
-import path from "path";
+import { readFileSync } from "fs";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
 
-// Logical font names used throughout the PDF renderer.
-// Always default to PDFKit built-ins; registerFonts() may override.
-export const FONT = {
-  display:        "Times-Italic",
-  displayRegular: "Times-Roman",
-  body:           "Helvetica",
-  bodyMedium:     "Helvetica-Bold",
-};
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
-// Resolve fonts directory using process.cwd() as a stable serverless anchor.
-// Vercel serverless functions run with cwd at the project root.
-function getFontsDir() {
-  return path.join(process.cwd(), "lib", "pdf", "fonts");
+function fontFile(pkg, filename) {
+  return join(__dirname, "..", "..", "node_modules", "@fontsource", pkg, "files", filename);
 }
 
-/**
- * Try to register custom fonts on the document. Safe to call multiple times.
- * Entirely defensive: NEVER throws — silently falls back to built-ins if
- * anything goes wrong.
- */
-export function registerFonts(doc) {
+function face(family, weight, style, pkg, filename) {
+  const path = fontFile(pkg, filename);
+  let data;
   try {
-    const FONTS_DIR = getFontsDir();
-    if (!fs.existsSync(FONTS_DIR)) return;
-
-    const tryRegister = (name, file) => {
-      try {
-        const p = path.join(FONTS_DIR, file);
-        if (fs.existsSync(p)) {
-          doc.registerFont(name, p);
-          return true;
-        }
-      } catch (e) {
-        console.warn(`[fonts] register ${file} failed: ${e.message}`);
-      }
-      return false;
-    };
-
-    if (tryRegister("Display-Italic",  "CormorantGaramond-Italic.ttf"))  FONT.display        = "Display-Italic";
-    if (tryRegister("Display-Regular", "CormorantGaramond-Regular.ttf")) FONT.displayRegular = "Display-Regular";
-    if (tryRegister("Body-Regular",    "Inter-Regular.ttf"))             FONT.body           = "Body-Regular";
-    if (tryRegister("Body-Medium",     "Inter-Medium.ttf"))              FONT.bodyMedium     = "Body-Medium";
-  } catch (e) {
-    console.warn(`[fonts] registration skipped: ${e.message}`);
+    data = readFileSync(path);
+  } catch {
+    return null;
   }
+  const b64 = data.toString("base64");
+  return `@font-face {
+  font-family: '${family}';
+  font-style: ${style};
+  font-weight: ${weight};
+  font-display: swap;
+  src: url('data:font/woff2;base64,${b64}') format('woff2');
+}`;
+}
+
+// Built once, cached forever
+let _css = null;
+
+export function buildFontCSS() {
+  if (_css !== null) return _css;
+
+  const rules = [
+    // Inter — normal (weights 300/400/500)
+    face("Inter", 300, "normal", "inter", "inter-latin-300-normal.woff2"),
+    face("Inter", 400, "normal", "inter", "inter-latin-400-normal.woff2"),
+    face("Inter", 500, "normal", "inter", "inter-latin-500-normal.woff2"),
+
+    // Cormorant Garamond — normal
+    face("Cormorant Garamond", 300, "normal", "cormorant-garamond", "cormorant-garamond-latin-300-normal.woff2"),
+    face("Cormorant Garamond", 400, "normal", "cormorant-garamond", "cormorant-garamond-latin-400-normal.woff2"),
+    face("Cormorant Garamond", 600, "normal", "cormorant-garamond", "cormorant-garamond-latin-600-normal.woff2"),
+
+    // Cormorant Garamond — italic
+    face("Cormorant Garamond", 300, "italic", "cormorant-garamond", "cormorant-garamond-latin-300-italic.woff2"),
+    face("Cormorant Garamond", 400, "italic", "cormorant-garamond", "cormorant-garamond-latin-400-italic.woff2"),
+    face("Cormorant Garamond", 600, "italic", "cormorant-garamond", "cormorant-garamond-latin-600-italic.woff2"),
+  ].filter(Boolean);
+
+  _css = rules.join("\n");
+  return _css;
 }

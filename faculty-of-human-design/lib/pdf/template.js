@@ -2,6 +2,8 @@
 // Produces a full A4 HTML document from order + sections + bodygraph SVG.
 // Designed for Puppeteer/Chromium rendering — all styles inline, print-optimised.
 
+import { buildFontCSS } from "./fonts.js";
+
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
 function esc(s) {
   return String(s || "")
@@ -359,20 +361,11 @@ function buildBodygraphPage(svgBodygraph, order) {
 }
 
 // ─── PAGE: SECTION ────────────────────────────────────────────────────────────
-// Returns HTML for the section header + content + closing page.
-function buildSectionPages(section, idx, order) {
+// Shared header+closing shell used by both JSON and legacy text paths.
+function sectionHeaderHTML(section, idx, order, pullQuote, chartBlockHTML, contentHTML) {
   const lang      = order.language || "nl";
-  const cleanText = cleanSectionText(section.text, section.title);
-  const { chartBlock, prose, closingBlocks } = parseSection(cleanText);
-  const pullQuote = extractPullQuote(cleanText);
   const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
-
-  // ── Section header page ──────────────────────────────────────────────────
-  const chartBlockHTML = chartBlock
-    ? blockHTML(chartBlock.block, chartBlock.lines, false)
-    : "";
-
-  const headerPage = `
+  return `
 <div style="break-before:page;">
   <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
@@ -390,11 +383,111 @@ function buildSectionPages(section, idx, order) {
   <div style="height:1px;background:#E5E0D8;"></div>
   <div style="padding:6mm 20mm 0;">
     ${chartBlockHTML}
-    ${proseHTML(prose)}
+    ${contentHTML}
   </div>
 </div>`;
+}
 
-  // ── Closing blocks page ──────────────────────────────────────────────────
+function sectionClosingHTML(section, idx, order, gridHTML) {
+  const lang      = order.language || "nl";
+  const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
+  return `
+<div style="height:285mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-after:page;">
+  <div style="height:40mm;background:#1A1715;position:relative;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="padding:9mm 16mm 0 20mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">${esc(partLabel)}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#FFFFFF;max-width:120mm;">${esc(section.title)}</div>
+    </div>
+    <div style="position:absolute;right:20mm;top:12mm;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.15em;text-transform:uppercase;">${ui(lang, "INZICHTEN & PRAKTIJK", "INSIGHTS & PRACTICE")}</div>
+  </div>
+  <div style="padding:6mm 20mm 0;">${gridHTML}</div>
+  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
+  </div>
+</div>`;
+}
+
+// JSON path — section has structured fields (inJouwChart, kern, valkuilen, etc.)
+function buildSectionPagesJSON(section, idx, order) {
+  const lang = order.language || "nl";
+
+  // ── Pull quote (teaser field) ───────────────────────────────────────────
+  const pullQuote = section.teaser || "";
+
+  // ── "In jouw chart" block ───────────────────────────────────────────────
+  const chartBlockDef = BLOCKS.find(function(b) { return b.key === "chart"; });
+  const chartLabel    = ui(lang, "In jouw chart", "In your chart");
+  const chartItems    = (section.inJouwChart || []).filter(Boolean);
+  const chartBlockHTML = chartItems.length
+    ? `<div style="background:${chartBlockDef.tint};border-left:5px solid ${chartBlockDef.accent};padding:18px 20px 20px;break-inside:avoid;margin-bottom:4px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:13pt;color:${chartBlockDef.accent};margin-bottom:10px;letter-spacing:0.01em;">${esc(chartLabel)}</div>
+        <div style="font-family:'Inter',sans-serif;font-size:10pt;color:#2A2820;">
+          ${chartItems.map(function(item) {
+            return `<div style="display:flex;gap:6px;margin-bottom:7px;line-height:1.55;">
+              <span style="font-weight:500;color:${chartBlockDef.accent};min-width:14px;display:inline-block;">•</span>
+              <span>${esc(item)}</span>
+            </div>`;
+          }).join("")}
+        </div>
+      </div>`
+    : "";
+
+  // ── Kern (subheadings + paragraphs) ────────────────────────────────────
+  const kernHTML = (section.kern || []).map(function(block) {
+    const subkop = (block.subkop || "").trim();
+    const paras  = (block.paragraphs || []).filter(Boolean);
+    const subkopHTML = subkop
+      ? `<h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:18px 0 6px;break-after:avoid;line-height:1.3;">${esc(subkop)}<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>`
+      : "";
+    const parasHTML = paras.map(function(p) {
+      return `<p style="font-family:'Inter',sans-serif;font-size:11pt;line-height:1.72;color:#2A2820;margin-bottom:13px;break-inside:avoid;">${esc(p)}</p>`;
+    }).join("");
+    return subkopHTML + parasHTML;
+  }).join("");
+
+  const headerPage = sectionHeaderHTML(section, idx, order, pullQuote, chartBlockHTML, kernHTML);
+
+  // ── Closing blocks grid ─────────────────────────────────────────────────
+  const closingDefs = [
+    { key: "valkuilen",       blockKey: "val"  },
+    { key: "praktijk",        blockKey: "prakt" },
+    { key: "dezeWeek",        blockKey: "week"  },
+    { key: "reflectievragen", blockKey: "refl"  },
+  ];
+  const closingPairs = [];
+  for (let i = 0; i < closingDefs.length; i += 2) {
+    closingPairs.push([closingDefs[i], closingDefs[i + 1]]);
+  }
+
+  const gridHTML = closingPairs.map(function(pair) {
+    const left  = pair[0] ? blockHTML(BLOCKS.find(function(b) { return b.key === pair[0].blockKey; }), section[pair[0].key] || [], true) : "";
+    const right = pair[1] ? blockHTML(BLOCKS.find(function(b) { return b.key === pair[1].blockKey; }), section[pair[1].key] || [], true) : "";
+    return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">
+      <div>${left}</div>
+      <div>${right}</div>
+    </div>`;
+  }).join("");
+
+  const hasClosing = closingDefs.some(function(d) { return (section[d.key] || []).length > 0; });
+  const closingPage = hasClosing ? sectionClosingHTML(section, idx, order, gridHTML) : "";
+
+  return headerPage + closingPage;
+}
+
+// Legacy text path — section has a plain `text` string
+function buildSectionPagesText(section, idx, order) {
+  const cleanText = cleanSectionText(section.text, section.title);
+  const { chartBlock, prose, closingBlocks } = parseSection(cleanText);
+  const pullQuote = extractPullQuote(cleanText);
+
+  const chartBlockHTML = chartBlock
+    ? blockHTML(chartBlock.block, chartBlock.lines, false)
+    : "";
+
+  const headerPage = sectionHeaderHTML(section, idx, order, pullQuote, chartBlockHTML, proseHTML(prose));
+
   const blockOrder = ["val", "prakt", "week", "refl"];
   const closingKeys = blockOrder.filter(function(k) { return closingBlocks[k]; });
 
@@ -412,26 +505,16 @@ function buildSectionPages(section, idx, order) {
         <div>${right}</div>
       </div>`;
     }).join("");
-
-    closingPage = `
-<div style="height:285mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-after:page;">
-  <div style="height:40mm;background:#1A1715;position:relative;">
-    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
-    <div style="padding:9mm 16mm 0 20mm;">
-      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">${esc(partLabel)}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#FFFFFF;max-width:120mm;">${esc(section.title)}</div>
-    </div>
-    <div style="position:absolute;right:20mm;top:12mm;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.15em;text-transform:uppercase;">${ui(lang, "INZICHTEN & PRAKTIJK", "INSIGHTS & PRACTICE")}</div>
-  </div>
-  <div style="padding:6mm 20mm 0;">${gridHTML}</div>
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;align-items:center;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
-  </div>
-</div>`;
+    closingPage = sectionClosingHTML(section, idx, order, gridHTML);
   }
 
   return headerPage + closingPage;
+}
+
+function buildSectionPages(section, idx, order) {
+  return Array.isArray(section.inJouwChart)
+    ? buildSectionPagesJSON(section, idx, order)
+    : buildSectionPagesText(section, idx, order);
 }
 
 // ─── PAGE: EXECUTIVE SUMMARY ─────────────────────────────────────────────────
@@ -594,18 +677,23 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 
   const hasChart = chart.type && Array.isArray(chart.definedCenters);
 
+  const bundledFonts = buildFontCSS();
+  const fontBlock = bundledFonts
+    ? `<style>${bundledFonts}</style>`
+    : `<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>`;
+
   return `<!DOCTYPE html>
 <html lang="${lang}">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   @page { size: A4 portrait; margin: 0; }
-  html, body { width: 210mm; background: #F0EDE6; }
+  html, body { width: 210mm; background: #F7F5F0; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
     html, body { width: 210mm; }

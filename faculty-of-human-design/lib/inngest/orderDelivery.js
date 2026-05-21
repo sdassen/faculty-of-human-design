@@ -90,7 +90,7 @@ STEM & STIJL:
 - Toon: rustig, premium, warm-spiritueel, precies en betrouwbaar. Geen zweverige clichés, geen overdreven superlatieven, geen sensatie.
 - Begin elke sectie direct met relevantie voor de lezer — vermijd openers als "Het is belangrijk om...", "In de hedendaagse samenleving...", "Laat ons eerst...", "Het is van cruciaal belang...".
 - Houd zinnen beknopt; liever meerdere korte alinea's dan lange blokken.
-- GEEN Markdown-opmaak: geen sterretjes (**bold**, *italic*), geen hekjes (# Heading), geen underscores. Schrijf uitsluitend platte tekst en gebruik de structuurlabels hieronder als kopjes.
+- GEEN Markdown-opmaak: geen sterretjes (**bold**, *italic*), geen hekjes (# Heading), geen underscores. Alle inhoud gaat in de JSON-velden — schrijf uitsluitend platte tekst binnen elke veldwaarde.
 
 INHOUD:
 - Veranker elke alinea in de concrete chartdata: noem type, strategie, autoriteit, profiel, gedefinieerde/open centra, kanalen en poorten waar relevant.
@@ -105,35 +105,34 @@ TERMINOLOGIE:
 - Gebruik consistente Nederlandse HD-termen. Engelse term maximaal één keer tussen haakjes bij introductie, daarna alleen Nederlands.
 - Kies één label per centrum en houd dat vast (bijv. altijd "Sacraalcentrum", nooit afwisselend "Sacral"/"Sacraal").
 
-STRUCTUUR — elke sectie volgt exact dit format. Gebruik precies deze labels als kopjes (geen Markdown, geen extra opmaak):
+OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen tekst buiten het JSON-object. Gebruik exact dit schema:
 
-In jouw chart:
-• [3–5 concrete feiten specifiek voor DEZE chart: getallen, poorten, centra, kanalen]
+{
+  "teaser": "Maximaal 18 woorden — één zin die de kern van deze sectie samenvat. Wordt pull-quote in het rapport.",
+  "inJouwChart": [
+    "Concreet feit 1: poort/kanaal/centrum + betekenis — specifiek voor DEZE chart",
+    "Concreet feit 2 — gebruik echte getallen en namen uit de chartdata",
+    "Concreet feit 3 (3–5 items totaal)"
+  ],
+  "kern": [
+    {"subkop": "Kort subkopje — max 8 woorden, geen punt aan het einde", "paragraphs": ["Eerste alineatekst verankerd in chartdata.", "Optionele tweede alinea."]},
+    {"subkop": "Tweede subkopje", "paragraphs": ["Alineatekst."]}
+  ],
+  "valkuilen": ["Concreet valkuil 1 — operationeel, geen algemeenheid", "Valkuil 2", "Valkuil 3"],
+  "praktijk": ["Concrete oefening 1 — vandaag uitvoerbaar", "Oefening 2", "Oefening 3"],
+  "dezeWeek": ["Micro-actie 1 — extreem concreet, tijdgebonden, max één zin", "Micro-actie 2", "Micro-actie 3"],
+  "reflectievragen": ["Vraag 1?", "Vraag 2?", "Vraag 3?"]
+}
 
-[Kernuitleg: 3–5 korte subparagrafen met subkopjes als platte tekst. Elke paragraaf verankerd in chartdata. Max ~600 woorden totaal — streef naar kwaliteit boven kwantiteit.]
-
-Valkuilen:
-• [concreet, operationeel — geen algemeenheden]
-• [...]
-• [...]
-
-Praktijk:
-• [concrete oefening of antidote, vandaag uitvoerbaar]
-• [...]
-• [...]
-
-Deze week:
-• [micro-actie — extreem concreet, tijdgebonden, max één zin]
-• [...]
-• [...]
-
-Reflectievragen:
-1. [Vraag]
-2. [Vraag]
-3. [Vraag]
+VELDREGELS:
+- inJouwChart: 3–5 items
+- kern: 3–5 objecten, elk met subkop + 1–3 paragrafen, max 500 woorden totaal over alle paragrafen
+- valkuilen, praktijk, dezeWeek: elk exact 3 items
+- reflectievragen: exact 3 vragen
+- Geen Markdown in de JSON values: geen **, geen *, geen #, geen _
+- Sluit de laatste kern-paragraaf af met een volledige, afgeronde zin
 
 AFSLUITING:
-- Sluit de kernuitleg af met een volledige, afgeronde zin — geen afgekapte regels.
 - De Slotanalyse synthethiseert de rode draad van het rapport; herhaal geen kanaalbeschrijvingen die al eerder staan.`;
 
 const SYSTEM_PROMPT_EN = `You are a senior analyst at the Faculty of Human Design in Ibiza. You write in-depth, personalised reports in English for paying clients.
@@ -144,7 +143,7 @@ VOICE & STYLE:
 - Tone: calm, premium, warm-spiritual, precise and trustworthy. No vague spiritual clichés, no excessive superlatives, no sensationalism.
 - Begin each section directly with relevance for the reader — avoid openers like "It is important to...", "In today's society...", "Let us first...", "It is of crucial importance...".
 - Keep sentences concise; prefer multiple short paragraphs over long blocks.
-- NO Markdown formatting: no asterisks (**bold**, *italic*), no hashes (# Heading), no underscores. Write plain text only and use the structure labels below as headings.
+- NO Markdown formatting: no asterisks (**bold**, *italic*), no hashes (# Heading), no underscores. All content goes into the JSON fields — write plain text only inside each field value.
 
 CONTENT:
 - Anchor every paragraph in concrete chart data: mention type, strategy, authority, profile, defined/open centers, channels and gates where relevant.
@@ -159,35 +158,34 @@ TERMINOLOGY:
 - Use consistent English HD terms throughout.
 - Choose one label per center and maintain it (e.g. always "Sacral Center", never alternating).
 
-STRUCTURE — every section follows exactly this format. Use precisely these labels as headings (no Markdown, no extra formatting):
+OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outside the JSON object. Use exactly this schema:
 
-In your chart:
-• [3–5 concrete facts specific to THIS chart: numbers, gates, centers, channels]
+{
+  "teaser": "Max 18 words — one sentence capturing the essence of this section. Used as pull-quote in the report.",
+  "inJouwChart": [
+    "Concrete fact 1: gate/channel/center + meaning — specific to THIS chart",
+    "Concrete fact 2 — use real numbers and names from the chart data",
+    "Concrete fact 3 (3–5 items total)"
+  ],
+  "kern": [
+    {"subkop": "Short sub-heading — max 8 words, no period at end", "paragraphs": ["First paragraph anchored in chart data.", "Optional second paragraph."]},
+    {"subkop": "Second sub-heading", "paragraphs": ["Paragraph text."]}
+  ],
+  "valkuilen": ["Concrete pitfall 1 — operational, no generality", "Pitfall 2", "Pitfall 3"],
+  "praktijk": ["Concrete exercise 1 — actionable today", "Exercise 2", "Exercise 3"],
+  "dezeWeek": ["Micro-action 1 — extremely concrete, time-bound, max one sentence", "Micro-action 2", "Micro-action 3"],
+  "reflectievragen": ["Question 1?", "Question 2?", "Question 3?"]
+}
 
-[Core analysis: 3–5 short sub-paragraphs with sub-headings as plain text. Each paragraph anchored in chart data. Max ~600 words total — quality over quantity.]
-
-Pitfalls:
-• [concrete, operational — no generalities]
-• [...]
-• [...]
-
-Practice:
-• [concrete exercise or antidote, actionable today]
-• [...]
-• [...]
-
-This week:
-• [micro-action — extremely concrete, time-bound, max one sentence]
-• [...]
-• [...]
-
-Reflection questions:
-1. [Question]
-2. [Question]
-3. [Question]
+FIELD RULES:
+- inJouwChart: 3–5 items
+- kern: 3–5 objects each with subkop + 1–3 paragraphs, max 500 words total across all paragraphs
+- valkuilen, praktijk, dezeWeek: exactly 3 items each
+- reflectievragen: exactly 3 questions
+- No Markdown in JSON values: no **, no *, no #, no _
+- End the final kern paragraph with a complete, rounded sentence
 
 CLOSING:
-- End the core analysis with a complete, rounded sentence — no cut-off lines.
 - The Closing Analysis synthesises the key thread of the report; do not repeat channel descriptions already covered earlier.`;
 
 function getSystemPrompt(lang) {
@@ -250,12 +248,27 @@ function buildChartContext(order) {
  */
 function previousSectionsSummary(previousSections) {
   if (!previousSections.length) return null;
+
+  // Flatten JSON sections to text for the summary (pull from kern paragraphs + bullets)
+  function sectionToSummaryText(s) {
+    if (s.text) return (s.text || "").slice(0, 500).trim();
+    const parts = [];
+    (s.kern || []).forEach(function(b) {
+      if (b.subkop) parts.push(b.subkop);
+      (b.paragraphs || []).forEach(function(p) { parts.push(p); });
+    });
+    ["valkuilen", "praktijk", "dezeWeek"].forEach(function(key) {
+      (s[key] || []).forEach(function(item) { parts.push(item); });
+    });
+    return parts.join(" ").slice(0, 500).trim();
+  }
+
   const sectionSummaries = previousSections
-    .map((s) => `[${s.title}]\n${(s.text || "").slice(0, 500).trim()}...`)
+    .map((s) => `[${s.title}]\n${sectionToSummaryText(s)}...`)
     .join("\n\n");
 
   // Extract all channel references to explicitly forbid repetition
-  const allText = previousSections.map((s) => s.text || "").join(" ");
+  const allText = previousSections.map((s) => sectionToSummaryText(s)).join(" ");
   const channelRefs = [...new Set((allText.match(/\b\d{1,2}-\d{1,2}\b/g) || []))];
   const channelNote = channelRefs.length
     ? `\n\nCHANNELS/GATES ALREADY COVERED (do not repeat full descriptions): ${channelRefs.slice(0, 20).join(", ")}`
@@ -379,143 +392,88 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
 Write section "${sectionTitle}" for ${customer_name}.
 
 RULES (strict):
-- No section title in the text — begin directly with "In your chart:"
-- No Markdown: no **, no *, no #, no _
-- Sub-headings in the core analysis are short lines (max 8 words, no period at end)
+- Output only the JSON object — no prose before or after, no markdown code fences
 - Moon cycle always exactly "28 days"
 - Incarnation Cross: use only the names from the canon reference above
-- Anchor EVERY paragraph in concrete chart data from the chart context
-- STRICT word limit: core analysis max 500 words. Quality over quantity. Every sentence must earn its place.
-- Do NOT repeat any channel, center, or profile description already covered in a previous section — only a brief callback reference is allowed.
-
-REQUIRED FORMAT — copy this structure exactly:
-
-In your chart:
-• [Concrete fact 1 — gate/channel/center + meaning]
-• [Concrete fact 2 — specific to this chart]
-• [Concrete fact 3 — max 5 bullets total]
-
-[Short sub-heading for first core paragraph — no bullet, no colon]
-[Paragraph text. Plain prose, NO "•" prefix. Anchored in chart data.]
-
-[Short sub-heading for second core paragraph]
-[Paragraph text. Max 500 words total across all core paragraphs.]
-
-Pitfalls:
-• [item 1]
-• [item 2]
-• [item 3]
-
-Practice:
-• [item 1]
-• [item 2]
-• [item 3]
-
-This week:
-• [item 1]
-• [item 2]
-• [item 3]
-
-Reflection questions:
-• [item 1]
-• [item 2]
-• [item 3]
-
-CRITICAL: The "In your chart:" block ends after the bullets and a blank line. The core analysis that follows has NEVER a "•" bullet prefix. Sub-headings are plain lines with no prefix. End the core analysis with a complete sentence.`
+- Anchor EVERY kern paragraph in concrete chart data from the chart context
+- kern max 500 words total across all paragraphs — quality over quantity, every sentence must earn its place
+- Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
     : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
 REGELS (strikt):
-- Geen sectietitel in de tekst — begin direct met "In jouw chart:"
-- Geen Markdown: geen **, geen *, geen #, geen _
-- Subkopjes in de kernuitleg zijn korte regels (max 8 woorden, geen punt aan het einde)
+- Schrijf uitsluitend het JSON-object — geen tekst ervoor of erna, geen markdown-blokken
 - Maancyclus altijd exact "28 dagen"
 - Inkarnatie-Kruis: gebruik alleen de namen uit de canon-referentie hierboven
-- Veranker ELKE alinea in concrete chartdata uit de chart context
-- STRIKTE woordgrens: kernuitleg max 500 woorden. Kwaliteit boven kwantiteit. Elke zin moet zijn plek verdienen.
-- Herhaal GEEN kanaal-, centrum- of profiel-beschrijving die al in een eerdere sectie staat — alleen een korte terugverwijzing is toegestaan.
-
-VERPLICHT FORMAT — kopieer deze structuur exact:
-
-In jouw chart:
-• [Concreet feit 1 — poort/kanaal/centrum + betekenis]
-• [Concreet feit 2 — specifiek voor DEZE chart]
-• [Concreet feit 3 — max 5 bullets totaal]
-
-[Kort subkopje eerste kernparagraaf — geen bullet, geen dubbele punt]
-[Alineatekst. Gewone lopende tekst, NOOIT "•" bullet-prefix. Verankerd in chartdata.]
-
-[Kort subkopje tweede kernparagraaf]
-[Alineatekst. Max 500 woorden totaal voor alle kernparagrafen samen.]
-
-Valkuilen:
-• [item 1]
-• [item 2]
-• [item 3]
-
-Praktijk:
-• [item 1]
-• [item 2]
-• [item 3]
-
-Deze week:
-• [item 1]
-• [item 2]
-• [item 3]
-
-Reflectievragen:
-• [item 1]
-• [item 2]
-• [item 3]
-
-CRUCIAAL: De "In jouw chart:" sectie eindigt na de bullets en een witregel. De kernuitleg die DAARNA komt heeft NOOIT een "•" bullet-prefix. Subkopjes zijn gewone regels zonder prefix. Sluit de kernuitleg af met een volledige, afgeronde zin.`;
+- Veranker ELKE kern-alinea in concrete chartdata uit de chart context
+- kern max 500 woorden totaal over alle paragrafen — kwaliteit boven kwantiteit, elke zin moet zijn plek verdienen
+- Herhaal GEEN kanaal-, centrum- of profiel-beschrijving die al in een eerdere sectie staat — een korte verwijzing is toegestaan`;
 
   const useDeepThinking = shouldUseDeepThinking(sectionTitle);
   const systemPrompt = getSystemPrompt(lang);
-  const text = await callClaude(systemPrompt, prompt, { thinking: useDeepThinking });
+  const raw = await callClaude(systemPrompt, prompt, { thinking: useDeepThinking });
 
-  if (text.length < 200) {
-    throw new Error(`Section text too short (${text.length} chars)`);
+  if (raw.length < 100) {
+    throw new Error(`Section response too short (${raw.length} chars)`);
   }
-  return text;
+
+  // Extract JSON — the model sometimes wraps it in ```json ... ```
+  const jsonMatch = raw.match(/\{[\s\S]*\}/);
+  if (!jsonMatch) {
+    throw new Error(`Section response contained no JSON object (${raw.length} chars)`);
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(jsonMatch[0]);
+  } catch (e) {
+    throw new Error(`Section JSON parse failed: ${e.message}`);
+  }
+
+  // Validate required fields
+  if (!Array.isArray(parsed.inJouwChart) || !Array.isArray(parsed.kern)) {
+    throw new Error("Section JSON missing required fields (inJouwChart, kern)");
+  }
+
+  return parsed;
 }
 
 // ─── GENERATE WITH QUALITY GATE ───────────────────────────────────────────────
 /**
  * Generate a section + score it + retry up to MAX_RETRIES times if below threshold.
- * Returns the best version found (highest score), even if all attempts failed.
+ * Returns the best JSON section object found (highest score), or null on total failure.
  */
 async function generateScoredSection(sectionTitle, order, previousSections) {
   const chart = (order.birth_data || {}).chart || {};
   const lang  = order.language || "nl";
-  let bestText = "";
-  let bestScore = -1;
-  let lastIssues = [];
+  let bestSection = null;
+  let bestScore   = -1;
+  let lastIssues  = [];
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-    let text;
+    let section;
     try {
-      text = await generateSectionText(sectionTitle, order, previousSections, attempt, lastIssues);
+      section = await generateSectionText(sectionTitle, order, previousSections, attempt, lastIssues);
     } catch (e) {
       console.warn(`[gen] "${sectionTitle}" attempt ${attempt} failed: ${e.message}`);
       continue;
     }
 
-    const result = await scoreSection(text, sectionTitle, chart, lang);
+    const result = await scoreSection(section, sectionTitle, chart, lang);
     console.log(`[QA] "${sectionTitle}" attempt ${attempt}: score ${result.total}/40 (${result.passed ? "PASS" : "FAIL"})`);
 
     if (result.total > bestScore) {
-      bestText = text;
-      bestScore = result.total;
-      lastIssues = result.issues;
+      bestSection = section;
+      bestScore   = result.total;
+      lastIssues  = result.issues;
     }
 
-    if (result.passed) return bestText;
+    if (result.passed) return bestSection;
   }
 
   console.warn(`[QA] "${sectionTitle}" used best-of-${MAX_RETRIES + 1} (score ${bestScore}/40)`);
-  return bestText;
+  return bestSection;
 }
 
 // ─── INNGEST FUNCTION ─────────────────────────────────────────────────────────
@@ -635,11 +593,11 @@ export const orderDelivery = inngest.createFunction(
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
       // Snapshot previous sections to pass as interdependence context
-      const previous = sections.map((s) => ({ title: s.title, text: s.text }));
-      const text = await step.run(`generate-section-${i}`, async () => {
+      const previous = sections.map((s) => ({ title: s.title, ...s }));
+      const sectionData = await step.run(`generate-section-${i}`, async () => {
         return generateScoredSection(title, enrichedOrder, previous);
       });
-      sections.push({ title, text });
+      sections.push({ title, ...(sectionData || {}) });
     }
 
     // ── Step N+1: Render PDF ───────────────────────────────────────────────

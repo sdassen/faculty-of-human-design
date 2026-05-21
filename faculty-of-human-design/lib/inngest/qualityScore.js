@@ -1,3 +1,43 @@
+// ─── JSON → TEXT FLATTENING ───────────────────────────────────────────────────
+// Converts a structured JSON section back to the labeled-text format that the
+// existing quick/content scorers expect. Works for both NL and EN.
+export function sectionToText(section, lang = "nl") {
+  const isEN = lang === "en";
+  const lines = [];
+
+  // In jouw chart / In your chart
+  if (Array.isArray(section.inJouwChart) && section.inJouwChart.length) {
+    lines.push(isEN ? "In your chart:" : "In jouw chart:");
+    section.inJouwChart.forEach(function(item) { lines.push("• " + item); });
+    lines.push("");
+  }
+
+  // Kern
+  if (Array.isArray(section.kern)) {
+    section.kern.forEach(function(block) {
+      if (block.subkop) lines.push(block.subkop);
+      (block.paragraphs || []).forEach(function(p) { lines.push(p); });
+      lines.push("");
+    });
+  }
+
+  // Closing blocks
+  const closingMap = isEN
+    ? { valkuilen: "Pitfalls", praktijk: "Practice", dezeWeek: "This week", reflectievragen: "Reflection questions" }
+    : { valkuilen: "Valkuilen", praktijk: "Praktijk", dezeWeek: "Deze week", reflectievragen: "Reflectievragen" };
+
+  ["valkuilen", "praktijk", "dezeWeek", "reflectievragen"].forEach(function(key) {
+    const items = section[key];
+    if (Array.isArray(items) && items.length) {
+      lines.push(closingMap[key] + ":");
+      items.forEach(function(item) { lines.push("• " + item); });
+      lines.push("");
+    }
+  });
+
+  return lines.join("\n");
+}
+
 // ─── QUALITY SCORING ──────────────────────────────────────────────────────────
 // Lightweight scoring of generated section text using Claude Haiku.
 // Purpose: gate AI output before it ends up in the customer's PDF.
@@ -271,9 +311,13 @@ Antwoord ALLEEN met JSON, geen prose. Format:
 // ─── COMBINED SCORE ───────────────────────────────────────────────────────────
 /**
  * Run both deterministic + content scoring.
+ * Accepts either a plain text string or a JSON section object.
  * Returns total score (max 40), all issues, and a pass/fail flag.
  */
-export async function scoreSection(text, sectionTitle, chart, lang = "nl") {
+export async function scoreSection(textOrSection, sectionTitle, chart, lang = "nl") {
+  const text = (typeof textOrSection === "object" && textOrSection !== null)
+    ? sectionToText(textOrSection, lang)
+    : textOrSection;
   const q = quickCheck(text, lang, chart);  // pass chart for type/locale contamination checks
   const c = await contentScore(text, sectionTitle, chart);
 
