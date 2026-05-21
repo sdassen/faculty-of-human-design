@@ -46,11 +46,14 @@ app.post("/pdf", async (req, res) => {
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 
+    const footerTemplate = `<div style="font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span></div>`;
     const pdf = await page.pdf({
-      format:            "A4",
-      printBackground:   true,
-      margin:            { top: "0mm", bottom: "0mm", left: "0mm", right: "0mm" },
-      preferCSSPageSize: true,
+      format:               "A4",
+      printBackground:      true,
+      margin:               { top: "0mm", bottom: "12mm", left: "0mm", right: "0mm" },
+      displayHeaderFooter:  true,
+      headerTemplate:       "<span></span>",
+      footerTemplate,
     });
 
     res.set("Content-Type", "application/pdf");

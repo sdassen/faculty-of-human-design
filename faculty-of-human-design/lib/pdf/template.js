@@ -224,7 +224,7 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${["","jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"][parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:297mm;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:285mm;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 290)}
@@ -262,7 +262,7 @@ function buildTOCPage(sections, order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:297mm;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;padding:20mm;">
+<div style="width:210mm;height:285mm;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;padding:20mm;">
   <div style="height:2px;background:#1A1715;margin-bottom:3px;"></div>
   <div style="height:0.5px;background:#C9A85C;margin-bottom:32px;"></div>
   <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.25em;margin-bottom:16px;">${tocLabel}</div>
@@ -306,7 +306,7 @@ function buildProfilePage(order) {
   const definedCenters = (chart.definedCenters || []).join("  ·  ");
 
   return `
-<div style="width:210mm;height:297mm;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;">
+<div style="width:210mm;height:285mm;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;">
   <div style="height:70mm;background:${ta.bg};position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${ta.bar};"></div>
     <div style="padding:20mm 20mm 0 24mm;">
@@ -338,7 +338,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;height:297mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
+<div style="width:210mm;height:285mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -414,7 +414,7 @@ function buildSectionPages(section, idx, order) {
     }).join("");
 
     closingPage = `
-<div style="height:297mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-after:page;">
+<div style="height:285mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-after:page;">
   <div style="height:40mm;background:#1A1715;position:relative;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:9mm 16mm 0 20mm;">
@@ -442,7 +442,7 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:297mm;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:285mm;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 420)}
