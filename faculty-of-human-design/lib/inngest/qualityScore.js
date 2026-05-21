@@ -21,6 +21,17 @@ export function sectionToText(section, lang = "nl") {
     });
   }
 
+  // Micro-inzichten (optional)
+  if (Array.isArray(section.microInzichten)) {
+    section.microInzichten.forEach(function(m) {
+      if (m && m.label && m.tekst) {
+        lines.push(m.label + ":");
+        lines.push(m.tekst);
+        lines.push("");
+      }
+    });
+  }
+
   // Closing blocks
   const closingMap = isEN
     ? { valkuilen: "Pitfalls", praktijk: "Practice", dezeWeek: "This week", reflectievragen: "Reflection questions" }

@@ -50,6 +50,10 @@
       "Op welk moment voelde jouw Sacraal voor het laatst een ondubbelzinnig 'ja'? Wat deed je op dat moment?",
       "Hoe reageer jij doorgaans als je moet wachten terwijl anderen om je heen al in actie komen?",
       "Wat zou er veranderen als je de komende week alle initiatieven laat bij anderen en alleen reageert op wat op jou afkomt?"
+    ],
+    "microInzichten": [
+      {"label": "Jouw verborgen gave", "tekst": "Jouw vermogen om levensenergie te genereren voor wat werkelijk resoneert is zeldzamer dan je denkt — de meeste mensen leven hun hele leven zonder ooit dit soort onvoorwaardelijke ja te kennen."},
+      {"label": "Wat mensen over jou misverstand", "tekst": "Men denkt dat jij nooit moe wordt, omdat je energie uitstraalt. De waarheid is dat jij juist diep uitgeput raakt van alles wat jouw Sacraal niet beantwoordt met een volmondig ja."}
     ]
   },
   {
@@ -96,6 +100,9 @@
       "Herinner jij je een moment waarop je een beslissing nam die achteraf precies goed voelde — hoe nam je die beslissing?",
       "In welke situaties neig jij ernaar om je sacraalgevoel te overschrijven met logica? Wat drijft dat patroon?",
       "Als jouw lichaam de enige beslisser zou zijn de komende maand, welke keuze zou je dan direct anders maken?"
+    ],
+    "microInzichten": [
+      {"label": "Wat jou het snelst uitput", "tekst": "Beslissingen nemen vanuit je hoofd — beredeneerd, argumentatief, vol met 'zou moeten' — kost jou meer energie dan een volledige werkdag. Jouw systeem is niet gebouwd voor mentale deliberatie maar voor lichamelijke zekerheid."}
     ]
   }
 ]

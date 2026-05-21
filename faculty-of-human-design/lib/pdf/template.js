@@ -271,7 +271,7 @@ function buildIntroPage(order) {
     if (i === 0) {
       return `<p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16pt;font-weight:300;color:#1A1715;line-height:1.45;margin-bottom:20px;">${esc(p)}</p>`;
     }
-    return `<p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;">${esc(p)}</p>`;
+    return `<p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">${esc(p)}</p>`;
   }).join("");
 
   return `
@@ -638,6 +638,21 @@ function buildSectionPagesJSON(section, idx, order) {
     return subkopHTML + parasHTML;
   }).join("");
 
+  // ── Micro-inzichten — optional insight cards ───────────────────────────
+  const microInzichten = (section.microInzichten || []).filter(function(m) {
+    return m && m.label && m.tekst;
+  });
+  const microInzichtenHTML = microInzichten.length
+    ? `<div style="margin-top:24px;">
+        ${microInzichten.map(function(m) {
+          return `<div style="padding:13px 0;border-top:0.4px solid #E8E4DC;break-inside:avoid;">
+            <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#C9A85C;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:7px;">${esc(m.label)}</div>
+            <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12pt;color:#1A1715;line-height:1.55;max-width:130mm;">${esc(m.tekst)}</div>
+          </div>`;
+        }).join("")}
+      </div>`
+    : "";
+
   // ── "In jouw chart" — AFTER kern, as grounding reference ───────────────
   const chartLabel = ui(lang, "In jouw chart", "In your chart");
   const chartItems = (section.inJouwChart || []).filter(Boolean);
@@ -673,6 +688,7 @@ function buildSectionPagesJSON(section, idx, order) {
   ${pullQuoteStrip}
   <div style="padding:8mm 24mm 12mm;">
     ${kernHTML}
+    ${microInzichtenHTML}
     ${chartBlockHTML}
   </div>
 </div>`;
@@ -1022,16 +1038,24 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>`;
 
-  // Transition page quote — shown once, roughly halfway through the sections
+  // Transition pages — one halfway, one before the final section
   const midTransition = buildTransitionPage(
     "Afstemming is niet iemand anders worden.\nHet is onthouden wat jouw lichaam al weet.",
     "Alignment is not becoming someone else.\nIt is remembering what your body already knows.",
     order
   );
-  const midIdx = Math.floor(sections.length / 2);
+  const finalTransition = buildTransitionPage(
+    "Jij bent niet hier om jezelf te worden.\nJij bent hier om te onthouden wie je al bent.",
+    "You are not here to become yourself.\nYou are here to remember who you already are.",
+    order
+  );
+  const midIdx  = Math.floor(sections.length / 2);
+  const lastIdx = sections.length - 1;
   const sectionPagesWithTransition = sections.map(function(s, i) {
     const page = buildSectionPages(s, i, order);
-    return i === midIdx && sections.length > 2 ? midTransition + page : page;
+    if (sections.length > 3 && i === midIdx) return midTransition + page;
+    if (sections.length > 1 && i === lastIdx) return finalTransition + page;
+    return page;
   }).join("\n");
 
   return `<!DOCTYPE html>

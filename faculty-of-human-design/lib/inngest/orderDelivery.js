@@ -141,7 +141,10 @@ OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen t
   "valkuilen": ["Herkenbaar schaduwpatroon 1 — concreet, zonder oordeel", "Patroon 2", "Patroon 3"],
   "praktijk": ["Lichamelijke of dagelijkse oefening 1 — vandaag uitvoerbaar", "Oefening 2", "Oefening 3"],
   "dezeWeek": ["Micro-actie 1 — extreem concreet, tijdgebonden, max één zin", "Actie 2", "Actie 3"],
-  "reflectievragen": ["Integratieprompt 1 die echte reflectie uitnodigt?", "Vraag 2?", "Vraag 3?"]
+  "reflectievragen": ["Integratieprompt 1 die echte reflectie uitnodigt?", "Vraag 2?", "Vraag 3?"],
+  "microInzichten": [
+    {"label": "Jouw verborgen gave", "tekst": "Één tot twee zinnen die de lezer direct herkent maar zelden over zichzelf hoort."}
+  ]
 }
 
 VELDREGELS:
@@ -149,6 +152,10 @@ VELDREGELS:
 - kern: 3–5 objecten; emotionele boog (herkenning → waarheid → inzicht → schaduw → alignment); max 500 woorden totaal
 - valkuilen, praktijk, dezeWeek: elk exact 3 items
 - reflectievragen: exact 3 vragen — uitnodigend, diep, niet retorisch
+- microInzichten: OPTIONEEL, 0–3 items; kies labels die passen bij het thema van déze sectie uit deze lijst:
+    "Jouw verborgen gave", "Wat mensen over jou misverstand", "Wat jou het snelst uitput",
+    "Wat jouw zenuwstelsel nodig heeft", "Hoe alignment aanvoelt in jouw lichaam"
+  Elk item: tekst van 1–2 zinnen, emotioneel resonant, specifiek voor déze chart. Weglaten als het niet past.
 - Sluit de laatste kern-paragraaf af met een volledige, afgeronde zin
 
 AFSLUITING:
@@ -213,7 +220,10 @@ OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outsid
   "valkuilen": ["Recognisable shadow pattern 1 — concrete, without judgment", "Pattern 2", "Pattern 3"],
   "praktijk": ["Embodied or daily practice 1 — actionable today", "Practice 2", "Practice 3"],
   "dezeWeek": ["Micro-action 1 — extremely concrete, time-bound, max one sentence", "Action 2", "Action 3"],
-  "reflectievragen": ["Integration prompt 1 that invites genuine reflection?", "Question 2?", "Question 3?"]
+  "reflectievragen": ["Integration prompt 1 that invites genuine reflection?", "Question 2?", "Question 3?"],
+  "microInzichten": [
+    {"label": "Your hidden gift", "tekst": "One to two sentences the reader recognises immediately but rarely hears about themselves."}
+  ]
 }
 
 FIELD RULES:
@@ -221,6 +231,10 @@ FIELD RULES:
 - kern: 3–5 objects; emotional arc (recognition → truth → insight → shadow → alignment); max 500 words total
 - valkuilen, praktijk, dezeWeek: exactly 3 items each
 - reflectievragen: exactly 3 questions — inviting, deep, not rhetorical
+- microInzichten: OPTIONAL, 0–3 items; choose labels relevant to this section's theme from:
+    "Your hidden gift", "What people misunderstand about you", "What drains you fastest",
+    "What your nervous system needs", "What alignment feels like in your body"
+  Each item: 1–2 sentences, emotionally resonant, specific to this chart. Omit if not relevant.
 - End the final kern paragraph with a complete, rounded sentence
 
 CLOSING:
