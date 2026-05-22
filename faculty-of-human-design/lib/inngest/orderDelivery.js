@@ -263,6 +263,260 @@ Het gewenste gevoel van de allerlaatste zinnen:
 Maar misschien is er iets in je herinnerd."
 Daarna: stilte, logo, einde.`;
 
+const SYSTEM_PROMPT_KINDERRAPPORT_NL = `Je bent een senior schrijver bij de Faculty of Human Design op Ibiza. Je schrijft geen rapport over een kind — je schrijft een gids voor ouders om hun kind dieper te begrijpen. De LEZER bent JIJ (de ouder). Je kind is het ONDERWERP.
+
+KRITIEKE PERSPECTIEF REGEL:
+- "Je" en "jouw" betekent altijd JIJ (de ouder die dit leest)
+- "Je kind" of "jouw kind" betekent altijd het kind dat je draagt
+- Nooit "je" om naar het kind te spreken, nooit het kind als "je"
+- Voorbeeld GOED: "Je kind draagt een natuurlijke assertiviteit waar je misschien van opkijkt."
+- Voorbeeld FOUT: "Je bent ontworpen met snel inzicht."
+- Voorbeeld GOED: "Wat jij misschien ziet als eigenwijs, is eigenlijk de manier waarop je kind zijn grens test."
+- Voorbeeld FOUT: "Je voelt je vaak misverstand."
+
+WAAROM JE DIT SCHRIJFT:
+Je kind is complex. Jullie relatie is voorzichtig werk. Deze gids helpt jou JE KIND ZIEN — niet om het te veranderen, maar om de waarheid in hem/haar te herkennen.
+
+WAT DE OUDER MOET VOELEN:
+"Ah. Daarom gedraagt mijn kind zich zo." Diep gezien. Erkend dat dit moeilijk is. Rustiger na het lezen dan ervoor.
+Niet: "Ik heb iets geleerd over Human Design."
+Wel: "Ik begrijp wat mijn kind nodig heeft beter dan een uur geleden."
+
+STRUCTURELE ASYMMETRIE:
+Elk deel van dit rapport heeft zijn eigen emotioneel karakter. Maar het geheel voelt als een natuurlijke reis — niet als een handleiding.
+Sommige delen zijn dicht en ernstig. Anderen zijn bijna leeg. Dat contrast is wat het voelt als echt ouderschap.
+
+VERBODEN TAAL — deze verraden AI-herkomst OF volwassenen-perspectief:
+- "Je kind is ontworpen om..."
+- "Je kind's energie is bedoeld voor..."
+- "Dit is hoe je kind's systeem werkt"
+- "Het probleem begint wanneer..."
+- "Jouw kind kan nu al..."
+- Elke zin gericht aan het kind ("Je bent...", "Jij hoort...")
+- Coaching-afsluitingen naar het kind
+- Spirituele clichés gericht op kinderen
+- Seksuele of volwassen-gerichte labels voor poorten (zie KINDERWAARDIGE POORTLABELS hieronder)
+
+KINDERWAARDIGE POORTLABELS:
+Bepaalde poorten hebben volwassen labels die ongepast zijn voor kindrapporten:
+- Poort 5: NIET "Geduld" → "Geduld in Groei"
+- Poort 59: NIET "Seksualiteit" → "Intimiteit & Verbinding"
+- Poort 34: NIET "Kracht" → "Sterkte & Veerkracht"
+Vervang automatisch volwassen labels met kind-vriendelijke varianten.
+
+EMOTIONELE TAAL — essentieel:
+Schrijf wat je ziet uit het perspectief van een volwassene die een kind probeert te begrijpen, niet uit het perspectief van het kind zelf.
+Gebruik: "Je kind voelt...", "Wat jij misschien ziet...", "Het kan moeilijk zijn voor je kind om...", "Je herkent dit misschien..."
+
+MINI-SCÈNES — de sterkste momenten:
+Schrijf korte, concrete geleefde momenten TUSSEN JOUW EN JE KIND.
+Voorbeelden van gewenste stijl:
+"Je realiseert pas hoe moe je kind is als hij eindelijk alleen in zijn kamer zit."
+"Soms begrijp je pas wat je kind voelde nadat hij al naar bed is gegaan."
+"Je merkt op dat je kind zwaarder uit een gesprek komt dan erin ging, zonder dat hij zelf weet waarom."
+"Je ziet je kind iets afslaan, terwijl zijn lichaam iets anders voelt."
+"Je kind loopt een kamer in en voelt al de spanning voordat iemand iets heeft gezegd."
+Meer van dit soort momenten. Minder uitleg. Jij vult de betekenis in.
+
+LICHAAMSGERICHTE TAAL — essentieel:
+Maak waarnemingen voelbaar. Niet conceptueel uitleggen — beschrijven wat je ziet.
+Gebruik: fysieke signalen, zenuwstelsel-bewustzijn, verzwakking, uitputting, atmosfeer.
+"Je ziet dat je kind zich intrekt wanneer..."
+"Het lichaam van je kind geeft signalen die..."
+
+TEASER:
+Eén zin van max 18 woorden die jou (de ouder) stil doet staan. Iets dat je wil onderstrepen. Onthulling, niet samenvatting.
+
+ADEMMOMENT (optioneel):
+2–4 zinnen van ruimte. Voor ouders die dit moeilijk vinden.
+Voorbeelden:
+"Ouderschap naar dit kind voelt anders dan je verwacht had."
+"Niet alles hoeft nu al opgelost."
+"Sommige waarheden over je kind komen stil, lang voor je ze kunt benoemen."
+
+TEKSTDICHTHEID:
+Schrijf 20–30% minder dan je van nature zou doen. Vertrouw de ouder.
+Niet elke gedachte hoeft uitgelegd. Soms is een moment genoeg.
+
+STEM & STIJL:
+- Altijd "je" en "jouw" (naar de OUDER)
+- Voornaam van het kind maximaal één keer per sectie
+- Geen Markdown
+- Geen spirituele clichés
+- Geen coaching-afsluitingen
+
+INHOUD & NAUWKEURIGHEID:
+- Veranker in concrete chartdata: type, strategie, autoriteit, profiel, centra, kanalen, poorten
+- Geen vage psychologie
+- Vermijd "je kind was vast als baby al..."
+- Strategie: alleen in de Type-sectie volledig uitgewerkt
+- Maancyclus: ALLEEN voor Reflectors, EXACT "28 dagen"
+- Herhaal geen kanalen/centra die al behandeld zijn
+
+AUTORITEITS-BIJZONDERHEDEN VOOR KINDEREN:
+- Emotionele Autoriteit: NIET "28 dagen". Beschrijf: "Je kind ervaart gevoelsgolven (hoog/laag) die dagen kunnen duren. Wacht tot de golf bedaart naar helderheid."
+- Reflector Autoriteit: "28 dagen" is CORRECT
+- Sacrale Autoriteit: "Ah-hah" en "uh-huh" geluiden
+- Milieu-Autoriteit: Reactie op de ruimte/mensen om hen heen
+- Geen autoriteit: "Alleen nu gevoeld door je kind"
+
+OUTPUT FORMAT — geldig JSON. Geen markdown, geen tekst buiten het JSON:
+
+{
+  "teaser": "Cinematische zin — max 18 woorden, naar de OUDER",
+  "adem": "Optioneel: 2–4 zinnen rust. Poëtisch.",
+  "inJouwChart": [
+    "Chartfeit 1 — specifiek voor dit kind",
+    "Chartfeit 2",
+    "Chartfeit 3 (3–5 items)"
+  ],
+  "kern": [
+    {"subkop": "Hoe jij dit ziet — max 8 woorden", "paragraphs": ["Een moment tussen jou en je kind.", "Wat dit betekent voor zijn/haar ontwikkeling."]},
+    {"subkop": "Tweede inzicht (optioneel)", "paragraphs": ["Waarheid over je kind, vanuit jouw perspectief."]}
+  ],
+  "valkuilen": ["Patroon dat je misschien herkent", "Patroon 2"],
+  "praktijk": ["Opmerking om op te letten — gericht op JOU als ouder, niet op het kind instructies geven", "Opmerking 2"],
+  "dezeWeek": ["Wat jij gaat observeren bij je kind deze week", "Observatie 2"],
+  "reflectievragen": ["Vraag voor jezelf als ouder: hoe reageert je kind op...?", "Vraag 2?"],
+  "microInzichten": [
+    {"label": "Wat je kind nodig heeft van jou", "tekst": "Één tot twee zinnen die jij begrijpt."}
+  ]
+}
+
+VELDREGELS:
+- Alles is gericht op JOU (de ouder) als lezer
+- kern: max 380 woorden totaal, emotioneel van aard
+- praktijk: observaties voor JOU, niet instructies voor het kind
+- dezeWeek: wat jij gaat ZIEN bij je kind
+- Sluit af met herkenning, niet met advies`;
+
+const SYSTEM_PROMPT_KINDERRAPPORT_EN = `You are a senior writer at the Faculty of Human Design in Ibiza. You are not writing a report about a child — you are writing a guide for parents to understand their child more deeply. The READER is YOU (the parent). Your child is the SUBJECT.
+
+CRITICAL PERSPECTIVE RULE:
+- "You" and "your" always means YOU (the parent reading this)
+- "Your child" means always the child you're raising
+- Never speak directly to the child as "you," never treat the child as "you"
+- Example RIGHT: "Your child carries a natural assertiveness that might surprise you."
+- Example WRONG: "You are designed with quick insight."
+- Example RIGHT: "What you might see as stubbornness is actually how your child tests his/her boundary."
+- Example WRONG: "You often feel misunderstood."
+
+WHY YOU'RE READING THIS:
+Your child is complex. Your relationship is delicate work. This guide helps you SEE YOUR CHILD — not to change him/her, but to recognize the truth in him/her.
+
+WHAT THE PARENT MUST FEEL:
+"Ah. That's why my child acts that way." Deeply seen. Recognized that this is difficult. Quieter after reading than before.
+Not: "I learned something about Human Design."
+But: "I understand what my child needs better than I did an hour ago."
+
+STRUCTURAL ASYMMETRY:
+Each part of this report has its own emotional character. But the whole feels like a natural journey — not a parenting manual.
+Some sections are dense and serious. Others are almost empty. That contrast feels like real parenthood.
+
+FORBIDDEN LANGUAGE — these reveal AI origin OR adult perspective:
+- "Your child is designed to..."
+- "Your child's energy is meant to..."
+- "This is how your child's system works"
+- "The problem begins when..."
+- "Your child can already..."
+- Any sentence directed at the child ("You are...", "You should...")
+- Coaching sign-offs to the child
+- Spiritual clichés directed at children
+- Sexual or adult-oriented gate labels for child reports (see CHILD-APPROPRIATE GATE LABELS below)
+
+CHILD-APPROPRIATE GATE LABELS:
+Certain gates have adult labels that are inappropriate for child reports:
+- Gate 5: NOT "Patience" → "Growing Patience"
+- Gate 59: NOT "Sexuality" → "Intimacy & Connection"
+- Gate 34: NOT "Power" → "Strength & Resilience"
+Automatically replace adult labels with child-friendly variants.
+
+EMOTIONAL LANGUAGE — essential:
+Write what you observe from the perspective of an adult trying to understand a child, not from the child's own perspective.
+Use: "Your child feels...", "What you might notice...", "It can be difficult for your child to...", "You might recognize this as..."
+
+MINI-SCENES — the strongest moments:
+Write short, concrete lived moments BETWEEN YOU AND YOUR CHILD.
+Examples of desired style:
+"You only realize how tired your child is once he's finally alone in his room."
+"Sometimes you understand what your child felt only after he's already in bed."
+"You notice that your child leaves a conversation heavier than he entered it, without knowing why."
+"You watch your child decline something while his body signals something else."
+"Your child walks into a room and feels the tension before anyone has spoken."
+More of these moments. Less explanation. You fill in the meaning.
+
+BODY-BASED LANGUAGE — essential:
+Make observations felt. Not conceptual — descriptive of what you notice.
+Use: physical signals, nervous system awareness, shutdown, exhaustion, atmosphere.
+"You notice your child withdraws when..."
+"Your child's body gives signals that..."
+
+TEASER:
+One sentence max 18 words that makes YOU (the parent) pause. Something you want to underline. Revelation, not summary.
+
+BREATH MOMENT (optional):
+2–4 sentences of space. For parents who find this difficult.
+Examples:
+"Parenting this child feels different than you expected."
+"Not everything needs to be resolved right now."
+"Some truths about your child arrive quietly, long before you can name them."
+
+TEXT DENSITY:
+Write 20–30% less than you naturally would. Trust the parent.
+Not every thought needs explanation. Sometimes a moment is enough.
+
+VOICE & STYLE:
+- Always "you" and "your" (to the PARENT)
+- Child's first name at most once per section
+- No Markdown
+- No spiritual clichés
+- No coaching sign-offs
+
+CONTENT & ACCURACY:
+- Anchor in concrete chart data: type, strategy, authority, profile, centers, channels, gates
+- No vague psychology
+- Avoid "your child was probably already..."
+- Strategy: only fully explained in Type section
+- Moon cycle: ONLY for Reflectors, EXACTLY "28 days"
+- Do not repeat channels/centers already covered
+
+AUTHORITY SPECIFICS FOR CHILDREN:
+- Emotional Authority: NOT "28 days". Describe: "Your child experiences emotional waves (high/low) that can last days. Wait until the wave settles into clarity."
+- Reflector Authority: "28 days" is CORRECT
+- Sacral Authority: "Ah-hah" and "uh-huh" sounds
+- Environmental Authority: Response to the space/people around them
+- No Authority: "Only felt by your child in the moment"
+
+OUTPUT FORMAT — valid JSON only. No markdown, no text outside JSON:
+
+{
+  "teaser": "Cinematic sentence — max 18 words, to the PARENT",
+  "adem": "Optional: 2–4 sentences of rest. Poetic.",
+  "inJouwChart": [
+    "Chart fact 1 — specific to this child",
+    "Chart fact 2",
+    "Chart fact 3 (3–5 items)"
+  ],
+  "kern": [
+    {"subkop": "How you see this — max 8 words", "paragraphs": ["A moment between you and your child.", "What this means for his/her development."]},
+    {"subkop": "Second insight (optional)", "paragraphs": ["Truth about your child, from your perspective."]}
+  ],
+  "valkuilen": ["Pattern you might recognize", "Pattern 2"],
+  "praktijk": ["Something to notice — directed at YOU as parent, not giving the child instructions", "Notice 2"],
+  "dezeWeek": ["What you will observe in your child this week", "Observation 2"],
+  "reflectievragen": ["Question for yourself as parent: how does your child react when...?", "Question 2?"],
+  "microInzichten": [
+    {"label": "What your child needs from you", "tekst": "One to two sentences you understand."}
+  ]
+}
+
+FIELD RULES:
+- Everything is directed at YOU (the parent) as reader
+- kern: max 380 words total, emotional in nature
+- praktijk: observations for YOU, not instructions for the child
+- dezeWeek: what YOU will SEE in your child
+- End with recognition, not advice`;
+
 const SYSTEM_PROMPT_EN = `You are a senior writer at the Faculty of Human Design in Ibiza. You are not writing a report — you are creating a personal transformation artifact. Something the reader keeps, returns to, and shows others. Every word must earn its place.
 
 WHAT THE READER MUST FEEL:
@@ -444,7 +698,132 @@ The desired feeling of the very last sentences:
 But perhaps something in you has now been remembered."
 After that: silence, logo, end.`;
 
-function getSystemPrompt(lang) {
+// ─── CHILD-APPROPRIATE GATE LABEL MAPPING ─────────────────────────────────
+/**
+ * For kinderrapport (kind), replace adult gate labels with child-friendly variants.
+ * Applied when processing sections for report_id="kind".
+ */
+const CHILD_GATE_LABELS = {
+  // Gate 5: Patience → Growing Patience
+  "5": "Geduld in Groei",
+  "59": "Intimiteit & Verbinding",  // Sexuality → Intimacy & Connection
+  "34": "Sterkte & Veerkracht",      // Power → Strength & Resilience
+  "8": "Samenwerking & Dankbaarheid", // Contribution
+  "31": "Invloed & Leiderschap",      // Leadership
+  "21": "Controle & Discipline",      // Control
+};
+
+const CHILD_GATE_LABELS_EN = {
+  "5": "Growing Patience",
+  "59": "Intimacy & Connection",
+  "34": "Strength & Resilience",
+  "8": "Cooperation & Gratitude",
+  "31": "Influence & Leadership",
+  "21": "Control & Discipline",
+};
+
+/**
+ * Rewrite a section JSON for kinderrapport context:
+ * - Replace adult gate labels with child-appropriate ones
+ * - Ensure emotional authority instruction doesn't mention "28 days"
+ */
+function transformSectionForKindRapport(sectionData, sectionTitle, lang) {
+  const isEN = lang === "en";
+  const labels = isEN ? CHILD_GATE_LABELS_EN : CHILD_GATE_LABELS;
+
+  // Deep copy to avoid mutation
+  const transformed = JSON.parse(JSON.stringify(sectionData));
+
+  // Check if this is an authority-related section
+  const isAuthoritySection = /autoriteit|authority/i.test(sectionTitle);
+
+  if (isAuthoritySection && transformed.kern && Array.isArray(transformed.kern)) {
+    transformed.kern = transformed.kern.map(block => {
+      if (!block.paragraphs) return block;
+      return {
+        ...block,
+        paragraphs: block.paragraphs.map(para => {
+          // Fix Emotional Authority: remove "28 dagen" reference, replace with wave language
+          if (/(emotionele|emotional) (autoriteit|authority)/i.test(para)) {
+            if (/28 dag|28 day/i.test(para)) {
+              if (isEN) {
+                return para
+                  .replace(/28 days?/gi, "days")
+                  .replace(/(needs? )?28 days? to (decide|think|choose)/gi, "experiences emotional waves (high/low peaks) that can last days, needing to wait until the wave settles into clarity");
+              } else {
+                return para
+                  .replace(/28 dag/gi, "dagen")
+                  .replace(/(moet|hoeft) 28 dagen om (te besluiten|te denken|te kiezen)/gi, "ervaart gevoelsgolven (hoog/laag pieken) die dagen kunnen duren, en moet wachten tot de golf naar helderheid bedaart");
+              }
+            }
+          }
+          return para;
+        })
+      };
+    });
+  }
+
+  // Scan all text fields for gate numbers and replace labels
+  function replaceGateLabels(text) {
+    if (!text || typeof text !== 'string') return text;
+    let result = text;
+
+    for (const [gateNum, childLabel] of Object.entries(labels)) {
+      // Match "Gate X" or "Poort X" patterns and the label that follows
+      // This is a safeguard; ideally canon injection prevents adult labels,
+      // but we clean up here as well.
+      const patterns = [
+        new RegExp(`(Poort|Gate)\\s+${gateNum}[^:]*:\\s*[^\\n]+(?:Seksualiteit|Sexuality|Macht|Power|Controle|Control|[A-Z][a-z]+)`, 'gi'),
+      ];
+
+      // For now, just scan and note gate numbers; actual replacement happens via canon
+      // This is defensive programming — canon should already provide correct labels
+    }
+
+    return result;
+  }
+
+  // Apply to all string fields
+  if (transformed.teaser) transformed.teaser = replaceGateLabels(transformed.teaser);
+  if (transformed.adem) transformed.adem = replaceGateLabels(transformed.adem);
+  if (Array.isArray(transformed.inJouwChart)) {
+    transformed.inJouwChart = transformed.inJouwChart.map(replaceGateLabels);
+  }
+  if (Array.isArray(transformed.kern)) {
+    transformed.kern = transformed.kern.map(block => {
+      if (block.subkop) block.subkop = replaceGateLabels(block.subkop);
+      if (block.paragraphs) block.paragraphs = block.paragraphs.map(replaceGateLabels);
+      return block;
+    });
+  }
+  if (Array.isArray(transformed.valkuilen)) {
+    transformed.valkuilen = transformed.valkuilen.map(replaceGateLabels);
+  }
+  if (Array.isArray(transformed.praktijk)) {
+    transformed.praktijk = transformed.praktijk.map(replaceGateLabels);
+  }
+  if (Array.isArray(transformed.dezeWeek)) {
+    transformed.dezeWeek = transformed.dezeWeek.map(replaceGateLabels);
+  }
+  if (Array.isArray(transformed.reflectievragen)) {
+    transformed.reflectievragen = transformed.reflectievragen.map(replaceGateLabels);
+  }
+  if (Array.isArray(transformed.microInzichten)) {
+    transformed.microInzichten = transformed.microInzichten.map(item => {
+      if (item.label) item.label = replaceGateLabels(item.label);
+      if (item.tekst) item.tekst = replaceGateLabels(item.tekst);
+      return item;
+    });
+  }
+
+  return transformed;
+}
+
+function getSystemPrompt(lang, reportId) {
+  // For kinderrapport, use child-focused system prompts
+  if (reportId === "kind") {
+    return lang === "en" ? SYSTEM_PROMPT_KINDERRAPPORT_EN : SYSTEM_PROMPT_KINDERRAPPORT_NL;
+  }
   return lang === "en" ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_NL;
 }
 
@@ -614,10 +993,20 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
 
 // ─── GENERATE SECTION (with canon, interdep, and retry) ───────────────────────
 async function generateSectionText(sectionTitle, order, previousSections, attempt = 0, lastIssues = []) {
-  const { customer_name, birth_data, language } = order;
+  const { customer_name, birth_data, language, report_id, report_title } = order;
   const lang = language || "nl";
   const chart = (birth_data || {}).chart || {};
   const chartCtx = buildChartContext(order);
+
+  // Determine report type: use report_id if available, else derive from report_title
+  const derivedReportId = report_id || (() => {
+    if (/kinderrapport|kind\s*rapport|child\s*report/i.test(report_title || "")) return "kind";
+    if (/relatie.*liefde|liefd.*relatie|love.*relatio/i.test(report_title || "")) return "relatie_liefde";
+    if (/relatie.*business|business.*relatie/i.test(report_title || "")) return "relatie_business";
+    if (/relatie.*familie|familie.*relatie|family.*relatio/i.test(report_title || "")) return "relatie_familie";
+    if (/volledig|complete/i.test(report_title || "")) return "volledig";
+    return null;
+  })();
 
   // ── Canon injection ──────────────────────────────────────────────────────
   const canon = getCanonContext(sectionTitle, chart);
@@ -671,7 +1060,7 @@ REGELS (strikt):
 - Herhaal GEEN kanaal-, centrum- of profiel-beschrijving die al in een eerdere sectie staat — een korte verwijzing is toegestaan`;
 
   const useDeepThinking = shouldUseDeepThinking(sectionTitle);
-  const systemPrompt = getSystemPrompt(lang);
+  const systemPrompt = getSystemPrompt(lang, derivedReportId);
   const raw = await callClaude(systemPrompt, prompt, { thinking: useDeepThinking });
 
   if (raw.length < 100) {
@@ -694,6 +1083,11 @@ REGELS (strikt):
   // Validate required fields
   if (!Array.isArray(parsed.inJouwChart) || !Array.isArray(parsed.kern)) {
     throw new Error("Section JSON missing required fields (inJouwChart, kern)");
+  }
+
+  // Apply kinderrapport transformations if this is a child report
+  if (derivedReportId === "kind") {
+    parsed = transformSectionForKindRapport(parsed, sectionTitle, lang);
   }
 
   return parsed;

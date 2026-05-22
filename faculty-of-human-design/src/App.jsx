@@ -1,5 +1,9 @@
-import { useState, useEffect } from "react";
-import { LANG, t, tl, switchLang, langPath, stripLangPrefix } from './i18n.js';
+import { useState, useEffect, createContext, useContext } from "react";
+import { LANG, useLang, t, tl, switchLang, langPath, stripLangPrefix } from './i18n.js';
+
+// ─── LANGUAGE CONTEXT ────────────────────────────────────────────────────────
+const LangContext = createContext('nl');
+export const useDynamicLang = () => useContext(LangContext);
 
 const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');`;
 
@@ -82,7 +86,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 
 /* TYPOGRAPHY */
 .h1 { font-family:var(--font-serif); font-size:clamp(2.4rem,5.5vw,4rem); font-weight:300; line-height:1.08; }
-.h1-hero { font-family:var(--font-serif); font-size:clamp(1.8rem,3.2vw,2.6rem); font-weight:300; line-height:1.22; color:white; letter-spacing:.01em; }
+.h1-hero { font-family:var(--font-serif); font-size:clamp(3.2rem,9vw,6.4rem); font-weight:300; line-height:1.08; color:white; letter-spacing:-.02em; }
 .h2 { font-family:var(--font-serif); font-size:clamp(1.9rem,3.8vw,2.95rem); font-weight:300; line-height:1.12; }
 .h3 { font-family:var(--font-serif); font-size:clamp(1.35rem,2.5vw,1.9rem); font-weight:400; line-height:1.2; }
 .label { font-size:.6rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase; color:var(--gold); }
@@ -258,20 +262,20 @@ button { cursor:pointer; font-family:var(--font-sans); }
     radial-gradient(circle at 65% 65%, white 1px, transparent 1px);
   background-size:420px 420px,510px 510px,360px 360px,460px 460px,390px 390px,430px 430px,380px 380px; }
 .hero-glow { position:absolute; top:-10%; right:-8%; width:60%; height:85%; border-radius:50%; background:radial-gradient(ellipse, rgba(154,128,80,.07) 0%, transparent 60%); pointer-events:none; }
-.hero-content { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:0 32px; width:100%; }
-.hero-text { max-width:660px; }
-.hero-eyebrow { font-size:.58rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:rgba(201,168,92,.8); margin-bottom:26px; display:flex; align-items:center; gap:14px; }
-.hero-eyebrow::before { content:""; display:block; width:28px; height:1px; background:rgba(201,168,92,.45); flex-shrink:0; }
-.hero-title em, .h1-hero em { color:rgba(255,255,255,.42); font-style:italic; }
-.hero-subtitle { font-size:1.05rem; font-weight:300; color:rgba(255,255,255,.5); line-height:1.84; margin:20px 0 36px; max-width:520px; }
-.hero-actions { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:40px; }
-.hero-trust { display:flex; gap:24px; flex-wrap:wrap; }
-.hero-trust-item { font-size:.7rem; font-weight:300; color:rgba(255,255,255,.36); display:flex; align-items:center; gap:6px; }
-.hero-trust-item::before { content:"✦"; font-size:.48rem; color:rgba(201,168,92,.45); }
-.hero-scroll { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:8px; opacity:.4; }
-.hero-scroll-line { width:1px; height:36px; background:linear-gradient(to bottom, transparent, white); animation:scrollline 2.2s ease-in-out infinite; }
-@keyframes scrollline { 0%,100%{opacity:0;transform:scaleY(0);transform-origin:top} 40%,60%{opacity:1;transform:scaleY(1);transform-origin:top} 80%{transform:scaleY(1);transform-origin:bottom;opacity:0} }
-.hero-scroll-label { font-size:.5rem; letter-spacing:.18em; text-transform:uppercase; color:white; }
+.hero-content { position:relative; z-index:2; max-width:800px; margin:0; padding:0 32px 0 32px; width:100%; }
+.hero-text { max-width:540px; }
+.hero-eyebrow { font-size:.52rem; font-weight:500; letter-spacing:.24em; text-transform:uppercase; color:rgba(201,168,92,.75); margin-bottom:28px; display:flex; align-items:center; gap:12px; }
+.hero-eyebrow::before { content:""; display:block; width:24px; height:1px; background:rgba(201,168,92,.5); flex-shrink:0; }
+.hero-title em, .h1-hero em { color:rgba(255,255,255,.55); font-style:italic; font-weight:300; }
+.hero-subtitle { font-size:.95rem; font-weight:300; color:rgba(255,255,255,.52); line-height:1.88; margin:28px 0 48px; max-width:460px; }
+.hero-actions { display:flex; gap:14px; flex-wrap:wrap; margin-bottom:56px; }
+.hero-trust { display:flex; gap:32px; flex-wrap:wrap; }
+.hero-trust-item { font-size:.65rem; font-weight:300; color:rgba(255,255,255,.42); display:flex; align-items:center; gap:8px; }
+.hero-trust-item::before { content:"✦"; font-size:.45rem; color:rgba(201,168,92,.52); }
+.hero-scroll { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:10px; opacity:.32; }
+.hero-scroll-line { width:1px; height:40px; background:linear-gradient(to bottom, transparent, white); animation:scrollline 3.2s ease-in-out infinite; }
+@keyframes scrollline { 0%,100%{opacity:0;transform:scaleY(0);transform-origin:top} 35%,65%{opacity:1;transform:scaleY(1);transform-origin:top} 85%{transform:scaleY(1);transform-origin:bottom;opacity:0} }
+.hero-scroll-label { font-size:.48rem; letter-spacing:.2em; text-transform:uppercase; color:white; font-weight:300; }
 
 /* FORM */
 .form-wrap { background:white; border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow-md); padding:36px; }
@@ -2537,16 +2541,103 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
   );
 }
 
+// ─── DOWNLOAD PAGE ────────────────────────────────────────────────────────────
+/**
+ * DownloadPage: Validates download token and redirects to PDF blob
+ *
+ * Flow:
+ * 1. User clicks link from email: /download/{uuid}
+ * 2. This page extracts the token and looks it up in Supabase
+ * 3. If valid, redirect to the PDF blob URL (Vercel Blob)
+ * 4. If invalid/expired, show error message
+ */
+function DownloadPage({token}){
+  const[status,setStatus]=useState("validating"); // validating | success | invalid
+  const[error,setError]=useState("");
+
+  useEffect(()=>{
+    const validateAndRedirect=async()=>{
+      try{
+        // Call backend API to validate token and get PDF URL
+        const res=await fetch("/api/validate-download",{
+          method:"POST",
+          headers:{"Content-Type":"application/json"},
+          body:JSON.stringify({token}),
+        });
+
+        const data=await res.json();
+
+        if(!res.ok||!data.pdfUrl){
+          setStatus("invalid");
+          setError(data.error||(LANG==="en"?"Link invalid or expired":"Link ongeldig of verlopen"));
+          return;
+        }
+
+        // Redirect to the PDF blob URL
+        setStatus("success");
+        window.location.href=data.pdfUrl;
+      }catch(e){
+        console.error("[DownloadPage]",e);
+        setStatus("invalid");
+        setError(LANG==="en"?"Error validating link":"Fout bij valideren van link");
+      }
+    };
+
+    validateAndRedirect();
+  },[token]);
+
+  if(status==="validating"){
+    return(
+      <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
+        <div style={{maxWidth:560,width:"100%",textAlign:"center"}}>
+          <div style={{width:72,height:72,borderRadius:"50%",background:"rgba(61,44,94,.08)",border:"1px solid rgba(61,44,94,.14)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 28px",fontSize:"2rem",color:"var(--brand)"}}>✦</div>
+          <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.4rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>
+            {LANG==="en"?"Preparing your download...":"Je download wordt voorbereid..."}
+          </div>
+          <p style={{fontSize:".95rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8}}>
+            {LANG==="en"?"Your report is being verified and will open shortly.":"Je rapport wordt geverifieerd en opent zo."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  return(
+    <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
+      <div style={{maxWidth:560,width:"100%",textAlign:"center"}}>
+        <div style={{width:72,height:72,borderRadius:"50%",background:"rgba(192,57,43,.1)",border:"1px solid rgba(192,57,43,.2)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 28px",fontSize:"2rem",color:"#c0392b"}}>!</div>
+        <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4vw,2.4rem)",fontWeight:300,color:"var(--text)",marginBottom:14,lineHeight:1.12}}>
+          {LANG==="en"?"Link invalid":"Link ongeldig"}
+        </div>
+        <p style={{fontSize:".95rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:28}}>
+          {error}
+        </p>
+        <p style={{fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8}}>
+          {LANG==="en"?"This download link does not exist or is expired. Download links expire after 30 days.":"Deze downloadlink bestaat niet of is verlopen. Downloadlinks verlopen na 30 dagen."}
+        </p>
+        <div style={{marginTop:28}}>
+          <p style={{fontSize:".85rem",color:"var(--text-light)",marginBottom:12}}>
+            {LANG==="en"?"Questions? Contact us at":"Vragen? Neem contact op met"}
+          </p>
+          <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ─── PAGES ────────────────────────────────────────────────────────────────────
 function HomePage({go}){
+  const lang = useDynamicLang();  // Get reactive language from context
   useSEO({
-    title:LANG==="en"?"Human Design Report — Personal & In-Depth":"Human Design Rapport — Persoonlijk & Diepgaand",
-    description:LANG==="en"?"Receive an in-depth, personal Human Design report based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.":"Ontvang een diepgaand, persoonlijk Human Design rapport op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, direct als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
+    title:lang==="en"?"Human Design Report — Personal & In-Depth":"Human Design Rapport — Persoonlijk & Diepgaand",
+    description:lang==="en"?"Receive an in-depth, personal Human Design report based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.":"Ontvang een diepgaand, persoonlijk Human Design rapport op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, direct als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
     canonical:SITE+"/",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
-      "name":LANG==="en"?"Human Design Reports — Faculty of Human Design":"Human Design Rapporten — Faculty of Human Design",
-      "description":LANG==="en"?"In-depth personal reports based on Human Design, Numerology and Astrology.":"Diepgaande persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "name":lang==="en"?"Human Design Reports — Faculty of Human Design":"Human Design Rapporten — Faculty of Human Design",
+      "description":lang==="en"?"In-depth personal reports based on Human Design, Numerology and Astrology.":"Diepgaande persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
       "itemListElement": REPORTS.slice(0,4).map((r,i)=>({
         "@type":"ListItem","position":i+1,
         "name":tl(r.title),"description":tl(r.tagline),
@@ -2570,19 +2661,16 @@ function HomePage({go}){
         <div style={{position:"absolute",bottom:0,left:0,right:0,height:"35%",background:"linear-gradient(to top, rgba(12,10,23,.65) 0%, transparent 100%)",pointerEvents:"none",zIndex:1}}/>
         <div className="hero-content">
           <div className="hero-text">
-            <div className="hero-eyebrow">{LANG==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
-            <h1 className="h1-hero">{LANG==="en"?<>Your blueprint.<br/><em>Your truth.</em></>:<>Jouw blauwdruk.<br/><em>Jouw waarheid.</em></>}</h1>
-            <p className="hero-subtitle">{LANG==="en"?"A personal report on who you truly are — in-depth, precise, delivered as PDF within 1 business day.":"Een persoonlijk rapport over wie jij werkelijk bent — diepgaand, precies, bezorgd als PDF binnen 1 werkdag."}</p>
+            <div className="hero-eyebrow">{lang==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
+            <h1 className="h1-hero">{lang==="en"?<>Your blueprint.<br/><em>Your truth.</em></>:<>Jouw blauwdruk.<br/><em>Jouw waarheid.</em></>}</h1>
+            <p className="hero-subtitle">{lang==="en"?"Uncover who you truly are. An intimate, in-depth portrait delivered as PDF within 1 business day.":"Ontdek wie jij werkelijk bent. Een intiem, diepgaand portret bezorgd als PDF binnen 1 werkdag."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 {t("home.heroCta")}
               </button>
-              <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>{t("home.viewAll")}</button>
             </div>
             <div className="hero-trust">
               {[
-                t("trust.payment"),
-                t("trust.personal")+" · "+t("trust.delivery").toLowerCase(),
                 "Swiss Ephemeris — "+( LANG==="en"?"planet positions to the degree":"planeetposities tot op de graad"),
                 (LANG==="en"?"Founded 2014 · Ibiza":"Opgericht 2014 · Ibiza"),
               ].map(item=>(
@@ -2777,7 +2865,7 @@ function HomePage({go}){
             <h2 className="h2">{t("home.testimonialsTitle")}</h2>
           </div>
           <div className="grid-3">
-            {(LANG==="en"?[
+            {(lang==="en"?[
               ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report","Something in me settled"],
               ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report","More understanding in one evening"],
               ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report","Read in a single breath"],
@@ -4304,6 +4392,7 @@ function TermsPage({go}){
 
 // ─── ROUTER ───────────────────────────────────────────────────────────────────
 export default function App(){
+  const dynamicLang = useLang();  // Get reactive language from hook
   const[page,setPage]=useState(()=>pathToPage(window.location.pathname));
   const[result,setResult]=useState(null);
   const[menuOpen,setMenuOpen]=useState(false);
@@ -4395,25 +4484,27 @@ export default function App(){
   const downloadToken=(()=>{const m=window.location.pathname.match(/^\/download\/([a-f0-9-]{36})$/i);return m?m[1]:null;})();
 
   return(
-    <div>
-      <style>{FONTS}{CSS}</style>
-      {downloadToken
-        ? <DownloadPage token={downloadToken}/>
-        : <>
-          {page!=="result"&&page!=="bedankt"&&<Nav page={page} go={go} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>}
-          {page==="home"&&<HomePage go={go}/>}
-          {page==="wat"&&<WatPage go={go}/>}
-          {page==="rapporten"&&<RapportenPage go={go}/>}
-          {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
-          {page==="blog"&&<BlogPage go={go}/>}
-          {page==="over"&&<OverPage go={go}/>}
-          {page==="contact"&&<ContactPage/>}
-          {page==="voorwaarden"&&<TermsPage go={go}/>}
-          {page==="result"&&result&&<ThankYouPage result={result} go={go}/>}
-          {page==="bedankt"&&<OrderConfirmationPage result={result} go={go}/>}
-          {page!=="result"&&page!=="bedankt"&&<Footer go={go}/>}
-        </>
-      }
-    </div>
+    <LangContext.Provider value={dynamicLang}>
+      <div>
+        <style>{FONTS}{CSS}</style>
+        {downloadToken
+          ? <DownloadPage token={downloadToken}/>
+          : <>
+            {page!=="result"&&page!=="bedankt"&&<Nav page={page} go={go} menuOpen={menuOpen} setMenuOpen={setMenuOpen}/>}
+            {page==="home"&&<HomePage go={go}/>}
+            {page==="wat"&&<WatPage go={go}/>}
+            {page==="rapporten"&&<RapportenPage go={go}/>}
+            {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
+            {page==="blog"&&<BlogPage go={go}/>}
+            {page==="over"&&<OverPage go={go}/>}
+            {page==="contact"&&<ContactPage/>}
+            {page==="voorwaarden"&&<TermsPage go={go}/>}
+            {page==="result"&&result&&<ThankYouPage result={result} go={go}/>}
+            {page==="bedankt"&&<OrderConfirmationPage result={result} go={go}/>}
+            {page!=="result"&&page!=="bedankt"&&<Footer go={go}/>}
+          </>
+        }
+      </div>
+    </LangContext.Provider>
   );
 }

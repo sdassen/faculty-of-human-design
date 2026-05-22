@@ -2,6 +2,7 @@
 // No external libraries. LANG is set once from URL, t() for UI strings,
 // tl() for REPORTS fields that are { nl: "...", en: "..." } objects.
 
+import { useState, useEffect } from 'react';
 import NL from './locales/nl.js';
 import EN from './locales/en.js';
 
@@ -12,6 +13,26 @@ export const LANG = (() => {
   if (typeof window === 'undefined') return 'nl';
   return window.location.pathname.startsWith('/en') ? 'en' : 'nl';
 })();
+
+/** React hook for reactive language detection — updates when URL changes */
+export function useLang() {
+  const [lang, setLang] = useState(() => {
+    if (typeof window === 'undefined') return 'nl';
+    return window.location.pathname.startsWith('/en') ? 'en' : 'nl';
+  });
+
+  useEffect(() => {
+    // Update language when browser back/forward is used
+    const handlePopState = () => {
+      setLang(window.location.pathname.startsWith('/en') ? 'en' : 'nl');
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  return lang;
+}
 
 /** Translate a dot-notation UI key, with optional {var} interpolation */
 export function createT(lang) {
