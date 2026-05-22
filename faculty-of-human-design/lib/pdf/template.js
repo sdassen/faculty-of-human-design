@@ -360,7 +360,9 @@ function buildCoverPage(order) {
   const chart = bd.chart || {};
   const lang  = order.language || "nl";
   const ta    = typeAccent(chart.type);
-  const dateStr = bd.day ? `${bd.day} ${["","jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"][parseInt(bd.month)] || bd.month} ${bd.year}` : "";
+  const coverMonthsNL = ["","jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
+  const coverMonthsEN = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
+  const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
 <div style="width:210mm;height:285mm;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
@@ -845,9 +847,12 @@ function buildExecutiveSummaryPage(order) {
 function buildMethodologyPage(order) {
   const bd   = order.birth_data || {};
   const lang = order.language || "nl";
+  const isEN = lang === "en";
+
   const MAANDEN = ["","januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
+  const MONTHS  = ["","January","February","March","April","May","June","July","August","September","October","November","December"];
   const dateStr = bd.day
-    ? `${bd.day} ${MAANDEN[parseInt(bd.month)] || bd.month} ${bd.year}`
+    ? `${bd.day} ${(isEN ? MONTHS : MAANDEN)[parseInt(bd.month)] || bd.month} ${bd.year}`
     : "";
   const timeStr = bd.hour != null
     ? `${String(bd.hour).padStart(2,"0")}:${String(bd.minute || 0).padStart(2,"0")}`
@@ -857,36 +862,48 @@ function buildMethodologyPage(order) {
 <div style="width:210mm;height:285mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
-    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">BEREKENING</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22pt;color:#1A1715;line-height:1.1;margin-bottom:10px;">Zo is dit rapport berekend</div>
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22pt;color:#1A1715;line-height:1.1;margin-bottom:10px;">${ui(lang, "Zo is dit rapport berekend", "How this report was calculated")}</div>
     <div style="height:0.75px;background:#C9A85C;margin-bottom:16px;"></div>
 
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin-bottom:20px;">
       ${dateStr ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">GEBOORTEDATUM</div>
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTEDATUM", "DATE OF BIRTH")}</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(dateStr)}</div>
       </div>` : ""}
       ${timeStr ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">GEBOORTETIJD</div>
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTETIJD", "TIME OF BIRTH")}</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(timeStr)}</div>
       </div>` : ""}
       ${bd.place ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">GEBOORTEPLAATS</div>
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTEPLAATS", "PLACE OF BIRTH")}</div>
         <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(bd.place)}</div>
       </div>` : ""}
     </div>
 
-    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#A8A29E;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">BEREKENINGSWIJZE</div>
-    <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:10px;">Dit rapport is berekend met behulp van de Swiss Ephemeris — de meest nauwkeurige astronomische database ter wereld, ook gebruikt door professionele astrologen en sterrenwachten. Op basis van jouw exacte geboortetijdstip worden de planetaire posities op de minuut nauwkeurig bepaald.</p>
-    <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:10px;">Vanuit die posities worden jouw 64 poorten, gedefinieerde centra en actieve kanalen afgeleid via de Human Design systematiek zoals beschreven door Ra Uru Hu. De berekening combineert de bewuste (persoonlijkheid) en onbewuste (ontwerp) component op basis van twee afzonderlijke planetaire momentopnames.</p>
-    <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:20px;">Elke berekening is uniek voor jouw geboortegegevens en kan niet worden veralgemeend naar anderen.</p>
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#A8A29E;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">${ui(lang, "BEREKENINGSWIJZE", "CALCULATION METHOD")}</div>
+    <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:10px;">${ui(lang,
+      "Dit rapport is berekend met behulp van de Swiss Ephemeris — de meest nauwkeurige astronomische database ter wereld, ook gebruikt door professionele astrologen en sterrenwachten. Op basis van jouw exacte geboortetijdstip worden de planetaire posities op de minuut nauwkeurig bepaald.",
+      "This report was calculated using the Swiss Ephemeris — the most accurate astronomical database in the world, also used by professional astrologers and observatories. Based on your exact birth time, planetary positions are determined to the minute."
+    )}</p>
+    <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:10px;">${ui(lang,
+      "Vanuit die posities worden jouw 64 poorten, gedefinieerde centra en actieve kanalen afgeleid via de Human Design systematiek zoals beschreven door Ra Uru Hu. De berekening combineert de bewuste (persoonlijkheid) en onbewuste (ontwerp) component op basis van twee afzonderlijke planetaire momentopnames.",
+      "From those positions, your 64 gates, defined centers and active channels are derived through the Human Design system as described by Ra Uru Hu. The calculation combines the conscious (personality) and unconscious (design) component based on two separate planetary snapshots."
+    )}</p>
+    <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:20px;">${ui(lang,
+      "Elke berekening is uniek voor jouw geboortegegevens en kan niet worden veralgemeend naar anderen.",
+      "Every calculation is unique to your birth data and cannot be generalised to others."
+    )}</p>
 
     <div style="background:#F7F5F0;border-left:3px solid #E5E0D8;padding:10px 14px;">
-      <p style="font-family:'Inter',sans-serif;font-size:8.5pt;line-height:1.65;color:#6B6560;font-style:italic;">Dit rapport is een persoonlijk werkdocument bedoeld voor zelfreflectie en bewustwording. Het is geen vervanging voor medisch, psychologisch, financieel of juridisch advies. Faculty of Human Design aanvaardt geen aansprakelijkheid voor beslissingen genomen op basis van de inhoud van dit rapport.</p>
+      <p style="font-family:'Inter',sans-serif;font-size:8.5pt;line-height:1.65;color:#6B6560;font-style:italic;">${ui(lang,
+        "Dit rapport is een persoonlijk werkdocument bedoeld voor zelfreflectie en bewustwording. Het is geen vervanging voor medisch, psychologisch, financieel of juridisch advies. Faculty of Human Design aanvaardt geen aansprakelijkheid voor beslissingen genomen op basis van de inhoud van dit rapport.",
+        "This report is a personal working document intended for self-reflection and awareness. It is not a substitute for medical, psychological, financial or legal advice. Faculty of Human Design accepts no liability for decisions made based on the contents of this report."
+      )}</p>
     </div>
   </div>
   <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "Volledig Human Design Rapport")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
   </div>
 </div>`;
