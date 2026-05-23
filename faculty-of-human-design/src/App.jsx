@@ -425,12 +425,6 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .price-box-amount { font-family:var(--font-serif); font-size:3.2rem; font-weight:300; color:white; line-height:1; }
 .price-box-period { font-size:.66rem; color:rgba(255,255,255,.36); margin-top:5px; margin-bottom:22px; }
 
-/* WAAROM EDITORIAL */
-.waarom-editorial { display:grid; grid-template-columns:1.15fr 1fr; gap:2px; border-radius:var(--radius-xl); overflow:hidden; box-shadow:var(--shadow-xl); min-height:540px; }
-.waarom-feature-pillar { position:relative; overflow:hidden; min-height:480px; }
-.waarom-sidebar { display:flex; flex-direction:column; gap:2px; }
-.waarom-sidebar-item { background:white; border:1px solid var(--border); flex:1; display:flex; flex-direction:column; }
-
 /* RESPONSIVE */
 @media (max-width:1100px) {
   .feature-split { grid-template-columns:1fr; }
@@ -476,9 +470,6 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .tab-scroll { padding:0 16px; }
   /* Feature content mobile padding */
   .feature-content { padding:48px 24px; }
-  /* Waarom editorial */
-  .waarom-editorial { grid-template-columns:1fr; box-shadow:none; border-radius:var(--radius-lg); }
-  .waarom-feature-pillar { min-height:320px; }
   /* Origin content */
   .origin-content { padding:72px 20px; }
   /* Sub-card stacking */
@@ -2628,46 +2619,35 @@ function HomePage({go}){
         </div>
       </div>
 
-      {/* ── WAAROM ANDERS — editorial asymmetric ─────────────────────────── */}
-      <section className="section bg-white">
+      {/* ── WAAROM ANDERS — 3 visual pillars ─────────────────────────────── */}
+      <section className="section-md bg-white">
         <div className="container">
-          <div style={{marginBottom:56,maxWidth:520}}>
-            <div className="label" style={{marginBottom:12}}>{t("home.waaromLabel")}</div>
-            <h2 className="h2">{t("home.waaromTitle")}</h2>
+          <div className="text-center" style={{marginBottom:52}}>
+            <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
+            <h2 className="h2" style={{marginBottom:0}}>{t("home.waaromTitle")}</h2>
           </div>
-          <div className="waarom-editorial">
-            {/* Feature pillar — Ibiza left */}
-            <div className="waarom-feature-pillar ph">
-              <img src={IMGS.w_ibiza} alt="Es Vedrà, Ibiza" loading="lazy" style={{objectPosition:"center 40%"}}/>
-              <div style={{position:"absolute",inset:0,background:"linear-gradient(to top,rgba(12,10,23,.9) 0%,rgba(12,10,23,.1) 55%,transparent 100%)"}}/>
-              <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"44px 40px"}}>
-                <div className="label-light" style={{marginBottom:12}}>Est. 2014</div>
-                <h3 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.5rem,2.8vw,2.1rem)",fontWeight:300,color:"white",lineHeight:1.1,marginBottom:14}}>{LANG==="en"?"Founded on the island where it began":"Opgericht op het eiland waar het begon"}</h3>
-                <p style={{fontSize:".88rem",fontWeight:300,color:"rgba(255,255,255,.5)",lineHeight:1.78,maxWidth:340}}>{LANG==="en"?"Founded in 2014 on Ibiza — the island where Ra Uru Hu received the Human Design system in 1987.":"Opgericht in 2014 op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving."}</p>
-              </div>
-            </div>
-            {/* Two pillars stacked — right */}
-            <div className="waarom-sidebar">
-              {(LANG==="en"?[
-                [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris — the professional standard for exact planetary positions to the degree. No rounded tables, no averages."],
-                [IMGS.w_depth,"In-depth analysis","40+ pages","No bullet points, no generic texts. Extensive paragraphs tailored to your unique combination of Type, Authority and Profile."],
-              ]:[
-                [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — de professionele standaard voor exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
-                [IMGS.w_depth,"Diepgaande analyse","40+ pagina's","Geen bulletpoints, geen generieke teksten. Uitgebreide alinea's afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
-              ]).map(([img,title,badge,desc])=>(
-                <div className="waarom-sidebar-item" key={title}>
-                  <div className="ph" style={{height:220,flexShrink:0}}>
-                    <img src={img} alt={title} loading="lazy"/>
-                    <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 40%,rgba(12,10,23,.48) 100%)"}}/>
-                  </div>
-                  <div style={{padding:"28px 32px",flex:1}}>
-                    <div style={{fontSize:".57rem",fontWeight:600,letterSpacing:".15em",textTransform:"uppercase",color:"var(--gold)",marginBottom:10}}>{badge}</div>
-                    <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:10,lineHeight:1.2}}>{title}</h4>
-                    <p style={{fontSize:".875rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{desc}</p>
-                  </div>
+          <div className="grid-3">
+            {(LANG==="en"?[
+              [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris — the professional standard for exact planetary positions to the degree. No rounded tables, no averages."],
+              [IMGS.w_depth,    "In-depth analysis",     "40+ pages",      "No bullet points, no generic texts. Extensive paragraphs tailored to your unique combination of Type, Authority and Profile."],
+              [IMGS.w_ibiza,    "Ibiza as origin",       "Est. 2014",      "Founded on the island where Ra Uru Hu received the Human Design system in 1987. Every report carries the clarity of that origin."],
+            ]:[
+              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — de professionele standaard voor exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
+              [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide alinea's afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
+              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Elk rapport draagt de helderheid van die oorsprong."],
+            ]).map(([img,title,badge,desc])=>(
+              <div className="waarom-card" key={title}>
+                <div className="waarom-card-img">
+                  <img src={img} alt={`Faculty of Human Design — ${title}`} loading="lazy"/>
+                  <div className="ov-grad-t"/>
+                  <div className="waarom-card-badge">{badge}</div>
                 </div>
-              ))}
-            </div>
+                <div className="waarom-card-body">
+                  <h4 className="waarom-card-title">{title}</h4>
+                  <p className="body-sm">{desc}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -2790,31 +2770,32 @@ function HomePage({go}){
       {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
       <section className="section bg-white" style={{position:"relative"}}>
         <div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none"}}>
-          <img src={IMGS.milkyway} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%",opacity:.06,filter:"grayscale(40%) saturate(1.4)"}}/>
-          <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%, rgba(247,245,240,0) 30%, rgba(247,245,240,.9) 100%)"}}/>
+          <img src={IMGS.milkyway} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%",opacity:.07,filter:"grayscale(40%) saturate(1.4)"}}/>
+          <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%, rgba(247,245,240,0) 30%, rgba(247,245,240,.85) 100%)"}}/>
         </div>
-        <div className="container-md" style={{position:"relative",zIndex:1}}>
-          <div style={{marginBottom:72}}>
-            <div className="label" style={{marginBottom:12}}>{t("home.testimonialsLabel")}</div>
-            <h2 className="h2" style={{maxWidth:480}}>{t("home.testimonialsTitle")}</h2>
+        <div className="container" style={{position:"relative",zIndex:1}}>
+          <div className="text-center" style={{marginBottom:56}}>
+            <div className="label" style={{marginBottom:14}}>{t("home.testimonialsLabel")}</div>
+            <h2 className="h2">{t("home.testimonialsTitle")}</h2>
           </div>
-          <div className="grid-2" style={{gap:64}}>
+          <div className="grid-3">
             {(lang==="en"?[
-              ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report"],
-              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report"],
+              ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report","Something in me settled"],
+              ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report","More understanding in one evening"],
+              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report","Read in a single breath"],
             ]:[
-              ["Ik voelde me eindelijk emotioneel erkend in plaats van geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Volledig Rapport"],
-              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport"],
-            ]).map(([q,n,r])=>(
-              <div key={n} style={{position:"relative",paddingTop:40}}>
-                <div style={{position:"absolute",top:0,left:-8,fontFamily:"var(--font-serif)",fontSize:"5.5rem",lineHeight:1,color:"var(--gold)",opacity:.13,fontStyle:"italic",pointerEvents:"none",userSelect:"none"}}>"</div>
-                <div className="stars" style={{marginBottom:22}}>★★★★★</div>
-                <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.05rem,1.8vw,1.28rem)",fontStyle:"italic",color:"var(--text)",lineHeight:1.82,marginBottom:32}}>{q}</div>
-                <div style={{display:"flex",gap:14,alignItems:"center"}}>
-                  <div style={{width:28,height:1,background:"var(--gold)",opacity:.5,flexShrink:0}}/>
+              ["Ik voelde me eindelijk emotioneel erkend in plaats van geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Volledig Rapport","Iets in mij raakte op zijn plek"],
+              ["Wij hadden al jaren moeite om elkaar te begrijpen. Het rapport noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relatierapport","Meer begrip in één avond"],
+              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport","Gelezen in één adem"],
+            ]).map(([q,n,r,result])=>(
+              <div className="tcard" key={n}>
+                <div className="stars" style={{marginBottom:20}}>★★★★★</div>
+                <div className="tcard-quote">{q}</div>
+                <div style={{display:"flex",gap:10,alignItems:"center",marginTop:20}}>
+                  <div style={{width:20,height:1,background:"var(--gold)",opacity:.6,flexShrink:0}}/>
                   <div>
-                    <div style={{fontSize:".68rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text)"}}>{n}</div>
-                    <div style={{fontSize:".6rem",color:"var(--gold)",marginTop:3}}>{r}</div>
+                    <div className="tcard-author">{n}</div>
+                    <div className="tcard-report">{r}</div>
                   </div>
                 </div>
               </div>
@@ -2867,6 +2848,7 @@ function HomePage({go}){
             <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>
               {t("home.ctaBtn")}
             </button>
+            <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>{t("home.ctaBtnSecondary")}</button>
           </div>
           <TrustStrip light/>
         </div>
