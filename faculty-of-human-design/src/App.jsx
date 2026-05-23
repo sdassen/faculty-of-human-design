@@ -87,7 +87,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* TYPOGRAPHY */
 .h1 { font-family:var(--font-serif); font-size:clamp(2.4rem,5.5vw,4rem); font-weight:300; line-height:1.08; }
 .h1-hero { font-family:var(--font-serif); font-size:clamp(3.2rem,9vw,6.4rem); font-weight:300; line-height:1.08; color:white; letter-spacing:-.02em; }
-.h2 { font-family:var(--font-serif); font-size:clamp(1.9rem,3.8vw,2.95rem); font-weight:300; line-height:1.12; }
+.h2 { font-family:var(--font-serif); font-size:clamp(1.9rem,3.8vw,2.95rem); font-weight:300; line-height:1.12; color:var(--text); }
 .h3 { font-family:var(--font-serif); font-size:clamp(1.35rem,2.5vw,1.9rem); font-weight:400; line-height:1.2; }
 .label { font-size:.6rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase; color:var(--gold); }
 .label-light { font-size:.6rem; font-weight:500; letter-spacing:.17em; text-transform:uppercase; color:rgba(201,168,92,.75); }
@@ -100,10 +100,10 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .section { padding:112px 32px; }
 .section-md { padding:88px 32px; }
 .section-sm { padding:64px 32px; }
-.section.bg-white { background:var(--white); }
-.section.bg-muted { background:var(--muted); }
-.section.bg-dark { background:var(--dark); }
-.section.bg-cosmos { background:var(--cosmos); }
+.section.bg-white, .section-md.bg-white, .section-sm.bg-white { background:var(--white); }
+.section.bg-muted, .section-md.bg-muted, .section-sm.bg-muted { background:var(--muted); }
+.section.bg-dark, .section-md.bg-dark, .section-sm.bg-dark { background:var(--dark); }
+.section.bg-cosmos, .section-md.bg-cosmos, .section-sm.bg-cosmos { background:var(--cosmos); }
 .container { max-width:1240px; margin:0 auto; width:100%; }
 .container-sm { max-width:760px; margin:0 auto; width:100%; }
 .container-md { max-width:960px; margin:0 auto; width:100%; }
@@ -242,6 +242,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .nav-link { font-size:.78rem; font-weight:400; color:var(--text-muted); padding:8px 14px; border-radius:var(--radius-sm); transition:all 150ms; cursor:pointer; }
 .nav-link:hover, .nav-link.active { color:var(--brand); background:rgba(61,44,94,.06); }
 .mobile-nav { display:none; }
+.nav-cta-wrap { display:flex; align-items:center; gap:8px; }
 .mobile-menu { position:fixed; inset:0; background:white; z-index:300; padding:24px; display:flex; flex-direction:column; gap:8px; padding-top:88px; }
 .mobile-menu-link { font-size:1.1rem; font-weight:300; color:var(--text); padding:16px 0; border-bottom:1px solid var(--border); cursor:pointer; }
 .menu-btn { background:none; border:none; padding:8px; color:var(--text); }
@@ -407,6 +408,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* SUB CARD */
 .sub-card { background:linear-gradient(135deg,var(--brand) 0%,var(--brand-deep) 100%); border-radius:var(--radius-xl); padding:48px; color:white; position:relative; overflow:hidden; }
 .sub-card::before { content:""; position:absolute; top:-40%; right:-8%; width:65%; height:170%; background:radial-gradient(ellipse, rgba(201,168,92,.05) 0%, transparent 60%); pointer-events:none; }
+.sub-card-body { position:relative; z-index:1; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:36px; }
 .sub-price { font-family:var(--font-serif); font-size:3rem; font-weight:300; color:white; line-height:1; }
 .sub-price-period { font-size:.78rem; color:rgba(255,255,255,.45); margin-top:5px; }
 
@@ -455,6 +457,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .upsell-grid { grid-template-columns:1fr; }
   .report-summary-grid { grid-template-columns:1fr 1fr; }
   .footer-top { grid-template-columns:1fr; gap:28px; }
+  .footer-desc { text-align:center; max-width:100%; }
   .footer-bottom { flex-direction:column; align-items:flex-start; gap:16px; }
   .footer-trust { flex-wrap:wrap; gap:10px; }
   .stat-row-inner { flex-wrap:wrap; }
@@ -474,6 +477,8 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .origin-content { padding:72px 20px; }
   /* Sub-card stacking */
   .sub-card { padding:36px 24px; }
+  .sub-card-body { flex-direction:column; align-items:center; text-align:center; }
+  .sub-card-body > div:first-child { max-width:100%; }
   /* Portrait image collapses to landscape on mobile */
   .portrait-img { aspect-ratio:16/9; max-height:320px; }
   /* Method steps: keep row layout, explicit left-align */
@@ -1917,7 +1922,7 @@ function Nav({page,go,menuOpen,setMenuOpen}){
               <span key={id} className={"nav-link"+(page===id||page.startsWith("rapport-")&&id==="rapporten"?" active":"")} onClick={()=>go(id)}>{label}</span>
             ))}
           </div>
-          <div style={{display:"flex",gap:8,alignItems:"center"}} className="nav-cta-wrap">
+          <div className="nav-cta-wrap">
             {/* Language switcher */}
             <div style={{display:"flex",gap:4,marginRight:4}}>
               {["nl","en"].map(lng=>(
@@ -2622,9 +2627,12 @@ function HomePage({go}){
       {/* ── WAAROM ANDERS — 3 visual pillars ─────────────────────────────── */}
       <section className="section-md bg-white">
         <div className="container">
-          <div className="text-center" style={{marginBottom:52}}>
-            <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
-            <h2 className="h2" style={{marginBottom:0}}>{t("home.waaromTitle")}</h2>
+          <div style={{marginBottom:52,display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:20}}>
+            <div>
+              <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>{t("home.waaromTitle")}</h2>
+            </div>
+            <div style={{width:48,height:1,background:"var(--gold)",opacity:.5,flexShrink:0,marginBottom:8}}/>
           </div>
           <div className="grid-3">
             {(LANG==="en"?[
@@ -2707,10 +2715,12 @@ function HomePage({go}){
           <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(247,245,240,0) 0%,rgba(247,245,240,.6) 60%,rgba(247,245,240,1) 100%)"}}/>
         </div>
         <div className="container" style={{position:"relative",zIndex:1}}>
-          <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
-            <h2 className="h2" style={{marginBottom:16}}>{t("rapporten.title")}</h2>
-            <p className="body-md" style={{maxWidth:480,margin:"0 auto"}}>{t("rapporten.sub")}</p>
+          <div style={{marginBottom:56,display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:24}}>
+            <div>
+              <div className="label" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:480}}>{t("rapporten.title")}</h2>
+            </div>
+            <p className="body-md" style={{maxWidth:320,marginBottom:4,textAlign:"right"}}>{t("rapporten.sub")}</p>
           </div>
           <div className="grid-3">
             {REPORTS.filter(r=>["relatie_liefde","jaar","loopbaan"].includes(r.id)).map(r=>(
@@ -2729,11 +2739,11 @@ function HomePage({go}){
         <div className="origin-section-bg">
           <img src="/ibiza-es-vedra.jpg" alt="Es Vedrà bij schemering — Ibiza, de geboorteplaats van Human Design" loading="lazy"/>
         </div>
-        <div className="origin-content">
-          <div>
+        <div className="origin-content" style={{gridTemplateColumns:"1fr",textAlign:"center"}}>
+          <div style={{maxWidth:620,margin:"0 auto"}}>
             <div className="label-light" style={{marginBottom:16}}>{LANG==="en"?"The institute":"Het instituut"}</div>
             <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>{LANG==="en"?"Founded on the island":"Opgericht op het eiland"}<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.45)"}}>{LANG==="en"?"where it began":"waar het begon"}</em></h2>
-            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,maxWidth:460,marginBottom:28}}>{LANG==="en"?"The Faculty of Human Design was founded in 2014 on Ibiza — the island where Ra Uru Hu received the Human Design system in 1987. Exact astronomical calculation. Personal, in-depth analysis.":"De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse."}</p>
+            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,marginBottom:28}}>{LANG==="en"?"The Faculty of Human Design was founded in 2014 on Ibiza — the island where Ra Uru Hu received the Human Design system in 1987. Exact astronomical calculation. Personal, in-depth analysis.":"De Faculty of Human Design is in 2014 opgericht op Ibiza — het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse."}</p>
             <button className="btn btn-ghost" onClick={()=>go("over")}>{LANG==="en"?"About our institute":"Over ons instituut"}</button>
             <div className="origin-stat">
               {(LANG==="en"?[["2014","Founded"],["2,400+","Reports"],["4.9","Rating"]]:[["2014","Opgericht"],["2.400+","Rapporten"],["4.9","Beoordeling"]]).map(([n,l])=>(
@@ -2744,7 +2754,6 @@ function HomePage({go}){
               ))}
             </div>
           </div>
-          <div/>
         </div>
       </div>
 
@@ -2811,7 +2820,7 @@ function HomePage({go}){
             <div className="sub-card-moon">
               <img src={IMGS.sub_moon} alt="" loading="lazy"/>
             </div>
-            <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:36}}>
+            <div className="sub-card-body">
               <div style={{maxWidth:520}}>
                 <div className="label-light" style={{marginBottom:14}}>{LANG==="en"?"Monthly subscription":"Maandabonnement"}</div>
                 <h2 className="h2" style={{color:"white",marginBottom:14}}>{t("report.monthlyOffer")}</h2>

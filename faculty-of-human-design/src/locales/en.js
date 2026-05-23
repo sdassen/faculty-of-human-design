@@ -307,7 +307,7 @@ export default {
     contact: "Contact",
     safePayment: "Secure payment",
     personalPdf: "Personal PDF",
-    directDelivery: "Direct delivery",
+    directDelivery: "Delivered within 1 business day",
     email: "info@facultyhd.com",
     terms: "Terms & Privacy",
     ssl: "SSL secured",

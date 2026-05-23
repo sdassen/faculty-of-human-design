@@ -307,7 +307,7 @@ export default {
     contact: "Contact",
     safePayment: "Veilige betaling",
     personalPdf: "Persoonlijke PDF",
-    directDelivery: "Direct beschikbaar",
+    directDelivery: "Bezorgd binnen 1 werkdag",
     email: "info@facultyhd.com",
     terms: "Algemene Voorwaarden & Privacy",
     ssl: "SSL beveiligd",
