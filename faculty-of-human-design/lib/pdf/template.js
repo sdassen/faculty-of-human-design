@@ -391,12 +391,50 @@ function buildCoverPage(order) {
 }
 
 // ─── PAGE: TABLE OF CONTENTS ──────────────────────────────────────────────────
-function buildTOCPage(sections, order) {
+function buildTOCPage(sections, order, hasChart, hasSvg) {
   const lang = order.language || "nl";
   const tocLabel = ui(lang, "INHOUD", "CONTENTS");
+
+  // ── Approximate page number calculation ─────────────────────────────────
+  // Fixed pages before the first section:
+  //   Cover(1) + Intro(1) + HowToRead(1) + ExecSummary(hasChart?1:0)
+  //   + Methodology(1) + TOC(1) + Profile(hasChart?2:0) + Bodygraph(hasChart&&hasSvg?1:0)
+  // Profile can run long; we count it as 2 pages for a typical chart.
+  const fixedPages = 1 + 1 + 1 + (hasChart ? 1 : 0) + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0);
+
+  const midIdx  = sections.length > 3 ? Math.floor(sections.length / 2) : -1;
+  const lastIdx = sections.length > 1 ? sections.length - 1 : -1;
+
+  let runningPage = fixedPages + 1; // first section starts on this page
+
+  const sectionStartPages = sections.map(function(s, i) {
+    // Transition pages are inserted *before* midIdx and lastIdx sections
+    if (i === midIdx || i === lastIdx) runningPage += 1;
+
+    const startPage = runningPage;
+
+    // Estimate pages consumed by this section:
+    //   1 (main page, always)
+    // + 1 if adem breath page is present
+    // + 1 if section has closing content (valkuilen / praktijk / dezeWeek / reflectievragen)
+    let pagesThisSection = 1;
+    if (s.adem && String(s.adem).trim().length > 0) pagesThisSection += 1;
+    const hasClosing = (
+      (Array.isArray(s.valkuilen)       && s.valkuilen.length > 0)       ||
+      (Array.isArray(s.praktijk)        && s.praktijk.length > 0)        ||
+      (Array.isArray(s.dezeWeek)        && s.dezeWeek.length > 0)        ||
+      (Array.isArray(s.reflectievragen) && s.reflectievragen.length > 0)
+    );
+    if (hasClosing) pagesThisSection += 1;
+    // Text-path sections (legacy): no closing metadata, assume 1 page
+    runningPage += pagesThisSection;
+    return startPage;
+  });
+
   const items = sections.map(function(s, i) {
+    const pageNum = sectionStartPages[i];
     return `<div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;">
-      <span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">${String(i + 1).padStart(2, "0")}</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">${pageNum}</span>
       <span style="flex:1;height:0.4px;background:#E5E0D8;max-width:0;"></span>
       <span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;letter-spacing:0.01em;">${esc(s.title)}</span>
     </div>`;
@@ -1004,6 +1042,19 @@ const GATE_REF = {
   64: { nl: "Verwarring",               en: "Confusion" },
 };
 
+// ─── CHILD-SAFE GATE OVERRIDES ───────────────────────────────────────────────
+// For kinderrapport (report_id="kind"), replace adult gate labels with child-appropriate names.
+const CHILD_GATE_OVERRIDE = {
+  nl: { 59: "Verbinding & Creatie", 5: "Geduld in Groei", 34: "Sterkte & Veerkracht" },
+  en: { 59: "Connection & Creation", 5: "Growing Patience", 34: "Strength & Resilience" },
+};
+
+function isChildReport(order) {
+  const rid = (order.report_id || "").toLowerCase();
+  const rtitle = (order.report_title || "").toLowerCase();
+  return rid === "kind" || /kinderrapport|child\s*report/.test(rtitle);
+}
+
 // ─── PAGE: GATE APPENDIX ──────────────────────────────────────────────────────
 function buildGateAppendixPage(order) {
   const lang  = order.language || "nl";
@@ -1012,16 +1063,28 @@ function buildGateAppendixPage(order) {
 
   if (!gates.length) return "";
 
+  const childReport = isChildReport(order);
+  const childOverrides = CHILD_GATE_OVERRIDE[lang === "en" ? "en" : "nl"] || {};
+
   const headerLabel = ui(lang, "APPENDIX", "APPENDIX");
-  const pageTitle   = ui(lang, "Jouw actieve poorten", "Your active gates");
+  const pageTitle   = ui(lang,
+    childReport ? "Actieve poorten van je kind" : "Jouw actieve poorten",
+    childReport ? "Your child's active gates" : "Your active gates"
+  );
   const introText   = ui(lang,
-    "Onderstaande poorten zijn actief in jouw chart — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van jouw ontwerp.",
-    "The gates below are active in your chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your design."
+    childReport
+      ? "Onderstaande poorten zijn actief in het chart van je kind — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van het ontwerp van je kind."
+      : "Onderstaande poorten zijn actief in jouw chart — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van jouw ontwerp.",
+    childReport
+      ? "The gates below are active in your child's chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your child's design."
+      : "The gates below are active in your chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your design."
   );
 
   const gateCards = gates.map(function(g) {
     const ref  = GATE_REF[g] || { nl: "—", en: "—" };
-    const name = lang === "en" ? ref.en : ref.nl;
+    // For child reports, override adult gate labels with child-appropriate names
+    const baseLabel = lang === "en" ? ref.en : ref.nl;
+    const name = (childReport && childOverrides[g]) ? childOverrides[g] : baseLabel;
     return `<div style="padding:10px 14px;border:0.5px solid #E5E0D8;background:#FFFFFF;break-inside:avoid;">
       <div style="font-family:'Cormorant Garamond',serif;font-size:18pt;font-weight:600;color:#C9A85C;line-height:1;">${g}</div>
       <div style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:400;color:#1A1715;margin-top:4px;line-height:1.35;">${esc(name)}</div>
@@ -1107,7 +1170,7 @@ ${buildIntroPage(order)}
 ${buildHowToReadPage(order)}
 ${hasChart ? buildExecutiveSummaryPage(order) : ""}
 ${buildMethodologyPage(order)}
-${buildTOCPage(sections, order)}
+${buildTOCPage(sections, order, hasChart, !!svgBodygraph)}
 ${hasChart ? buildProfilePage(order) : ""}
 ${hasChart && svgBodygraph ? buildBodygraphPage(svgBodygraph, order) : ""}
 ${sectionPagesWithTransition}

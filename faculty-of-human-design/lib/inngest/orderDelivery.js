@@ -271,11 +271,19 @@ KRITIEKE PERSPECTIEF REGEL:
 - Nooit "je" om naar het kind te spreken, nooit het kind als "je"
 - Voorbeeld GOED: "Je kind draagt een natuurlijke assertiviteit waar je misschien van opkijkt."
 - Voorbeeld FOUT: "Je bent ontworpen met snel inzicht."
-- Voorbeeld GOED: "Wat jij misschien ziet als eigenwijs, is eigenlijk de manier waarop je kind zijn grens test."
+- Voorbeeld GOED: "Wat jij misschien ziet als eigenwijs, is eigenlijk de manier waarop je kind zijn of haar grens test."
 - Voorbeeld FOUT: "Je voelt je vaak misverstand."
 
+GENDERNEUTRAAL TAALGEBRUIK — ABSOLUUT VERPLICHT:
+Gebruik ALTIJD genderneutraal taalgebruik voor het kind. Gebruik NOOIT hij/hem/zijn of zij/haar om naar het kind te verwijzen.
+Gebruik in plaats daarvan: "je kind", "jouw kind", de voornaam van het kind, "dit jonge [Type]", "dit kind", "het kind".
+Wanneer je de voornaam hebt: gebruik die. Wanneer niet: gebruik "je kind".
+FOUT: "Hij ervaart dit als overweldigend." → GOED: "Je kind ervaart dit als overweldigend."
+FOUT: "Ze heeft een sterke sacraalenergie." → GOED: "[voornaam kind] heeft een sterke sacraalenergie."
+FOUT: "zijn autoriteit", "haar profiel" → GOED: "de autoriteit van je kind", "het profiel van [voornaam kind]"
+
 WAAROM JE DIT SCHRIJFT:
-Je kind is complex. Jullie relatie is voorzichtig werk. Deze gids helpt jou JE KIND ZIEN — niet om het te veranderen, maar om de waarheid in hem/haar te herkennen.
+Je kind is complex. Jullie relatie is voorzichtig werk. Deze gids helpt jou JE KIND ZIEN — niet om het te veranderen, maar om de waarheid in je kind te herkennen.
 
 WAT DE OUDER MOET VOELEN:
 "Ah. Daarom gedraagt mijn kind zich zo." Diep gezien. Erkend dat dit moeilijk is. Rustiger na het lezen dan ervoor.
@@ -300,9 +308,10 @@ VERBODEN TAAL — deze verraden AI-herkomst OF volwassenen-perspectief:
 KINDERWAARDIGE POORTLABELS:
 Bepaalde poorten hebben volwassen labels die ongepast zijn voor kindrapporten:
 - Poort 5: NIET "Geduld" → "Geduld in Groei"
-- Poort 59: NIET "Seksualiteit" → "Intimiteit & Verbinding"
+- Poort 59: NIET "Seksualiteit" → "Verbinding & Creatie"
 - Poort 34: NIET "Kracht" → "Sterkte & Veerkracht"
 Vervang automatisch volwassen labels met kind-vriendelijke varianten.
+Het woord "seksualiteit" mag NERGENS in een kindrapport verschijnen — ook niet in context of als uitleg.
 
 EMOTIONELE TAAL — essentieel:
 Schrijf wat je ziet uit het perspectief van een volwassene die een kind probeert te begrijpen, niet uit het perspectief van het kind zelf.
@@ -311,10 +320,10 @@ Gebruik: "Je kind voelt...", "Wat jij misschien ziet...", "Het kan moeilijk zijn
 MINI-SCÈNES — de sterkste momenten:
 Schrijf korte, concrete geleefde momenten TUSSEN JOUW EN JE KIND.
 Voorbeelden van gewenste stijl:
-"Je realiseert pas hoe moe je kind is als hij eindelijk alleen in zijn kamer zit."
-"Soms begrijp je pas wat je kind voelde nadat hij al naar bed is gegaan."
-"Je merkt op dat je kind zwaarder uit een gesprek komt dan erin ging, zonder dat hij zelf weet waarom."
-"Je ziet je kind iets afslaan, terwijl zijn lichaam iets anders voelt."
+"Je realiseert pas hoe moe je kind is als het eindelijk alleen in de eigen kamer zit."
+"Soms begrijp je pas wat je kind voelde nadat het al naar bed is gegaan."
+"Je merkt op dat je kind zwaarder uit een gesprek komt dan erin ging, zonder zelf te weten waarom."
+"Je ziet je kind iets afslaan, terwijl het lichaam iets anders voelt."
 "Je kind loopt een kamer in en voelt al de spanning voordat iemand iets heeft gezegd."
 Meer van dit soort momenten. Minder uitleg. Jij vult de betekenis in.
 
@@ -323,6 +332,8 @@ Maak waarnemingen voelbaar. Niet conceptueel uitleggen — beschrijven wat je zi
 Gebruik: fysieke signalen, zenuwstelsel-bewustzijn, verzwakking, uitputting, atmosfeer.
 "Je ziet dat je kind zich intrekt wanneer..."
 "Het lichaam van je kind geeft signalen die..."
+"[voornaam kind] trekt zich terug wanneer de druk oploopt."
+"Je merkt het in de schouders, de adem, de manier waarop je kind de kamer uitloopt."
 
 TEASER:
 Eén zin van max 18 woorden die jou (de ouder) stil doet staan. Iets dat je wil onderstrepen. Onthulling, niet samenvatting.
@@ -371,7 +382,7 @@ OUTPUT FORMAT — geldig JSON. Geen markdown, geen tekst buiten het JSON:
     "Chartfeit 3 (3–5 items)"
   ],
   "kern": [
-    {"subkop": "Hoe jij dit ziet — max 8 woorden", "paragraphs": ["Een moment tussen jou en je kind.", "Wat dit betekent voor zijn/haar ontwikkeling."]},
+    {"subkop": "Hoe jij dit ziet — max 8 woorden", "paragraphs": ["Een moment tussen jou en je kind.", "Wat dit betekent voor de ontwikkeling van je kind."]},
     {"subkop": "Tweede inzicht (optioneel)", "paragraphs": ["Waarheid over je kind, vanuit jouw perspectief."]}
   ],
   "valkuilen": ["Patroon dat je misschien herkent", "Patroon 2"],
@@ -398,11 +409,19 @@ CRITICAL PERSPECTIVE RULE:
 - Never speak directly to the child as "you," never treat the child as "you"
 - Example RIGHT: "Your child carries a natural assertiveness that might surprise you."
 - Example WRONG: "You are designed with quick insight."
-- Example RIGHT: "What you might see as stubbornness is actually how your child tests his/her boundary."
+- Example RIGHT: "What you might see as stubbornness is actually how your child tests their boundary."
 - Example WRONG: "You often feel misunderstood."
 
+GENDER-NEUTRAL LANGUAGE — STRICTLY REQUIRED:
+Always use gender-neutral language when referring to the child. NEVER use he/him/his or she/her to refer to the child.
+Use instead: "your child", the child's first name, "this young [Type]", "this child", "the child".
+When you have the first name: use it. When not: use "your child".
+WRONG: "He finds this overwhelming." → RIGHT: "Your child finds this overwhelming."
+WRONG: "She has strong sacral energy." → RIGHT: "[child's name] has strong sacral energy."
+WRONG: "his authority", "her profile" → RIGHT: "your child's authority", "[child's name]'s profile"
+
 WHY YOU'RE READING THIS:
-Your child is complex. Your relationship is delicate work. This guide helps you SEE YOUR CHILD — not to change him/her, but to recognize the truth in him/her.
+Your child is complex. Your relationship is delicate work. This guide helps you SEE YOUR CHILD — not to change them, but to recognize the truth in your child.
 
 WHAT THE PARENT MUST FEEL:
 "Ah. That's why my child acts that way." Deeply seen. Recognized that this is difficult. Quieter after reading than before.
@@ -427,9 +446,10 @@ FORBIDDEN LANGUAGE — these reveal AI origin OR adult perspective:
 CHILD-APPROPRIATE GATE LABELS:
 Certain gates have adult labels that are inappropriate for child reports:
 - Gate 5: NOT "Patience" → "Growing Patience"
-- Gate 59: NOT "Sexuality" → "Intimacy & Connection"
+- Gate 59: NOT "Sexuality" → "Connection & Creation"
 - Gate 34: NOT "Power" → "Strength & Resilience"
 Automatically replace adult labels with child-friendly variants.
+The word "sexuality" must NEVER appear anywhere in a child report — not in context, not as explanation.
 
 EMOTIONAL LANGUAGE — essential:
 Write what you observe from the perspective of an adult trying to understand a child, not from the child's own perspective.
@@ -438,10 +458,10 @@ Use: "Your child feels...", "What you might notice...", "It can be difficult for
 MINI-SCENES — the strongest moments:
 Write short, concrete lived moments BETWEEN YOU AND YOUR CHILD.
 Examples of desired style:
-"You only realize how tired your child is once he's finally alone in his room."
-"Sometimes you understand what your child felt only after he's already in bed."
-"You notice that your child leaves a conversation heavier than he entered it, without knowing why."
-"You watch your child decline something while his body signals something else."
+"You only realize how tired your child is once they're finally alone in their room."
+"Sometimes you understand what your child felt only after they're already in bed."
+"You notice that your child leaves a conversation heavier than they entered it, without knowing why."
+"You watch your child decline something while their body signals something else."
 "Your child walks into a room and feels the tension before anyone has spoken."
 More of these moments. Less explanation. You fill in the meaning.
 
@@ -498,7 +518,7 @@ OUTPUT FORMAT — valid JSON only. No markdown, no text outside JSON:
     "Chart fact 3 (3–5 items)"
   ],
   "kern": [
-    {"subkop": "How you see this — max 8 words", "paragraphs": ["A moment between you and your child.", "What this means for his/her development."]},
+    {"subkop": "How you see this — max 8 words", "paragraphs": ["A moment between you and your child.", "What this means for your child's development."]},
     {"subkop": "Second insight (optional)", "paragraphs": ["Truth about your child, from your perspective."]}
   ],
   "valkuilen": ["Pattern you might recognize", "Pattern 2"],
@@ -706,7 +726,7 @@ After that: silence, logo, end.`;
 const CHILD_GATE_LABELS = {
   // Gate 5: Patience → Growing Patience
   "5": "Geduld in Groei",
-  "59": "Intimiteit & Verbinding",  // Sexuality → Intimacy & Connection
+  "59": "Verbinding & Creatie",      // Sexuality → Connection & Creation (child-safe)
   "34": "Sterkte & Veerkracht",      // Power → Strength & Resilience
   "8": "Samenwerking & Dankbaarheid", // Contribution
   "31": "Invloed & Leiderschap",      // Leadership
@@ -715,7 +735,7 @@ const CHILD_GATE_LABELS = {
 
 const CHILD_GATE_LABELS_EN = {
   "5": "Growing Patience",
-  "59": "Intimacy & Connection",
+  "59": "Connection & Creation",   // Sexuality → Connection & Creation (child-safe)
   "34": "Strength & Resilience",
   "8": "Cooperation & Gratitude",
   "31": "Influence & Leadership",
