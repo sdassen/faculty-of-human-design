@@ -19,7 +19,7 @@
     }
   ],
   "functions": {
-    "api/**/*.js": {
+    "api/inngest.js": {
       "includeFiles": "lib/pdf/bodygraph-svg.cjs"
     }
   }
