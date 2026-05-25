@@ -3970,7 +3970,22 @@ function OverPage({go}){
 
 function ContactPage(){
   const[form,setForm]=useState({name:"",email:"",subject:"",msg:""});
+  const[status,setStatus]=useState(null); // null | "sending" | "ok" | "error"
+  const[errMsg,setErrMsg]=useState("");
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
+  const send=async()=>{
+    if(!form.name.trim()||!form.email.trim()||!form.msg.trim())return;
+    setStatus("sending");
+    try{
+      const res=await fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});
+      const data=await res.json();
+      if(!res.ok)throw new Error(data.error||"Onbekende fout");
+      setStatus("ok");
+    }catch(e){
+      setErrMsg(e.message);
+      setStatus("error");
+    }
+  };
   useSEO({
     title:"Contact — Faculty of Human Design",
     description:LANG==="en"?"Contact Faculty of Human Design. Questions about reports, orders or Human Design? We respond within 1 business day. Email: info@facultyhd.com":"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
@@ -4015,7 +4030,17 @@ function ContactPage(){
                 <div className="form-group"><label className="form-label">{t("contact.emailField")}</label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder={t("contact.emailPlaceholder")}/></div>
                 <div className="form-group"><label className="form-label">{t("contact.subjectLabel")}</label><input className="form-input" name="subject" value={form.subject} onChange={ch} placeholder={t("contact.subjectPlaceholder")}/></div>
                 <div className="form-group"><label className="form-label">{t("contact.msgLabel")}</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder={t("contact.msgPlaceholder")} style={{resize:"vertical",minHeight:110}}/></div>
-                <button className="btn btn-primary" onClick={()=>alert(t("contact.thankYou"))}>{t("contact.sendBtn")}</button>
+                {status==="ok"
+                  ? <div style={{background:"#F0FDF4",border:"1px solid #86EFAC",borderRadius:"var(--radius-md)",padding:"16px 20px",fontSize:".9rem",color:"#166534",lineHeight:1.6}}>
+                      ✓ &nbsp;{LANG==="en"?"Your message has been sent. We'll respond within 1 business day.":"Je bericht is verstuurd. We reageren binnen 1 werkdag."}
+                    </div>
+                  : <>
+                      <button className="btn btn-primary" onClick={send} disabled={status==="sending"||!form.name.trim()||!form.email.trim()||!form.msg.trim()}>
+                        {status==="sending"?(LANG==="en"?"Sending...":"Versturen..."):(t("contact.sendBtn"))}
+                      </button>
+                      {status==="error"&&<div style={{fontSize:".82rem",color:"#C62828",marginTop:6}}>{errMsg}</div>}
+                    </>
+                }
               </div>
             </div>
           </div>
