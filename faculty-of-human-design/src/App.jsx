@@ -1842,11 +1842,6 @@ function BlueprintPanel({chart,name,onCta}){
       </svg>
       <div className="cd-bp-lbl">{t("form.blueprintLabel")}</div>
       <Bodygraph chart={chart} name={name}/>
-      <div className="cd-bp-cta">
-        <button className="cd-pill" onClick={onCta}>
-          {t("form.chartCta")}
-        </button>
-      </div>
     </div>
   );
 }
