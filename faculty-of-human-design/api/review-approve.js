@@ -107,6 +107,32 @@ export default async function handler(req, res) {
     return res.status(404).send(page("Token niet gevonden", "Deze link bestaat niet of is verlopen.", "#C62828"));
   }
 
+  // needs_revision: allow approve (skip revision) or show feedback form again
+  if (order.status === "needs_revision") {
+    if (action === "approve") {
+      // Admin approves without revision — resume delivery workflow
+      try {
+        await inngest.send({ name: "app/order.approved", data: { orderId: order.id } });
+        return res.status(200).send(page(
+          "Rapport goedgekeurd ✓",
+          `Het rapport <strong>${escHtml(order.report_title)}</strong> voor <strong>${escHtml(order.customer_name)}</strong>
+           is goedgekeurd.<br><br>De klant ontvangt de download-email binnen enkele minuten.`,
+          "#2E7D32"
+        ));
+      } catch (e) {
+        return res.status(500).send(page("Fout", `Kon goedkeuring niet verzenden: ${escHtml(e.message)}`, "#C62828"));
+      }
+    }
+    if (action === "reject") {
+      // Show feedback form again
+      return res.status(200).send(feedbackForm({
+        token,
+        customerName: order.customer_name,
+        reportTitle:  order.report_title,
+      }));
+    }
+  }
+
   if (order.status !== "review_pending") {
     const msg = order.status === "delivered"
       ? "Dit rapport is al bezorgd bij de klant."
