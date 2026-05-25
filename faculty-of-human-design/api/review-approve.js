@@ -1,14 +1,17 @@
-// ─── ADMIN REVIEW — APPROVE / REJECT / REGENERATE ────────────────────────────
+// ─── ADMIN REVIEW — APPROVE / REJECT / REGENERATE + CONTACT FORM ─────────────
 // GET  /api/review-approve?token=<reviewToken>&action=approve|reject
 // POST /api/review-approve  body: token=<reviewToken>&feedback=<text>
+// POST /api/review-approve  body: contact=1&name=&email=&subject=&msg=
 //
-// Three flows:
+// Flows:
 // - approve:    fires "app/order.approved" → delivery workflow resumes
 // - reject:     sets status "needs_revision", shows feedback form
-// - POST:       stores feedback, fires "app/order.revision_requested"
+// - POST feedback: stores feedback, fires "app/order.revision_requested"
+// - POST contact: sends contact form email via Resend
 
 import { createClient } from "@supabase/supabase-js";
 import { inngest } from "../lib/inngest/client.js";
+import { Resend } from "resend";
 
 class _NoopWS {
   constructor() { this.readyState = 3; }
@@ -25,6 +28,42 @@ function getSupabase() {
 }
 
 export default async function handler(req, res) {
+
+  // ── POST: contact form ───────────────────────────────────────────────────
+  if (req.method === "POST" && req.body?.contact) {
+    const { name, email, subject, msg } = req.body;
+    if (!name?.trim() || !email?.trim() || !msg?.trim()) {
+      return res.status(400).json({ error: "Vul alle verplichte velden in." });
+    }
+    try {
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const { data, error: sendError } = await resend.emails.send({
+        from: "Faculty of Human Design <noreply@facultyhd.com>",
+        to: process.env.ADMIN_EMAIL || "stevendassen@gmail.com",
+        reply_to: email,
+        subject: `Contact: ${subject || "Bericht van " + name}`,
+        html: `<div style="font-family:Helvetica,Arial,sans-serif;max-width:600px;color:#1A1715;">
+          <div style="background:#1A1715;padding:20px 32px;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:rgba(201,168,92,.6);">FACULTY OF HUMAN DESIGN &nbsp;·&nbsp; CONTACT</div>
+          <div style="padding:32px;background:#fff;border:1px solid #E5E0D8;">
+            <p><strong>Naam:</strong> ${escHtml(name)}</p>
+            <p><strong>Email:</strong> <a href="mailto:${escHtml(email)}">${escHtml(email)}</a></p>
+            <p><strong>Onderwerp:</strong> ${escHtml(subject || "—")}</p>
+            <hr style="border:none;border-top:1px solid #E5E0D8;margin:16px 0;"/>
+            <div style="white-space:pre-wrap;line-height:1.8;">${escHtml(msg)}</div>
+            <div style="margin-top:24px;"><a href="mailto:${escHtml(email)}?subject=Re: ${escHtml(subject || "Jouw bericht")}" style="background:#3D2C5E;color:#fff;padding:12px 28px;border-radius:100px;font-size:13px;text-decoration:none;">Beantwoorden →</a></div>
+          </div>
+        </div>`,
+      });
+      if (sendError) {
+        console.error("[contact] Resend error:", sendError);
+        return res.status(500).json({ error: sendError.message || "Versturen mislukt." });
+      }
+      return res.status(200).json({ ok: true });
+    } catch (e) {
+      console.error("[contact] Exception:", e.message);
+      return res.status(500).json({ error: e.message || "Versturen mislukt. Probeer het opnieuw of mail direct naar info@facultyhd.com." });
+    }
+  }
 
   // ── POST: feedback form submission (regenerate) ──────────────────────────
   if (req.method === "POST") {
