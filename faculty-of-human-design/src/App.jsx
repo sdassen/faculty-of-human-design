@@ -695,7 +695,7 @@ function productLD(rpt) {
       "reviewCount": "2400",
       "bestRating": "5"
     },
-    "review": (rpt.reviews || []).slice(0, 3).map(([body, author]) => ({
+    "review": (Array.isArray(rpt.reviews) ? rpt.reviews : (rpt.reviews?.[LANG] || rpt.reviews?.nl || [])).slice(0, 3).map(([body, author]) => ({
       "@type": "Review",
       "reviewBody": body,
       "author": { "@type": "Person", "name": author },
@@ -747,11 +747,18 @@ const REPORTS = [
       nl:"### 1. Je Energetische Blauwdruk\n### 2. Type & Levensstrategie\n### 3. Autoriteit\n### 4. Profiel\n### 5. Gedefinieerde Centra\n### 6. Open Centra & Conditionering\n### 7. Actieve Kanalen\n### 8. Je Poorten\n### 9. Inkarnatie-Kruis\n### 10. Relaties & Verbinding\n### 11. Praktische Guidance 2026-2028\n### 12. Slotanalyse",
       en:"### 1. Your Energetic Blueprint\n### 2. Type & Life Strategy\n### 3. Authority\n### 4. Profile\n### 5. Defined Centers\n### 6. Open Centers & Conditioning\n### 7. Active Channels\n### 8. Your Gates\n### 9. Incarnation Cross\n### 10. Relationships & Connection\n### 11. Practical Guidance 2026-2028\n### 12. Closing Analysis",
     },
-    reviews:[
-      ["Ik had al eerder iets gelezen over Human Design maar dit rapport bracht het echt tot leven. De sectie over mijn open centra was confronterend en bevrijdend tegelijk — ik herkende zo veel conditionering die ik als 'mezelf' had aangenomen. Drie maanden later lees ik het nog steeds.","Marieke V., Amsterdam"],
-      ["Precies wat ik zocht. Geen vage spirituele teksten maar concrete analyse van wie ik ben en hoe ik het beste functioneer.","Thomas D., Antwerpen"],
-      ["Het stuk over mijn Inkarnatie-Kruis heeft me echt geraakt. Ik begrijp nu waarom bepaalde dingen in mijn leven steeds terugkomen. De schrijfstijl is ook prettig — persoonlijk, niet droog of technisch.","Sofie M., Utrecht"],
-    ],
+    reviews:{
+      nl:[
+        ["Ik had al eerder iets gelezen over Human Design maar dit rapport bracht het echt tot leven. De sectie over mijn open centra was confronterend en bevrijdend tegelijk — ik herkende zo veel conditionering die ik als 'mezelf' had aangenomen. Drie maanden later lees ik het nog steeds.","Marieke V., Amsterdam"],
+        ["Precies wat ik zocht. Geen vage spirituele teksten maar concrete analyse van wie ik ben en hoe ik het beste functioneer.","Thomas D., Antwerpen"],
+        ["Het stuk over mijn Inkarnatie-Kruis heeft me echt geraakt. Ik begrijp nu waarom bepaalde dingen in mijn leven steeds terugkomen. De schrijfstijl is ook prettig — persoonlijk, niet droog of technisch.","Sofie M., Utrecht"],
+      ],
+      en:[
+        ["I had read about Human Design before, but this report truly brought it to life. The section about my open centers was both confronting and liberating — I recognised so much conditioning I had assumed was just 'me'. Three months later I still read it.","Marieke V., Amsterdam"],
+        ["Exactly what I was looking for. No vague spiritual texts but concrete analysis of who I am and how I function best.","Thomas D., Antwerp"],
+        ["The section about my Incarnation Cross really moved me. I now understand why certain things keep returning in my life. The writing style is also pleasant — personal, not dry or technical.","Sofie M., Utrecht"],
+      ],
+    },
   },
   {
     id:"relatie_liefde", icon:"◎", tag:"",
@@ -769,11 +776,18 @@ const REPORTS = [
       nl:"### 1. De Energie van Jullie Verbinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Partners Design\n### 4. Elektromagnetische Verbindingen\n### 5. Compatibiliteit & Aantrekking\n### 6. Communicatie & Intimiteit\n### 7. Spanningsvelden & Doorbraken\n### 8. Gezamenlijk Groeipad\n### 9. Praktisch Advies voor Harmonie",
       en:"### 1. The Energy of Your Connection\n### 2. Chart Analysis — Your Design\n### 3. Chart Analysis — Partner's Design\n### 4. Electromagnetic Connections\n### 5. Compatibility & Attraction\n### 6. Communication & Intimacy\n### 7. Tension Points & Breakthroughs\n### 8. Shared Growth Path\n### 9. Practical Advice for Harmony",
     },
-    reviews:[
-      ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom — onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
-      ["Ik had dit als verrassing voor mijn partner besteld. We hebben het samen gelezen en waren allebei stil bij hoe accuraat de beschrijving van onze dynamiek was.","Roos & Tim, Amsterdam"],
-      ["Verrassend diepgaand. Niet alleen 'jullie vullen elkaar aan' maar echt concrete patronen en waar de wrijving vandaan komt.","Nathalie D., Brugge"],
-    ],
+    reviews:{
+      nl:[
+        ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom — onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
+        ["Ik had dit als verrassing voor mijn partner besteld. We hebben het samen gelezen en waren allebei stil bij hoe accuraat de beschrijving van onze dynamiek was.","Roos & Tim, Amsterdam"],
+        ["Verrassend diepgaand. Niet alleen 'jullie vullen elkaar aan' maar echt concrete patronen en waar de wrijving vandaan komt.","Nathalie D., Brugge"],
+      ],
+      en:[
+        ["My partner and I had struggled to communicate for years. The report explained exactly why — our energy types clash in a very specific way that we can now recognise and redirect. That is worth its weight in gold.","Elena & Marc, Ghent"],
+        ["I ordered this as a surprise for my partner. We read it together and were both struck by how accurately it described our dynamic.","Roos & Tim, Amsterdam"],
+        ["Surprisingly in-depth. Not just 'you complement each other' but truly concrete patterns and where the friction comes from.","Nathalie D., Bruges"],
+      ],
+    },
   },
   {
     id:"relatie_business", icon:"◈", tag:"",
@@ -791,11 +805,18 @@ const REPORTS = [
       nl:"### 1. De Energie van Jullie Samenwerking\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Zakenpartner Design\n### 4. Besluitvormingsdynamieken\n### 5. Complementariteit & Sterktes\n### 6. Leiderschapsstijl & Rolverdeling\n### 7. Communicatie & Conflictpatronen\n### 8. Gezamenlijke Visie & Richting\n### 9. Praktisch Advies voor Samenwerking",
       en:"### 1. The Energy of Your Partnership\n### 2. Chart Analysis — Your Design\n### 3. Chart Analysis — Business Partner's Design\n### 4. Decision-Making Dynamics\n### 5. Complementarity & Strengths\n### 6. Leadership Style & Role Division\n### 7. Communication & Conflict Patterns\n### 8. Shared Vision & Direction\n### 9. Practical Advice for Collaboration",
     },
-    reviews:[
-      ["Ik had dit met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
-      ["Het rapport liet zien dat mijn partner een Manifestor is en ik een Generator. Dat verklaarde zoveel van onze samenwerking — nu gaan we er bewust mee om.","Lars M., Utrecht"],
-      ["Als twee oprichters van een startup is het rapport ons leidraad geworden voor taakverdeling. Concreet, praktisch en verrassend nauwkeurig.","Sara & Joris, Gent"],
-    ],
+    reviews:{
+      nl:[
+        ["Ik had dit met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
+        ["Het rapport liet zien dat mijn partner een Manifestor is en ik een Generator. Dat verklaarde zoveel van onze samenwerking — nu gaan we er bewust mee om.","Lars M., Utrecht"],
+        ["Als twee oprichters van een startup is het rapport ons leidraad geworden voor taakverdeling. Concreet, praktisch en verrassend nauwkeurig.","Sara & Joris, Gent"],
+      ],
+      en:[
+        ["I did this with my business partner. The analysis of how we make decisions was remarkably accurate. We now consciously work together differently.","Pieter K., Rotterdam"],
+        ["The report showed that my partner is a Manifestor and I am a Generator. That explained so much about our collaboration — now we work with it consciously.","Lars M., Utrecht"],
+        ["As two founders of a startup, the report has become our guide for task division. Concrete, practical and surprisingly accurate.","Sara & Joris, Ghent"],
+      ],
+    },
   },
   {
     id:"relatie_familie", icon:"◇", tag:"",
@@ -813,11 +834,18 @@ const REPORTS = [
       nl:"### 1. De Energie van Jullie Familiebinding\n### 2. Chart Analyse — Jouw Design\n### 3. Chart Analyse — Familielid\n### 4. Familiedynamieken & Patronen\n### 5. Communicatiestijlen & Begrip\n### 6. Groeimogelijkheden voor Beiden\n### 7. Spanningsvelden & Oplossingen\n### 8. Guidance voor Meer Verbinding\n### 9. Slotanalyse",
       en:"### 1. The Energy of Your Family Bond\n### 2. Chart Analysis — Your Design\n### 3. Chart Analysis — Family Member's Design\n### 4. Family Dynamics & Patterns\n### 5. Communication Styles & Understanding\n### 6. Growth Opportunities for Both\n### 7. Tension Points & Solutions\n### 8. Guidance for More Connection\n### 9. Closing Analysis",
     },
-    reviews:[
-      ["Mijn dochter en ik hebben het rapport samen besproken. Voor het eerst begreep ik écht waarom zij reageert zoals ze reageert — dat heeft onze verhouding veranderd.","Karin V., Den Haag"],
-      ["Het inzicht in hoe mijn moeder en ik anders communiceren was een openbaring. Niet alleen voor mijn begrip van haar, maar ook voor hoe ik mezelf in die relatie gedraag.","Thomas B., Antwerpen"],
-      ["Voor broer en zus is dit ook bijzonder waardevol. Veel patronen die we altijd 'gewoon zo' noemden kregen eindelijk een verklaring.","Femke O., Leiden"],
-    ],
+    reviews:{
+      nl:[
+        ["Mijn dochter en ik hebben het rapport samen besproken. Voor het eerst begreep ik écht waarom zij reageert zoals ze reageert — dat heeft onze verhouding veranderd.","Karin V., Den Haag"],
+        ["Het inzicht in hoe mijn moeder en ik anders communiceren was een openbaring. Niet alleen voor mijn begrip van haar, maar ook voor hoe ik mezelf in die relatie gedraag.","Thomas B., Antwerpen"],
+        ["Voor broer en zus is dit ook bijzonder waardevol. Veel patronen die we altijd 'gewoon zo' noemden kregen eindelijk een verklaring.","Femke O., Leiden"],
+      ],
+      en:[
+        ["My daughter and I discussed the report together. For the first time I truly understood why she reacts the way she does — that has changed our relationship.","Karin V., The Hague"],
+        ["The insight into how my mother and I communicate differently was a revelation. Not only for my understanding of her, but also for how I behave in that relationship.","Thomas B., Antwerp"],
+        ["For siblings this is also remarkably valuable. Many patterns we always called 'just the way it is' finally got an explanation.","Femke O., Leiden"],
+      ],
+    },
   },
   {
     id:"jaar", icon:"◈", tag:"",
@@ -834,11 +862,18 @@ const REPORTS = [
       nl:"### 1. Energie van Je Nieuw Levensjaar\n### 2. Solar Return Analyse\n### 3. Dominante Themas\n### 4. Kwartaal 1\n### 5. Kwartaal 2\n### 6. Kwartaal 3\n### 7. Kwartaal 4\n### 8. Kansen & Uitdagingen\n### 9. Intentie voor het Jaar",
       en:"### 1. Energy of Your New Personal Year\n### 2. Solar Return Analysis\n### 3. Dominant Themes\n### 4. Quarter 1\n### 5. Quarter 2\n### 6. Quarter 3\n### 7. Quarter 4\n### 8. Opportunities & Challenges\n### 9. Intention for the Year",
     },
-    reviews:[
-      ["Ik bestel dit elk jaar rond mijn verjaardag. Het kwartaaloverzicht gebruik ik echt als leidraad — niet als agenda maar als bewustzijn van wat er op me afkomt. Dit jaar klopte het weer opvallend goed.","Roos B., Utrecht"],
-      ["Het rapport beschreef een thema van 'loslaten en vertrouwen' voor het derde kwartaal. Ik was sceptisch, maar er gebeurde inderdaad iets in die periode wat ik niet had zien aankomen. Achteraf paste het precies in dat verhaal.","Joost V., Den Haag"],
-      ["Fijn dat het niet alleen over 'kansen' gaat maar ook eerlijk is over uitdagingen. Dat maakt het geloofwaardiger.","Anke S., Leiden"],
-    ],
+    reviews:{
+      nl:[
+        ["Ik bestel dit elk jaar rond mijn verjaardag. Het kwartaaloverzicht gebruik ik echt als leidraad — niet als agenda maar als bewustzijn van wat er op me afkomt. Dit jaar klopte het weer opvallend goed.","Roos B., Utrecht"],
+        ["Het rapport beschreef een thema van 'loslaten en vertrouwen' voor het derde kwartaal. Ik was sceptisch, maar er gebeurde inderdaad iets in die periode wat ik niet had zien aankomen. Achteraf paste het precies in dat verhaal.","Joost V., Den Haag"],
+        ["Fijn dat het niet alleen over 'kansen' gaat maar ook eerlijk is over uitdagingen. Dat maakt het geloofwaardiger.","Anke S., Leiden"],
+      ],
+      en:[
+        ["I order this every year around my birthday. I genuinely use the quarterly overview as a guide — not as a schedule but as awareness of what's coming. This year it was strikingly accurate again.","Roos B., Utrecht"],
+        ["The report described a theme of 'letting go and trusting' for the third quarter. I was sceptical, but something did happen in that period that I hadn't seen coming. In hindsight it fit exactly into that narrative.","Joost V., The Hague"],
+        ["It's good that it doesn't just focus on 'opportunities' but is also honest about challenges. That makes it more believable.","Anke S., Leiden"],
+      ],
+    },
   },
   {
     id:"kind", icon:"◇", tag:"",
@@ -855,11 +890,18 @@ const REPORTS = [
       nl:"### 1. Het Unieke Design van Je Kind\n### 2. Type & Energie\n### 3. Beslissingen Nemen\n### 4. Hoe Je Kind Leert\n### 5. Behoeften & Grenzen\n### 6. Centra Analyse\n### 7. Opvoedtips Op Maat\n### 8. Gaven & Talenten\n### 9. Relatie Ouder-Kind\n### 10. Slotanalyse",
       en:"### 1. Your Child's Unique Design\n### 2. Type & Energy\n### 3. Making Decisions\n### 4. How Your Child Learns\n### 5. Needs & Boundaries\n### 6. Centers Analysis\n### 7. Parenting Tips Tailored to Your Child\n### 8. Gifts & Talents\n### 9. Parent-Child Relationship\n### 10. Closing Analysis",
     },
-    reviews:[
-      ["Mijn dochter van 9 werd altijd gezien als 'druk' of 'moeilijk'. Het rapport legde uit dat zij een Manifestor is en dat haar behoefte om dingen zelf te initiëren volkomen logisch is. Sindsdien botsen we veel minder.","Sandra P., Haarlem"],
-      ["Ik was aanvankelijk sceptisch — mijn kind is nog maar 6. Maar de beschrijving van zijn leerstijl klopte zo precies dat mijn man en ik allebei stil werden.","Femke J., Eindhoven"],
-      ["De opvoedtips zijn niet vaag maar heel concreet: hoe reageer je wanneer je kind iets weigert, hoe geef je grenzen aan op een manier die bij zijn type past. Dat is echt bruikbaar.","David C., Maastricht"],
-    ],
+    reviews:{
+      nl:[
+        ["Mijn dochter van 9 werd altijd gezien als 'druk' of 'moeilijk'. Het rapport legde uit dat zij een Manifestor is en dat haar behoefte om dingen zelf te initiëren volkomen logisch is. Sindsdien botsen we veel minder.","Sandra P., Haarlem"],
+        ["Ik was aanvankelijk sceptisch — mijn kind is nog maar 6. Maar de beschrijving van zijn leerstijl klopte zo precies dat mijn man en ik allebei stil werden.","Femke J., Eindhoven"],
+        ["De opvoedtips zijn niet vaag maar heel concreet: hoe reageer je wanneer je kind iets weigert, hoe geef je grenzen aan op een manier die bij zijn type past. Dat is echt bruikbaar.","David C., Maastricht"],
+      ],
+      en:[
+        ["My 9-year-old daughter was always seen as 'hyper' or 'difficult'. The report explained that she is a Manifestor and that her need to initiate things herself is completely logical. Since then we clash much less.","Sandra P., Haarlem"],
+        ["I was initially sceptical — my child is only 6. But the description of their learning style was so precise that both my husband and I fell silent.","Femke J., Eindhoven"],
+        ["The parenting tips are not vague but very concrete: how to respond when your child refuses something, how to set boundaries in a way that suits their type. That is genuinely useful.","David C., Maastricht"],
+      ],
+    },
   },
   {
     id:"loopbaan", icon:"◆", tag:"",
@@ -876,11 +918,18 @@ const REPORTS = [
       nl:"### 1. Professionele Blauwdruk\n### 2. Ideale Werkomgeving\n### 3. Hoe Je Geld Aantrekt\n### 4. Je Professionele Kracht\n### 5. Samenwerking & Leiderschap\n### 6. Valkuilen\n### 7. Ondernemen vs. Loondienst\n### 8. Financiele Strategie\n### 9. Volgende Stap",
       en:"### 1. Professional Blueprint\n### 2. Ideal Work Environment\n### 3. How You Attract Money\n### 4. Your Professional Strengths\n### 5. Collaboration & Leadership\n### 6. Pitfalls\n### 7. Self-Employment vs. Employment\n### 8. Financial Strategy\n### 9. Your Next Step",
     },
-    reviews:[
-      ["Na twaalf jaar in loondienst twijfelde ik of ik voor mezelf moest beginnen. Het rapport was heel helder: mijn type en profiel passen beter bij zelfstandig werken, en het legde ook uit waarom ik me in teamverband altijd een beetje gevangen voel. Twee maanden later had ik mijn eerste eigen klant.","Laura M., Amsterdam"],
-      ["Het stuk over 'hoe ik geld aantrek' klonk in eerste instantie zweverig maar de uitleg was verrassend praktisch — het gaat over hoe je je werk aanbiedt en op welk moment je ja of nee zegt.","Kevin T., Antwerpen"],
-      ["Ik gebruik het rapport nog steeds als naslagwerk bij carrièrebeslissingen. Het geeft me een referentiepunt.","Isabel R., Utrecht"],
-    ],
+    reviews:{
+      nl:[
+        ["Na twaalf jaar in loondienst twijfelde ik of ik voor mezelf moest beginnen. Het rapport was heel helder: mijn type en profiel passen beter bij zelfstandig werken, en het legde ook uit waarom ik me in teamverband altijd een beetje gevangen voel. Twee maanden later had ik mijn eerste eigen klant.","Laura M., Amsterdam"],
+        ["Het stuk over 'hoe ik geld aantrek' klonk in eerste instantie zweverig maar de uitleg was verrassend praktisch — het gaat over hoe je je werk aanbiedt en op welk moment je ja of nee zegt.","Kevin T., Antwerpen"],
+        ["Ik gebruik het rapport nog steeds als naslagwerk bij carrièrebeslissingen. Het geeft me een referentiepunt.","Isabel R., Utrecht"],
+      ],
+      en:[
+        ["After twelve years in employment I was wondering whether to start for myself. The report was very clear: my type and profile suit independent work better, and it also explained why I always feel a little trapped in a team setting. Two months later I had my first client.","Laura M., Amsterdam"],
+        ["The section about 'how I attract money' initially sounded vague but the explanation was surprisingly practical — it's about how you present your work and when you say yes or no.","Kevin T., Antwerp"],
+        ["I still use the report as a reference for career decisions. It gives me a point of reference.","Isabel R., Utrecht"],
+      ],
+    },
   },
   {
     id:"numerologie", icon:"∞", tag:"",
@@ -897,11 +946,18 @@ const REPORTS = [
       nl:"### 1. Je Numerologische Blauwdruk\n### 2. Levenspadgetal\n### 3. Uitdrukkingsgetal\n### 4. Zielsgetal\n### 5. Persoonlijkheidsgetal\n### 6. Verjaardagsgetal\n### 7. Persoonlijk Jaar 2026\n### 8. Rijpingsgetal\n### 9. Mastergetallen\n### 10. Hoe Je Getallen Samenwerken\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
       en:"### 1. Your Numerological Blueprint\n### 2. Life Path Number\n### 3. Expression Number\n### 4. Soul Urge Number\n### 5. Personality Number\n### 6. Birthday Number\n### 7. Personal Year 2026\n### 8. Maturity Number\n### 9. Master Numbers\n### 10. How Your Numbers Work Together\n### 11. Guidance 2026-2028\n### 12. Closing Analysis",
     },
-    reviews:[
-      ["Ik heb een levenspadgetal 11 en had altijd het gevoel anders te zijn. Voor het eerst las ik een uitleg die dat niet pathologiseerde maar als een gave behandelde. Dat deed iets met me.","Vera N., Nijmegen"],
-      ["Ik was benieuwd of numerologie iets zou toevoegen naast mijn Human Design rapport. Het bleek een andere invalshoek die elkaar goed aanvult — het ene gaat over energie, het andere over levenslessen en patronen.","Frank O., Den Bosch"],
-      ["De sectie over mijn persoonlijk jaar was opvallend accuraat voor wat er dit jaar speelt.","Mirjam H., Groningen"],
-    ],
+    reviews:{
+      nl:[
+        ["Ik heb een levenspadgetal 11 en had altijd het gevoel anders te zijn. Voor het eerst las ik een uitleg die dat niet pathologiseerde maar als een gave behandelde. Dat deed iets met me.","Vera N., Nijmegen"],
+        ["Ik was benieuwd of numerologie iets zou toevoegen naast mijn Human Design rapport. Het bleek een andere invalshoek die elkaar goed aanvult — het ene gaat over energie, het andere over levenslessen en patronen.","Frank O., Den Bosch"],
+        ["De sectie over mijn persoonlijk jaar was opvallend accuraat voor wat er dit jaar speelt.","Mirjam H., Groningen"],
+      ],
+      en:[
+        ["I have a life path number 11 and always felt different. For the first time I read an explanation that didn't pathologise that but treated it as a gift. That touched something in me.","Vera N., Nijmegen"],
+        ["I was curious whether numerology would add something alongside my Human Design report. It turned out to be a different perspective that complements it well — one is about energy, the other about life lessons and patterns.","Frank O., Den Bosch"],
+        ["The section about my personal year was strikingly accurate for what is happening this year.","Mirjam H., Groningen"],
+      ],
+    },
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
@@ -918,11 +974,18 @@ const REPORTS = [
       nl:"### 1. Je Astrologische Blauwdruk\n### 2. Zonneteken\n### 3. Ascendant\n### 4. De Maan\n### 5. Mercurius Venus Mars\n### 6. Jupiter Saturnus\n### 7. Buitenste Planeten\n### 8. De Huizen\n### 9. Aspecten\n### 10. Midhemel\n### 11. Guidance 2026-2028\n### 12. Slotanalyse",
       en:"### 1. Your Astrological Blueprint\n### 2. Sun Sign\n### 3. Ascendant\n### 4. The Moon\n### 5. Mercury, Venus & Mars\n### 6. Jupiter & Saturn\n### 7. Outer Planets\n### 8. The Houses\n### 9. Aspects\n### 10. Midheaven\n### 11. Guidance 2026-2028\n### 12. Closing Analysis",
     },
-    reviews:[
-      ["Ik heb veel horoscopen gelezen maar dit was de eerste die écht inging op de spanning tussen mijn Maan en Ascendant. Dat is precies waar ik mijn leven lang mee worstel. Het voelde alsof iemand mij eindelijk begreep.","Charlotte B., Leiden"],
-      ["Diepgaander dan ik had verwacht. Niet alleen de zonnetekens maar alle huizen, aspecten, de Midhemel — een volledig portret. Ik heb het met mijn therapeut gedeeld als extra context.","Bart V., Gent"],
-      ["Goed geschreven en toegankelijk, ook als je niet veel weet van astrologie. De kern kwam meteen over.","Yasmine K., Rotterdam"],
-    ],
+    reviews:{
+      nl:[
+        ["Ik heb veel horoscopen gelezen maar dit was de eerste die écht inging op de spanning tussen mijn Maan en Ascendant. Dat is precies waar ik mijn leven lang mee worstel. Het voelde alsof iemand mij eindelijk begreep.","Charlotte B., Leiden"],
+        ["Diepgaander dan ik had verwacht. Niet alleen de zonnetekens maar alle huizen, aspecten, de Midhemel — een volledig portret. Ik heb het met mijn therapeut gedeeld als extra context.","Bart V., Gent"],
+        ["Goed geschreven en toegankelijk, ook als je niet veel weet van astrologie. De kern kwam meteen over.","Yasmine K., Rotterdam"],
+      ],
+      en:[
+        ["I have read many horoscopes but this was the first that truly addressed the tension between my Moon and Ascendant. That is precisely what I have struggled with my whole life. It felt as though someone finally understood me.","Charlotte B., Leiden"],
+        ["More in-depth than I expected. Not just sun signs but all the houses, aspects, the Midheaven — a complete portrait. I shared it with my therapist as additional context.","Bart V., Ghent"],
+        ["Well written and accessible, even if you don't know much about astrology. The essence came across immediately.","Yasmine K., Rotterdam"],
+      ],
+    },
   },
   {
     id:"maandelijks", icon:"◯",
@@ -940,11 +1003,18 @@ const REPORTS = [
       nl:"### 1. Energie van Deze Maand\n### 2. Planetaire Invloeden\n### 3. Wat Er van jou Gevraagd Wordt\n### 4. Kansen\n### 5. Aandachtspunten\n### 6. Intentie voor de Maand",
       en:"### 1. Energy of This Month\n### 2. Planetary Influences\n### 3. What Is Asked of You\n### 4. Opportunities\n### 5. Points of Attention\n### 6. Intention for the Month",
     },
-    reviews:[
-      ["Ik ben nu acht maanden abonnee. Elke maand lees ik het rapport in de eerste week en gebruik ik de intentie als anker. Het is bescheiden in omvang maar precies genoeg.","Noor A., Amsterdam"],
-      ["Wat ik fijn vind is dat het niet overlaadt met informatie. Eén duidelijke intentie voor de maand, een paar aandachtspunten — dat is genoeg om bewust mee te leven.","Tom S., Breda"],
-      ["Vorige maand beschreef het rapport een thema van 'terugkeer naar jezelf'. Ik had net een zware periode achter de rug en het voelde alsof het precies op het juiste moment kwam.","Lisa V., Utrecht"],
-    ],
+    reviews:{
+      nl:[
+        ["Ik ben nu acht maanden abonnee. Elke maand lees ik het rapport in de eerste week en gebruik ik de intentie als anker. Het is bescheiden in omvang maar precies genoeg.","Noor A., Amsterdam"],
+        ["Wat ik fijn vind is dat het niet overlaadt met informatie. Eén duidelijke intentie voor de maand, een paar aandachtspunten — dat is genoeg om bewust mee te leven.","Tom S., Breda"],
+        ["Vorige maand beschreef het rapport een thema van 'terugkeer naar jezelf'. Ik had net een zware periode achter de rug en het voelde alsof het precies op het juiste moment kwam.","Lisa V., Utrecht"],
+      ],
+      en:[
+        ["I have been a subscriber for eight months now. Every month I read the report in the first week and use the intention as an anchor. It's modest in size but exactly enough.","Noor A., Amsterdam"],
+        ["What I appreciate is that it doesn't overwhelm with information. One clear intention for the month, a few points of attention — that's enough to live consciously with.","Tom S., Breda"],
+        ["Last month the report described a theme of 'returning to yourself'. I had just been through a difficult period and it felt as though it came at exactly the right moment.","Lisa V., Utrecht"],
+      ],
+    },
   },
 ];
 
@@ -3538,7 +3608,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           <div className="label" style={{marginBottom:12}}>{t("home.testimonialsLabel")}</div>
           <h2 className="h2" style={{marginBottom:32}}>{t("report.reviews")}</h2>
           <div className="grid-3">
-            {(rpt.reviews||[]).map(([q,n])=>(
+            {(Array.isArray(rpt.reviews)?rpt.reviews:(rpt.reviews?.[LANG]||rpt.reviews?.nl||[])).map(([q,n])=>(
               <div className="tcard" key={n}><div className="stars">★★★★★</div><div className="tcard-quote">"{q}"</div><div className="tcard-author">{n}</div></div>
             ))}
           </div>
@@ -4176,10 +4246,15 @@ function pageToPath(page) {
 
 // ─── TERMS & PRIVACY PAGE ─────────────────────────────────────────────────────
 function TermsPage({go}){
+  const isEn = LANG==="en";
   useSEO({
-    title:"Algemene Voorwaarden & Privacybeleid — Faculty of Human Design",
-    description:"Lees de algemene voorwaarden en het privacybeleid van Faculty of Human Design. Informatie over restitutie, aansprakelijkheid en AVG/GDPR.",
-    canonical:SITE+"/voorwaarden",
+    title: isEn
+      ? "Terms & Privacy Policy — Faculty of Human Design"
+      : "Algemene Voorwaarden & Privacybeleid — Faculty of Human Design",
+    description: isEn
+      ? "Read the terms and conditions and privacy policy of Faculty of Human Design. Information on refunds, liability and GDPR."
+      : "Lees de algemene voorwaarden en het privacybeleid van Faculty of Human Design. Informatie over restitutie, aansprakelijkheid en AVG/GDPR.",
+    canonical:SITE+(isEn?"/en/terms":"/voorwaarden"),
   });
 
   const Section=({title,children})=>(
@@ -4201,9 +4276,18 @@ function TermsPage({go}){
       <div style={{background:"var(--dark)",padding:"96px 32px 64px",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 60% 40%, rgba(61,44,94,.35) 0%, transparent 65%)",pointerEvents:"none"}}/>
         <div style={{maxWidth:760,margin:"0 auto",position:"relative",zIndex:1}}>
-          <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(201,168,92,.6)",marginBottom:14}}>Juridische informatie</div>
-          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:300,color:"white",marginBottom:16,lineHeight:1.08}}>Algemene Voorwaarden<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.4)"}}>& Privacybeleid</em></h1>
-          <p style={{fontSize:".9rem",fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>Versie 1.0 — van kracht per 1 januari 2026</p>
+          <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(201,168,92,.6)",marginBottom:14}}>
+            {isEn?"Legal information":"Juridische informatie"}
+          </div>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2rem,4vw,2.8rem)",fontWeight:300,color:"white",marginBottom:16,lineHeight:1.08}}>
+            {isEn?"Terms & Conditions":"Algemene Voorwaarden"}<br/>
+            <em style={{fontStyle:"italic",color:"rgba(255,255,255,.4)"}}>
+              {isEn?"& Privacy Policy":"& Privacybeleid"}
+            </em>
+          </h1>
+          <p style={{fontSize:".9rem",fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.7}}>
+            {isEn?"Version 1.0 — effective 1 January 2026":"Versie 1.0 — van kracht per 1 januari 2026"}
+          </p>
         </div>
       </div>
 
@@ -4211,116 +4295,188 @@ function TermsPage({go}){
       <section className="section bg-white">
         <div style={{maxWidth:760,margin:"0 auto",padding:"0 24px"}}>
 
-          <Section title="1. Wie zijn wij">
-            <P>Faculty of Human Design is een zelfstandige aanbieder van gepersonaliseerde digitale rapporten op het gebied van Human Design, Numerologie en Astrologie. Voor vragen kun je contact opnemen via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</P>
+          <Section title={isEn?"1. Who we are":"1. Wie zijn wij"}>
+            <P>{isEn
+              ?<>Faculty of Human Design is an independent provider of personalised digital reports in the fields of Human Design, Numerology and Astrology. For questions you can contact us at <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</>
+              :<>Faculty of Human Design is een zelfstandige aanbieder van gepersonaliseerde digitale rapporten op het gebied van Human Design, Numerologie en Astrologie. Voor vragen kun je contact opnemen via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</>
+            }</P>
           </Section>
 
-          <Section title="2. Toepasselijkheid">
-            <P>Deze algemene voorwaarden zijn van toepassing op alle bestellingen, leveringen en overeenkomsten via de website <strong>facultyhd.com</strong>. Door een bestelling te plaatsen accepteer je deze voorwaarden.</P>
+          <Section title={isEn?"2. Applicability":"2. Toepasselijkheid"}>
+            <P>{isEn
+              ?<>These terms and conditions apply to all orders, deliveries and agreements via the website <strong>facultyhd.com</strong>. By placing an order you accept these terms.</>
+              :<>Deze algemene voorwaarden zijn van toepassing op alle bestellingen, leveringen en overeenkomsten via de website <strong>facultyhd.com</strong>. Door een bestelling te plaatsen accepteer je deze voorwaarden.</>
+            }</P>
           </Section>
 
-          <Section title="3. Aard van de dienst — persoonlijk digitaal rapport">
-            <P>De rapporten die wij leveren zijn <strong>gepersonaliseerde digitale producten</strong>. Elk rapport wordt volledig op maat samengesteld op basis van de door jou opgegeven geboortedatum, -tijd en -plaats. Het eindproduct is een PDF-bestand dat uitsluitend voor jou is opgesteld.</P>
-            <P>Onze rapporten zijn bedoeld als persoonlijk inzichtsinstrument. Ze vormen <strong>geen vervanging voor professioneel medisch, psychologisch, juridisch of financieel advies</strong>. De inhoud is gebaseerd op de systemen van Human Design, Numerologie en Astrologie en dient als aanvulling op — niet als alternatief voor — erkende professionele hulpverlening.</P>
+          <Section title={isEn?"3. Nature of the service — personal digital report":"3. Aard van de dienst — persoonlijk digitaal rapport"}>
+            <P>{isEn
+              ?<>The reports we deliver are <strong>personalised digital products</strong>. Each report is fully tailored based on the date, time and place of birth you provide. The end product is a PDF file compiled exclusively for you.</>
+              :<>De rapporten die wij leveren zijn <strong>gepersonaliseerde digitale producten</strong>. Elk rapport wordt volledig op maat samengesteld op basis van de door jou opgegeven geboortedatum, -tijd en -plaats. Het eindproduct is een PDF-bestand dat uitsluitend voor jou is opgesteld.</>
+            }</P>
+            <P>{isEn
+              ?<>Our reports are intended as a personal insight tool. They are <strong>not a substitute for professional medical, psychological, legal or financial advice</strong>. The content is based on the systems of Human Design, Numerology and Astrology and serves as a complement to — not a replacement for — recognised professional help.</>
+              :<>Onze rapporten zijn bedoeld als persoonlijk inzichtsinstrument. Ze vormen <strong>geen vervanging voor professioneel medisch, psychologisch, juridisch of financieel advies</strong>. De inhoud is gebaseerd op de systemen van Human Design, Numerologie en Astrologie en dient als aanvulling op — niet als alternatief voor — erkende professionele hulpverlening.</>
+            }</P>
           </Section>
 
-          <Section title="4. Geen restitutie">
-            <P>Omdat elk rapport volledig gepersonaliseerd is en onmiddellijk na betaling in productie gaat, is <strong>restitutie niet mogelijk</strong> zodra de bestelling is bevestigd.</P>
-            <P>Dit valt onder de uitzondering op het herroepingsrecht voor <em>digitale inhoud die niet op een materiële drager is geleverd</em>, waarvoor de klant uitdrukkelijk toestemming heeft gegeven dat de levering onmiddellijk begint (Artikel 16(m) van de EU Richtlijn 2011/83/EU, geïmplementeerd in Artikel 6:230p sub e BW).</P>
-            <P>Door de bestelling te plaatsen en de betaling te voltooien:</P>
+          <Section title={isEn?"4. No refunds":"4. Geen restitutie"}>
+            <P>{isEn
+              ?<>Because each report is fully personalised and goes into production immediately after payment, <strong>refunds are not possible</strong> once the order has been confirmed.</>
+              :<>Omdat elk rapport volledig gepersonaliseerd is en onmiddellijk na betaling in productie gaat, is <strong>restitutie niet mogelijk</strong> zodra de bestelling is bevestigd.</>
+            }</P>
+            <P>{isEn
+              ?<>This falls under the exception to the right of withdrawal for <em>digital content not delivered on a tangible medium</em>, for which the customer has explicitly consented that delivery begins immediately (Article 16(m) of EU Directive 2011/83/EU).</>
+              :<>Dit valt onder de uitzondering op het herroepingsrecht voor <em>digitale inhoud die niet op een materiële drager is geleverd</em>, waarvoor de klant uitdrukkelijk toestemming heeft gegeven dat de levering onmiddellijk begint (Artikel 16(m) van de EU Richtlijn 2011/83/EU, geïmplementeerd in Artikel 6:230p sub e BW).</>
+            }</P>
+            <P>{isEn?"By placing the order and completing payment:":"Door de bestelling te plaatsen en de betaling te voltooien:"}</P>
             <ul style={{paddingLeft:20,marginBottom:12}}>
-              <Li>stem je er uitdrukkelijk mee in dat wij direct beginnen met de uitvoering van de overeenkomst;</Li>
-              <Li>erken je dat je daarmee afstand doet van het herroepingsrecht;</Li>
-              <Li>bevestig je kennis te hebben genomen van deze voorwaarden.</Li>
+              <Li>{isEn?"you explicitly agree that we begin performance of the agreement immediately;":"stem je er uitdrukkelijk mee in dat wij direct beginnen met de uitvoering van de overeenkomst;"}</Li>
+              <Li>{isEn?"you acknowledge that you thereby waive your right of withdrawal;":"erken je dat je daarmee afstand doet van het herroepingsrecht;"}</Li>
+              <Li>{isEn?"you confirm having read and understood these terms.":"bevestig je kennis te hebben genomen van deze voorwaarden."}</Li>
             </ul>
-            <P>Heb je een vraag of klacht over je rapport? Neem dan contact op via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — wij lossen het graag op.</P>
+            <P>{isEn
+              ?<>Do you have a question or complaint about your report? Contact us at <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — we are happy to resolve it.</>
+              :<>Heb je een vraag of klacht over je rapport? Neem dan contact op via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — wij lossen het graag op.</>
+            }</P>
           </Section>
 
-          <Section title="5. Levering">
-            <P>Rapporten worden binnen <strong>1 werkdag</strong> per e-mail bezorgd als beveiligde downloadlink (PDF). De downloadlink is 30 dagen geldig. Wij adviseren het bestand direct op te slaan in je eigen archief.</P>
-            <P>Bij technische problemen met de levering neem je contact op via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — wij sturen de link opnieuw.</P>
+          <Section title={isEn?"5. Delivery":"5. Levering"}>
+            <P>{isEn
+              ?<>Reports are delivered within <strong>1 business day</strong> by email as a secure download link (PDF). The download link is valid for 30 days. We recommend saving the file immediately to your own archive.</>
+              :<>Rapporten worden binnen <strong>1 werkdag</strong> per e-mail bezorgd als beveiligde downloadlink (PDF). De downloadlink is 30 dagen geldig. Wij adviseren het bestand direct op te slaan in je eigen archief.</>
+            }</P>
+            <P>{isEn
+              ?<>In case of technical problems with delivery, contact us at <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — we will resend the link.</>
+              :<>Bij technische problemen met de levering neem je contact op via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a> — wij sturen de link opnieuw.</>
+            }</P>
           </Section>
 
-          <Section title="6. Aansprakelijkheid">
-            <P>Faculty of Human Design aanvaardt <strong>geen aansprakelijkheid</strong> voor schade die voortvloeit uit het gebruik van of vertrouwen op de inhoud van onze rapporten. Dit omvat — maar is niet beperkt tot — beslissingen op het gebied van gezondheid, relaties, financiën, werk of enig ander levensgebied.</P>
-            <P>Onze rapporten zijn gebaseerd op de systemen van Human Design (Ra Uru Hu), Pythagoreïsche numerologie en westerse astrologie. De toepasbaarheid en interpretatie van deze systemen is subjectief van aard. Wij garanderen geen specifieke uitkomsten of resultaten.</P>
-            <P>In het geval dat aansprakelijkheid toch wordt vastgesteld, is deze altijd beperkt tot het bedrag dat voor het betreffende rapport is betaald.</P>
+          <Section title={isEn?"6. Liability":"6. Aansprakelijkheid"}>
+            <P>{isEn
+              ?<>Faculty of Human Design accepts <strong>no liability</strong> for damages arising from the use of or reliance on the content of our reports. This includes — but is not limited to — decisions in the areas of health, relationships, finances, work or any other area of life.</>
+              :<>Faculty of Human Design aanvaardt <strong>geen aansprakelijkheid</strong> voor schade die voortvloeit uit het gebruik van of vertrouwen op de inhoud van onze rapporten. Dit omvat — maar is niet beperkt tot — beslissingen op het gebied van gezondheid, relaties, financiën, werk of enig ander levensgebied.</>
+            }</P>
+            <P>{isEn
+              ?"Our reports are based on the systems of Human Design (Ra Uru Hu), Pythagorean numerology and Western astrology. The applicability and interpretation of these systems is subjective in nature. We do not guarantee specific outcomes or results."
+              :"Onze rapporten zijn gebaseerd op de systemen van Human Design (Ra Uru Hu), Pythagoreïsche numerologie en westerse astrologie. De toepasbaarheid en interpretatie van deze systemen is subjectief van aard. Wij garanderen geen specifieke uitkomsten of resultaten."
+            }</P>
+            <P>{isEn
+              ?"In the event that liability is nonetheless established, it is always limited to the amount paid for the report in question."
+              :"In het geval dat aansprakelijkheid toch wordt vastgesteld, is deze altijd beperkt tot het bedrag dat voor het betreffende rapport is betaald."
+            }</P>
           </Section>
 
-          <Section title="7. Intellectueel eigendom">
-            <P>Alle rapporten, teksten, berekeningen en overige inhoud zijn het intellectueel eigendom van Faculty of Human Design. Het is niet toegestaan rapporten geheel of gedeeltelijk openbaar te maken, te reproduceren, te verkopen of door te sturen zonder schriftelijke toestemming, behoudens voor strikt persoonlijk gebruik.</P>
+          <Section title={isEn?"7. Intellectual property":"7. Intellectueel eigendom"}>
+            <P>{isEn
+              ?"All reports, texts, calculations and other content are the intellectual property of Faculty of Human Design. It is not permitted to publish, reproduce, sell or forward reports in whole or in part without written permission, except for strictly personal use."
+              :"Alle rapporten, teksten, berekeningen en overige inhoud zijn het intellectueel eigendom van Faculty of Human Design. Het is niet toegestaan rapporten geheel of gedeeltelijk openbaar te maken, te reproduceren, te verkopen of door te sturen zonder schriftelijke toestemming, behoudens voor strikt persoonlijk gebruik."
+            }</P>
           </Section>
 
-          <Section title="8. Privacybeleid — AVG/GDPR">
-            <P>Faculty of Human Design verwerkt persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG / GDPR, EU 2016/679).</P>
+          <Section title={isEn?"8. Privacy policy — GDPR":"8. Privacybeleid — AVG/GDPR"}>
+            <P>{isEn
+              ?"Faculty of Human Design processes personal data in accordance with the General Data Protection Regulation (GDPR, EU 2016/679)."
+              :"Faculty of Human Design verwerkt persoonsgegevens in overeenstemming met de Algemene Verordening Gegevensbescherming (AVG / GDPR, EU 2016/679)."
+            }</P>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
-              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Welke gegevens verwerken wij?</div>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
+                {isEn?"What data do we process?":"Welke gegevens verwerken wij?"}
+              </div>
               <ul style={{paddingLeft:20,margin:0}}>
-                <Li><strong>Identificatiegegevens:</strong> naam en e-mailadres</Li>
-                <Li><strong>Geboortedatum, -tijd en -plaats</strong> (noodzakelijk voor de berekening van je rapport)</Li>
-                <Li><strong>Betalingsgegevens</strong> worden verwerkt door Stripe en worden nooit door ons opgeslagen</Li>
+                <Li><strong>{isEn?"Identification data:":"Identificatiegegevens:"}</strong> {isEn?"name and email address":"naam en e-mailadres"}</Li>
+                <Li><strong>{isEn?"Date, time and place of birth":"Geboortedatum, -tijd en -plaats"}</strong> {isEn?"(required for the calculation of your report)":"(noodzakelijk voor de berekening van je rapport)"}</Li>
+                <Li><strong>{isEn?"Payment data":"Betalingsgegevens"}</strong> {isEn?"are processed by Stripe and are never stored by us":"worden verwerkt door Stripe en worden nooit door ons opgeslagen"}</Li>
               </ul>
             </div>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
-              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Waarvoor gebruiken wij jouw gegevens?</div>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
+                {isEn?"What do we use your data for?":"Waarvoor gebruiken wij jouw gegevens?"}
+              </div>
               <ul style={{paddingLeft:20,margin:0}}>
-                <Li>Het samenstellen en leveren van het bestelde rapport</Li>
-                <Li>Het versturen van de bevestigings- en leveringsmail</Li>
-                <Li>Het beantwoorden van vragen of klachten</Li>
+                <Li>{isEn?"Compiling and delivering the ordered report":"Het samenstellen en leveren van het bestelde rapport"}</Li>
+                <Li>{isEn?"Sending the confirmation and delivery email":"Het versturen van de bevestigings- en leveringsmail"}</Li>
+                <Li>{isEn?"Answering questions or complaints":"Het beantwoorden van vragen of klachten"}</Li>
               </ul>
             </div>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
-              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Grondslag voor verwerking</div>
-              <P style={{marginBottom:0}}>De verwerking is noodzakelijk voor de uitvoering van de overeenkomst die je met ons aangaat bij het plaatsen van een bestelling (Art. 6 lid 1 sub b AVG).</P>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
+                {isEn?"Legal basis for processing":"Grondslag voor verwerking"}
+              </div>
+              <P style={{marginBottom:0}}>{isEn
+                ?"Processing is necessary for the performance of the agreement you enter into with us when placing an order (Art. 6(1)(b) GDPR)."
+                :"De verwerking is noodzakelijk voor de uitvoering van de overeenkomst die je met ons aangaat bij het plaatsen van een bestelling (Art. 6 lid 1 sub b AVG)."
+              }</P>
             </div>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
-              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Derde partijen</div>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
+                {isEn?"Third parties":"Derde partijen"}
+              </div>
               <ul style={{paddingLeft:20,margin:0}}>
-                <Li><strong>Supabase</strong> — veilige opslag van bestellingen (servers in de EU)</Li>
-                <Li><strong>Stripe</strong> — betalingsverwerking (eigen verwerkersovereenkomst van toepassing)</Li>
-                <Li><strong>Resend</strong> — verzending van transactionele e-mail</Li>
-                <Li><strong>Anthropic (Claude API)</strong> — AI-analyse voor het samenstellen van rapporten; geboortegegevens worden uitsluitend voor dit doel gebruikt en niet bewaard door Anthropic</Li>
-                <Li><strong>Vercel</strong> — hosting van de website en rapporten (servers in de EU/VS)</Li>
+                <Li><strong>Supabase</strong> — {isEn?"secure order storage (EU servers)":"veilige opslag van bestellingen (servers in de EU)"}</Li>
+                <Li><strong>Stripe</strong> — {isEn?"payment processing (own data processing agreement applies)":"betalingsverwerking (eigen verwerkersovereenkomst van toepassing)"}</Li>
+                <Li><strong>Resend</strong> — {isEn?"transactional email delivery":"verzending van transactionele e-mail"}</Li>
+                <Li><strong>Anthropic (Claude API)</strong> — {isEn?"AI analysis for report generation; birth data is used solely for this purpose and not retained by Anthropic":"AI-analyse voor het samenstellen van rapporten; geboortegegevens worden uitsluitend voor dit doel gebruikt en niet bewaard door Anthropic"}</Li>
+                <Li><strong>Vercel</strong> — {isEn?"website and report hosting (EU/US servers)":"hosting van de website en rapporten (servers in de EU/VS)"}</Li>
               </ul>
             </div>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
-              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Bewaartermijn</div>
-              <P style={{marginBottom:0}}>Bestellingen en bijbehorende gegevens worden bewaard zolang nodig voor de dienstverlening en daarna conform wettelijke fiscale bewaarplichten (maximaal 7 jaar). De gegenereerde PDF wordt 30 dagen na levering verwijderd.</P>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
+                {isEn?"Retention period":"Bewaartermijn"}
+              </div>
+              <P style={{marginBottom:0}}>{isEn
+                ?"Orders and associated data are retained as long as necessary for the service and thereafter in accordance with statutory fiscal retention obligations (maximum 7 years). The generated PDF is deleted 30 days after delivery."
+                :"Bestellingen en bijbehorende gegevens worden bewaard zolang nodig voor de dienstverlening en daarna conform wettelijke fiscale bewaarplichten (maximaal 7 jaar). De gegenereerde PDF wordt 30 dagen na levering verwijderd."
+              }</P>
             </div>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
-              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>Jouw rechten</div>
-              <P style={{marginBottom:8}}>Op grond van de AVG heb je het recht op:</P>
+              <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
+                {isEn?"Your rights":"Jouw rechten"}
+              </div>
+              <P style={{marginBottom:8}}>{isEn?"Under the GDPR you have the right to:":"Op grond van de AVG heb je het recht op:"}</P>
               <ul style={{paddingLeft:20,margin:0}}>
-                <Li>Inzage in de gegevens die wij van je verwerken</Li>
-                <Li>Correctie van onjuiste gegevens</Li>
-                <Li>Verwijdering van je gegevens ('recht op vergetelheid')</Li>
-                <Li>Beperking van de verwerking</Li>
-                <Li>Bezwaar maken tegen de verwerking</Li>
-                <Li>Gegevensoverdraagbaarheid</Li>
+                <Li>{isEn?"Access to the data we process about you":"Inzage in de gegevens die wij van je verwerken"}</Li>
+                <Li>{isEn?"Correction of inaccurate data":"Correctie van onjuiste gegevens"}</Li>
+                <Li>{isEn?"Deletion of your data ('right to be forgotten')":"Verwijdering van je gegevens ('recht op vergetelheid')"}</Li>
+                <Li>{isEn?"Restriction of processing":"Beperking van de verwerking"}</Li>
+                <Li>{isEn?"Object to processing":"Bezwaar maken tegen de verwerking"}</Li>
+                <Li>{isEn?"Data portability":"Gegevensoverdraagbaarheid"}</Li>
               </ul>
-              <P style={{marginTop:12,marginBottom:0}}>Je kunt deze rechten uitoefenen door een e-mail te sturen naar <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>. Wij reageren binnen 30 dagen. Je hebt ook het recht een klacht in te dienen bij de Autoriteit Persoonsgegevens (autoriteitpersoonsgegevens.nl).</P>
+              <P style={{marginTop:12,marginBottom:0}}>{isEn
+                ?<>You can exercise these rights by emailing <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your national data protection authority.</>
+                :<>Je kunt deze rechten uitoefenen door een e-mail te sturen naar <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>. Wij reageren binnen 30 dagen. Je hebt ook het recht een klacht in te dienen bij de Autoriteit Persoonsgegevens (autoriteitpersoonsgegevens.nl).</>
+              }</P>
             </div>
           </Section>
 
-          <Section title="9. Cookies">
-            <P>Wij gebruiken geen tracking- of advertentiecookies. Er worden uitsluitend functioneel noodzakelijke gegevens opgeslagen (zoals anonieme sessiedata) om de website correct te laten functioneren.</P>
+          <Section title={isEn?"9. Cookies":"9. Cookies"}>
+            <P>{isEn
+              ?"We do not use tracking or advertising cookies. Only functionally necessary data is stored (such as anonymous session data) for the website to function correctly."
+              :"Wij gebruiken geen tracking- of advertentiecookies. Er worden uitsluitend functioneel noodzakelijke gegevens opgeslagen (zoals anonieme sessiedata) om de website correct te laten functioneren."
+            }</P>
           </Section>
 
-          <Section title="10. Toepasselijk recht">
-            <P>Op alle overeenkomsten is het <strong>Nederlands recht</strong> van toepassing. Geschillen worden voorgelegd aan de bevoegde rechter in Nederland, tenzij dwingend recht een andere rechter aanwijst.</P>
+          <Section title={isEn?"10. Governing law":"10. Toepasselijk recht"}>
+            <P>{isEn
+              ?<>All agreements are governed by <strong>Dutch law</strong>. Disputes will be submitted to the competent court in the Netherlands, unless mandatory law designates another court.</>
+              :<>Op alle overeenkomsten is het <strong>Nederlands recht</strong> van toepassing. Geschillen worden voorgelegd aan de bevoegde rechter in Nederland, tenzij dwingend recht een andere rechter aanwijst.</>
+            }</P>
           </Section>
 
           <div style={{paddingTop:16,textAlign:"center"}}>
-            <p style={{fontSize:".8rem",color:"var(--text-light)",marginBottom:24}}>Vragen over deze voorwaarden? Stuur een e-mail naar{" "}
+            <p style={{fontSize:".8rem",color:"var(--text-light)",marginBottom:24}}>
+              {isEn?"Questions about these terms? Send an email to ":"Vragen over deze voorwaarden? Stuur een e-mail naar "}
               <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.
             </p>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>Bekijk onze rapporten</button>
+            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>
+              {isEn?"View our reports":"Bekijk onze rapporten"}
+            </button>
           </div>
         </div>
       </section>
