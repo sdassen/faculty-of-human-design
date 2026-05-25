@@ -67,7 +67,7 @@ export default {
     namePlaceholder: "Jouw naam",
     emailPlaceholder: "jouw@email.nl",
     placePlaceholder: "Geboorteplaats",
-    timeNote: "Geboortetijd zo nauwkeurig mogelijk",
+    timeNote: "Gebruik 24-uurs notatie (bijv. 14:00) — zo nauwkeurig mogelijk",
     sectionYou: "Jouw gegevens",
     chartTitle: "Jouw Human Design Chart",
     chartEyebrow: "Jouw Human Design Profiel",

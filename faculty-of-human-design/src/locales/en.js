@@ -67,7 +67,7 @@ export default {
     namePlaceholder: "Your name",
     emailPlaceholder: "your@email.com",
     placePlaceholder: "Place of birth",
-    timeNote: "Birth time as accurate as possible",
+    timeNote: "Use 24-hour format (e.g. 14:00) — as accurate as possible",
     sectionYou: "Your details",
     chartTitle: "Your Human Design Chart",
     chartEyebrow: "Your Human Design Profile",
