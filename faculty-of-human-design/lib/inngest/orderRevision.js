@@ -121,6 +121,24 @@ export const orderRevision = inngest.createFunction(
       return token;
     });
 
+    // ── Step N+3.5: Persist feedback as a reusable prompt lesson ─────────
+    // Every revision becomes a structural lesson for all future reports.
+    await step.run("save-prompt-lesson", async () => {
+      const db = getSupabase();
+      const { error } = await db
+        .from("prompt_lessons")
+        .insert({
+          lesson: feedback.trim(),
+          source_order_id: orderId,
+        });
+      if (error) {
+        // Non-fatal — log but don't fail the revision workflow
+        console.warn(`[order-revision] Could not save prompt lesson: ${error.message}`);
+      } else {
+        console.log(`[order-revision] Prompt lesson saved for order ${orderId}`);
+      }
+    });
+
     // ── Step N+4: Send new review email ───────────────────────────────────
     await step.run("send-revised-review-email", async () => {
       await sendAdminReviewEmail({

@@ -26,6 +26,27 @@ function getSupabase() {
   );
 }
 
+// ─── PROMPT LESSONS ───────────────────────────────────────────────────────────
+/**
+ * Fetch all active lessons from the prompt_lessons table.
+ * Returns an array of lesson strings, or [] on failure.
+ */
+async function fetchPromptLessons() {
+  try {
+    const db = getSupabase();
+    const { data, error } = await db
+      .from("prompt_lessons")
+      .select("lesson")
+      .eq("active", true)
+      .order("created_at", { ascending: true });
+    if (error) throw error;
+    return (data || []).map((r) => r.lesson);
+  } catch (e) {
+    console.warn(`[prompt-lessons] Could not fetch lessons: ${e.message}`);
+    return [];
+  }
+}
+
 // ─── DELIVERY TIMING ──────────────────────────────────────────────────────────
 /**
  * Calculate the target delivery Date.
@@ -1056,10 +1077,18 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
         : `\n\n✏️ REDACTIE REVISIE-INSTRUCTIE — de volgende feedback is gegeven voor dit rapport:\n${order.revisionFeedback}\nVerwerk deze feedback waar relevant voor deze sectie. Als deze sectie niet geraakt wordt, houd dan dezelfde kwaliteitsstandaarden aan.`)
     : "";
 
+  // ── Structural lessons from past revisions ────────────────────────────────
+  const lessons = order.promptLessons || [];
+  const lessonsBlock = lessons.length
+    ? (lang === "en"
+        ? `\n\n📚 STRUCTURAL LESSONS FROM PREVIOUS REVISIONS — apply these to every section:\n${lessons.map((l, i) => `${i + 1}. ${l}`).join("\n")}`
+        : `\n\n📚 STRUCTURELE LESSEN UIT EERDERE REVISIES — pas deze toe op elke sectie:\n${lessons.map((l, i) => `${i + 1}. ${l}`).join("\n")}`)
+    : "";
+
   const criticalAlert = buildCriticalAlert(chart, lang === "en");
 
   const prompt = lang === "en"
-    ? `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}
+    ? `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
 Write section "${sectionTitle}" for ${customer_name}.
 
@@ -1072,7 +1101,7 @@ RULES (strict):
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
 - kern max 500 words total — quality over quantity, every sentence must earn its place
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
-    : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}
+    : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
@@ -1265,28 +1294,38 @@ export const orderDelivery = inngest.createFunction(
       }
     });
 
+    // ── Step 2.6: Load structural lessons from past revisions ────────────
+    const enrichedOrderWithLessons = await step.run("load-prompt-lessons", async () => {
+      const lessons = await fetchPromptLessons();
+      if (lessons.length) {
+        console.log(`[order-delivery] Injecting ${lessons.length} prompt lesson(s) into generation`);
+      }
+      return { ...enrichedOrder, promptLessons: lessons };
+    });
+
     // ── Steps 3…N: Generate each section via Claude ────────────────────────
     // Each section is generated WITH:
     //   1. Canon ground-truth injection (centers/channels/gates/types/profiles)
     //   2. Summary of previously written sections (avoids repetition)
     //   3. Quality scoring + up to 2 retries if score < threshold
     //   4. Extended thinking for the key analytical sections
+    //   5. Structural lessons from all past admin revisions
     const sections = [];
-    const sectionTitles = enrichedOrder.prompt_sections || [];
+    const sectionTitles = enrichedOrderWithLessons.prompt_sections || [];
 
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
       // Snapshot previous sections to pass as interdependence context
       const previous = sections.map((s) => ({ title: s.title, ...s }));
       const sectionData = await step.run(`generate-section-${i}`, async () => {
-        return generateScoredSection(title, enrichedOrder, previous);
+        return generateScoredSection(title, enrichedOrderWithLessons, previous);
       });
       sections.push({ title, ...(sectionData || {}) });
     }
 
     // ── Step N+1: Render PDF ───────────────────────────────────────────────
     const pdfBytes = await step.run("render-pdf", async () => {
-      const buffer = await generatePDF({ order: enrichedOrder, sections });
+      const buffer = await generatePDF({ order: enrichedOrderWithLessons, sections });
       // Convert Buffer to base64 string for serialisation through Inngest state
       return Buffer.from(buffer).toString("base64");
     });
@@ -1320,7 +1359,7 @@ export const orderDelivery = inngest.createFunction(
         .eq("id", orderId);
 
       await sendAdminReviewEmail({
-        order:       enrichedOrder,
+        order:       enrichedOrderWithLessons,
         pdfUrl:      blobUrl,
         reviewToken,
         orderId,
