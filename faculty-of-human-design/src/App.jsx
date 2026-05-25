@@ -3977,7 +3977,7 @@ function ContactPage(){
     if(!form.name.trim()||!form.email.trim()||!form.msg.trim())return;
     setStatus("sending");
     try{
-      const res=await fetch("/api/contact",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(form)});
+      const res=await fetch("/api/review-approve",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,contact:1})});
       const data=await res.json();
       if(!res.ok)throw new Error(data.error||"Onbekende fout");
       setStatus("ok");
