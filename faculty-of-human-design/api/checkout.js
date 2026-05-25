@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  const { orderId, rptId, title, price, isSubscription, language } = req.body;
+  const { orderId, rptId, title, price, isSubscription, language, email } = req.body;
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(500).json({ error: "STRIPE_SECRET_KEY niet geconfigureerd in Vercel" });
   }
@@ -39,6 +39,7 @@ export default async function handler(req, res) {
   body.append("metadata[rptId]", rptId);
   // client_reference_id lets the webhook look up the pre-created order
   if (orderId) body.append("client_reference_id", orderId);
+  if (email) body.append("customer_email", email);
 
   try {
     const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {
