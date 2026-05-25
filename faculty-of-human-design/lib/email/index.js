@@ -12,6 +12,22 @@ const FROM = "Faculty of Human Design <noreply@facultyhd.com>";
 
 // ─── PUBLIC API ───────────────────────────────────────────────────────────────
 
+export async function sendAdminReviewEmail({ order, pdfUrl, reviewToken, orderId }) {
+  const approveUrl = `https://www.facultyhd.com/api/review-approve?token=${encodeURIComponent(reviewToken)}&action=approve`;
+  const rejectUrl  = `https://www.facultyhd.com/api/review-approve?token=${encodeURIComponent(reviewToken)}&action=reject`;
+
+  const subject = `[Review vereist] ${order.report_title} — ${order.customer_name}`;
+
+  const { data, error } = await getResend().emails.send({
+    from: FROM,
+    to: "info@facultyhd.com",
+    subject,
+    html: adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId }),
+  });
+  if (error) throw new Error(`Resend error (admin review): ${error.message}`);
+  return data;
+}
+
 export async function sendConfirmationEmail({ to, name, reportTitle, language }) {
   const lang = language === "en" ? "en" : "nl";
   const subject = lang === "en"
@@ -319,6 +335,90 @@ function deliveryHtml({ name, reportTitle, downloadUrl, lang }) {
     <p style="font-size:12px;color:#B0AAA4;line-height:1.75;margin:0;">
       Vragen of opmerkingen? We horen graag van je via
       <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
+    </p>
+  `);
+}
+
+// ─── ADMIN REVIEW TEMPLATE ────────────────────────────────────────────────────
+function adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId }) {
+  const bd    = order.birth_data || {};
+  const chart = bd.chart || {};
+  const lang  = order.language === "en" ? "EN" : "NL";
+
+  const birthLine = [bd.day, bd.month, bd.year].filter(Boolean).join("-");
+  const timeLine  = bd.hour != null ? `${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}` : "—";
+
+  const rows = [
+    ["Order ID",    escHtml(orderId || order.id)],
+    ["Klant",       escHtml(order.customer_name || "—")],
+    ["Email",       escHtml(order.customer_email || "—")],
+    ["Rapport",     escHtml(order.report_title || "—")],
+    ["Taal",        lang],
+    ["Geboortedatum", birthLine || "—"],
+    ["Geboortetijd",  timeLine],
+    ["Geboorteplaats", escHtml(bd.place || "—")],
+    ["HD Type",     escHtml(chart.type  || "—")],
+    ["Autoriteit",  escHtml(chart.auth  || "—")],
+    ["Profiel",     escHtml(chart.profile || "—")],
+  ];
+
+  const tableRows = rows.map(([k, v]) => `
+    <tr>
+      <td style="padding:6px 12px 6px 0;font-size:12.5px;color:#888;font-weight:500;white-space:nowrap;vertical-align:top;">${k}</td>
+      <td style="padding:6px 0 6px 12px;font-size:12.5px;color:#2A2820;border-left:1px solid #E8E3DB;">${v}</td>
+    </tr>`).join("");
+
+  return base(`
+    <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:400;color:#1A1715;margin:0 0 6px;line-height:1.3;">
+      Rapport klaar voor review
+    </h1>
+    <p style="font-size:13px;color:#888;margin:0 0 28px;">
+      Controleer het rapport vóórdat het naar de klant gaat — keur het goed of stuur het ter revisie.
+    </p>
+
+    <!-- Order details -->
+    <div style="background:#FAFAF7;border:1px solid #E5E0D8;border-radius:6px;padding:20px 24px;margin:0 0 28px;">
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#9A8050;margin-bottom:14px;font-weight:600;">Ordergegevens</div>
+      <table style="border-collapse:collapse;width:100%;">
+        ${tableRows}
+      </table>
+    </div>
+
+    <!-- PDF preview link -->
+    <div style="background:#F0EDE7;border:1px solid #DDD8CE;border-radius:6px;padding:16px 22px;margin:0 0 30px;">
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#9A8050;margin-bottom:10px;font-weight:600;">PDF-preview</div>
+      <a href="${escHtml(pdfUrl)}" style="color:#3D2C5E;font-size:13.5px;text-decoration:none;word-break:break-all;">
+        📄 &nbsp;Open PDF in browser →
+      </a>
+      <p style="margin:8px 0 0;font-size:11px;color:#A8A39E;">
+        Direct de Vercel Blob-link — geen login vereist. Link blijft geldig zolang de blob bestaat.
+      </p>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="text-align:center;margin:0 0 12px;">
+      <a href="${escHtml(approveUrl)}"
+         style="display:inline-block;background:#2E7D32;color:#ffffff;text-decoration:none;
+                padding:15px 40px;border-radius:100px;font-size:14px;font-weight:500;
+                letter-spacing:.3px;margin-right:12px;box-shadow:0 4px 12px rgba(46,125,50,.25);">
+        ✓ &nbsp;Goedkeuren
+      </a>
+      <a href="${escHtml(rejectUrl)}"
+         style="display:inline-block;background:#C62828;color:#ffffff;text-decoration:none;
+                padding:15px 40px;border-radius:100px;font-size:14px;font-weight:500;
+                letter-spacing:.3px;box-shadow:0 4px 12px rgba(198,40,40,.25);">
+        ✗ &nbsp;Ter revisie
+      </a>
+    </div>
+    <p style="font-size:11.5px;color:#B0AAA4;text-align:center;margin:0 0 32px;">
+      Knoppen werken niet? Kopieer links uit de browser:<br>
+      <span style="color:#9A8050;">Goedkeuren:</span> ${escHtml(approveUrl)}<br>
+      <span style="color:#9A8050;">Revisie:</span> ${escHtml(rejectUrl)}
+    </p>
+
+    <div style="height:1px;background:#EEEBE5;margin:0 0 20px;"></div>
+    <p style="font-size:11.5px;color:#C0BAB4;line-height:1.6;margin:0;">
+      Als je niet reageert wordt het rapport na <strong>72 uur</strong> automatisch goedgekeurd en bezorgd.
     </p>
   `);
 }

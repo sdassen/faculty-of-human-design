@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 import { put } from "@vercel/blob";
 import { inngest } from "./client.js";
 import { generatePDF } from "../pdf/index.js";
-import { sendConfirmationEmail, sendDeliveryEmail } from "../email/index.js";
+import { sendConfirmationEmail, sendDeliveryEmail, sendAdminReviewEmail } from "../email/index.js";
 import { getCanonContext } from "../canon/index.js";
 import { scoreSection, MAX_RETRIES } from "./qualityScore.js";
 import { calcHDServer } from "../hd/calculator.js";
@@ -1049,10 +1049,17 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
         : `\n\nHERSCHRIJVEN — vorige versie miste op:\n${lastIssues.map((i) => `- ${i}`).join("\n")}\nFix deze punten in deze versie.`)
     : "";
 
+  // ── Revision feedback (human editor notes) ───────────────────────────────
+  const revisionBlock = order.revisionFeedback
+    ? (lang === "en"
+        ? `\n\n✏️ EDITOR REVISION REQUEST — the following feedback was given for this report:\n${order.revisionFeedback}\nAddress these points where relevant to this section. If this section is unaffected, maintain the same quality standards.`
+        : `\n\n✏️ REDACTIE REVISIE-INSTRUCTIE — de volgende feedback is gegeven voor dit rapport:\n${order.revisionFeedback}\nVerwerk deze feedback waar relevant voor deze sectie. Als deze sectie niet geraakt wordt, houd dan dezelfde kwaliteitsstandaarden aan.`)
+    : "";
+
   const criticalAlert = buildCriticalAlert(chart, lang === "en");
 
   const prompt = lang === "en"
-    ? `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+    ? `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}
 
 Write section "${sectionTitle}" for ${customer_name}.
 
@@ -1065,7 +1072,7 @@ RULES (strict):
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
 - kern max 500 words total — quality over quantity, every sentence must earn its place
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
-    : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}
+    : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
@@ -1117,8 +1124,11 @@ REGELS (strikt):
 /**
  * Generate a section + score it + retry up to MAX_RETRIES times if below threshold.
  * Returns the best JSON section object found (highest score), or null on total failure.
+ *
+ * Pass `order.revisionFeedback` (string) to inject human editor notes into every
+ * section prompt — used by the orderRevision workflow for regeneration.
  */
-async function generateScoredSection(sectionTitle, order, previousSections) {
+export async function generateScoredSection(sectionTitle, order, previousSections) {
   const chart = (order.birth_data || {}).chart || {};
   const lang  = order.language || "nl";
   let bestSection = null;
@@ -1294,19 +1304,68 @@ export const orderDelivery = inngest.createFunction(
       return url;
     });
 
+    // ── Step N+2.5: Send PDF to admin for manual review ───────────────────
+    // Sets order status to "review_pending" and stores a review_token.
+    // The admin gets an email with Approve / Reject buttons.
+    await step.run("send-admin-review-email", async () => {
+      const reviewToken = randomUUID();
+      const db = getSupabase();
+      await db
+        .from("orders")
+        .update({
+          status: "review_pending",
+          pdf_blob_url: blobUrl,
+          review_token: reviewToken,
+        })
+        .eq("id", orderId);
+
+      await sendAdminReviewEmail({
+        order:       enrichedOrder,
+        pdfUrl:      blobUrl,
+        reviewToken,
+        orderId,
+      });
+    });
+
+    // ── Step N+2.6: Wait for admin approval (auto-approve after 72h) ──────
+    // The /api/review-approve endpoint fires "app/order.approved" on approval.
+    // If no response arrives within 72 hours, Inngest returns null and we
+    // auto-approve so the customer always receives their report on time.
+    const approvalResult = await step.waitForEvent("wait-for-admin-approval", {
+      event:   "app/order.approved",
+      match:   "data.orderId",
+      timeout: "72h",
+    });
+
+    if (!approvalResult) {
+      console.log(`[review] Auto-approving ${orderId} after 72h timeout`);
+    }
+
     // ── Step N+3: Generate token & update order ───────────────────────────
     const downloadToken = await step.run("create-download-token", async () => {
       const token = randomUUID();
       const db = getSupabase();
 
+      // Always re-read pdf_blob_url + generated_sections from DB before writing.
+      // A revision run (orderRevision) may have uploaded a new PDF and updated
+      // these fields — the closure values would be stale in that case.
+      const { data: latest } = await db
+        .from("orders")
+        .select("pdf_blob_url, generated_sections")
+        .eq("id", orderId)
+        .single();
+
+      const finalBlobUrl    = latest?.pdf_blob_url     || blobUrl;
+      const finalSections   = latest?.generated_sections || sections;
+
       const { error } = await db
         .from("orders")
         .update({
           status: "delivered",
-          pdf_blob_url: blobUrl,
+          pdf_blob_url: finalBlobUrl,
           download_token: token,
           delivered_at: new Date().toISOString(),
-          generated_sections: sections,  // store for admin preview / re-render
+          generated_sections: finalSections,
         })
         .eq("id", orderId);
 

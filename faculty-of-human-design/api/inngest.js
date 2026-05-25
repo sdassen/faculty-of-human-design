@@ -10,7 +10,7 @@ async function getHandler() {
   if (_handler) return _handler;
   if (_initError) throw _initError;
 
-  let serve, inngest, orderDelivery, articleGeneration;
+  let serve, inngest, orderDelivery, orderRevision, articleGeneration;
 
   try {
     console.log("[inngest-init] importing inngest/next...");
@@ -43,6 +43,16 @@ async function getHandler() {
   }
 
   try {
+    console.log("[inngest-init] importing orderRevision...");
+    ({ orderRevision } = await import("../lib/inngest/orderRevision.js"));
+    console.log("[inngest-init] orderRevision OK");
+  } catch (err) {
+    console.error("[inngest-init] FAILED at orderRevision:", err.message, err.stack);
+    _initError = err;
+    throw err;
+  }
+
+  try {
     console.log("[inngest-init] importing articleGeneration...");
     ({ articleGeneration } = await import("../lib/inngest/articleGeneration.js"));
     console.log("[inngest-init] articleGeneration OK");
@@ -56,7 +66,7 @@ async function getHandler() {
     console.log("[inngest-init] calling serve()...");
     _handler = serve({
       client: inngest,
-      functions: [orderDelivery, articleGeneration],
+      functions: [orderDelivery, orderRevision, articleGeneration],
     });
     console.log("[inngest-init] handler ready");
     return _handler;
