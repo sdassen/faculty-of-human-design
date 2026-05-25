@@ -357,12 +357,12 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .includes-num { width:22px; height:22px; border:1px solid var(--border); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.6rem; font-weight:600; color:var(--brand); flex-shrink:0; margin-top:1px; }
 
 /* FAQ */
-.faq-item { border-bottom:1px solid var(--border); padding:18px 0; }
-.faq-q { font-family:var(--font-serif); font-size:1rem; font-weight:400; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; }
+.faq-item { border-bottom:1px solid var(--border); padding:18px 0; text-align:left; }
+.faq-q { font-family:var(--font-serif); font-size:1rem; font-weight:400; color:var(--text); cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:16px; text-align:left; }
 .faq-q:hover { color:var(--brand); }
 .faq-toggle { font-size:1.2rem; color:var(--brand); flex-shrink:0; transition:transform .25s; }
 .faq-toggle.open { transform:rotate(45deg); }
-.faq-a { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.85; margin-top:12px; }
+.faq-a { font-size:.875rem; font-weight:300; color:var(--text-muted); line-height:1.85; margin-top:12px; text-align:left; }
 
 /* STICKY MOBILE CTA */
 .sticky-cta { display:none; position:fixed; bottom:0; left:0; right:0; z-index:150; padding:12px 16px; background:rgba(248,246,241,.97); backdrop-filter:blur(12px); border-top:1px solid var(--border); }
