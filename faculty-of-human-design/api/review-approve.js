@@ -1,12 +1,11 @@
-// ─── ADMIN REVIEW APPROVE / REJECT ───────────────────────────────────────────
-// GET /api/review-approve?token=<reviewToken>&action=approve|reject
+// ─── ADMIN REVIEW — APPROVE / REJECT / REGENERATE ────────────────────────────
+// GET  /api/review-approve?token=<reviewToken>&action=approve|reject
+// POST /api/review-approve  body: token=<reviewToken>&feedback=<text>
 //
-// Called when admin clicks the Approve or Reject button in the review email.
-// - approve: fires "app/order.approved" Inngest event so the delivery workflow
-//            resumes immediately (download token is created + email sent).
-// - reject:  sets order status to "needs_revision" so it shows up in the
-//            backlog. The Inngest workflow will auto-approve after 72h if no
-//            approval arrives, but the admin can re-trigger manually.
+// Three flows:
+// - approve:    fires "app/order.approved" → delivery workflow resumes
+// - reject:     sets status "needs_revision", shows feedback form
+// - POST:       stores feedback, fires "app/order.revision_requested"
 
 import { createClient } from "@supabase/supabase-js";
 import { inngest } from "../lib/inngest/client.js";
@@ -26,16 +25,77 @@ function getSupabase() {
 }
 
 export default async function handler(req, res) {
-  const { token, action } = req.query;
 
-  // ── Validate input ─────────────────────────────────────────────────────
-  if (!token || !["approve", "reject"].includes(action)) {
-    return res
-      .status(400)
-      .send(page("Ongeldige aanvraag", "De link is onvolledig of onjuist.", "#C62828"));
+  // ── POST: feedback form submission (regenerate) ──────────────────────────
+  if (req.method === "POST") {
+    const { token, feedback } = req.body || {};
+
+    if (!token || !feedback?.trim()) {
+      return res.status(400).send(page(
+        "Ontbrekende gegevens",
+        "Vul eerst het feedbackveld in voordat je verstuurt.",
+        "#C62828"
+      ));
+    }
+
+    const db = getSupabase();
+    const { data: order, error } = await db
+      .from("orders")
+      .select("id, status, customer_name, report_title")
+      .eq("review_token", token)
+      .single();
+
+    if (error || !order) {
+      return res.status(404).send(page(
+        "Token niet gevonden",
+        "Deze link bestaat niet of is verlopen.",
+        "#C62828"
+      ));
+    }
+
+    if (!["needs_revision", "review_pending"].includes(order.status)) {
+      return res.status(200).send(page(
+        "Al verwerkt",
+        `De order heeft status <strong>${escHtml(order.status)}</strong> — geen revisie meer mogelijk.`,
+        "#888"
+      ));
+    }
+
+    const { error: updErr } = await db
+      .from("orders")
+      .update({ status: "regenerating", revision_notes: feedback.trim() })
+      .eq("id", order.id);
+
+    if (updErr) {
+      return res.status(500).send(page("Fout", `DB update mislukt: ${escHtml(updErr.message)}`, "#C62828"));
+    }
+
+    try {
+      await inngest.send({
+        name: "app/order.revision_requested",
+        data: { orderId: order.id, feedback: feedback.trim() },
+      });
+    } catch (e) {
+      console.error("[review] Inngest send error:", e.message);
+      return res.status(500).send(page("Fout", `Kon regeneratie niet starten: ${escHtml(e.message)}`, "#C62828"));
+    }
+
+    return res.status(200).send(page(
+      "Regeneratie gestart ✓",
+      `Het rapport <strong>${escHtml(order.report_title)}</strong> voor <strong>${escHtml(order.customer_name)}</strong>
+       wordt opnieuw gegenereerd met jouw feedback.<br><br>
+       Je ontvangt een nieuwe review-email zodra de herziene versie klaar is (5–15 minuten).`,
+      "#2E7D32"
+    ));
   }
 
-  // ── Look up order by review_token ──────────────────────────────────────
+  // ── GET: approve or reject ────────────────────────────────────────────────
+  const { token, action } = req.query;
+
+  if (!token || !["approve", "reject"].includes(action)) {
+    return res.status(400).send(page("Ongeldige aanvraag", "De link is onvolledig of onjuist.", "#C62828"));
+  }
+
   const db = getSupabase();
   const { data: order, error } = await db
     .from("orders")
@@ -44,48 +104,33 @@ export default async function handler(req, res) {
     .single();
 
   if (error || !order) {
-    return res
-      .status(404)
-      .send(page("Token niet gevonden", "Deze link bestaat niet of is verlopen.", "#C62828"));
+    return res.status(404).send(page("Token niet gevonden", "Deze link bestaat niet of is verlopen.", "#C62828"));
   }
 
-  // ── Idempotency: already processed ────────────────────────────────────
   if (order.status !== "review_pending") {
     const msg = order.status === "delivered"
       ? "Dit rapport is al bezorgd bij de klant."
       : `De order heeft status: <strong>${order.status}</strong> — geen actie nodig.`;
-    return res
-      .status(200)
-      .send(page("Al verwerkt", msg, "#888"));
+    return res.status(200).send(page("Al verwerkt", msg, "#888"));
   }
 
-  // ── Approve ─────────────────────────────────────────────────────────────
+  // ── Approve ────────────────────────────────────────────────────────────────
   if (action === "approve") {
     try {
-      // Fire the Inngest event — the waiting workflow step will receive this
-      // and resume immediately with download token creation + delivery email.
-      await inngest.send({
-        name: "app/order.approved",
-        data: { orderId: order.id },
-      });
-
-      return res
-        .status(200)
-        .send(page(
-          "Rapport goedgekeurd ✓",
-          `Het rapport <strong>${escHtml(order.report_title)}</strong> voor <strong>${escHtml(order.customer_name)}</strong> is goedgekeurd.<br><br>
-           De klant ontvangt de download-email binnen enkele minuten.`,
-          "#2E7D32"
-        ));
+      await inngest.send({ name: "app/order.approved", data: { orderId: order.id } });
+      return res.status(200).send(page(
+        "Rapport goedgekeurd ✓",
+        `Het rapport <strong>${escHtml(order.report_title)}</strong> voor <strong>${escHtml(order.customer_name)}</strong>
+         is goedgekeurd.<br><br>De klant ontvangt de download-email binnen enkele minuten.`,
+        "#2E7D32"
+      ));
     } catch (e) {
-      console.error("[review-approve] Inngest send error:", e.message);
-      return res
-        .status(500)
-        .send(page("Fout", `Kon de goedkeuring niet verzenden: ${escHtml(e.message)}`, "#C62828"));
+      console.error("[review] Inngest send error:", e.message);
+      return res.status(500).send(page("Fout", `Kon goedkeuring niet verzenden: ${escHtml(e.message)}`, "#C62828"));
     }
   }
 
-  // ── Reject → show feedback form ────────────────────────────────────────
+  // ── Reject → feedback form ─────────────────────────────────────────────────
   if (action === "reject") {
     const { error: updErr } = await db
       .from("orders")
@@ -93,12 +138,9 @@ export default async function handler(req, res) {
       .eq("id", order.id);
 
     if (updErr) {
-      return res
-        .status(500)
-        .send(page("Fout", `DB update mislukt: ${escHtml(updErr.message)}`, "#C62828"));
+      return res.status(500).send(page("Fout", `DB update mislukt: ${escHtml(updErr.message)}`, "#C62828"));
     }
 
-    // Show a feedback form so admin can describe what needs fixing
     return res.status(200).send(feedbackForm({
       token,
       customerName: order.customer_name,
@@ -135,14 +177,14 @@ function feedbackForm({ token, customerName, reportTitle }) {
         Rapport: <strong style="color:#2A2820;">${escHtml(reportTitle)}</strong>
         &nbsp;·&nbsp; Klant: <strong style="color:#2A2820;">${escHtml(customerName)}</strong>
       </p>
-      <form method="POST" action="/api/review-regenerate">
+      <form method="POST" action="/api/review-approve">
         <input type="hidden" name="token" value="${escHtml(token)}">
         <label style="display:block;font-size:12px;font-weight:600;letter-spacing:.5px;
                       text-transform:uppercase;color:#9A8050;margin-bottom:10px;">
           Wat moet anders?
         </label>
         <textarea name="feedback" required
-          placeholder="Beschrijf zo concreet mogelijk wat Claude moet aanpassen. Bijv: &#10;— De Type-sectie is te algemeen, mist persoonlijke observaties&#10;— De autoriteit klopt niet: zegt Emotioneel maar moet Sacraal zijn&#10;— Toon te coachend, meer observationeel schrijven"
+          placeholder="Beschrijf zo concreet mogelijk wat Claude moet aanpassen. Bijv:&#10;— De Type-sectie is te algemeen, mist persoonlijke observaties&#10;— De autoriteit klopt niet: zegt Emotioneel maar moet Sacraal zijn&#10;— Toon te coachend, meer observationeel schrijven"
           style="width:100%;box-sizing:border-box;height:200px;padding:14px 16px;
                  font-size:14px;color:#2A2820;border:1.5px solid #DDD8CE;border-radius:6px;
                  font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;line-height:1.7;
@@ -164,7 +206,7 @@ function feedbackForm({ token, customerName, reportTitle }) {
 </html>`;
 }
 
-// ─── SIMPLE HTML PAGE ─────────────────────────────────────────────────────────
+// ─── SIMPLE PAGE ──────────────────────────────────────────────────────────────
 function page(title, body, accentColor) {
   return `<!DOCTYPE html>
 <html lang="nl">
