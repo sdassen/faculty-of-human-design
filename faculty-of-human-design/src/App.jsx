@@ -4078,12 +4078,14 @@ function DownloadPage({token}){
   const[reportTitle,setReportTitle]=useState("");
 
   useEffect(()=>{
-    // Use HEAD to check token validity without downloading the PDF
+    // Use HEAD to check token validity without downloading the PDF.
+    // API status codes: 200=ready, 202=processing, 404=not found, 410=expired
     fetch("/api/get-download?token="+token,{method:"HEAD"})
       .then(r=>{
-        if(r.status===404){setStatus("notfound");}
+        if(r.status===200){setStatus("ready");}
         else if(r.status===410){setStatus("expired");}
-        else if(r.ok&&r.headers.get("x-fhd-status")==="ready"){setStatus("ready");}
+        else if(r.status===404){setStatus("notfound");}
+        else if(r.status===202){setStatus("processing");}
         else{setStatus("error");}
       })
       .catch(()=>setStatus("error"));
@@ -4116,6 +4118,18 @@ function DownloadPage({token}){
             </a>
             <p style={{fontSize:".72rem",color:"var(--text-light)"}}>
               {LANG==="en"?"Save the file to your archive — the link is valid for 30 days.":"Sla het bestand op voor je archief — de link is 30 dagen geldig."}
+            </p>
+          </>
+        )}
+        {status==="processing"&&(
+          <>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",fontWeight:300,color:"var(--text)",marginBottom:10}}>
+              {LANG==="en"?"Your report is being prepared":"Je rapport wordt samengesteld"}
+            </div>
+            <p style={{color:"var(--text-light)",fontSize:".85rem",lineHeight:1.75,marginBottom:16}}>
+              {LANG==="en"
+                ?"Your blueprint is still being compiled. You will receive an email as soon as it is ready — usually within 1 business day."
+                :"Je blauwdruk wordt nog samengesteld. Je ontvangt een e-mail zodra hij klaar staat — doorgaans binnen 1 werkdag."}
             </p>
           </>
         )}
