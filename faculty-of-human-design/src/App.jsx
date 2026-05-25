@@ -1888,7 +1888,6 @@ function ChartDashboard({chart,name,onOrder}){
       <div className="cd-int">
         <div className="cd-int-hdr">
           <div className="cd-int-ttl">{t("form.deeperLabel")}</div>
-          <div className="cd-int-lnk" onClick={onOrder}>{t("form.deeperLink")}</div>
         </div>
         <div className="cd-int-row">
           <IntegrationCard
@@ -2431,7 +2430,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="day" min="1" max={maxDay()} value={form.day} onChange={ch} onBlur={numBlur("day",1,maxDay())} placeholder="15"/></div>
               <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
               <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="year" min="1900" max={new Date().getFullYear()} value={form.year} onChange={ch} onBlur={numBlur("year",1900,new Date().getFullYear())} placeholder="1990"/></div>
-              {needsTime&&<div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} onBlur={numBlur("hour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} onBlur={numBlur("minute",0,59)} placeholder={t("form.minute")}/></div></div>}
+              {needsTime&&<div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="hour" min="0" max="23" value={form.hour} onChange={ch} onBlur={numBlur("hour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="minute" min="0" max="59" value={form.minute} onChange={ch} onBlur={numBlur("minute",0,59)} placeholder={t("form.minute")}/></div><div style={{fontSize:".72rem",color:"var(--text-light)",marginTop:5}}>{t("form.timeNote")}</div></div>}
               <div className="form-group full">
                 <label className="form-label">{t("form.birthPlace")}</label>
                 <PlaceAutocomplete
