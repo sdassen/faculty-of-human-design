@@ -1995,16 +1995,16 @@ function Nav({page,go,menuOpen,setMenuOpen}){
           <div className="nav-cta-wrap">
             {/* Language switcher */}
             <div style={{display:"flex",gap:4,marginRight:4}}>
-              {["nl","en"].map(lng=>(
+              {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
                 <button key={lng} onClick={()=>switchLang(lng)} style={{
                   background:LANG===lng?"var(--brand)":"transparent",
                   color:LANG===lng?"white":"var(--text-muted)",
                   border:LANG===lng?"1px solid var(--brand)":"1px solid var(--border)",
                   borderRadius:"var(--radius-sm)",
-                  padding:"4px 9px",fontSize:".62rem",fontWeight:600,letterSpacing:".08em",
-                  cursor:LANG===lng?"default":"pointer",textTransform:"uppercase",
+                  padding:"4px 9px",fontSize:".85rem",fontWeight:600,letterSpacing:".08em",
+                  cursor:LANG===lng?"default":"pointer",
                   transition:"all 150ms",
-                }}>{lng.toUpperCase()}</button>
+                }}>{flag}</button>
               ))}
             </div>
             <button className="btn btn-primary btn-sm" onClick={()=>{track("hero_cta_click",{location:"nav"});go("rapporten");}}>{t("nav.cta")}</button>
@@ -2024,15 +2024,15 @@ function Nav({page,go,menuOpen,setMenuOpen}){
           ))}
           {/* Mobile language switcher */}
           <div style={{display:"flex",gap:8,padding:"16px 0",borderBottom:"1px solid var(--border)"}}>
-            {["nl","en"].map(lng=>(
+            {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
               <button key={lng} onClick={()=>switchLang(lng)} style={{
                 background:LANG===lng?"var(--brand)":"transparent",
                 color:LANG===lng?"white":"var(--text-muted)",
                 border:LANG===lng?"1px solid var(--brand)":"1px solid var(--border)",
                 borderRadius:"var(--radius-sm)",padding:"6px 14px",
-                fontSize:".7rem",fontWeight:600,letterSpacing:".08em",
-                cursor:LANG===lng?"default":"pointer",textTransform:"uppercase",
-              }}>{lng.toUpperCase()}</button>
+                fontSize:"1rem",fontWeight:600,letterSpacing:".08em",
+                cursor:LANG===lng?"default":"pointer",
+              }}>{flag}</button>
             ))}
           </div>
           <div style={{marginTop:16}}>
@@ -2078,6 +2078,17 @@ function Footer({go}){
             <span className="footer-trust-item" style={{cursor:"pointer"}} onClick={()=>go("voorwaarden")}>{t("footer.terms")}</span>
             <div className="footer-trust-item">{t("footer.ssl")}</div>
             <div className="footer-trust-item">{t("footer.ideal")}</div>
+            <div style={{display:"flex",gap:4,marginLeft:8}}>
+              {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
+                <button key={lng} onClick={()=>switchLang(lng)} style={{
+                  background:LANG===lng?"rgba(255,255,255,.15)":"transparent",
+                  color:LANG===lng?"white":"rgba(255,255,255,.4)",
+                  border:LANG===lng?"1px solid rgba(255,255,255,.25)":"1px solid transparent",
+                  borderRadius:"var(--radius-sm)",padding:"2px 7px",fontSize:".9rem",
+                  cursor:LANG===lng?"default":"pointer",transition:"all 150ms",
+                }}>{flag}</button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
