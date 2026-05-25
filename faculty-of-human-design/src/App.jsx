@@ -2023,7 +2023,7 @@ function Nav({page,go,menuOpen,setMenuOpen}){
             <div key={id} className="mobile-menu-link" onClick={()=>{go(id);setMenuOpen(false);}}>{label}</div>
           ))}
           {/* Mobile language switcher */}
-          <div style={{display:"flex",gap:8,padding:"16px 0",borderBottom:"1px solid var(--border)"}}>
+          <div style={{display:"flex",justifyContent:"center",gap:8,padding:"16px 0",borderBottom:"1px solid var(--border)"}}>
             {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
               <button key={lng} onClick={()=>switchLang(lng)} style={{
                 background:LANG===lng?"var(--brand)":"transparent",
