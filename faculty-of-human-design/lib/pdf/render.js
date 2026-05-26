@@ -41,13 +41,14 @@ export async function renderPDF(html) {
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 
+    const headerTemplate = `<style>html,body{background:transparent!important;margin:0;padding:0;}</style><div style="font-family:Arial,sans-serif;font-size:5.5pt;color:#9A9490;width:100%;text-align:center;padding-top:2.5mm;letter-spacing:0.22em;text-transform:uppercase;box-sizing:border-box;">FACULTY OF HUMAN DESIGN  &middot;  IBIZA</div>`;
     const footerTemplate = `<style>html,body{background:transparent!important;margin:0;padding:0;}</style><div style="font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`;
     const pdf = await page.pdf({
       format:               "A4",
       printBackground:      true,
-      margin:               { top: "0mm", bottom: "10mm", left: "0mm", right: "0mm" },
+      margin:               { top: "8mm", bottom: "10mm", left: "0mm", right: "0mm" },
       displayHeaderFooter:  true,
-      headerTemplate:       "<span></span>",
+      headerTemplate,
       footerTemplate,
     });
 
