@@ -443,9 +443,11 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
   // ── Approximate page number calculation ─────────────────────────────────
   // Fixed pages before the first section:
   //   Cover(1) + Intro(1) + HowToRead(1) + ExecSummary(hasChart?1:0)
-  //   + Methodology(1) + TOC(1) + Profile(hasChart?2:0) + Bodygraph(hasChart&&hasSvg?1:0)
+  //   + Methodology(1) + TOC(1) + Profile(hasChart?2:0)
+  //   + Bodygraph(hasChart&&hasSvg?1:0) + GateAppendix(hasChart?1:0)
   // Profile can run long; we count it as 2 pages for a typical chart.
-  const fixedPages = 1 + 1 + 1 + (hasChart ? 1 : 0) + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0);
+  // GateAppendix is now placed directly after Bodygraph, before sections.
+  const fixedPages = 1 + 1 + 1 + (hasChart ? 1 : 0) + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0) + (hasChart ? 1 : 0);
 
   const midIdx  = sections.length > 3 ? Math.floor(sections.length / 2) : -1;
   const lastIdx = sections.length > 1 ? sections.length - 1 : -1;
@@ -1220,8 +1222,8 @@ ${buildMethodologyPage(order)}
 ${buildTOCPage(sections, order, hasChart, !!svgBodygraph)}
 ${hasChart ? buildProfilePage(order) : ""}
 ${hasChart && svgBodygraph ? buildBodygraphPage(svgBodygraph, order) : ""}
-${sectionPagesWithTransition}
 ${hasChart ? buildGateAppendixPage(order) : ""}
+${sectionPagesWithTransition}
 ${buildClosingPage(order)}
 </body>
 </html>`;
