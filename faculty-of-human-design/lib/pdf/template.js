@@ -1202,7 +1202,7 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 ${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @page { size: A4 portrait; margin: 0mm; }
+  @page { size: A4 portrait; margin: 8mm 0mm 10mm 0mm; }
   html, body { width: 210mm; background: #F7F5F0; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
