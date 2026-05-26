@@ -1115,7 +1115,7 @@ function buildGateAppendixPage(order) {
   const childReport = isChildReport(order);
   const childOverrides = CHILD_GATE_OVERRIDE[lang === "en" ? "en" : "nl"] || {};
 
-  const headerLabel = ui(lang, "APPENDIX", "APPENDIX");
+  const headerLabel = ui(lang, "JOUW CHART", "YOUR CHART");
   const pageTitle   = ui(lang,
     childReport ? "Actieve poorten van je kind" : "Jouw actieve poorten",
     childReport ? "Your child's active gates" : "Your active gates"
