@@ -3981,6 +3981,7 @@ function ContactPage(){
       const data=await res.json();
       if(!res.ok)throw new Error(data.error||"Onbekende fout");
       setStatus("ok");
+      setForm({name:"",email:"",subject:"",msg:""});
     }catch(e){
       setErrMsg(e.message);
       setStatus("error");
