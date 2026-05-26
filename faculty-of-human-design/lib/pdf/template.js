@@ -383,7 +383,7 @@ function buildHowToReadPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;">
   <div style="height:3px;background:#1A1715;"></div>
   <div style="padding:14mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">${esc(c.label)}</div>
@@ -552,7 +552,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;min-height:273mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
+<div style="width:210mm;min-height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -645,7 +645,7 @@ function buildSectionClosingJSON(section, idx, order) {
   if (!hasAny) return "";
 
   return `
-<div style="background:#FFFFFF;position:relative;break-before:page;break-after:page;min-height:273mm;">
+<div style="background:#F7F5F0;position:relative;break-before:page;break-after:page;min-height:273mm;">
   <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:8mm 20mm 0 24mm;">
@@ -919,7 +919,7 @@ function buildMethodologyPage(order) {
     : "";
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
