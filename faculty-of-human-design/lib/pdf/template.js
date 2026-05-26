@@ -267,7 +267,7 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
   const lang  = order.language || "nl";
   const quote = lang === "en" ? quoteEN : quoteNL;
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:297mm;page:dark-page;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="padding:0 32mm;text-align:center;position:relative;">
@@ -406,7 +406,7 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:297mm;page:dark-page;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 290)}
@@ -973,7 +973,7 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:297mm;page:dark-page;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 420)}
@@ -1170,6 +1170,7 @@ ${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   @page { size: A4 portrait; margin: 14mm 0mm 10mm 0mm; }
+  @page dark-page { size: A4 portrait; margin: 0mm; }
   html, body { width: 210mm; background: #F7F5F0; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
