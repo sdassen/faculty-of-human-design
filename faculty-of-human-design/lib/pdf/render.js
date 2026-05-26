@@ -46,7 +46,7 @@ export async function renderPDF(html) {
     const pdf = await page.pdf({
       format:               "A4",
       printBackground:      true,
-      margin:               { top: "8mm", bottom: "10mm", left: "0mm", right: "0mm" },
+      margin:               { top: "14mm", bottom: "10mm", left: "0mm", right: "0mm" },
       displayHeaderFooter:  true,
       headerTemplate,
       footerTemplate,

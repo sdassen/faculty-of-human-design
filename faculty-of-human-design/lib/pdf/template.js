@@ -267,7 +267,7 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
   const lang  = order.language || "nl";
   const quote = lang === "en" ? quoteEN : quoteNL;
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="padding:0 32mm;text-align:center;position:relative;">
@@ -320,7 +320,7 @@ function buildIntroPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;">
   <div style="height:3px;background:#1A1715;"></div>
   <div style="flex:1;padding:18mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:18px;">${esc(c.label)}</div>
@@ -383,7 +383,7 @@ function buildHowToReadPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
   <div style="height:3px;background:#1A1715;"></div>
   <div style="padding:14mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">${esc(c.label)}</div>
@@ -391,10 +391,6 @@ function buildHowToReadPage(order) {
     <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:16px;"></div>
     <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#6B6560;line-height:1.72;margin-bottom:20px;max-width:150mm;">${esc(c.intro)}</p>
     ${itemsHTML}
-  </div>
-  <div style="position:absolute;bottom:10mm;left:24mm;right:24mm;display:flex;justify-content:space-between;align-items:center;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
   </div>
 </div>`;
 }
@@ -410,7 +406,7 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 290)}
@@ -488,16 +484,12 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
   }).join("");
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;padding:20mm;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;padding:20mm;">
   <div style="height:2px;background:#1A1715;margin-bottom:3px;"></div>
   <div style="height:0.5px;background:#C9A85C;margin-bottom:32px;"></div>
   <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.25em;margin-bottom:16px;">${tocLabel}</div>
   <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:28pt;font-weight:400;color:#1A1715;margin-bottom:28px;line-height:1.1;">${esc(order.report_title || "Volledig Human Design Rapport")}</div>
   ${items}
-  <div style="position:absolute;bottom:20mm;left:20mm;right:20mm;">
-    <div style="height:0.5px;background:#E5E0D8;margin-bottom:10px;"></div>
-    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:300;color:#A8A29E;">Faculty of Human Design  ·  Ibiza</div>
-  </div>
 </div>`;
 }
 
@@ -532,7 +524,7 @@ function buildProfilePage(order) {
   const definedCenters = (chart.definedCenters || []).join("  ·  ");
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;">
   <div style="height:70mm;background:${ta.bg};position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${ta.bar};"></div>
     <div style="padding:20mm 20mm 0 24mm;">
@@ -552,10 +544,6 @@ function buildProfilePage(order) {
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "GEDEFINIEERDE CENTRA", "DEFINED CENTERS")}</div>
     <div style="font-family:'Inter',sans-serif;font-size:8pt;color:#6B6560;">${esc(definedCenters)}</div>
   </div>` : ""}
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;align-items:center;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
-  </div>
 </div>`;
 }
 
@@ -564,7 +552,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;min-height:279mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
+<div style="width:210mm;min-height:273mm;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -573,13 +561,6 @@ function buildBodygraphPage(svgBodygraph, order) {
   </div>
   <div style="display:flex;justify-content:center;margin-top:4px;">
     <div style="width:170mm;aspect-ratio:360/500;">${svgBodygraph}</div>
-  </div>
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;">
-    <div style="height:0.5px;background:#E5E0D8;margin-bottom:8px;"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
-    </div>
   </div>
 </div>`;
 }
@@ -616,7 +597,7 @@ function sectionClosingHTML(section, idx, order, gridHTML) {
   const lang      = order.language || "nl";
   const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
   return `
-<div style="height:279mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-after:page;">
+<div style="height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-after:page;">
   <div style="height:40mm;background:#1A1715;position:relative;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:9mm 16mm 0 20mm;">
@@ -626,10 +607,6 @@ function sectionClosingHTML(section, idx, order, gridHTML) {
     <div style="position:absolute;right:20mm;top:12mm;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.15em;text-transform:uppercase;">${ui(lang, "INZICHTEN & PRAKTIJK", "INSIGHTS & PRACTICE")}</div>
   </div>
   <div style="padding:6mm 20mm 0;">${gridHTML}</div>
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;align-items:center;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
-  </div>
 </div>`;
 }
 
@@ -668,7 +645,7 @@ function buildSectionClosingJSON(section, idx, order) {
   if (!hasAny) return "";
 
   return `
-<div style="background:#FFFFFF;position:relative;break-before:page;break-after:page;min-height:279mm;">
+<div style="background:#FFFFFF;position:relative;break-before:page;break-after:page;min-height:273mm;">
   <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:8mm 20mm 0 24mm;">
@@ -691,10 +668,6 @@ function buildSectionClosingJSON(section, idx, order) {
     <div style="padding-left:22px;">${botRight}</div>
   </div>` : ""}
 
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#C8C4BC;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#C8C4BC;">Faculty of Human Design</div>
-  </div>
 </div>`;
 }
 
@@ -760,7 +733,7 @@ function buildSectionPagesJSON(section, idx, order) {
   // ── Breath page (adem) — minimalist pause before this section ────────────
   const ademText = (section.adem || "").trim();
   const ademPage = ademText
-    ? `<div style="break-before:page;min-height:279mm;background:#FAF8F4;display:flex;align-items:center;justify-content:center;position:relative;">
+    ? `<div style="break-before:page;min-height:273mm;background:#FAF8F4;display:flex;align-items:center;justify-content:center;position:relative;">
         <div style="max-width:120mm;text-align:center;padding:0 20mm;">
           <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:17pt;color:#1A1715;line-height:1.7;">${esc(ademText)}</div>
         </div>
@@ -898,7 +871,7 @@ function buildExecutiveSummaryPage(order) {
     : null;
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;">
   <!-- Dark header with type -->
   <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;flex-shrink:0;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
@@ -946,7 +919,7 @@ function buildMethodologyPage(order) {
     : "";
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-after:page;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
@@ -989,10 +962,6 @@ function buildMethodologyPage(order) {
       )}</p>
     </div>
   </div>
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
-  </div>
 </div>`;
 }
 
@@ -1004,7 +973,7 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:279mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 420)}
@@ -1154,10 +1123,6 @@ function buildGateAppendixPage(order) {
       ${gateCards}
     </div>
   </div>
-  <div style="position:absolute;bottom:10mm;left:20mm;right:20mm;display:flex;justify-content:space-between;">
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
-  </div>
 </div>`;
 }
 
@@ -1204,7 +1169,7 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 ${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @page { size: A4 portrait; margin: 8mm 0mm 10mm 0mm; }
+  @page { size: A4 portrait; margin: 14mm 0mm 10mm 0mm; }
   html, body { width: 210mm; background: #F7F5F0; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
