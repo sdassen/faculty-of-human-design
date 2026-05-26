@@ -3972,6 +3972,27 @@ function ContactPage(){
   const[form,setForm]=useState({name:"",email:"",subject:"",msg:""});
   const[status,setStatus]=useState(null); // null | "sending" | "ok" | "error"
   const[errMsg,setErrMsg]=useState("");
+  const[faqOpen,setFaqOpen]=useState(null);
+
+  const FAQ_NL=[
+    {q:"Wat heb ik nodig om een rapport te bestellen?",a:"Alleen je exacte geboortedatum, geboortetijd en geboorteplaats. Hoe nauwkeuriger de geboortetijd, hoe preciezer het rapport. Een afwijking van 15 minuten heeft al merkbaar effect op sommige chart-elementen."},
+    {q:"Hoe snel ontvang ik mijn rapport?",a:"Rapporten worden bezorgd binnen 18–23 uur na betaling, op werkdagen tussen 9:00 en 17:30 uur. Zo voelt het als een persoonlijk samengesteld document — niet als een directe download."},
+    {q:"In welke taal is het rapport geschreven?",a:"Je kiest zelf de taal bij het bestellen: Nederlands of Engels. Het rapport wordt volledig in de gekozen taal opgeleverd."},
+    {q:"Wat als ik mijn exacte geboortetijd niet weet?",a:"Een geschatte tijd is vaak voldoende voor de meeste chart-elementen. Neem bij twijfel contact op — we adviseren je welk rapport nog steeds waardevol is voor jouw situatie."},
+    {q:"Wat maakt dit rapport anders dan andere Human Design lezingen?",a:"Onze rapporten worden individueel gegenereerd op basis van jouw chartdata en geschreven in een literaire, emotioneel resonante stijl. Geen generieke templates — elk rapport is uniek voor jou."},
+    {q:"Kan ik een rapport retourneren of terugbetaling aanvragen?",a:"Omdat elk rapport persoonlijk voor jou wordt samengesteld, is terugbetaling niet mogelijk na levering. Bij vragen of opmerkingen kun je ons altijd bereiken via info@facultyhd.com."},
+    {q:"Hoe lang blijft de download-link geldig?",a:"De link naar jouw rapport blijft permanent beschikbaar. Je kunt het PDF-bestand altijd opslaan of opnieuw downloaden via de link die je per e-mail ontvangt."},
+  ];
+  const FAQ_EN=[
+    {q:"What do I need to order a report?",a:"Only your exact date of birth, time of birth and place of birth. The more accurate the birth time, the more precise the report. Even a 15-minute difference can meaningfully affect certain chart elements."},
+    {q:"How soon will I receive my report?",a:"Reports are delivered within 18–23 hours after payment, on business days between 9:00 and 17:30. This gives it the feel of a personally curated document rather than an instant download."},
+    {q:"What language is the report written in?",a:"You choose the language when ordering: Dutch or English. The report will be delivered entirely in your chosen language."},
+    {q:"What if I don't know my exact birth time?",a:"An approximate time is often sufficient for most chart elements. If you're unsure, feel free to contact us — we can advise which report still provides meaningful insight for your situation."},
+    {q:"What makes this report different from other Human Design readings?",a:"Our reports are individually generated based on your chart data, written in a literary, emotionally resonant style. No generic templates — every report is unique to you."},
+    {q:"Can I return a report or request a refund?",a:"Because each report is personally compiled for you, refunds are not available after delivery. For any questions or concerns, you can always reach us at info@facultyhd.com."},
+    {q:"How long does the download link remain valid?",a:"The link to your report remains permanently available. You can save the PDF or re-download it at any time using the link you receive by email."},
+  ];
+  const faqs=LANG==="en"?FAQ_EN:FAQ_NL;
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   const send=async()=>{
     if(!form.name.trim()||!form.email.trim()||!form.msg.trim())return;
@@ -4014,6 +4035,39 @@ function ContactPage(){
           <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{t("contact.sub")}</p>
         </div>
       </div>
+      <section className="section" style={{background:"var(--muted)"}}>
+        <div className="container-sm">
+          <div style={{maxWidth:680,margin:"0 auto"}}>
+            <div className="label" style={{marginBottom:12,textAlign:"center"}}>{LANG==="en"?"FREQUENTLY ASKED QUESTIONS":"VEELGESTELDE VRAGEN"}</div>
+            <h2 className="h2" style={{textAlign:"center",marginBottom:48}}>{LANG==="en"?"Everything you need to know":"Alles wat je wilt weten"}</h2>
+            <div style={{display:"flex",flexDirection:"column",gap:2}}>
+              {faqs.map((item,i)=>(
+                <div key={i} style={{background:"var(--white)",borderRadius:"var(--radius-md)",overflow:"hidden",boxShadow:"var(--shadow-sm)"}}>
+                  <button
+                    onClick={()=>setFaqOpen(faqOpen===i?null:i)}
+                    style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,padding:"18px 24px",background:"none",border:"none",textAlign:"left",cursor:"pointer"}}
+                  >
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:600,color:"var(--text)",lineHeight:1.4}}>{item.q}</span>
+                    <span style={{flexShrink:0,width:22,height:22,borderRadius:"50%",background:faqOpen===i?"var(--gold-warm)":"var(--muted)",display:"flex",alignItems:"center",justifyContent:"center",transition:"background 0.2s",color:faqOpen===i?"#fff":"var(--text-muted)",fontSize:"0.85rem",fontWeight:500}}>
+                      {faqOpen===i?"−":"+"}
+                    </span>
+                  </button>
+                  {faqOpen===i&&(
+                    <div style={{padding:"0 24px 20px",fontSize:"0.925rem",lineHeight:1.75,color:"var(--text-muted)",borderTop:"1px solid var(--border)"}}>
+                      <div style={{paddingTop:14}}>{item.a}</div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+            <p style={{textAlign:"center",marginTop:32,fontSize:"0.875rem",color:"var(--text-light)"}}>
+              {LANG==="en"
+                ?"Still have a question? Fill in the form below and we'll respond within 1 business day."
+                :"Staat jouw vraag er niet bij? Vul het formulier hieronder in en we reageren binnen 1 werkdag."}
+            </p>
+          </div>
+        </div>
+      </section>
       <section className="section bg-white">
         <div className="container-sm">
           <div className="grid-2" style={{gap:56,alignItems:"start"}}>
