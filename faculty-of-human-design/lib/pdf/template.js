@@ -13,6 +13,51 @@ function esc(s) {
 
 function ui(lang, nl, en) { return lang === "en" ? en : nl; }
 
+// ─── CHART VALUE TRANSLATIONS (NL → EN) ──────────────────────────────────────
+// Chart data is always stored in Dutch. When rendering an EN report, run values
+// through this map so strategy / authority / signature / not-self appear in EN.
+const CHART_TRANSLATIONS = {
+  // ── Type ───────────────────────────────────────────────────────────────────
+  "manifesteerend generator":                                   "Manifesting Generator",
+  "manifesteerder":                                             "Manifestor",
+  // ── Strategy ───────────────────────────────────────────────────────────────
+  "wacht op te reageren":                                       "Wait to respond",
+  "wacht om te reageren":                                       "Wait to respond",
+  "wacht om te reageren, informeer dan voor je handelt":        "Wait to respond, then inform before acting",
+  "wacht op te reageren, informeer dan voor je handelt":        "Wait to respond, then inform before acting",
+  "informeer voor je handelt":                                  "Inform before acting",
+  "informeer voordat je handelt":                               "Inform before acting",
+  "wacht op de uitnodiging":                                    "Wait for the invitation",
+  "wacht een maancyclus":                                       "Wait a lunar cycle",
+  // ── Authority ──────────────────────────────────────────────────────────────
+  "sacraal":                                                    "Sacral",
+  "emotioneel":                                                 "Emotional",
+  "milt":                                                       "Splenic",
+  "ego":                                                        "Ego / Heart",
+  "ego manifesteerder":                                         "Ego Manifestor",
+  "g-center":                                                   "G-Center / Self",
+  "zelf":                                                       "Self / G-Center",
+  "mentaal":                                                    "Mental",
+  "geen":                                                       "None",
+  // ── Signature ──────────────────────────────────────────────────────────────
+  "bevrediging":                                                "Satisfaction",
+  "bevrediging en vrede":                                       "Satisfaction and peace",
+  "vrede":                                                      "Peace",
+  "succes":                                                     "Success",
+  "verrassing":                                                 "Surprise",
+  // ── Not-Self ───────────────────────────────────────────────────────────────
+  "frustratie":                                                 "Frustration",
+  "frustratie en woede":                                        "Frustration and anger",
+  "woede":                                                      "Anger",
+  "bitterheid":                                                 "Bitterness",
+  "teleurstelling":                                             "Disappointment",
+};
+
+function tvl(value, lang) {
+  if (lang !== "en" || !value) return value;
+  return CHART_TRANSLATIONS[(value || "").toLowerCase().trim()] || value;
+}
+
 function stripMd(text) {
   if (!text) return "";
   return text
@@ -462,13 +507,13 @@ function buildProfilePage(order) {
   const ta    = typeAccent(chart.type);
 
   const keyData = [
-    chart.type    ? { label: ui(lang, "Type",        "Type"),        value: chart.type }    : null,
-    chart.strat   ? { label: ui(lang, "Strategie",   "Strategy"),    value: chart.strat }   : null,
-    chart.auth    ? { label: ui(lang, "Autoriteit",  "Authority"),   value: chart.auth }    : null,
-    chart.profile ? { label: ui(lang, "Profiel",     "Profile"),     value: chart.profile } : null,
-    chart.sig     ? { label: ui(lang, "Signatuur",   "Signature"),   value: chart.sig }     : null,
-    chart.notSelf ? { label: "Not-Self",                              value: chart.notSelf } : null,
-    chart.cross   ? { label: ui(lang, "Inkarnatie-Kruis", "Incarnation Cross"), value: chart.cross } : null,
+    chart.type    ? { label: ui(lang, "Type",        "Type"),        value: tvl(chart.type,    lang) } : null,
+    chart.strat   ? { label: ui(lang, "Strategie",   "Strategy"),    value: tvl(chart.strat,   lang) } : null,
+    chart.auth    ? { label: ui(lang, "Autoriteit",  "Authority"),   value: tvl(chart.auth,    lang) } : null,
+    chart.profile ? { label: ui(lang, "Profiel",     "Profile"),     value: chart.profile }            : null,
+    chart.sig     ? { label: ui(lang, "Signatuur",   "Signature"),   value: tvl(chart.sig,     lang) } : null,
+    chart.notSelf ? { label: "Not-Self",                              value: tvl(chart.notSelf, lang) } : null,
+    chart.cross   ? { label: ui(lang, "Inkarnatie-Kruis", "Incarnation Cross"), value: chart.cross }   : null,
   ].filter(Boolean);
 
   const dataGrid = keyData.map(function(it) {
@@ -490,7 +535,7 @@ function buildProfilePage(order) {
     <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${ta.bar};"></div>
     <div style="padding:20mm 20mm 0 24mm;">
       <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.22em;opacity:0.7;text-transform:uppercase;margin-bottom:8px;">${ui(lang, "JOUW HUMAN DESIGN", "YOUR HUMAN DESIGN")}</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32pt;font-weight:400;color:#FFFFFF;line-height:1.1;">${esc(chart.type || "")}</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32pt;font-weight:400;color:#FFFFFF;line-height:1.1;">${esc(tvl(chart.type, lang) || "")}</div>
       ${chart.profile ? `<div style="font-family:'Inter',sans-serif;font-size:9pt;font-weight:300;color:${ta.fg};opacity:0.75;margin-top:8px;">${ui(lang, "Profiel", "Profile")} ${esc(chart.profile)}</div>` : ""}
     </div>
   </div>
@@ -825,12 +870,12 @@ function buildExecutiveSummaryPage(order) {
 
   // Data pairs — left / right columns
   const pairs = [
-    chart.strat   ? { label: ui(lang, "Strategie",        "Strategy"),         value: chart.strat }   : null,
-    chart.auth    ? { label: ui(lang, "Autoriteit",       "Authority"),        value: chart.auth }    : null,
-    chart.profile ? { label: ui(lang, "Profiel",          "Profile"),          value: chart.profile } : null,
-    chart.sig     ? { label: ui(lang, "Signatuur",        "Signature"),        value: chart.sig }     : null,
-    chart.notSelf ? { label: "Not-Self",                                        value: chart.notSelf } : null,
-    chart.cross   ? { label: ui(lang, "Inkarnatie-kruis", "Incarnation cross"), value: chart.cross }   : null,
+    chart.strat   ? { label: ui(lang, "Strategie",        "Strategy"),         value: tvl(chart.strat,   lang) } : null,
+    chart.auth    ? { label: ui(lang, "Autoriteit",       "Authority"),        value: tvl(chart.auth,    lang) } : null,
+    chart.profile ? { label: ui(lang, "Profiel",          "Profile"),          value: chart.profile }            : null,
+    chart.sig     ? { label: ui(lang, "Signatuur",        "Signature"),        value: tvl(chart.sig,     lang) } : null,
+    chart.notSelf ? { label: "Not-Self",                                        value: tvl(chart.notSelf, lang) } : null,
+    chart.cross   ? { label: ui(lang, "Inkarnatie-kruis", "Incarnation cross"), value: chart.cross }              : null,
   ].filter(Boolean);
 
   // Render as a clean 2-column grid
@@ -841,10 +886,12 @@ function buildExecutiveSummaryPage(order) {
     </div>`;
   }).join("");
 
-  // Signature / not-self pull-quote
+  // Signature / not-self pull-quote (use translated values for EN)
+  const sigTvl     = tvl(chart.sig,     lang);
+  const notSelfTvl = tvl(chart.notSelf, lang);
   const sigQuote = chart.sig && chart.notSelf
     ? (isEN
-        ? `You know you are on the right path when you feel <em>${esc(chart.sig)}</em>. When <em>${esc(chart.notSelf)}</em> arises, it is not failure — it is navigation.`
+        ? `You know you are on the right path when you feel <em>${esc(sigTvl)}</em>. When <em>${esc(notSelfTvl)}</em> arises, it is not failure — it is navigation.`
         : `Je weet dat je op het goede pad bent als je <em>${esc(chart.sig)}</em> voelt. Wanneer <em>${esc(chart.notSelf)}</em> opkomt, is dat geen falen — het is navigatie.`)
     : null;
 
@@ -855,7 +902,7 @@ function buildExecutiveSummaryPage(order) {
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
     <div style="position:absolute;right:14mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:80pt;font-weight:400;color:${ta.fg};opacity:0.04;line-height:1;padding-top:4mm;white-space:nowrap;overflow:hidden;">HD</div>
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:${ta.fg};letter-spacing:0.28em;text-transform:uppercase;opacity:0.65;margin-bottom:8px;">${ui(lang, "JOUW ONTWERP", "YOUR DESIGN")}</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:36pt;color:#FFFFFF;line-height:1.1;letter-spacing:-0.01em;">${esc(chart.type || "")}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:36pt;color:#FFFFFF;line-height:1.1;letter-spacing:-0.01em;">${esc(tvl(chart.type, lang) || "")}</div>
     ${chart.profile ? `<div style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:${ta.fg};opacity:0.7;margin-top:6px;letter-spacing:0.06em;">${ui(lang, "Profiel", "Profile")} ${esc(chart.profile)}</div>` : ""}
     ${typeTagline ? `<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10pt;font-weight:300;color:#FFFFFF;opacity:0.45;margin-top:10px;max-width:140mm;line-height:1.5;">${esc(typeTagline)}</div>` : ""}
   </div>
