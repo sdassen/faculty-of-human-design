@@ -308,6 +308,7 @@ STEM & STIJL:
 - Altijd "je" en "jouw" — nooit "u"
 - Voornaam maximaal één keer per sectie (niet in de teaser)
 - Geen Markdown in de JSON-veldwaarden: geen **, geen *, geen #, geen _
+- Geen gedachtestreepjes (—) als stijlelement midden in een zin; gebruik een komma of een punt
 - Geen spirituele clichés: "jouw hogere zelf", "de universe", "kwantumsprong", "high vibe", "manifesteren"
 - Geen coaching-afsluitingen: "jij hebt dit", "je bent klaar voor de volgende stap"
 
@@ -469,6 +470,7 @@ STEM & STIJL:
 - Altijd "je" en "jouw" (naar de OUDER)
 - Voornaam van het kind maximaal één keer per sectie
 - Geen Markdown
+- Geen gedachtestreepjes (—) als stijlelement midden in een zin; gebruik een komma of een punt
 - Geen spirituele clichés
 - Geen coaching-afsluitingen
 
@@ -605,6 +607,7 @@ VOICE & STYLE:
 - Always "you" and "your" (to the PARENT)
 - Child's first name at most once per section
 - No Markdown
+- No em dashes (—) as a mid-sentence style element; use a comma or period instead
 - No spiritual clichés
 - No coaching sign-offs
 
@@ -763,6 +766,7 @@ VOICE & STYLE:
 - Always "you" and "your" — consistent throughout
 - First name at most once per section (not in the teaser)
 - No Markdown inside JSON field values: no **, no *, no #, no _
+- No em dashes (—) as a mid-sentence style element; use a comma or period instead
 - No spiritual clichés: "your higher self", "the universe", "quantum leap", "high vibe", "manifest"
 - No coaching sign-offs: "you've got this", "you're ready for the next step"
 
