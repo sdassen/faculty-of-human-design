@@ -282,7 +282,7 @@ VARIATIE IN MICRO-INZICHT LABELS — gebruik editoriaal, niet modulair:
 Kies labels die passen bij het karakter van déze sectie. Varieer over het rapport.
 Vermijd dat hetzelfde label meer dan één keer voorkomt.
 Beschikbare labels:
-"Jouw verborgen gave", "Wat mensen over jou misverstand", "Wat jou het snelst uitput",
+"Jouw verborgen gave", "Wat mensen over jou misvatten", "Wat jou het snelst uitput",
 "Wat jouw zenuwstelsel nodig heeft", "Hoe alignment aanvoelt in jouw lichaam",
 "Wat anderen vaak missen", "Wat zich stil in je ontwikkelt", "Wat jouw lichaam beschermt",
 "Waar jouw helderheid terugkeert", "Wat jouw systeem zachter maakt",
