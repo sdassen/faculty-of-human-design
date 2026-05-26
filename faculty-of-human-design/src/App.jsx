@@ -2908,7 +2908,7 @@ function HomePage({go}){
                 <div style={{display:"flex",flexDirection:"column",gap:6,margin:"14px 0 18px",textAlign:"left"}}>
                   <div style={{fontSize:".72rem",color:"rgba(255,255,255,.65)",display:"flex",alignItems:"flex-start",gap:7}}>
                     <span style={{color:"var(--gold-warm)",flexShrink:0,marginTop:1}}>✦</span>
-                    <span>{LANG==="en"?"Within 1 business day after payment you receive your monthly report as PDF":"Binnen 1 werkdag na betaling ontvang je je maandrapport als PDF"}</span>
+                    <span>{LANG==="en"?"Sent every month on the first Monday":"Elke maand verstuurd op de eerste maandag"}</span>
                   </div>
                   <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>{LANG==="en"?"Average 11 months active":"Gemiddeld 11 maanden actief"}</div>
                 </div>
@@ -3587,8 +3587,8 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
                 <div className="label" style={{marginBottom:14}}>{t("report.personalBadge")}</div>
                 <div className="grid-2" style={{gap:12}}>
                   {(LANG==="en"
-                    ?[["Size",rpt.pages+" pages"],["Delivery","Within 1 business day"],["Format","Digital Blueprint · PDF"],["Language","English"]]
-                    :[["Omvang",rpt.pages+" pagina's"],["Levering","Binnen 1 werkdag"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]]
+                    ?[["Size",rpt.pages+" pages"],["Delivery",rpt.id==="maandelijks"?"Every month · first Monday":"Within 1 business day"],["Format","Digital Blueprint · PDF"],["Language","English"]]
+                    :[["Omvang",rpt.pages+" pagina's"],["Levering",rpt.id==="maandelijks"?"Elke maand · eerste maandag":"Binnen 1 werkdag"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]]
                   ).map(([l,v])=>(
                     <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
                   ))}
