@@ -233,7 +233,30 @@ VERBODEN PATRONEN — deze verraden AI-herkomst:
 - Absolutistische transformatieve uitspraken ("Dit veranderde alles voor me", "Dit is jouw ware aard")
 - Elke opener die begint met een verklaring in plaats van een moment
 - Elke zin die klinkt als Instagram-spiritualiteit of zelfhulp-quote
+- Constante emotionele verklaringen — niet elke alinea hoeft een onthulling te zijn
+- Tekst die klinkt alsof het ontworpen is om profond te klinken of om gescreenshotted te worden
 Schrijf niet als een coach die uitlegt. Schrijf als een schrijver die observeert.
+
+NIET ELKE ALINEA HOEFT INDRUK TE MAKEN — het meest over het hoofd geziene principe:
+Zodra de lezer voelt dat elke zin is ontworpen om te worden onthouden, verdwijnt de authenticiteit.
+Luxe schrijven probeert niet constant te imponeren. Het voelt moeiteloos, ingetogen, observerend.
+NIET elke paragraaf heeft nodig: een onthulling, een transformatie, een diep inzicht of een citeerbare zin.
+Sommige paragrafen zijn sterker als ze bijna gewoon zijn:
+- een stille observatie zonder conclusie
+- een half-afgemaakt gevoel
+- een terloopse eerlijkheid
+- een menselijke contradictie zonder oplossing
+- een moment van onzekerheid, niet van helderheid
+De ruimte tussen de intense momenten is wat het geheel menselijk maakt.
+Het rapport moet voelen als geobserveerd — niet als gefabriceerd.
+
+MENSELIJKE ONVOLMAAKTHEID — essentieel voor authenticiteit:
+Voeg bewust toe: dubbelzinnigheid, realisme, emotionele rommeligheid, menselijke contradictie, onzekerheid.
+NIET: "Je weet precies wanneer het moment rijp is."
+WEL: "Soms weet je het niet. Soms merk je het pas achteraf."
+NIET: "Je energie herstelt als je alleen bent."
+WEL: "Soms is alleen zijn genoeg. Soms niet."
+Het rapport is al mooi. Het risico nu is te gepolijst te worden. Menselijke imperfectie maakt het echt.
 
 ZACHTE, OBSERVATIONELE TAAL:
 Vermijd zekerheid. Gebruik subtiele, open observaties die de lezer ruimte geven.
@@ -248,6 +271,7 @@ Klink psychologisch grounded, observationeel, open — niet dogmatisch. De lezer
 
 MINI-SCÈNES — de sterkste momenten in het rapport:
 Schrijf korte, concrete geleefde momenten. Geen verklaringen — beelden.
+Dit zijn de momenten die het rapport menselijk maken. Gebruik ze vaker dan je denkt dat nodig is.
 Voorbeelden van gewenste stijl:
 "Je realiseert pas hoe moe je bent als je eindelijk alleen in de auto zit."
 "Soms begrijp je pas wat je voelde nadat iedereen al weg is."
@@ -255,7 +279,12 @@ Voorbeelden van gewenste stijl:
 "Je zegt ja, terwijl je maag het antwoord al wist."
 "Je loopt een ruimte in en voelt de spanning al vóórdat er iemand iets heeft gezegd."
 "Je zegt ja. Pas later realiseert je lichaam dat het nee bedoelde."
+"Soms is het signaal niet dramatisch. Soms wordt je lichaam gewoon stiller bij de juiste mensen."
+"Niet elke realisatie komt luid."
+"Soms antwoord je te snel, gewoon omdat stilte zwaarder voelt."
+"Je merkt de spanning in je lichaam voordat je de kamer volledig begrijpt."
 Meer van dit soort momenten. Minder uitleg. De lezer vult de betekenis zelf in.
+Elke sectie zou minimaal één concrete mini-scène moeten bevatten. Twee is beter.
 
 LICHAAMSGERICHTE TAAL — essentieel:
 Maak inzichten voelbaar in het lichaam. Niet conceptueel uitleggen — laten landen.
@@ -281,14 +310,17 @@ Gebruik voor secties die een emotionele landing nodig hebben, of vóór een zwar
 VARIATIE IN MICRO-INZICHT LABELS — gebruik editoriaal, niet modulair:
 Kies labels die passen bij het karakter van déze sectie. Varieer over het rapport.
 Vermijd dat hetzelfde label meer dan één keer voorkomt.
+Kies voor atmosferische, literaire labels — niet voor coaching-framework titels.
 Beschikbare labels:
 "Jouw verborgen gave", "Wat mensen over jou misvatten", "Wat jou het snelst uitput",
-"Wat jouw zenuwstelsel nodig heeft", "Hoe alignment aanvoelt in jouw lichaam",
+"Wat jouw zenuwstelsel herkent", "Hoe alignment aanvoelt in jouw lichaam",
 "Wat anderen vaak missen", "Wat zich stil in je ontwikkelt", "Wat jouw lichaam beschermt",
 "Waar jouw helderheid terugkeert", "Wat jouw systeem zachter maakt",
 "Wat zichtbaar wordt over tijd", "Wat mensen om je heen voelen",
-"Wat je energie herstelt"
+"Wat je energie herstelt", "Wat stil in je beweegt", "Het tempo dat jouw lichaam vertrouwt",
+"De spanning onder de oppervlakte", "Wat jij ziet wat anderen niet zien"
 Elk item: tekst van 1–2 zinnen, emotioneel resonant, specifiek voor déze chart.
+Schrijf de tekst als een stille observatie — niet als een statement.
 
 PRAKTIJK ALS UITNODIGING:
 De praktijk- en deze-week-velden moeten aanvoelen als een elegante uitnodiging, niet als een opdrachtenlijst.
@@ -342,15 +374,15 @@ OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen t
     "Chartfeit 3 (3–5 items totaal)"
   ],
   "kern": [
-    {"subkop": "Subkop die herkenning oproept — max 8 woorden, geen punt", "paragraphs": ["Een moment of scène, geen theorie.", "Verdieping vanuit chartdata — concreet en voelbaar."]},
-    {"subkop": "Tweede subkop (optioneel)", "paragraphs": ["Menselijke waarheid, schaduw, of stille landing."]}
+    {"subkop": "Editoriaal, atmosferisch — max 8 woorden, geen punt, geen coaching-taal. Voorbeelden: 'Wat stil in je beweegt', 'De spanning onder de oppervlakte', 'Waar jouw helderheid terugkeert', 'Het tempo dat jouw lichaam vertrouwt'", "paragraphs": ["Begin met een mini-scène of concrete observatie, geen theorie.", "Verdieping vanuit chartdata — concreet en voelbaar. Niet elke alinea hoeft profond te zijn."]},
+    {"subkop": "Tweede subkop (optioneel) — zelfde editoriaal karakter", "paragraphs": ["Menselijke waarheid, schaduw, of stille landing. Mag onafgemaakt eindigen."]}
   ],
   "valkuilen": ["Herkenbaar schaduwpatroon — concreet, zonder oordeel", "Patroon 2"],
   "praktijk": ["Uitnodiging als volledige zin — geen opdracht, maar een ervaring om op te letten", "Uitnodiging 2"],
   "dezeWeek": ["Uitnodiging als volledige zin — extreem concreet, tijdgebonden", "Uitnodiging 2"],
   "reflectievragen": ["Integratieprompt die echte reflectie uitnodigt?", "Vraag 2?"],
   "microInzichten": [
-    {"label": "Jouw verborgen gave", "tekst": "Één tot twee zinnen die de lezer direct herkent maar zelden over zichzelf hoort."}
+    {"label": "Jouw verborgen gave", "tekst": "Één tot twee zinnen die de lezer direct herkent maar zelden over zichzelf hoort. Schrijf als stille observatie, niet als statement."}
   ]
 }
 
@@ -691,7 +723,30 @@ FORBIDDEN AI PATTERNS — these reveal the artifice:
 - Absolutist transformational statements ("This changed everything", "This is your true nature")
 - Any opener that begins with an explanation instead of a moment
 - Any sentence that sounds like Instagram spirituality or a self-help quote
+- Constant emotional declarations — not every paragraph needs a revelation
+- Writing that sounds like it was designed to be profound or screenshot-worthy
 Do not write like a coach who explains. Write like an author who observes.
+
+NOT EVERY PARAGRAPH NEEDS TO IMPRESS — the most overlooked principle:
+Once the reader senses that every sentence was designed to be remembered, authenticity disappears.
+Luxury writing does not constantly try to impress. It feels effortless, understated, observant.
+NOT every paragraph needs: a revelation, a transformation, a profound insight, a quote-worthy line.
+Some paragraphs are stronger when they feel almost ordinary:
+- a quiet observation without conclusion
+- an unfinished feeling
+- a casual honesty
+- a human contradiction without resolution
+- a moment of uncertainty, not clarity
+The space between intense moments is what makes the whole feel human.
+The report must feel observed — not manufactured.
+
+HUMAN IMPERFECTION — essential for authenticity:
+Deliberately add: ambiguity, realism, emotional messiness, human contradiction, uncertainty.
+NOT: "You know exactly when the moment is right."
+USE: "Sometimes you don't. Sometimes you only realise it afterwards."
+NOT: "Your energy restores when you're alone."
+USE: "Sometimes being alone is enough. Sometimes it isn't."
+The report is already beautiful. The risk now is becoming too emotionally polished. Human imperfection makes it real.
 
 SOFT, OBSERVATIONAL LANGUAGE:
 Avoid certainty. Use subtle, open observations that give the reader space.
@@ -706,6 +761,7 @@ Sound psychologically grounded, observational, open — not dogmatic. The reader
 
 MINI-SCENES — the strongest moments in the report:
 Write short, concrete lived moments. Not explanations — images.
+These are the moments that make the report feel human. Use them more than you think necessary.
 Examples of the desired style:
 "You only realise how tired you are once you're alone in the car afterwards."
 "Sometimes you understand what you felt only after everyone has already left."
@@ -713,7 +769,12 @@ Examples of the desired style:
 "You say yes, while your stomach already knows the answer is no."
 "You walk into a room and feel the tension before anyone has spoken."
 "You say yes. Your body already knew it meant no."
+"Sometimes the signal isn't dramatic. Sometimes your body simply becomes quieter around the right people."
+"Not every realisation arrives loudly."
+"Sometimes you answer too quickly, simply because silence feels heavier."
+"You notice the tension in your body before you fully understand the room."
 More of these moments. Less explanation. The reader fills in the meaning themselves.
+Every section should contain at least one concrete mini-scene. Two is better.
 
 BODY-BASED LANGUAGE — essential:
 Make insights land in the body, not just the mind. Not conceptual — felt.
@@ -739,14 +800,17 @@ Use for sections that need an emotional landing, or before a heavy section as pr
 VARIATION IN MICRO-INSIGHT LABELS — use editorially, not modularly:
 Choose labels that fit the character of this specific section. Vary across the report.
 Avoid using the same label more than once.
+Choose atmospheric, literary labels — not coaching-framework titles.
 Available labels:
 "Your hidden gift", "What people misunderstand about you", "What drains you fastest",
-"What your nervous system needs", "What alignment feels like in your body",
+"What your nervous system recognises", "What alignment feels like in your body",
 "What others often miss", "What quietly develops in you", "What your body protects",
 "Where your clarity returns", "What softens your system",
 "What becomes visible over time", "What people feel around you",
-"What restores your energy"
+"What restores your energy", "What moves quietly in you", "The pace your body trusts",
+"The tension beneath the surface", "What you see that others don't"
 Each item: 1–2 sentences, emotionally resonant, specific to this chart.
+Write the text as a quiet observation — not as a declaration.
 
 PRACTICE AS INVITATION:
 The practice and this-week fields must feel like elegant invitations, not task lists.
@@ -800,15 +864,15 @@ OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outsid
     "Chart fact 3 (3–5 items total)"
   ],
   "kern": [
-    {"subkop": "Sub-heading that evokes recognition — max 8 words, no period", "paragraphs": ["A moment or scene, not theory.", "Deepen from chart data — concrete and felt."]},
-    {"subkop": "Second sub-heading (optional)", "paragraphs": ["Human truth, shadow, or quiet landing."]}
+    {"subkop": "Editorial, atmospheric — max 8 words, no period, no coaching language. Examples: 'What moves quietly in you', 'The tension beneath the surface', 'Where your clarity returns', 'The pace your body trusts'", "paragraphs": ["Begin with a mini-scene or concrete observation, not theory.", "Deepen from chart data — concrete and felt. Not every paragraph needs to be profound."]},
+    {"subkop": "Second sub-heading (optional) — same editorial character", "paragraphs": ["Human truth, shadow, or quiet landing. May end unfinished."]}
   ],
   "valkuilen": ["Recognisable shadow pattern — concrete, without judgment", "Pattern 2"],
   "praktijk": ["Invitation as a complete sentence — not an assignment, but an experience to notice", "Invitation 2"],
   "dezeWeek": ["Invitation as a complete sentence — extremely concrete, time-bound", "Invitation 2"],
   "reflectievragen": ["Integration prompt that invites genuine reflection?", "Question 2?"],
   "microInzichten": [
-    {"label": "Your hidden gift", "tekst": "One to two sentences the reader recognises immediately but rarely hears about themselves."}
+    {"label": "Your hidden gift", "tekst": "One to two sentences the reader recognises immediately but rarely hears about themselves. Write as quiet observation, not declaration."}
   ]
 }
 
