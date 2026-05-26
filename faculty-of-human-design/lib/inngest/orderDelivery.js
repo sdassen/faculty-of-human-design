@@ -389,11 +389,11 @@ OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen t
 VELDREGELS:
 - adem: OPTIONEEL — gebruik voor 2–3 secties per rapport; weglaten als het niet past
 - inJouwChart: 3–5 items
-- kern: 1–4 objecten; geen vaste boog; laat het karakter van déze sectie bepalen; max 380 woorden totaal
-- valkuilen: OPTIONEEL — 0–3 items; weglaten als de sectie er geen nodig heeft
-- praktijk: OPTIONEEL — 0–3 items; schrijf als uitnodiging, niet als opdracht; weglaten voor meer reflectieve secties
-- dezeWeek: OPTIONEEL — 0–3 items; schrijf als uitnodiging; weglaten als het de sectie zwaarder maakt
-- reflectievragen: OPTIONEEL — 0–3 vragen; weglaten als de sectie al stilte en ruimte biedt
+- kern: 1–4 objecten; geen vaste boog; laat het karakter van déze sectie bepalen; 420–560 woorden totaal (vul de pagina — lege ruimte is geen luxe, het is een lege pagina)
+- valkuilen: 1–3 items; minimaal 1 altijd aanwezig; weglaten alleen als de sectie puur poëtisch is zonder schaduw
+- praktijk: 2–3 items; schrijf als uitnodiging, niet als opdracht; altijd aanwezig tenzij de sectie bewust als ademmoment is bedoeld
+- dezeWeek: 1–2 items; schrijf als uitnodiging; weglaten als het de sectie zwaarder maakt
+- reflectievragen: 2–3 vragen; altijd aanwezig; eindig elke sectie hiermee tenzij er een expliciete reden is om het weg te laten
 - microInzichten: OPTIONEEL — 0–3 items; kies labels editoriaal (zie VARIATIE IN MICRO-INZICHT LABELS); elk label maximaal één keer per rapport
 - Sluit de laatste kern-paragraaf af met een volledige, afgeronde zin
 
@@ -879,11 +879,11 @@ OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outsid
 FIELD RULES:
 - adem: OPTIONAL — use for 2–3 sections per report; omit if it doesn't fit
 - inJouwChart: 3–5 items
-- kern: 1–4 objects; no fixed arc; let the character of this section determine what it needs; max 380 words total
-- valkuilen: OPTIONAL — 0–3 items; omit if the section doesn't need it
-- praktijk: OPTIONAL — 0–3 items; write as invitation, not instruction; omit for more reflective sections
-- dezeWeek: OPTIONAL — 0–3 items; write as invitation; omit if it would make the section heavier
-- reflectievragen: OPTIONAL — 0–3 questions; omit if the section already offers silence and space
+- kern: 1–4 objects; no fixed arc; let the character of this section determine what it needs; 420–560 words total (fill the page — empty space is not luxury, it is an empty page)
+- valkuilen: 1–3 items; minimum 1 always present; omit only if the section is purely poetic with no shadow dimension
+- praktijk: 2–3 items; write as invitation, not instruction; always present unless the section is deliberately a breath moment
+- dezeWeek: 1–2 items; write as invitation; omit if it would make the section heavier
+- reflectievragen: 2–3 questions; always present; end every section with these unless there is an explicit reason not to
 - microInzichten: OPTIONAL — 0–3 items; choose labels editorially (see VARIATION IN MICRO-INSIGHT LABELS); each label at most once per report
 - End the final kern paragraph with a complete, rounded sentence
 
