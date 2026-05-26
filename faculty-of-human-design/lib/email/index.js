@@ -12,17 +12,18 @@ const FROM = "Faculty of Human Design <noreply@facultyhd.com>";
 
 // ─── PUBLIC API ───────────────────────────────────────────────────────────────
 
-export async function sendAdminReviewEmail({ order, pdfUrl, reviewToken, orderId }) {
+export async function sendAdminReviewEmail({ order, pdfUrl, reviewToken, orderId, violations = [] }) {
   const approveUrl = `https://www.facultyhd.com/api/review-approve?token=${encodeURIComponent(reviewToken)}&action=approve`;
   const rejectUrl  = `https://www.facultyhd.com/api/review-approve?token=${encodeURIComponent(reviewToken)}&action=reject`;
 
-  const subject = `[Review vereist] ${order.report_title} — ${order.customer_name}`;
+  const violationSuffix = violations.length ? ` ⚠️ ${violations.length} patroon(en)` : "";
+  const subject = `[Review vereist] ${order.report_title} — ${order.customer_name}${violationSuffix}`;
 
   const { data, error } = await getResend().emails.send({
     from: FROM,
-    to: "info@facultyhd.com",
+    to: process.env.ADMIN_EMAIL || "stevendassen@gmail.com",
     subject,
-    html: adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId }),
+    html: adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId, violations }),
   });
   if (error) throw new Error(`Resend error (admin review): ${error.message}`);
   return data;
@@ -340,7 +341,7 @@ function deliveryHtml({ name, reportTitle, downloadUrl, lang }) {
 }
 
 // ─── ADMIN REVIEW TEMPLATE ────────────────────────────────────────────────────
-function adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId }) {
+function adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId, violations = [] }) {
   const bd    = order.birth_data || {};
   const chart = bd.chart || {};
   const lang  = order.language === "en" ? "EN" : "NL";
@@ -394,6 +395,18 @@ function adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId }) {
         Direct de Vercel Blob-link — geen login vereist. Link blijft geldig zolang de blob bestaat.
       </p>
     </div>
+
+    ${violations.length ? `
+    <!-- Forbidden pattern warnings -->
+    <div style="background:#FFF8E1;border:1px solid #FFD54F;border-left:3px solid #E65100;border-radius:0 6px 6px 0;padding:16px 20px;margin:0 0 22px;">
+      <div style="font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:#E65100;margin-bottom:10px;font-weight:700;">⚠️ Verboden patronen gevonden (${violations.length})</div>
+      ${violations.map(v => `
+      <div style="margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid #FFE082;">
+        <div style="font-size:12px;font-weight:600;color:#BF360C;">${escHtml(v.sectionTitle)} — ${escHtml(v.patternLabel)}</div>
+        <div style="font-size:11.5px;color:#5D4037;font-style:italic;margin-top:3px;line-height:1.6;">${escHtml(v.excerpt)}</div>
+      </div>`).join("")}
+      <div style="font-size:11px;color:#E65100;margin-top:4px;line-height:1.5;">Overweeg te verwerpen en revisie aan te vragen als deze patronen zichtbaar zijn in het rapport.</div>
+    </div>` : ""}
 
     <!-- Action buttons -->
     <div style="text-align:center;margin:0 0 12px;">

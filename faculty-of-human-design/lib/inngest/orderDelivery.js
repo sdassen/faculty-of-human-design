@@ -29,22 +29,117 @@ function getSupabase() {
 // ─── PROMPT LESSONS ───────────────────────────────────────────────────────────
 /**
  * Fetch all active lessons from the prompt_lessons table.
- * Returns an array of lesson strings, or [] on failure.
+ * Returns an array of { lesson, section_pattern } objects.
+ * section_pattern is a nullable regex string; null = applies to all sections.
  */
 async function fetchPromptLessons() {
   try {
     const db = getSupabase();
     const { data, error } = await db
       .from("prompt_lessons")
-      .select("lesson")
+      .select("lesson, section_pattern")
       .eq("active", true)
       .order("created_at", { ascending: true });
     if (error) throw error;
-    return (data || []).map((r) => r.lesson);
+    return data || [];
   } catch (e) {
     console.warn(`[prompt-lessons] Could not fetch lessons: ${e.message}`);
     return [];
   }
+}
+
+/**
+ * Filter lessons for a specific section title.
+ * Lessons without a section_pattern always apply.
+ * Lessons with a section_pattern apply only if the title matches (case-insensitive).
+ */
+function lessonsForSection(allLessons, sectionTitle) {
+  return allLessons.filter(({ section_pattern }) => {
+    if (!section_pattern) return true;
+    try {
+      return new RegExp(section_pattern, "i").test(sectionTitle);
+    } catch {
+      return false;
+    }
+  }).map(({ lesson }) => lesson);
+}
+
+// ─── FORBIDDEN PATTERN SCANNER ────────────────────────────────────────────────
+/**
+ * List of patterns that reveal AI origin or coaching language.
+ * Each entry: { pattern: RegExp, label: string }
+ */
+const FORBIDDEN_PATTERNS = [
+  // NL patterns
+  { pattern: /je bent ontworpen om/i,          label: "\"je bent ontworpen om\"" },
+  { pattern: /jouw energie is bedoeld/i,        label: "\"jouw energie is bedoeld\"" },
+  { pattern: /dit is hoe jouw (systeem|energetica) werkt/i, label: "\"dit is hoe jouw systeem werkt\"" },
+  { pattern: /dit was nooit .{1,40}[—\-]{1,3} dit was/i, label: "\"dit was nooit X — dit was Y\" patroon" },
+  { pattern: /stap in jouw kracht/i,            label: "\"stap in jouw kracht\"" },
+  { pattern: /jij hebt dit/i,                  label: "\"jij hebt dit\"" },
+  { pattern: /je bent klaar voor de volgende stap/i, label: "coaching-afsluiting" },
+  { pattern: /jouw hogere zelf/i,              label: "\"jouw hogere zelf\"" },
+  { pattern: /kwantumsprong/i,                 label: "\"kwantumsprong\"" },
+  { pattern: /high vibe/i,                     label: "\"high vibe\"" },
+  { pattern: /het probleem begint wanneer/i,   label: "\"het probleem begint wanneer\"" },
+  { pattern: /dit veranderde alles/i,          label: "absolutistische transformatie" },
+  { pattern: /dit is jouw ware aard/i,         label: "\"dit is jouw ware aard\"" },
+  // EN patterns
+  { pattern: /you are designed to/i,           label: "\"you are designed to\"" },
+  { pattern: /your energy is meant to/i,       label: "\"your energy is meant to\"" },
+  { pattern: /this is how your system works/i, label: "\"this is how your system works\"" },
+  { pattern: /this was never .{1,40}[—\-]{1,3} this was/i, label: "\"this was never X — this was Y\" pattern" },
+  { pattern: /step into your power/i,          label: "\"step into your power\"" },
+  { pattern: /you've got this/i,               label: "coaching sign-off" },
+  { pattern: /you're ready for the next step/i, label: "coaching sign-off" },
+  { pattern: /your higher self/i,              label: "\"your higher self\"" },
+  { pattern: /quantum leap/i,                  label: "\"quantum leap\"" },
+  { pattern: /the problem begins when/i,       label: "\"the problem begins when\"" },
+  { pattern: /this changed everything/i,       label: "absolutist transformation" },
+  { pattern: /this is your true nature/i,      label: "\"this is your true nature\"" },
+];
+
+/**
+ * Scan all generated sections for forbidden patterns.
+ * Returns an array of violation objects: { sectionTitle, patternLabel, excerpt }
+ */
+function scanSectionsForViolations(sections) {
+  const violations = [];
+
+  for (const section of sections) {
+    // Collect all text from a section
+    const texts = [];
+    if (section.teaser)  texts.push(section.teaser);
+    if (section.adem)    texts.push(section.adem);
+    (section.inJouwChart || []).forEach(t => texts.push(t));
+    (section.kern || []).forEach(b => {
+      if (b.subkop) texts.push(b.subkop);
+      (b.paragraphs || []).forEach(p => texts.push(p));
+    });
+    (section.valkuilen || []).forEach(t => texts.push(t));
+    (section.praktijk  || []).forEach(t => texts.push(t));
+    (section.dezeWeek  || []).forEach(t => texts.push(t));
+    (section.reflectievragen || []).forEach(t => texts.push(t));
+    (section.microInzichten  || []).forEach(m => {
+      if (m.tekst) texts.push(m.tekst);
+    });
+
+    const fullText = texts.join(" ");
+
+    for (const { pattern, label } of FORBIDDEN_PATTERNS) {
+      const match = fullText.match(pattern);
+      if (match) {
+        // Extract a short excerpt around the match
+        const idx   = fullText.indexOf(match[0]);
+        const start = Math.max(0, idx - 30);
+        const end   = Math.min(fullText.length, idx + match[0].length + 30);
+        const excerpt = "…" + fullText.slice(start, end).replace(/\n/g, " ") + "…";
+        violations.push({ sectionTitle: section.title, patternLabel: label, excerpt });
+      }
+    }
+  }
+
+  return violations;
 }
 
 // ─── DELIVERY TIMING ──────────────────────────────────────────────────────────
@@ -1078,7 +1173,7 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
     : "";
 
   // ── Structural lessons from past revisions ────────────────────────────────
-  const lessons = order.promptLessons || [];
+  const lessons = lessonsForSection(order.promptLessons || [], sectionTitle);
   const lessonsBlock = lessons.length
     ? (lang === "en"
         ? `\n\n📚 STRUCTURAL LESSONS FROM PREVIOUS REVISIONS — apply these to every section:\n${lessons.map((l, i) => `${i + 1}. ${l}`).join("\n")}`
@@ -1343,6 +1438,23 @@ export const orderDelivery = inngest.createFunction(
       return url;
     });
 
+    // ── Step N+2.3: Scan sections for forbidden patterns ─────────────────
+    // Quick regex pass over all generated text — finds AI-tell phrases before
+    // the admin ever sees the report. Results are shown as warnings in the
+    // review email so the admin knows exactly what to look for.
+    const qualityViolations = await step.run("scan-quality-check", async () => {
+      const violations = scanSectionsForViolations(sections);
+      if (violations.length) {
+        console.warn(`[quality-scan] Found ${violations.length} violation(s)`);
+        violations.forEach(v =>
+          console.warn(`[quality-scan] ${v.sectionTitle}: ${v.patternLabel} — ${v.excerpt}`)
+        );
+      } else {
+        console.log(`[quality-scan] No forbidden patterns — clean report`);
+      }
+      return violations;
+    });
+
     // ── Step N+2.5: Send PDF to admin for manual review ───────────────────
     // Sets order status to "review_pending" and stores a review_token.
     // The admin gets an email with Approve / Reject buttons.
@@ -1359,10 +1471,11 @@ export const orderDelivery = inngest.createFunction(
         .eq("id", orderId);
 
       await sendAdminReviewEmail({
-        order:       enrichedOrderWithLessons,
-        pdfUrl:      blobUrl,
+        order:      enrichedOrderWithLessons,
+        pdfUrl:     blobUrl,
         reviewToken,
         orderId,
+        violations: qualityViolations,
       });
     });
 
