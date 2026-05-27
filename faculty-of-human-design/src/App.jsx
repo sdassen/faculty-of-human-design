@@ -4500,15 +4500,12 @@ function TermsPage({go}){
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
               <div style={{fontSize:".6rem",fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>
-                {isEn?"Third parties":"Derde partijen"}
+                {isEn?"Service providers":"Dienstverleners"}
               </div>
-              <ul style={{paddingLeft:20,margin:0}}>
-                <Li><strong>Supabase</strong> — {isEn?"secure order storage (EU servers)":"veilige opslag van bestellingen (servers in de EU)"}</Li>
-                <Li><strong>Stripe</strong> — {isEn?"payment processing (own data processing agreement applies)":"betalingsverwerking (eigen verwerkersovereenkomst van toepassing)"}</Li>
-                <Li><strong>Resend</strong> — {isEn?"transactional email delivery":"verzending van transactionele e-mail"}</Li>
-                <Li><strong>Anthropic (Claude API)</strong> — {isEn?"AI analysis for report generation; birth data is used solely for this purpose and not retained by Anthropic":"AI-analyse voor het samenstellen van rapporten; geboortegegevens worden uitsluitend voor dit doel gebruikt en niet bewaard door Anthropic"}</Li>
-                <Li><strong>Vercel</strong> — {isEn?"website and report hosting (EU/US servers)":"hosting van de website en rapporten (servers in de EU/VS)"}</Li>
-              </ul>
+              <P style={{marginBottom:0}}>{isEn
+                ?"We work with carefully selected service providers for payment processing, email delivery, data storage and website hosting. These providers process personal data on our behalf solely for the purpose of delivering the service, under strict confidentiality obligations."
+                :"Wij werken samen met zorgvuldig geselecteerde dienstverleners voor betalingsverwerking, e-mailbezorging, gegevensopslag en websitehosting. Deze dienstverleners verwerken persoonsgegevens uitsluitend namens ons en ten behoeve van de dienstverlening, onder strikte geheimhoudingsverplichtingen."
+              }</P>
             </div>
 
             <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px",marginBottom:16}}>
