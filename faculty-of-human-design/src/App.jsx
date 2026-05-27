@@ -3976,7 +3976,7 @@ function ContactPage(){
 
   const FAQ_NL=[
     {q:"Wat heb ik nodig om een rapport te bestellen?",a:"Alleen je exacte geboortedatum, geboortetijd en geboorteplaats. Hoe nauwkeuriger de geboortetijd, hoe preciezer het rapport. Een afwijking van 15 minuten heeft al merkbaar effect op sommige chart-elementen."},
-    {q:"Hoe snel ontvang ik mijn rapport?",a:"Rapporten worden bezorgd binnen 18–23 uur na betaling, op werkdagen tussen 9:00 en 17:30 uur. Zo voelt het als een persoonlijk samengesteld document — niet als een directe download."},
+    {q:"Hoe snel ontvang ik mijn rapport?",a:"Rapporten worden bezorgd binnen 18–23 uur na betaling, op werkdagen tussen 9:00 en 17:30 uur."},
     {q:"In welke taal is het rapport geschreven?",a:"Je kiest zelf de taal bij het bestellen: Nederlands of Engels. Het rapport wordt volledig in de gekozen taal opgeleverd."},
     {q:"Wat als ik mijn exacte geboortetijd niet weet?",a:"Een geschatte tijd is vaak voldoende voor de meeste chart-elementen. Neem bij twijfel contact op — we adviseren je welk rapport nog steeds waardevol is voor jouw situatie."},
     {q:"Wat maakt dit rapport anders dan andere Human Design lezingen?",a:"Onze rapporten worden individueel gegenereerd op basis van jouw chartdata en geschreven in een literaire, emotioneel resonante stijl. Geen generieke templates — elk rapport is uniek voor jou."},
@@ -3985,7 +3985,7 @@ function ContactPage(){
   ];
   const FAQ_EN=[
     {q:"What do I need to order a report?",a:"Only your exact date of birth, time of birth and place of birth. The more accurate the birth time, the more precise the report. Even a 15-minute difference can meaningfully affect certain chart elements."},
-    {q:"How soon will I receive my report?",a:"Reports are delivered within 18–23 hours after payment, on business days between 9:00 and 17:30. This gives it the feel of a personally curated document rather than an instant download."},
+    {q:"How soon will I receive my report?",a:"Reports are delivered within 18–23 hours after payment, on business days between 9:00 and 17:30."},
     {q:"What language is the report written in?",a:"You choose the language when ordering: Dutch or English. The report will be delivered entirely in your chosen language."},
     {q:"What if I don't know my exact birth time?",a:"An approximate time is often sufficient for most chart elements. If you're unsure, feel free to contact us — we can advise which report still provides meaningful insight for your situation."},
     {q:"What makes this report different from other Human Design readings?",a:"Our reports are individually generated based on your chart data, written in a literary, emotionally resonant style. No generic templates — every report is unique to you."},
