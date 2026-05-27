@@ -4053,7 +4053,7 @@ function ContactPage(){
                     </span>
                   </button>
                   {faqOpen===i&&(
-                    <div style={{padding:"0 24px 20px",fontSize:"0.925rem",lineHeight:1.75,color:"var(--text-muted)",borderTop:"1px solid var(--border)"}}>
+                    <div style={{padding:"0 24px 20px",fontSize:"0.925rem",lineHeight:1.75,color:"var(--text-muted)",borderTop:"1px solid var(--border)",textAlign:"left"}}>
                       <div style={{paddingTop:14}}>{item.a}</div>
                     </div>
                   )}
