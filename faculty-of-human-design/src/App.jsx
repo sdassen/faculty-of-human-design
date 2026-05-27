@@ -4473,7 +4473,7 @@ function TermsPage({go}){
               <ul style={{paddingLeft:20,margin:0}}>
                 <Li><strong>{isEn?"Identification data:":"Identificatiegegevens:"}</strong> {isEn?"name and email address":"naam en e-mailadres"}</Li>
                 <Li><strong>{isEn?"Date, time and place of birth":"Geboortedatum, -tijd en -plaats"}</strong> {isEn?"(required for the calculation of your report)":"(noodzakelijk voor de berekening van je rapport)"}</Li>
-                <Li><strong>{isEn?"Payment data":"Betalingsgegevens"}</strong> {isEn?"are processed by Stripe and are never stored by us":"worden verwerkt door Stripe en worden nooit door ons opgeslagen"}</Li>
+                <Li><strong>{isEn?"Payment data":"Betalingsgegevens"}</strong> {isEn?"are processed by our certified payment provider and are never stored by us":"worden verwerkt door onze gecertificeerde betalingsprovider en worden nooit door ons opgeslagen"}</Li>
               </ul>
             </div>
 
@@ -4578,14 +4578,14 @@ export default function App(){
   const go=p=>{
     setPage(p);
     setMenuOpen(false);
-    window.scrollTo(0,0);
+    window.scrollTo({top:0,left:0,behavior:"instant"});
     // Push URL for all navigable pages; skip transient states
     if(p!=="result"&&p!=="bedankt"){
       window.history.pushState({page:p},"",pageToPath(p));
     }
   };
 
-  const onDone=(chart,form,report,rpt)=>{setResult({chart,form,report,rpt});setPage("result");window.scrollTo(0,0);};
+  const onDone=(chart,form,report,rpt)=>{setResult({chart,form,report,rpt});setPage("result");window.scrollTo({top:0,left:0,behavior:"instant"});};
   const currentRpt=page.startsWith("rapport-")?REPORTS.find(r=>r.id===page.replace("rapport-","")):null;
 
   // Tag the initial history entry + listen for back/forward
@@ -4594,7 +4594,7 @@ export default function App(){
     const onPop=e=>{
       const p=e.state?.page||pathToPage(window.location.pathname);
       setPage(p);
-      window.scrollTo(0,0);
+      window.scrollTo({top:0,left:0,behavior:"instant"});
     };
     window.addEventListener("popstate",onPop);
     return()=>window.removeEventListener("popstate",onPop);
@@ -4616,7 +4616,7 @@ export default function App(){
       // New async delivery flow: show confirmation page, report arrives by email
       setPage("bedankt");
       setResult({ orderId: orderId||null });
-      window.scrollTo(0,0);
+      window.scrollTo({top:0,left:0,behavior:"instant"});
     }
   },[]);
 
