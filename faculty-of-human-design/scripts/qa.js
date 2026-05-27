@@ -18,8 +18,10 @@ const ROOT      = join(__dirname, "..");
 // ── CLI args ──────────────────────────────────────────────────────────────────
 const args    = process.argv.slice(2);
 const doPDF   = args.includes("--pdf");
+const doHTML  = args.includes("--html");
 const outIdx  = args.indexOf("--out");
 const outFile = outIdx !== -1 ? resolve(args[outIdx + 1]) : join(ROOT, "scripts", "qa-output.pdf");
+const htmlOut = join(ROOT, "scripts", "qa-preview.html");
 
 // ── Load fixtures ─────────────────────────────────────────────────────────────
 const order    = JSON.parse(readFileSync(join(__dirname, "fixtures", "test-order.json"),    "utf8"));
@@ -147,6 +149,10 @@ let html;
 try {
   html = buildHTML({ order, sections, svgBodygraph: null });
   ok(`buildHTML() succeeded (${(html.length / 1024).toFixed(0)} KB)`);
+  if (doHTML) {
+    writeFileSync(htmlOut, html);
+    ok(`HTML preview saved → ${htmlOut}`);
+  }
 } catch (e) {
   fail(`buildHTML() threw: ${e.message}`);
   html = "";
