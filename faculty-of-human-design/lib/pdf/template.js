@@ -267,7 +267,7 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
   const lang  = order.language || "nl";
   const quote = lang === "en" ? quoteEN : quoteNL;
   return `
-<div style="width:210mm;height:297mm;page:dark-page;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-after:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="padding:0 32mm;text-align:center;position:relative;">
@@ -406,10 +406,10 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:297mm;page:dark-page;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-after:page;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
-  ${coverDecoration(297, 290)}
+  ${coverDecoration(297, 260)}
   <div style="position:absolute;top:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#5A5438;letter-spacing:0.3em;text-transform:uppercase;">
     ${ui(lang, "Faculty of Human Design  ·  Ibiza  ·  Est. 2014", "Faculty of Human Design  ·  Ibiza  ·  Est. 2014")}
   </div>
@@ -973,10 +973,10 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:297mm;page:dark-page;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
-  ${coverDecoration(297, 420)}
+  ${coverDecoration(297, 380)}
   <div style="position:absolute;top:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#5A5438;letter-spacing:0.25em;text-transform:uppercase;">Faculty of Human Design  ·  Ibiza</div>
   <div style="padding:0 30mm;text-align:center;position:relative;">
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:30pt;color:#FFFFFF;line-height:1.3;">${ui(lang, "Met dank voor je vertrouwen.", "Thank you for your trust.")}</div>
@@ -1170,7 +1170,6 @@ ${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   @page { size: A4 portrait; margin: 14mm 0mm 10mm 0mm; }
-  @page dark-page { size: A4 portrait; margin: 0mm; }
   html, body { width: 210mm; background: #F7F5F0; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
