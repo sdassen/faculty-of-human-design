@@ -149,8 +149,8 @@ function confirmationHtml({ name, reportTitle, lang }) {
 
     <!-- Spam tip -->
     <p style="font-size:13px;color:#888;line-height:1.75;margin:0 0 10px;">
-      <strong style="color:#555;font-weight:500;">No email after 24 hours?</strong>
-      Check your spam folder. If it's not there either, simply reply to this email — we'll look into it right away.
+      <strong style="color:#555;font-weight:500;">No email after 1 business day?</strong>
+      Check your spam folder. If it's not there either, send an email to <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a> — we'll look into it right away.
     </p>
     <p style="font-size:13px;color:#AAA;line-height:1.75;margin:0;">
       Questions? Write to us at <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
@@ -196,8 +196,8 @@ function confirmationHtml({ name, reportTitle, lang }) {
 
     <!-- Spam tip -->
     <p style="font-size:13px;color:#888;line-height:1.75;margin:0 0 10px;">
-      <strong style="color:#555;font-weight:500;">Geen mail ontvangen na 24 uur?</strong>
-      Controleer dan je spam-map. Staat hij daar ook niet, stuur dan een reply op deze e-mail — we kijken direct met je mee.
+      <strong style="color:#555;font-weight:500;">Geen mail ontvangen na 1 werkdag?</strong>
+      Controleer dan je spam-map. Staat hij daar ook niet, stuur dan een e-mail naar <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a> — we kijken direct met je mee.
     </p>
     <p style="font-size:13px;color:#AAA;line-height:1.75;margin:0;">
       Vragen? Schrijf ons via <a href="mailto:info@facultyhd.com" style="color:#3D2C5E;text-decoration:none;">info@facultyhd.com</a>.
