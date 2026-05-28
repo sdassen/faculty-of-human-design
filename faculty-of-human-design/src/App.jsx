@@ -534,56 +534,56 @@ button { cursor:pointer; font-family:var(--font-sans); }
 
 /* ── CHART DASHBOARD ──────────────────────────────────────────────────────── */
 /* Main wrapper */
-.cd { background:#F9F8F5; border-radius:20px; border:1px solid #E8E3DB; box-shadow:0 8px 40px rgba(10,26,47,.08),0 2px 8px rgba(10,26,47,.04); overflow:hidden; }
+.cd { background:var(--bg); border-radius:0; border:1px solid var(--border); box-shadow:var(--shadow-md); overflow:hidden; }
 /* Header */
-.cd-hdr { padding:22px 28px 18px; border-bottom:1px solid #EBE7E0; display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; }
-.cd-eyebrow { font-size:.52rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
-.cd-title { font-family:var(--font-serif); font-size:1.55rem; font-weight:300; color:#0A1A2F; line-height:1.08; }
-.cd-name { font-size:.78rem; font-weight:300; color:rgba(10,26,47,.38); margin-top:3px; }
-.cd-hdr-type { font-family:var(--font-serif); font-size:1.4rem; font-weight:300; color:#0A1A2F; line-height:1; }
-.cd-hdr-auth { font-size:.56rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--text-light); margin-top:3px; }
+.cd-hdr { padding:22px 28px 18px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:12px; flex-wrap:wrap; background:var(--dark); }
+.cd-eyebrow { font-size:.52rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--gold); margin-bottom:5px; }
+.cd-title { font-family:var(--font-serif); font-size:1.55rem; font-weight:300; color:#FFFFFF; line-height:1.08; }
+.cd-name { font-size:.78rem; font-weight:300; color:rgba(255,255,255,.38); margin-top:3px; }
+.cd-hdr-type { font-family:var(--font-serif); font-size:1.4rem; font-weight:300; color:#FFFFFF; line-height:1; }
+.cd-hdr-auth { font-size:.56rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin-top:3px; opacity:.7; }
 /* 2-column body */
 .cd-body { display:grid; grid-template-columns:1fr 296px; }
 /* Left — blueprint panel */
-.cd-left { padding:22px 24px 20px; border-right:1px solid #EBE7E0; }
-.cd-bp { background:linear-gradient(148deg,#eeeae4 0%,#e4ddd5 60%,#dcd4ca 100%); border-radius:16px; position:relative; overflow:hidden; padding:18px 12px 14px; }
+.cd-left { padding:22px 24px 20px; border-right:1px solid var(--border); background:var(--bg); }
+.cd-bp { background:linear-gradient(148deg,#EDE9E2 0%,#E5DDD4 60%,#DDD4C8 100%); border-radius:0; position:relative; overflow:hidden; padding:18px 12px 14px; }
 .cd-bp-rings { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
-.cd-bp-lbl { font-size:.5rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:rgba(10,26,47,.28); text-align:center; margin-bottom:6px; }
+.cd-bp-lbl { font-size:.5rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:rgba(26,23,20,.32); text-align:center; margin-bottom:6px; }
 .cd-bp-cta { margin-top:10px; display:flex; justify-content:center; }
-.cd-pill { display:inline-flex; align-items:center; gap:6px; background:rgba(10,26,47,.07); border:1px solid rgba(10,26,47,.13); border-radius:100px; padding:8px 20px; font-size:.68rem; font-weight:500; letter-spacing:.04em; color:rgba(10,26,47,.58); cursor:pointer; transition:all 200ms var(--ease); white-space:nowrap; }
-.cd-pill:hover { background:rgba(10,26,47,.12); color:#0A1A2F; border-color:rgba(10,26,47,.22); }
+.cd-pill { display:inline-flex; align-items:center; gap:6px; background:rgba(26,23,20,.07); border:1px solid rgba(26,23,20,.15); border-radius:0; padding:8px 20px; font-size:.65rem; font-weight:500; letter-spacing:.1em; text-transform:uppercase; color:rgba(26,23,20,.55); cursor:pointer; transition:all 200ms var(--ease); white-space:nowrap; }
+.cd-pill:hover { background:rgba(26,23,20,.12); color:var(--dark); border-color:rgba(26,23,20,.25); }
 /* Right — insight cards */
-.cd-right { padding:16px 18px; display:flex; flex-direction:column; gap:8px; background:white; }
+.cd-right { padding:16px 18px; display:flex; flex-direction:column; gap:6px; background:var(--card); }
 /* Insight card */
-.cd-ic { background:#FAFAF8; border-radius:12px; border:1px solid #EDEBE5; padding:12px 14px; position:relative; transition:transform 180ms var(--ease),box-shadow 180ms var(--ease); overflow:hidden; }
-.cd-ic:hover { transform:translateY(-2px); box-shadow:0 5px 18px rgba(10,26,47,.08); }
+.cd-ic { background:var(--bg); border-radius:0; border:1px solid var(--border); padding:12px 14px; position:relative; overflow:hidden; transition:border-color 180ms var(--ease); }
+.cd-ic:hover { border-color:var(--gold); }
 .cd-ic-top { display:flex; align-items:flex-start; justify-content:space-between; gap:6px; margin-bottom:4px; }
-.cd-ic-lbl { font-size:.48rem; font-weight:700; letter-spacing:.22em; text-transform:uppercase; color:var(--text-light); line-height:1.4; }
-.cd-ic-ico { font-size:.62rem; opacity:.3; flex-shrink:0; margin-top:1px; }
-.cd-ic-val { font-family:var(--font-serif); font-size:1.05rem; font-weight:400; color:#0A1A2F; line-height:1.2; margin-bottom:3px; }
+.cd-ic-lbl { font-size:.48rem; font-weight:500; letter-spacing:.22em; text-transform:uppercase; color:var(--text-light); line-height:1.4; }
+.cd-ic-ico { font-size:.62rem; opacity:.2; flex-shrink:0; margin-top:1px; }
+.cd-ic-val { font-family:var(--font-serif); font-size:1.05rem; font-weight:400; color:var(--dark); line-height:1.2; margin-bottom:3px; }
 .cd-ic-desc { font-size:.65rem; font-weight:300; color:var(--text-muted); line-height:1.5; }
 .cd-ic-bar { position:absolute; left:0; top:0; bottom:0; width:3px; }
 /* Integrations section */
-.cd-int { padding:20px 28px 24px; border-top:1px solid #EBE7E0; background:#FAFAF8; }
+.cd-int { padding:20px 28px 24px; border-top:1px solid var(--border); background:var(--bg); }
 .cd-int-hdr { display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
-.cd-int-ttl { font-family:var(--font-serif); font-size:1.18rem; font-weight:300; color:#0A1A2F; }
-.cd-int-lnk { font-size:.58rem; font-weight:600; letter-spacing:.12em; text-transform:uppercase; color:var(--brand); cursor:pointer; opacity:.6; transition:opacity 150ms; }
+.cd-int-ttl { font-family:var(--font-serif); font-size:1.18rem; font-weight:300; color:var(--dark); }
+.cd-int-lnk { font-size:.58rem; font-weight:500; letter-spacing:.12em; text-transform:uppercase; color:var(--brand); cursor:pointer; opacity:.6; transition:opacity 150ms; }
 .cd-int-lnk:hover { opacity:1; }
-.cd-int-row { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; }
+.cd-int-row { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
 /* Integration card */
-.cd-ic2 { background:white; border-radius:11px; border:1px solid #EDEBE5; padding:14px 16px; transition:transform 180ms var(--ease),box-shadow 180ms var(--ease); }
-.cd-ic2:hover { transform:translateY(-2px); box-shadow:0 5px 16px rgba(10,26,47,.07); }
-.cd-ic2-lbl { font-size:.48rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--text-light); margin-bottom:6px; }
-.cd-ic2-val { font-family:var(--font-serif); font-size:.95rem; font-weight:400; color:#0A1A2F; margin-bottom:3px; line-height:1.25; }
+.cd-ic2 { background:var(--card); border-radius:0; border:1px solid var(--border); padding:14px 16px; transition:border-color 180ms var(--ease); }
+.cd-ic2:hover { border-color:var(--gold); }
+.cd-ic2-lbl { font-size:.48rem; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:var(--text-light); margin-bottom:6px; }
+.cd-ic2-val { font-family:var(--font-serif); font-size:.95rem; font-weight:400; color:var(--dark); margin-bottom:3px; line-height:1.25; }
 .cd-ic2-desc { font-size:.65rem; font-weight:300; color:var(--text-muted); line-height:1.52; }
 /* Footer tagline */
-.cd-foot { padding:10px 28px; border-top:1px solid #EBE7E0; text-align:center; }
-.cd-foot-tag { font-family:var(--font-serif); font-size:.7rem; font-style:italic; color:rgba(10,26,47,.24); letter-spacing:.03em; }
+.cd-foot { padding:10px 28px; border-top:1px solid var(--border); text-align:center; background:var(--card); }
+.cd-foot-tag { font-family:var(--font-serif); font-size:.7rem; font-style:italic; color:var(--text-light); letter-spacing:.03em; }
 /* Responsive */
 @media (max-width:900px) {
   .cd-body { grid-template-columns:1fr; }
-  .cd-left { border-right:none; border-bottom:1px solid #EBE7E0; }
-  .cd-right { background:#FAFAF8; }
+  .cd-left { border-right:none; border-bottom:1px solid var(--border); }
+  .cd-right { background:var(--bg); }
   .cd-int-row { grid-template-columns:1fr; }
   .cd-int { padding:18px 20px 22px; }
   .cd-hdr { padding:16px 18px 14px; }
@@ -1500,10 +1500,10 @@ function Bodygraph({chart,name}){
   const ap=new Set();
   for(const c of activeCh){ap.add(c.c1+"-"+c.c2);ap.add(c.c2+"-"+c.c1);}
   const isAct=k=>ap.has(k)||ap.has(k.split("-").reverse().join("-"));
-  const B="#1C2E4A",BL="#2d5080",G="#C9A85C";
+  const B="#1A1714",BL="#3A3730",G="#C9A85C";
 
   return(
-    <svg viewBox="0 0 640 620" style={{width:"100%",maxWidth:440,display:"block",margin:"0 auto",borderRadius:10}}>
+    <svg viewBox="0 0 640 620" style={{width:"100%",maxWidth:440,display:"block",margin:"0 auto",borderRadius:0}}>
       <defs>
         <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="rgba(255,255,255,0)"/>
@@ -1514,17 +1514,17 @@ function Bodygraph({chart,name}){
           <stop offset="100%" stopColor={B}/>
         </linearGradient>
         <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={B} stopOpacity="0.18"/>
+          <stop offset="0%" stopColor={B} stopOpacity="0.14"/>
           <stop offset="100%" stopColor={B} stopOpacity="0"/>
         </radialGradient>
         <filter id="ds" x="-20%" y="-20%" width="140%" height="140%">
-          <feDropShadow dx="0" dy="2" stdDeviation="5" floodColor={B} floodOpacity="0.18"/>
+          <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor={B} floodOpacity="0.14"/>
         </filter>
       </defs>
 
       {/* Background — transparent so the .cd-bp gradient shows through */}
-      <rect width="640" height="620" fill="url(#bg)" rx="10"/>
-      <line x1="0" y1="580" x2="640" y2="580" stroke="rgba(10,26,47,.07)" strokeWidth="1"/>
+      <rect width="640" height="620" fill="url(#bg)" rx="0"/>
+      <line x1="0" y1="580" x2="640" y2="580" stroke="rgba(26,23,20,.06)" strokeWidth="1"/>
 
       {/* Inactive channels — dashed subtle */}
       {Object.entries(CPATHS).filter(([k])=>!isAct(k)).map(([k,p])=>(
@@ -1584,7 +1584,7 @@ function Bodygraph({chart,name}){
         const ty=pos.cy>300?pos.cy-64:pos.cy+56;
         return(
           <g pointerEvents="none">
-            <rect x={tx} y={ty} width={tw} height={26} rx="5" fill={d?B:"#555"} opacity="0.93"/>
+            <rect x={tx} y={ty} width={tw} height={26} rx="0" fill={d?B:"#4A4640"} opacity="0.93"/>
             <text x={tx+tw/2} y={ty+14} textAnchor="middle" dominantBaseline="middle" fontFamily="Jost,sans-serif" fontSize="10.5" fill="white">{label}</text>
           </g>
         );
@@ -1879,10 +1879,10 @@ function ChartDashboard({chart,name,onOrder}){
           <BlueprintPanel chart={chart} name={name} onCta={onOrder}/>
         </div>
         <div className="cd-right">
-          <InsightCard label={t("form.typeLabel")} value={chart.type} desc={typeDesc} icon="◈" accentColor="#1C2E4A"/>
+          <InsightCard label={t("form.typeLabel")} value={chart.type} desc={typeDesc} icon="◈" accentColor="#1A1714"/>
           <InsightCard label={t("form.authorityLabel")} value={xlateAuth(chart.auth)} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
-          <InsightCard label={t("form.strategyLabel")} value={xlateStrat(chart.strat)} desc={t("form.signaturePrefix")+xlateSig(chart.sig)} icon="◇" accentColor="#9A8050"/>
-          <InsightCard label={t("form.profileLabel")} value={chart.profile} desc={t("form.profileDesc")} icon="✦" accentColor="#3D2C5E"/>
+          <InsightCard label={t("form.strategyLabel")} value={xlateStrat(chart.strat)} desc={t("form.signaturePrefix")+xlateSig(chart.sig)} icon="◇" accentColor="#8A7355"/>
+          <InsightCard label={t("form.profileLabel")} value={chart.profile} desc={t("form.profileDesc")} icon="✦" accentColor="#A08855"/>
         </div>
       </div>
 
