@@ -9,17 +9,17 @@ const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+G
 
 const IMGS = {
   // ── Full-bleed section backgrounds ─────────────────────────────────
-  hero:          "/img-meditation.png",
+  hero:          "/img-meditation.jpg",
   ibiza:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   cosmos:        "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=2000&auto=format&fit=crop&q=82",
-  origin:        "/img-ibiza-terrace.png",
-  cta:           "/img-fabric.png",
+  origin:        "/img-ibiza-terrace.jpg",
+  cta:           "/img-fabric.jpg",
 
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
   w_depth:       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
   // Ibiza: Es Vedrà bij schemering — eigen foto, brandperfect
-  w_ibiza:       "/img-ibiza-moon.png",
+  w_ibiza:       "/img-ibiza-moon.jpg",
 
   // ── Subscription moon backdrop ──────────────────────────────────────
   sub_moon:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
@@ -34,7 +34,7 @@ const IMGS = {
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
   r_volledig:        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&auto=format&fit=crop&q=80",
-  r_relatie_liefde:  "/img-relatie-liefde.png",
+  r_relatie_liefde:  "/img-relatie-liefde.jpg",
   r_relatie_business:"https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
   r_relatie_familie: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80",
   r_jaar:        "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
@@ -4112,7 +4112,7 @@ function ContactPage(){
     <div className="pg">
       <div className="origin-section" style={{minHeight:360}}>
         <div className="origin-section-bg">
-          <img src="/img-ibiza-moon.png" alt="Ibiza — Faculty of Human Design" loading="eager"/>
+          <img src="/img-ibiza-moon.jpg" alt="Ibiza — Faculty of Human Design" loading="eager"/>
         </div>
         <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:80}}>
           <div className="label-light" style={{marginBottom:14}}>{t("contact.eyebrow")}</div>
