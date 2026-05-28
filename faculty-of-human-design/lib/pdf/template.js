@@ -267,7 +267,7 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
   const lang  = order.language || "nl";
   const quote = lang === "en" ? quoteEN : quoteNL;
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="padding:0 32mm;text-align:center;position:relative;">
@@ -320,9 +320,9 @@ function buildIntroPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:3px;background:#1A1715;"></div>
-  <div style="flex:1;padding:18mm 24mm 0;">
+  <div style="padding:18mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:18px;">${esc(c.label)}</div>
     <div style="font-family:'Cormorant Garamond',serif;font-size:28pt;font-weight:400;color:#1A1715;margin-bottom:6px;line-height:1.1;">${esc(c.headline)}</div>
     <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:28px;"></div>
@@ -332,7 +332,7 @@ function buildIntroPage(order) {
       <div style="font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:300;color:#A8A29E;letter-spacing:0.08em;">${esc(c.org)}</div>
     </div>
   </div>
-  <div style="padding:0 24mm 12mm;display:flex;justify-content:space-between;align-items:center;">
+  <div style="position:absolute;bottom:0;left:0;right:0;padding:0 24mm 12mm;display:flex;justify-content:space-between;align-items:center;">
     <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
     ${name ? `<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9pt;color:#C9A85C;padding:0 14px;">${esc(name)}</div>` : ""}
     <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
@@ -383,7 +383,7 @@ function buildHowToReadPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:3px;background:#1A1715;"></div>
   <div style="padding:14mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">${esc(c.label)}</div>
@@ -406,7 +406,7 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-inside:avoid;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 260)}
@@ -484,7 +484,7 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;padding:20mm;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:20mm;">
   <div style="height:2px;background:#1A1715;margin-bottom:3px;"></div>
   <div style="height:0.5px;background:#C9A85C;margin-bottom:32px;"></div>
   <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.25em;margin-bottom:16px;">${tocLabel}</div>
@@ -524,7 +524,7 @@ function buildProfilePage(order) {
   const definedCenters = (chart.definedCenters || []).join("  ·  ");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:70mm;background:${ta.bg};position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${ta.bar};"></div>
     <div style="padding:20mm 20mm 0 24mm;">
@@ -552,7 +552,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;min-height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;padding:0 20mm;">
+<div style="width:210mm;min-height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -597,7 +597,7 @@ function sectionClosingHTML(section, idx, order, gridHTML) {
   const lang      = order.language || "nl";
   const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
   return `
-<div style="height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;">
+<div style="height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:40mm;background:#1A1715;position:relative;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:9mm 16mm 0 20mm;">
@@ -645,7 +645,7 @@ function buildSectionClosingJSON(section, idx, order) {
   if (!hasAny) return "";
 
   return `
-<div style="background:#F7F5F0;position:relative;break-before:page;min-height:273mm;">
+<div style="background:#F7F5F0;position:relative;break-before:page;break-inside:avoid;min-height:273mm;">
   <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:8mm 20mm 0 24mm;">
@@ -871,9 +871,9 @@ function buildExecutiveSummaryPage(order) {
     : null;
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <!-- Dark header with type -->
-  <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;flex-shrink:0;">
+  <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
     <div style="position:absolute;right:14mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:80pt;font-weight:400;color:${ta.fg};opacity:0.04;line-height:1;padding-top:4mm;white-space:nowrap;overflow:hidden;">HD</div>
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:${ta.fg};letter-spacing:0.28em;text-transform:uppercase;opacity:0.65;margin-bottom:8px;">${ui(lang, "JOUW ONTWERP", "YOUR DESIGN")}</div>
@@ -883,7 +883,7 @@ function buildExecutiveSummaryPage(order) {
   </div>
 
   <!-- Data grid -->
-  <div style="padding:0 20mm;flex:1;overflow:hidden;">
+  <div style="padding:6mm 20mm 0;">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;">
       ${pairsHTML}
     </div>
@@ -891,12 +891,12 @@ function buildExecutiveSummaryPage(order) {
 
   <!-- Signature / not-self framing -->
   ${sigQuote ? `
-  <div style="margin:0 20mm 14mm;padding:14px 18px;background:#FFFFFF;border-left:3px solid #C9A85C;">
+  <div style="margin:8mm 20mm 0;padding:14px 18px;background:#FFFFFF;border-left:3px solid #C9A85C;">
     <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#C9A85C;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:7px;">${ui(lang, "JOUW KOMPAS", "YOUR COMPASS")}</div>
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11pt;color:#2A2820;line-height:1.6;">${sigQuote}</div>
   </div>` : ""}
 
-  <div style="padding:0 20mm 10mm;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;">
+  <div style="position:absolute;bottom:0;left:0;right:0;padding:0 20mm 10mm;display:flex;justify-content:space-between;align-items:center;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
   </div>
@@ -919,7 +919,7 @@ function buildMethodologyPage(order) {
     : "";
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
@@ -973,7 +973,7 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 380)}
