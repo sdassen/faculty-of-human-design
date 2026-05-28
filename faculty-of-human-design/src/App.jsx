@@ -9,11 +9,11 @@ const FONTS = `@import url('https://fonts.googleapis.com/css2?family=Cormorant+G
 
 const IMGS = {
   // ── Full-bleed section backgrounds ─────────────────────────────────
-  hero:          "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=2400&auto=format&fit=crop&q=82",
+  hero:          "/img-meditation.png",
   ibiza:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   cosmos:        "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=2000&auto=format&fit=crop&q=82",
-  origin:        "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=2000&auto=format&fit=crop&q=82",
-  cta:           "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=2000&auto=format&fit=crop&q=82",
+  origin:        "/img-editorial.png",
+  cta:           "/img-fabric.png",
 
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
@@ -133,8 +133,8 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* ORIGIN SECTION */
 .origin-section { position:relative; min-height:500px; display:flex; align-items:center; overflow:hidden; }
 .origin-section-bg { position:absolute; inset:0; }
-.origin-section-bg>img { width:100%; height:100%; object-fit:cover; object-position:center 45%; }
-.origin-section-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(105deg,rgba(17,16,9,.95) 0%,rgba(17,16,9,.72) 55%,rgba(17,16,9,.50) 100%); }
+.origin-section-bg>img { width:100%; height:100%; object-fit:cover; object-position:65% center; }
+.origin-section-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(105deg,rgba(17,16,9,.92) 0%,rgba(17,16,9,.62) 48%,rgba(17,16,9,.28) 100%); }
 .origin-content { position:relative; z-index:2; max-width:1240px; margin:0 auto; padding:96px 32px; width:100%; display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
 .origin-stat { border-top:1px solid rgba(255,255,255,.12); padding-top:16px; margin-top:24px; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
 .origin-stat-n { font-family:var(--font-serif); font-size:2rem; font-weight:300; color:white; line-height:1; }
@@ -143,8 +143,8 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* PHOTO CTA */
 .photo-cta-section { position:relative; overflow:hidden; }
 .photo-cta-bg { position:absolute; inset:0; }
-.photo-cta-bg>img { width:100%; height:100%; object-fit:cover; object-position:center 60%; filter:saturate(.8); }
-.photo-cta-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(160deg,rgba(17,16,9,.95) 0%,rgba(17,16,9,.88) 55%,rgba(17,16,9,.78) 100%); }
+.photo-cta-bg>img { width:100%; height:100%; object-fit:cover; object-position:center center; filter:saturate(.95); }
+.photo-cta-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(180deg,rgba(17,16,9,.72) 0%,rgba(17,16,9,.88) 60%,rgba(17,16,9,.94) 100%); }
 .photo-cta-content { position:relative; z-index:1; padding:120px 32px; text-align:center; }
 
 /* BUTTONS */
@@ -253,7 +253,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .hero { min-height:100vh; position:relative; display:flex; align-items:center; overflow:hidden; }
 .hero-bg { position:absolute; inset:0; }
 .hero-bg>img { width:100%; height:100%; object-fit:cover; object-position:center 30%; }
-.hero-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(160deg,rgba(17,16,9,.96) 0%,rgba(17,16,9,.80) 50%,rgba(17,16,9,.62) 100%); }
+.hero-bg::after { content:""; position:absolute; inset:0; background:linear-gradient(160deg,rgba(17,16,9,.82) 0%,rgba(17,16,9,.58) 52%,rgba(17,16,9,.38) 100%); }
 .hero-fallback { position:absolute; inset:0; background:linear-gradient(160deg,var(--cosmos) 0%,#2A2217 55%,#1A1714 100%); }
 .hero-stars { position:absolute; inset:0; opacity:.10; pointer-events:none;
   background-image:radial-gradient(circle at 15% 25%, white 1px, transparent 1px),
