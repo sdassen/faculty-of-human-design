@@ -38,11 +38,13 @@ export async function renderPDF(html) {
 
   try {
     const page = await browser.newPage();
+    await page.emulateMediaType("print");
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 
-    const headerTemplate = `<style>html,body{background:#F7F5F0!important;margin:0;padding:0;}</style><div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:5.5pt;color:#9A9490;width:100%;text-align:center;padding-top:2.5mm;letter-spacing:0.22em;text-transform:uppercase;box-sizing:border-box;">FACULTY OF HUMAN DESIGN  &middot;  IBIZA</div>`;
-    const footerTemplate = `<style>html,body{background:#F7F5F0!important;margin:0;padding:0;}</style><div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`;
+    // No <style> tag in templates — avoids CSS bleeding into main document.
+    const headerTemplate = `<div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:5.5pt;color:#9A9490;width:100%;text-align:center;padding-top:2.5mm;letter-spacing:0.22em;text-transform:uppercase;box-sizing:border-box;">FACULTY OF HUMAN DESIGN  &middot;  IBIZA</div>`;
+    const footerTemplate = `<div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`;
     const pdf = await page.pdf({
       format:               "A4",
       printBackground:      true,

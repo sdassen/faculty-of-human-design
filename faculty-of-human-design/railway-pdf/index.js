@@ -1,6 +1,9 @@
 "use strict";
 const express    = require("express");
 const puppeteer  = require("puppeteer-core");
+const fs         = require("fs");
+const path       = require("path");
+const crypto     = require("crypto");
 
 const app    = express();
 const PORT   = process.env.PORT || 3000;
@@ -23,6 +26,8 @@ async function getBrowser() {
       "--disable-setuid-sandbox",
       "--disable-dev-shm-usage",
       "--disable-gpu",
+      "--force-color-profile=srgb",
+      "--allow-file-access-from-files",
     ],
   });
   return browser;
@@ -38,16 +43,28 @@ app.post("/pdf", async (req, res) => {
   const { html } = req.body || {};
   if (!html) return res.status(400).json({ error: "html field required" });
 
+  // Write HTML to a temp file so Chromium loads it via file:// (avoids CDP
+  // message-size limits and ensures local file access for any relative refs).
+  const tmpFile = path.join("/tmp", `report-${crypto.randomUUID()}.html`);
+
   let page;
   try {
+    fs.writeFileSync(tmpFile, html, "utf8");
+
     const b = await getBrowser();
     page = await b.newPage();
 
-    await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
+    // Tell Chromium to treat this as a print context so print CSS and fonts
+    // are applied before we call document.fonts.ready.
+    await page.emulateMediaType("print");
+
+    await page.goto(`file://${tmpFile}`, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 
-    const headerTemplate = `<style>html,body{background:#F7F5F0!important;margin:0;padding:0;}</style><div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:5.5pt;color:#9A9490;width:100%;text-align:center;padding-top:2.5mm;letter-spacing:0.22em;text-transform:uppercase;box-sizing:border-box;">FACULTY OF HUMAN DESIGN  &middot;  IBIZA</div>`;
-    const footerTemplate = `<style>html,body{background:#F7F5F0!important;margin:0;padding:0;}</style><div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`;
+    // Header/footer: no <style> tag — avoids any CSS bleeding into main doc.
+    const headerTemplate = `<div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:5.5pt;color:#9A9490;width:100%;text-align:center;padding-top:2.5mm;letter-spacing:0.22em;text-transform:uppercase;box-sizing:border-box;">FACULTY OF HUMAN DESIGN  &middot;  IBIZA</div>`;
+    const footerTemplate = `<div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`;
+
     const pdf = await page.pdf({
       format:               "A4",
       printBackground:      true,
@@ -65,6 +82,7 @@ app.post("/pdf", async (req, res) => {
     res.status(500).json({ error: err.message });
   } finally {
     if (page) await page.close().catch(() => {});
+    try { fs.unlinkSync(tmpFile); } catch {}
   }
 });
 

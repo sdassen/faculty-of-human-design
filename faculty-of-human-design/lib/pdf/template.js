@@ -1168,9 +1168,9 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 ${fontBlock}
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  @page { size: A4 portrait; }
-  html, body { width: 210mm; background: #F7F5F0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  @page { size: A4 portrait; margin: 0; }
+  html, body { width: 210mm; background: #F7F5F0; color-scheme: light; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
     html, body { width: 210mm; }
