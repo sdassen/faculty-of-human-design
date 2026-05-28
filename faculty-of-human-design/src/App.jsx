@@ -1992,16 +1992,16 @@ function Nav({page,go,menuOpen,setMenuOpen}){
           <div className="nav-cta-wrap">
             {/* Language switcher */}
             <div style={{display:"flex",gap:4,marginRight:4}}>
-              {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
+              {[["nl","NL"],["en","EN"]].map(([lng,lbl])=>(
                 <button key={lng} onClick={()=>switchLang(lng)} style={{
                   background:LANG===lng?"var(--brand)":"transparent",
                   color:LANG===lng?"white":"var(--text-muted)",
-                  border:LANG===lng?"1px solid var(--brand)":"1px solid var(--border)",
-                  borderRadius:"var(--radius-sm)",
-                  padding:"4px 9px",fontSize:".85rem",fontWeight:600,letterSpacing:".08em",
+                  border:LANG===lng?"1px solid var(--brand)":"1px solid transparent",
+                  borderRadius:0,
+                  padding:"4px 9px",fontSize:".6rem",fontWeight:500,letterSpacing:".14em",
                   cursor:LANG===lng?"default":"pointer",
-                  transition:"all 150ms",
-                }}>{flag}</button>
+                  transition:"all 150ms",fontFamily:"var(--font-sans)",
+                }}>{lbl}</button>
               ))}
             </div>
             <button className="btn btn-primary btn-sm" onClick={()=>{track("hero_cta_click",{location:"nav"});go("rapporten");}}>{t("nav.cta")}</button>
@@ -2021,15 +2021,15 @@ function Nav({page,go,menuOpen,setMenuOpen}){
           ))}
           {/* Mobile language switcher */}
           <div style={{display:"flex",justifyContent:"center",gap:8,padding:"16px 0",borderBottom:"1px solid var(--border)"}}>
-            {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
+            {[["nl","NL"],["en","EN"]].map(([lng,lbl])=>(
               <button key={lng} onClick={()=>switchLang(lng)} style={{
                 background:LANG===lng?"var(--brand)":"transparent",
                 color:LANG===lng?"white":"var(--text-muted)",
-                border:LANG===lng?"1px solid var(--brand)":"1px solid var(--border)",
-                borderRadius:"var(--radius-sm)",padding:"6px 14px",
-                fontSize:"1rem",fontWeight:600,letterSpacing:".08em",
-                cursor:LANG===lng?"default":"pointer",
-              }}>{flag}</button>
+                border:LANG===lng?"1px solid var(--brand)":"1px solid transparent",
+                borderRadius:0,padding:"6px 18px",
+                fontSize:".6rem",fontWeight:500,letterSpacing:".14em",
+                cursor:LANG===lng?"default":"pointer",fontFamily:"var(--font-sans)",
+              }}>{lbl}</button>
             ))}
           </div>
           <div style={{marginTop:16}}>
@@ -2076,14 +2076,14 @@ function Footer({go}){
             <div className="footer-trust-item">{t("footer.ssl")}</div>
             <div className="footer-trust-item">{t("footer.ideal")}</div>
             <div style={{display:"flex",gap:4,marginLeft:8}}>
-              {[["nl","🇳🇱"],["en","🇬🇧"]].map(([lng,flag])=>(
+              {[["nl","NL"],["en","EN"]].map(([lng,lbl])=>(
                 <button key={lng} onClick={()=>switchLang(lng)} style={{
                   background:LANG===lng?"rgba(255,255,255,.15)":"transparent",
-                  color:LANG===lng?"white":"rgba(255,255,255,.4)",
-                  border:LANG===lng?"1px solid rgba(255,255,255,.25)":"1px solid transparent",
-                  borderRadius:"var(--radius-sm)",padding:"2px 7px",fontSize:".9rem",
-                  cursor:LANG===lng?"default":"pointer",transition:"all 150ms",
-                }}>{flag}</button>
+                  color:LANG===lng?"white":"rgba(255,255,255,.38)",
+                  border:LANG===lng?"1px solid rgba(255,255,255,.22)":"1px solid transparent",
+                  borderRadius:0,padding:"2px 8px",fontSize:".58rem",fontWeight:500,letterSpacing:".14em",
+                  cursor:LANG===lng?"default":"pointer",transition:"all 150ms",fontFamily:"var(--font-sans)",
+                }}>{lbl}</button>
               ))}
             </div>
           </div>
