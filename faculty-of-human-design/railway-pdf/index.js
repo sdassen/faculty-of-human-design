@@ -61,17 +61,10 @@ app.post("/pdf", async (req, res) => {
     await page.goto(`file://${tmpFile}`, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 
-    // Header/footer: no <style> tag — avoids any CSS bleeding into main doc.
-    const headerTemplate = `<div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:5.5pt;color:#9A9490;width:100%;text-align:center;padding-top:2.5mm;letter-spacing:0.22em;text-transform:uppercase;box-sizing:border-box;">FACULTY OF HUMAN DESIGN  &middot;  IBIZA</div>`;
-    const footerTemplate = `<div style="background:#F7F5F0;font-family:Arial,sans-serif;font-size:7pt;color:#9A9490;width:100%;text-align:center;padding-bottom:3mm;box-sizing:border-box;"><span class="pageNumber"></span> / <span class="totalPages"></span></div>`;
-
     const pdf = await page.pdf({
-      format:               "A4",
-      printBackground:      true,
-      margin:               { top: "14mm", bottom: "10mm", left: "0mm", right: "0mm" },
-      displayHeaderFooter:  true,
-      headerTemplate,
-      footerTemplate,
+      format:          "A4",
+      printBackground: true,
+      margin:          { top: "14mm", bottom: "10mm", left: "0mm", right: "0mm" },
     });
 
     res.set("Content-Type", "application/pdf");
