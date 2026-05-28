@@ -285,15 +285,18 @@ export default {
     orderBtn: "{title} bestellen — {price}",
     bornLabel: "Geboren",
   },
-  blog: {
+  inzichten: {
     eyebrow: "Kennis",
-    title: "Inzichten en Achtergronden",
-    sub: "Artikelen over Human Design, Numerologie en Astrologie. Elke twee weken een nieuw artikel.",
+    title: "Inzichten",
+    sub: "Artikelen over Human Design, Numerologie en Astrologie, ingedeeld per thema.",
     readMore: "Lees artikel",
     backToList: "← Terug naar inzichten",
     loading: "Artikelen laden...",
     orderCta: "Bestel een rapport",
     readTime: "leestijd",
+    catBasics: "Human Design Basics",
+    catDepth: "Verdieping",
+    catNumAstr: "Numerologie & Astrologie",
   },
   footer: {
     logoSub: "Ibiza, Spanje — Est. 2014",

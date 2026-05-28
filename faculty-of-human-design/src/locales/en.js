@@ -285,15 +285,18 @@ export default {
     orderBtn: "Order {title} — {price}",
     bornLabel: "Born",
   },
-  blog: {
+  inzichten: {
     eyebrow: "Knowledge",
-    title: "Insights and Backgrounds",
-    sub: "Articles about Human Design, Numerology and Astrology. A new article every two weeks.",
+    title: "Insights",
+    sub: "Articles on Human Design, Numerology and Astrology, organised by theme.",
     readMore: "Read article",
     backToList: "← Back to insights",
     loading: "Loading articles...",
     orderCta: "Order a report",
     readTime: "read",
+    catBasics: "Human Design Basics",
+    catDepth: "In Depth",
+    catNumAstr: "Numerology & Astrology",
   },
   footer: {
     logoSub: "Ibiza, Spain — Est. 2014",

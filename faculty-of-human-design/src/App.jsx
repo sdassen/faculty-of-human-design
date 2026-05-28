@@ -1970,7 +1970,7 @@ function Nav({page,go,menuOpen,setMenuOpen}){
     ["home",   t("nav.home")],
     ["wat",    t("nav.wat")],
     ["rapporten", t("nav.reports")],
-    ["blog",   t("nav.insights")],
+    ["inzichten", t("nav.insights")],
     ["over",   t("nav.about")],
     ["contact",t("nav.contact")],
   ];
@@ -2055,7 +2055,7 @@ function Footer({go}){
           </div>
           <div>
             <div className="footer-col-title">{t("footer.infoCol")}</div>
-            {[["wat",t("footer.wat")],["over",t("footer.about")],["blog",t("footer.insights")],["contact",t("footer.contact")]].map(([id,l])=>(
+            {[["wat",t("footer.wat")],["over",t("footer.about")],["inzichten",t("footer.insights")],["contact",t("footer.contact")]].map(([id,l])=>(
               <span key={id} className="footer-link" onClick={()=>go(id)}>{l}</span>
             ))}
           </div>
@@ -3642,10 +3642,19 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
   );
 }
 
-function BlogPage({go}){
+function InzichtenPage({go}){
   const[activePost,setActivePost]=useState(null);
   const[articles,setArticles]=useState([]);
   const[loading,setLoading]=useState(true);
+  const[activeCat,setActiveCat]=useState("all");
+  const isEN=LANG==="en";
+
+  const CATS=[
+    {id:"basics",  tag:"Human Design Basics",    label:"Human Design Basics",                        desc:isEN?"Type, Strategy, Authority, Profile — the foundations of every Human Design chart.":"Type, Strategie, Autoriteit, Profiel — de basisconcepten van elke Human Design chart."},
+    {id:"depth",   tag:"Verdieping",              label:isEN?"In Depth":"Verdieping",                 desc:isEN?"Channels, Gates, Incarnation Cross, History — themes for deeper understanding.":"Kanalen, Poorten, Inkarnatie-Kruis, Geschiedenis — thema’s voor dieper begrip."},
+    {id:"numastr", tag:"Numerologie & Astrologie",label:isEN?"Numerology & Astrology":"Numerologie & Astrologie", desc:isEN?"Life Path, Expression, Sun sign — the numerical and astrological dimension.":"Levenspad, Uitdrukking, Zonneteken — de numerologische en astrologische dimensie."},
+  ];
+
   const STATIC=[
     {
       id:"s1",tag:"Human Design Basics",title:"Het verschil tussen Type en Strategie",date:"12 april 2026",readtime:"6 min",
@@ -3657,7 +3666,7 @@ function BlogPage({go}){
       body:"Type en Strategie worden in Human Design-kringen regelmatig door elkaar gebruikt. Dat is begrijpelijk — ze hangen samen en worden vaak in één adem genoemd. Maar ze beschrijven fundamenteel verschillende dingen, en het onderscheid begrijpen maakt het systeem een stuk bruikbaarder in het dagelijks leven.\n\nJe Type is je energetische aard. Het beschrijft hoe je energiesysteem is geconfigureerd — niet wat je doet, maar hoe je van nature functioneert. Er zijn vijf Types in Human Design: de Generator, de Manifesting Generator, de Projector, de Manifestor en de Reflector. Ongeveer 70 procent van de wereldbevolking bestaat uit Generators en Manifesting Generators. Projectors maken zo'n 20 procent uit. Manifestors zijn zeldzamer, rond de 9 procent, en Reflectors zijn de kleinste groep met ongeveer 1 procent.\n\nJe Type verandert nooit. Het staat vast op het moment van je geboorte, bepaald door de posities van de planeten en hun relatie tot de negen energiecentra in je chart. Het is geen persoonlijkheidstest die varieert afhankelijk van je stemming of levensfase — het is een constante, zoals je bloedgroep.\n\nDe Strategie is iets anders. Het is de optimale manier van handelen die bij je Type hoort. Waar het Type beschrijft wie je energetisch bent, beschrijft de Strategie hoe je het meest in lijn met jezelf kunt bewegen. Generators en Manifesting Generators zijn ontworpen om te reageren — niet om te initiëren. Ze wachten op iets in de buitenwereld dat een sacrale respons oproept, een instinctief 'ja' of 'nee' vanuit het lichaam, en handelen vanuit die respons.\n\nProjectors hebben een andere Strategie: wachten op de uitnodiging. Niet passief afwachten in de zin van niets doen, maar beschikbaar zijn en wachten tot anderen hun unieke capaciteit voor begeleiding en inzicht herkennen en expliciet uitnodigen. Wanneer een Projector geïnviteerd wordt, kan zijn energie volledig tot zijn recht komen. Zonder uitnodiging leidt dezelfde energie vaak tot weerstand of bitterheid.\n\nManifestors — de enige Types die van nature kunnen initiëren — hebben als Strategie om te informeren. Niet om toestemming te vragen, maar om mensen die door hun acties geraakt worden vooraf te laten weten wat er komen gaat. Dit simpele gebaar vermindert weerstand en maakt de weg vrij voor hun impactvolle energie. Reflectors ten slotte wachten een volledige maancyclus van 28 dagen voor ze grote beslissingen nemen, zodat ze de juiste context en helderheid kunnen ervaren.\n\nEen veel voorkomende misvatting is dat de Strategie iets is wat je moet presteren of aanleren. Dat is niet zo. Het is eerder een uitnodiging om het tegenovergestelde te doen van wat de conditionering je heeft geleerd. Veel Generators leren van jongs af aan om te initiëren, actief te zijn, doelen te stellen en ernaar toe te werken. Dat werkt voor sommige Types prima, maar voor een Generator leidt het initiëren zonder sacrale respons vaak tot frustratie en energieverlies.\n\nHet interessante van de Strategie is dat het niet gaat om grote, dramatische veranderingen in je leven. Het gaat om kleine verschuivingen in hoe je beslissingen neemt. Wacht je op een echte respons voor je ja zegt? Informeer je de mensen om je heen voor je handelt? Wacht je op een uitnodiging of pers je je inzichten op? Die kleine aanpassingen, consequent toegepast, kunnen over tijd een opvallend verschil maken in hoeveel energie je hebt en hoe soepel dingen verlopen.\n\nType en Strategie vormen samen het vertrekpunt van elk Human Design rapport van de Faculty of Human Design. Ze geven geen antwoord op alle vragen, maar bieden een solide basis vanwaaruit de rest van de chart — autoriteit, profiel, centra, kanalen — betekenis krijgt. Wie zijn Type en Strategie werkelijk begrijpt en toepast, begint te merken dat het leven minder wrijving kent en meer van nature stroomt.",
     },
     {
-      id:"s2",tag:"Autoriteit",title:"Innerlijke autoriteit: hoe je je beste beslissingen neemt",date:"28 maart 2026",readtime:"7 min",
+      id:"s2",tag:"Human Design Basics",title:"Innerlijke autoriteit: hoe je je beste beslissingen neemt",date:"28 maart 2026",readtime:"7 min",
       excerpt:"Je innerlijke autoriteit in Human Design is het meest consistente instrument voor besluitvorming dat je bezit.",
       images:[
         "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&auto=format&q=75",
@@ -3666,13 +3675,25 @@ function BlogPage({go}){
       body:"We nemen elke dag tientallen beslissingen. De meeste zijn klein — wat eten, welke route rijden, wanneer antwoorden. Maar de grotere beslissingen, over werk, relaties, woonplaats, gezondheid, zijn degenen waarbij we het vaakst twijfelen, aarzelen, of achteraf spijt hebben. Human Design biedt hiervoor een verrassend concreet instrument: de innerlijke autoriteit.\n\nDe innerlijke autoriteit is het centrum of het mechanisme in je chart van waaruit je het betrouwbaarst beslissingen neemt. Het is geen filosofie of levenshouding — het is gebaseerd op de configuratie van je energiesysteem. Afhankelijk van welke centra in je chart gedefinieerd zijn, heeft iedereen een andere autoriteit. Er zijn zeven vormen, en elke vraagt een andere aanpak.\n\nDe meest voorkomende autoriteit is de Emotionele autoriteit, ook wel de Solarplexus-autoriteit genoemd. Mensen met deze autoriteit hebben een gedefinieerd emotioneel centrum, wat betekent dat ze een continue golf van emotionele energie ervaren — van hoog naar laag en terug. Voor hen geldt: neem nooit een belangrijke beslissing in het moment zelf. Wacht op emotionele helderheid. Dat kan uren duren, of dagen. 'Slaap er eens een nacht over' is voor hen geen cliché maar een letterlijk advies dat hen behoedt voor beslissingen die vanuit een emotionele piek of dal zijn genomen.\n\nDe Sacrale autoriteit is exclusief voor Generators en Manifesting Generators met een gedefinieerd Sacraalcentrum en een ongedefinieerd emotioneel centrum. Deze autoriteit spreekt via het lichaam — een instinctieve, fysieke respons die voelt als een 'uh-huh' of een 'unh-unh'. Het is geen mentale stem maar een lichamelijke reactie die er al is voor de geest heeft kunnen nadenken. Mensen met Sacrale autoriteit doen er goed aan om hun beslissingen te testen via ja/nee-vragen en te luisteren naar wat het lichaam antwoordt, niet wat het hoofd redeneert.\n\nDe Splenische autoriteit is de stilst van alle autoriteiten. De Milt spreekt eenmalig, in het moment, en daarna is hij stil. Het is een zachte fluistering van instinct en intuïtie — niet de luidruchtige zekerheid van emotie of het kloppende ja van het Sacraalcentrum, maar een subtiel 'dit klopt' of 'dit klopt niet'. Mensen met Splenische autoriteit moeten leren om dat eerste, stille signaal te vertrouwen, ook al kunnen ze het moeilijk rationeel verklaren.\n\nDe Ego- of Hartautoriteit spreekt via wil en verlangens. 'Wil ik dit echt?' is de centrale vraag. Niet wat je zou moeten willen, niet wat anderen van je verwachten, maar wat jij vanuit je diepste wil kiest. Dit klinkt eenvoudig, maar voor mensen die gewend zijn hun eigen verlangens te onderdrukken ten gunste van anderen, kan dit een ingrijpende oefening zijn.\n\nVervolgens zijn er de Zelf-geprojecteerde autoriteit, de Mentale of Projectie-autoriteit, en de Lunaire autoriteit van de Reflector. De Zelf-geprojecteerde autoriteit werkt via het G-centrum — mensen met deze autoriteit vinden helderheid door hardop te spreken met iemand die ze vertrouwen, niet voor advies, maar om hun eigen stem te horen. De Mentale autoriteit is uniek voor bepaalde Projectors: zij kalibreren via gesprek en externe reflectie. En Reflectors, met hun bijzondere gevoeligheid voor de omgeving, nemen de tijd van een volledige maancyclus om te voelen hoe een beslissing aanvoelt doorheen verschillende energetische contexten.\n\nWat al deze autoriteiten gemeen hebben is dat ze het hoofd — de mentale analyse — uitdrukkelijk niet als beslisser aanwijzen. De geest is in Human Design een uitstekende tool om informatie te verzamelen en te verwerken, maar hij is niet ontworpen als de uiteindelijke beslisser. Dat is voor de meeste mensen een radicale verschuiving, want we zijn opgegroeid met de overtuiging dat denken en redeneren de meest betrouwbare weg naar goede beslissingen is.\n\nDe praktische toepassing vraagt oefening en geduld. Het herkennen van je autoriteit is één ding; erop leren vertrouwen is een langzamer proces, zeker als je jarenlang anders hebt besloten. Maar wie consequent leert te luisteren naar zijn innerlijke autoriteit, merkt doorgaans dat de uitkomsten beter passen, minder energie kosten, en dat de spijt van beslissingen afneemt. Niet omdat alles perfect gaat, maar omdat de beslissing écht van jou was.",
     },
     {
-      id:"s3",tag:"Geschiedenis",title:"De oorsprong van Human Design op Ibiza",date:"14 februari 2026",readtime:"8 min",
+      id:"s3",tag:"Verdieping",title:"De oorsprong van Human Design op Ibiza",date:"14 februari 2026",readtime:"8 min",
       excerpt:"In januari 1987 ontving Ra Uru Hu het Human Design systeem gedurende acht dagen op Ibiza.",
       images:[
         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&q=75",
         "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=800&auto=format&q=75",
       ],
       body:"Er zijn weinig plekken in de westerse wereld die zo doordrenkt zijn van een bepaalde sfeer als het eiland Ibiza in de winter. Buiten het hoogseizoen, als de clubs gesloten zijn en het eiland terugkeert naar zijn mediterrane stilte, ademt het iets ouds. Het is op dit eiland, in de januarinacht van 1987, dat het verhaal van Human Design begint.\n\nRa Uru Hu — geboren als Alan Robert Krakower in Canada — woonde op dat moment op Ibiza. Hij had een bewogen leven achter de rug: journalist, muzikant, reclameman, vader. In 1983 had hij alles achter zich gelaten en was hij naar Europa getrokken. Op Ibiza vond hij een teruggetrokken bestaan, alleen, in een huis aan de rand van een klein dorp op het eiland.\n\nIn de nacht van 3 januari 1987 was hij alleen thuis toen hij een ervaring begon die hij later zou omschrijven als het horen van een Stem. Geen metaforische stem, geen interne gedachte — maar wat hij ervoer als een externe, intelligente aanwezigheid die hem rechtstreeks aansprak. Hij schreef later dat hij aanvankelijk dacht gek te worden. Maar de Stem bleef, en gedurende acht aaneengesloten dagen dicteerde zij hem een compleet systeem.\n\nWat hij ontving was een synthese van vier grote kennissystemen die op het eerste gezicht weinig met elkaar gemeen hebben. De 64 hexagrammen van de Chinese I Ching vormden de ruggengraat — elk hexagram correspondeert met een van de 64 poorten in het Human Design chart. De Sefirot van de Joodse Kabbala leverde de structuur van de levensboom, die zichtbaar is in de verbindingen tussen de negen energiecentra. De westerse astrologie bood het raamwerk van planetaire posities en hun invloed op het moment van geboorte. En de kwantumfysica — met name de ontdekking van het neutrino in de jaren daarvoor — gaf een wetenschappelijk substraat voor de overdracht van informatie via materie.\n\nDe combinatie lijkt op het eerste gezicht eclectisch, zo niet willekeurig. Maar wie het systeem bestudeert, merkt dat de vier bronnen op een coherente manier zijn samengebracht — niet als een oppervlakkige mix, maar als een structurele synthese waarbij elk systeem een specifieke laag toevoegt aan het geheel. De I Ching geeft de kwaliteiten van de poorten, de Kabbala geeft de centra en hun verbindingen, de astrologie geeft de timing en planetaire invloeden, en de kwantumfysica biedt een verklaring voor hoe de sterrenposities op het moment van geboorte de configuratie van een individueel chart bepalen.\n\nNa de acht dagen was Ra Uru Hu uitgeput maar helder. Hij begon het systeem te bestuderen, te testen en te verfijnen. In de jaren die volgden gaf hij de eerste readings en trainingen, aanvankelijk vooral op Ibiza en in Europa. Het systeem groeide langzaam, aangedreven door mond-tot-mondreclame. Ra was geen marketingmens — hij was een leraar die zijn lessen op tape en later digitaal verspreidde, en die een kleine maar toegewijde gemeenschap om zich heen verzamelde.\n\nRa Uru Hu overleed in 2011, op 63-jarige leeftijd, op Ibiza — het eiland waar het allemaal was begonnen. Hij had altijd gezegd dat hij niet de auteur van het systeem was maar de boodschapper. Of men dat letterlijk neemt of als metafoor, het systeem dat hij heeft doorgegeven heeft sindsdien miljoenen mensen bereikt.\n\nDe Faculty of Human Design is opgericht op datzelfde eiland, vanuit een diepe verbondenheid met de plek waar het systeem is ontvangen. Ibiza is voor ons niet alleen een locatie maar een context — een eiland dat altijd ruimte heeft geboden aan zoekers, denkers en mensen die buiten de gebaande paden willen leven. Het is die geest die we meenemen in elk rapport dat wij maken: nauwkeurig, persoonlijk, en respectvol voor de diepgang van het systeem dat Ra Uru Hu ons heeft nagelaten.",
+    },
+    {
+      id:"s4",tag:"Verdieping",title:"Kanalen: de energetische verbindingen in jouw chart",date:"5 mei 2026",readtime:"6 min",
+      excerpt:"Een kanaal ontstaat wanneer twee centra via een poort aan beide kanten verbonden zijn. Het is de basis van jouw consistente energetische expressie.",
+      images:["https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&q=75"],
+      body:"In een Human Design chart zijn er negen energiecentra, elk verantwoordelijk voor een specifiek domein van het leven. Maar de centra staan niet op zichzelf. Ze zijn verbonden via poorten, en wanneer twee centra elk een poort delen die als één systeem functioneert, ontstaat een kanaal.\n\nEen kanaal is de brug tussen twee centra. Het heeft een nummer dat de combinatie van de twee poorten aangeeft. Poort 3-5 verbindt het Sacraalcentrum met het Wortelcentrum en beschrijft een ritme van persoonlijke groei via overgangen. Poort 36-35 verbindt het Solarplexuscentrum met het Keelcentrum en beschrijft de cyclische ervaring van crisis en variatie die uitmondt in wijsheid.\n\nWat een kanaal bepalend maakt, is dat het consistent is. Wanneer je een kanaal hebt, beschik je over een doorgaande, betrouwbare stroom van energie tussen die twee centra. Dat is anders dan open centra, die energie van buitenaf absorberen maar niet zelf genereren. Kanalen zijn jouw eigen, vastomlijnde expressie.\n\nIn de praktijk zie je dit terug in gedrag. Mensen met het kanaal 61-24, dat het Kroncentrum verbindt met het Ajna, worden gedreven door een onophoudelijke mentale zoektocht naar betekenis en patronen. Ze kunnen het niet laten. Het is geen keuze; het is hoe hun systeem functioneert. Mensen met het kanaal 12-22, Keel naar Solarplexus, zijn aangewezen op timing: ze communiceren op hun best wanneer de emotionele golfbeweging op haar juiste moment staat.\n\nNiet iedereen heeft kanalen. Sommige charts hebben er één of twee; anderen hebben er zes of zeven. Hoe meer kanalen, hoe meer centra gedefinieerd zijn en hoe meer van jouw ervaring intern bepaald is in plaats van door de omgeving. Het verschil is niet beter of slechter. Een chart met weinig kanalen is flexibeler, gevoeliger voor de energie van anderen. Een chart met veel kanalen heeft een sterke eigen ruggengraat, maar kan soms minder ontvankelijk zijn voor externe input.\n\nKanalen begrijpen helpt je te herkennen welke aspecten van jouw gedrag, drijfveren en energie werkelijk van jou zijn en welke je oppikt uit de omgeving. Dat onderscheid is, in de kern, waar Human Design over gaat.",
+    },
+    {
+      id:"s5",tag:"Numerologie & Astrologie",title:"Wat je levenspadgetal over jou zegt",date:"19 april 2026",readtime:"5 min",
+      excerpt:"Het levenspadgetal is het meest fundamentele getal in de numerologie, berekend uit je volledige geboortedatum en onveranderlijk voor je hele leven.",
+      images:["https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=800&auto=format&q=75"],
+      body:"Van alle getallen in de numerologie is het levenspadgetal het meest fundamentele. Het wordt berekend door de cijfers van je volledige geboortedatum tot één getal terug te brengen, met uitzondering van de mastergetallen 11, 22 en 33, die niet verder worden gereduceerd.\n\nDe berekening is eenvoudig. Neem als voorbeeld de geboortedatum 17 september 1985. Je telt: 1+7=8 voor de dag, 9 voor de maand, en 1+9+8+5=23 dus 2+3=5 voor het jaar. Dan tel je 8+9+5=22. Dat is een mastergetal, dus het blijft 22. Had de som 23 opgeleverd, dan was het levenspadgetal 5.\n\nElk getal heeft een eigen karakter, een thema dat door het leven loopt als een rode draad. Getal 1 staat voor zelfstandigheid en initiatief. Getal 2 gaat over verbinding en samenwerking. Getal 3 over expressie en creativiteit. Getal 4 over structuur en het bouwen van fundamenten. Getal 5 over vrijheid en verandering. Getal 6 over verantwoordelijkheid en zorg. Getal 7 over verdieping en de innerlijke wereld. Getal 8 over macht en materiële expressie. Getal 9 over universele verbinding en afronding.\n\nDe mastergetallen 11, 22 en 33 dragen een extra laag. Levenspad 11 staat voor inspiratie en intuïtieve helderheid, maar de weg ernaartoe gaat via angst en twijfel overwinnen. Levenspad 22 is de meester-bouwer: iemand met het vermogen om grote structuren op te richten, maar ook met de spanning tussen ambitie en zelfbegrenzing. Levenspad 33 is zeldzaam en draait om dienstbaarheid, liefde en creatieve expressie op het hoogste niveau.\n\nHet levenspadgetal beschrijft niet wie je bent in iedere situatie. Het beschrijft het thema van waaruit je groeit, soms door weerstand te ervaren aan precies dat wat het getal vraagt. Wie levenspad 8 heeft, worstelt misschien jarenlang met geld en macht, juist omdat dat zijn leergebied is. Numerologie is geen bepaling van het lot. Het is een kaart van het terrein waarop je leert.",
     },
   ];
   useEffect(()=>{
@@ -3695,11 +3716,11 @@ function BlogPage({go}){
   // Pick the right language field: en version if LANG=en and it exists, else nl fallback
   const al=(a,f)=>(LANG==="en"&&a[f+"_en"])?a[f+"_en"]:a[f];
 
-  // SEO for list view or single article
+  // SEO
   useSEO(activeArticle ? {
     title: al(activeArticle,"title"),
-    description: al(activeArticle,"excerpt") || al(activeArticle,"title") + (LANG==="en"?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
-    canonical: SITE + "/#blog",
+    description: al(activeArticle,"excerpt") || al(activeArticle,"title") + (isEN?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
+    canonical: SITE + "/inzichten",
     jsonLd: {
       "@context":"https://schema.org","@type":"Article",
       "headline": activeArticle.title,
@@ -3710,20 +3731,22 @@ function BlogPage({go}){
       "image": (activeArticle.images||[])[0]
     }
   } : {
-    title: LANG==="en"?"Insights on Human Design, Numerology & Astrology":"Inzichten over Human Design, Numerologie & Astrologie",
-    description: LANG==="en"?"Articles on Human Design, Numerology and Astrology. Learn about Type, Strategy, Authority and the origin of Human Design on Ibiza.":"Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
-    canonical: SITE + "/#blog",
+    title: isEN?"Insights on Human Design, Numerology & Astrology":"Inzichten over Human Design, Numerologie & Astrologie",
+    description: isEN?"Articles on Human Design, Numerology and Astrology. Learn about Type, Strategy, Authority and the origin of Human Design on Ibiza.":"Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
+    canonical: SITE + "/inzichten",
     jsonLd: {
       "@context":"https://schema.org","@type":"Blog",
-      "name":LANG==="en"?"Faculty of Human Design — Insights":"Faculty of Human Design — Inzichten",
-      "description":LANG==="en"?"Articles on Human Design, Numerology and Astrology.":"Artikelen over Human Design, Numerologie en Astrologie.",
+      "name":isEN?"Faculty of Human Design — Insights":"Faculty of Human Design — Inzichten",
+      "description":isEN?"Articles on Human Design, Numerology and Astrology.":"Artikelen over Human Design, Numerologie en Astrologie.",
       "publisher":{"@type":"Organization","name":"Faculty of Human Design"}
     }
   });
 
+  // ── Article detail view ────────────────────────────────────────────────────
   if(activePost){
     const post=articles.find(a=>String(a.id)===String(activePost));
     if(!post)return null;
+    const catLabel=CATS.find(c=>c.tag===post.tag)?.label||post.tag;
     return(
       <div className="pg">
         <div className="origin-section" style={{minHeight:320}}>
@@ -3731,10 +3754,10 @@ function BlogPage({go}){
             <img src={IMGS.cosmos} alt="Kosmische sfeer — Faculty of Human Design inzichten" loading="eager"/>
           </div>
           <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:56}}>
-            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>{t("blog.backToList")}</div>
-            <div className="label-light" style={{marginBottom:8}}>{post.tag}</div>
+            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>← {isEN?"Back to insights":"Terug naar inzichten"}</div>
+            <div className="label-light" style={{marginBottom:8}}>{catLabel}</div>
             <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{al(post,"title")}</h1>
-            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} {t("blog.readTime")}</div>
+            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} {isEN?"read":"leestijd"}</div>
           </div>
         </div>
         <section className="section bg-white">
@@ -3752,54 +3775,114 @@ function BlogPage({go}){
               ));
             })()}
             <div style={{marginTop:40,paddingTop:28,borderTop:"1px solid var(--border)"}}>
-              <div className="label" style={{marginBottom:16}}>{LANG==="en"?"More reading":"Meer lezen"}</div>
+              <div className="label" style={{marginBottom:16}}>{isEN?"More reading":"Meer lezen"}</div>
               <div className="grid-2">
-                {articles.filter(a=>String(a.id)!==String(activePost)).slice(0,2).map(a=>(
+                {articles.filter(a=>String(a.id)!==String(activePost)&&a.tag===post.tag).slice(0,2).map(a=>(
                   <div key={a.id} className="blog-card" onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
-                    <div className="blog-tag">{a.tag}</div>
+                    <div className="blog-tag">{CATS.find(c=>c.tag===a.tag)?.label||a.tag}</div>
                     <div className="blog-title" style={{fontSize:"1rem"}}>{al(a,"title")}</div>
                   </div>
                 ))}
               </div>
             </div>
-            <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>{t("blog.orderCta")}</button></div>
+            <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>{isEN?"Order a report":"Bestel een rapport"}</button></div>
           </div>
         </section>
       </div>
     );
   }
 
+  // ── Category filter pill styles ───────────────────────────────────────────
+  const pillBase={display:"inline-block",padding:"7px 18px",borderRadius:99,fontSize:".7rem",fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",cursor:"pointer",border:"1px solid var(--border)",transition:"all 150ms",whiteSpace:"nowrap"};
+  const pillActive={...pillBase,background:"var(--dark)",color:"white",border:"1px solid var(--dark)"};
+  const pillInactive={...pillBase,background:"transparent",color:"var(--text-muted)"};
+
+  // ── Articles per category ─────────────────────────────────────────────────
+  const catArts=(cat)=>articles.filter(a=>a.tag===cat.tag);
+  const visibleCats=activeCat==="all"?CATS:CATS.filter(c=>c.id===activeCat);
+
   return(
     <div className="pg">
-      <div className="origin-section" style={{minHeight:340}}>
+
+      {/* ── Hero ── */}
+      <div className="origin-section" style={{minHeight:320}}>
         <div className="origin-section-bg">
           <img src={IMGS.cosmos} alt="Kosmische sfeer" loading="eager"/>
         </div>
-        <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:72}}>
-          <div className="label-light" style={{marginBottom:14}}>{t("blog.eyebrow")}</div>
-          <h1 className="h1" style={{color:"white",marginBottom:14}}>{t("blog.title")}</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>{t("blog.sub")}</p>
+        <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:64}}>
+          <div className="label-light" style={{marginBottom:14}}>{isEN?"Knowledge":"Kennis"}</div>
+          <h1 className="h1" style={{color:"white",marginBottom:14}}>{isEN?"Insights":"Inzichten"}</h1>
+          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>{isEN?"Articles on Human Design, Numerology and Astrology — organised by theme.":"Artikelen over Human Design, Numerologie en Astrologie — ingedeeld per thema."}</p>
         </div>
       </div>
-      <section className="section bg-white">
-        <div className="container-sm">
-          {loading?(
-            <div style={{textAlign:"center",padding:"60px 0",color:"var(--text-light)",fontSize:".8rem",letterSpacing:".08em",textTransform:"uppercase"}}>{t("blog.loading")}</div>
-          ):articles.map((p,i)=>(
-            <div className="blog-card" key={i} onClick={()=>{setActivePost(String(p.id));window.scrollTo(0,0);}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"start",gap:16}}>
-                <div>
-                  <div className="blog-tag">{p.tag}</div>
-                  <div className="blog-title">{al(p,"title")}</div>
-                  <div className="blog-excerpt">{al(p,"excerpt")}</div>
-                  <div className="blog-more">{t("blog.readMore")}</div>
-                </div>
-                <div style={{fontSize:".65rem",letterSpacing:".06em",color:"var(--text-light)",textTransform:"uppercase",whiteSpace:"nowrap",flexShrink:0}}>{p.date}<br/>{p.readtime} {t("blog.readTime")}</div>
+
+      {/* ── Category filter bar ── */}
+      <div style={{background:"var(--bg)",borderBottom:"1px solid var(--border)",position:"sticky",top:64,zIndex:10}}>
+        <div className="container" style={{paddingTop:14,paddingBottom:14}}>
+          <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
+            <span style={activeCat==="all"?pillActive:pillInactive} onClick={()=>setActiveCat("all")}>{isEN?"All":"Alle"}</span>
+            {CATS.map(c=>(
+              <span key={c.id} style={activeCat===c.id?pillActive:pillInactive} onClick={()=>setActiveCat(c.id)}>{c.label}</span>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Loading ── */}
+      {loading&&(
+        <div style={{textAlign:"center",padding:"80px 0",color:"var(--text-light)",fontSize:".8rem",letterSpacing:".08em",textTransform:"uppercase"}}>{isEN?"Loading articles...":"Artikelen laden..."}</div>
+      )}
+
+      {/* ── Category sections ── */}
+      {!loading&&visibleCats.map(cat=>{
+        const arts=catArts(cat);
+        if(!arts.length) return null;
+        return(
+          <section key={cat.id} id={cat.id} style={{padding:"56px 0",borderBottom:"1px solid var(--border)"}}>
+            <div className="container">
+              {/* Section header */}
+              <div style={{marginBottom:36}}>
+                <div className="label" style={{marginBottom:10}}>{cat.label}</div>
+                <p style={{fontSize:".9rem",color:"var(--text-muted)",fontWeight:300,lineHeight:1.7,maxWidth:540}}>{cat.desc}</p>
+              </div>
+              {/* Article cards grid */}
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:24}}>
+                {arts.map(a=>(
+                  <div key={a.id} style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-md)",overflow:"hidden",cursor:"pointer",transition:"box-shadow 200ms"}}
+                    onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}
+                    onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 24px rgba(0,0,0,.08)";}}
+                    onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";}}>
+                    {(a.images||[])[0]&&(
+                      <img src={a.images[0]} alt={al(a,"title")} style={{width:"100%",height:180,objectFit:"cover",display:"block"}} loading="lazy"/>
+                    )}
+                    <div style={{padding:"20px 22px 24px"}}>
+                      <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"var(--brand)",marginBottom:8}}>{cat.label}</div>
+                      <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",lineHeight:1.3,marginBottom:10}}>{al(a,"title")}</div>
+                      <div style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65,marginBottom:16,display:"-webkit-box",WebkitLineClamp:3,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{al(a,"excerpt")}</div>
+                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+                        <span style={{fontSize:".7rem",fontWeight:500,color:"var(--brand)",letterSpacing:".08em",textTransform:"uppercase"}}>{isEN?"Read article":"Lees artikel"} →</span>
+                        <span style={{fontSize:".6rem",color:"var(--text-light)",letterSpacing:".06em",textTransform:"uppercase"}}>{a.readtime} {isEN?"read":"leestijd"}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
-          ))}
-        </div>
-      </section>
+          </section>
+        );
+      })}
+
+      {/* ── CTA ── */}
+      {!loading&&(
+        <section className="section bg-white" style={{textAlign:"center"}}>
+          <div className="container-sm">
+            <div className="label" style={{marginBottom:14}}>{isEN?"Ready to begin?":"Klaar om te beginnen?"}</div>
+            <h2 className="h2" style={{marginBottom:16,maxWidth:480,margin:"0 auto 16px"}}>{isEN?"Discover your personal blueprint":"Ontdek jouw persoonlijke blauwdruk"}</h2>
+            <p style={{fontSize:".95rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75,marginBottom:28,maxWidth:420,margin:"0 auto 28px"}}>{isEN?"Your chart is calculated free of charge. Your full report is delivered as a PDF within 1 business day.":"Je chart wordt gratis berekend. Je volledige rapport wordt als PDF bezorgd binnen 1 werkdag."}</p>
+            <button className="btn btn-primary" onClick={()=>go("rapporten")}>{isEN?"View reports":"Bekijk rapporten"}</button>
+          </div>
+        </section>
+      )}
     </div>
   );
 }
@@ -4310,7 +4393,7 @@ function DownloadPage({token}){
 }
 
 // ─── ROUTING HELPERS ─────────────────────────────────────────────────────────
-const ROUTABLE = new Set(["home","wat","rapporten","blog","over","contact","voorwaarden"]);
+const ROUTABLE = new Set(["home","wat","rapporten","inzichten","over","contact","voorwaarden"]);
 
 function pathToPage(pathname) {
   // Strip language prefix first (/en/... → /...)
@@ -4672,7 +4755,7 @@ export default function App(){
             {page==="wat"&&<WatPage go={go}/>}
             {page==="rapporten"&&<RapportenPage go={go}/>}
             {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
-            {page==="blog"&&<BlogPage go={go}/>}
+            {page==="inzichten"&&<InzichtenPage go={go}/>}
             {page==="over"&&<OverPage go={go}/>}
             {page==="contact"&&<ContactPage/>}
             {page==="voorwaarden"&&<TermsPage go={go}/>}
