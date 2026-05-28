@@ -19,7 +19,7 @@ const IMGS = {
   w_precision:   "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
   w_depth:       "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
   // Ibiza: Es Vedrà bij schemering — eigen foto, brandperfect
-  w_ibiza:       "/ibiza-es-vedra.jpg",
+  w_ibiza:       "/img-ibiza-moon.png",
 
   // ── Subscription moon backdrop ──────────────────────────────────────
   sub_moon:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
