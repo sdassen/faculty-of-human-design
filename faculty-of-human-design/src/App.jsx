@@ -4112,7 +4112,7 @@ function ContactPage(){
     <div className="pg">
       <div className="origin-section" style={{minHeight:360}}>
         <div className="origin-section-bg">
-          <img src="/ibiza-es-vedra.jpg" alt="Es Vedrà bij schemering — Ibiza" loading="eager"/>
+          <img src="/img-ibiza-moon.png" alt="Ibiza — Faculty of Human Design" loading="eager"/>
         </div>
         <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:80}}>
           <div className="label-light" style={{marginBottom:14}}>{t("contact.eyebrow")}</div>
