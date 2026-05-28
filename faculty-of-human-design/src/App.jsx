@@ -12,7 +12,7 @@ const IMGS = {
   hero:          "/img-meditation.png",
   ibiza:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   cosmos:        "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=2000&auto=format&fit=crop&q=82",
-  origin:        "/img-editorial.png",
+  origin:        "/img-ibiza-terrace.png",
   cta:           "/img-fabric.png",
 
   // ── Waarom-anders 3-up visual pillars ──────────────────────────────
