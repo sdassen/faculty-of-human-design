@@ -45,7 +45,7 @@ export async function renderPDF(html) {
     const pdf = await page.pdf({
       format:          "A4",
       printBackground: true,
-      margin:          { top: "14mm", bottom: "10mm", left: "0mm", right: "0mm" },
+      margin:          { top: "20mm", bottom: "10mm", left: "0mm", right: "0mm" },
     });
 
     return Buffer.from(pdf);

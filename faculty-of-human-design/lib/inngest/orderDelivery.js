@@ -389,7 +389,7 @@ OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen t
 VELDREGELS:
 - adem: OPTIONEEL — gebruik voor 2–3 secties per rapport; weglaten als het niet past
 - inJouwChart: 3–5 items
-- kern: 1–4 objecten; geen vaste boog; laat het karakter van déze sectie bepalen; 420–560 woorden totaal (vul de pagina — lege ruimte is geen luxe, het is een lege pagina)
+- kern: 1–4 objecten; geen vaste boog; laat het karakter van déze sectie bepalen; 480–560 woorden totaal — vul de pagina inhoudelijk; twee rijke pagina's zijn beter dan één dunne
 - valkuilen: 1–3 items; minimaal 1 altijd aanwezig; weglaten alleen als de sectie puur poëtisch is zonder schaduw
 - praktijk: 2–3 items; schrijf als uitnodiging, niet als opdracht; altijd aanwezig tenzij de sectie bewust als ademmoment is bedoeld
 - dezeWeek: 1–2 items; schrijf als uitnodiging; weglaten als het de sectie zwaarder maakt
@@ -879,7 +879,7 @@ OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outsid
 FIELD RULES:
 - adem: OPTIONAL — use for 2–3 sections per report; omit if it doesn't fit
 - inJouwChart: 3–5 items
-- kern: 1–4 objects; no fixed arc; let the character of this section determine what it needs; 420–560 words total (fill the page — empty space is not luxury, it is an empty page)
+- kern: 1–4 objects; no fixed arc; let the character of this section determine what it needs; 480–560 words total — fill the page with substance; two rich pages are better than one thin one
 - valkuilen: 1–3 items; minimum 1 always present; omit only if the section is purely poetic with no shadow dimension
 - praktijk: 2–3 items; write as invitation, not instruction; always present unless the section is deliberately a breath moment
 - dezeWeek: 1–2 items; write as invitation; omit if it would make the section heavier
@@ -1195,6 +1195,27 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
   }
 }
 
+// ─── ADEM LIMITER ─────────────────────────────────────────────────────────────
+// The system prompt says "2–3 adem moments per report" but the model often
+// generates one for every section (~8-10), each becoming a separate full page.
+// This function caps adem at MAX_ADEM_PER_REPORT sections — the first N that
+// have it keep it; the rest have it stripped before PDF rendering.
+const MAX_ADEM_PER_REPORT = 3;
+
+function limitAdemPerReport(sections) {
+  let ademCount = 0;
+  return sections.map(function(section) {
+    if (!section.adem) return section;
+    if (ademCount < MAX_ADEM_PER_REPORT) {
+      ademCount++;
+      return section;
+    }
+    // Strip adem from this section — keeps all other fields intact
+    const { adem: _removed, ...rest } = section;
+    return rest;
+  });
+}
+
 // ─── EM-DASH STRIPPER ─────────────────────────────────────────────────────────
 // Replaces em-dashes (—) used as mid-sentence style elements with commas.
 // En-dashes in channel/gate notation (e.g. "3–5", "g1–g2") use a different
@@ -1314,7 +1335,7 @@ RULES (strict):
 - Moon cycle always exactly "28 days"
 - Incarnation Cross: use only the names from the canon reference above
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
-- kern max 500 words total — quality over quantity, every sentence must earn its place
+- kern 480–560 words total — fill the page with substance; two rich pages are better than one thin one
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
     : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
@@ -1327,7 +1348,7 @@ REGELS (strikt):
 - Maancyclus altijd exact "28 dagen"
 - Inkarnatie-Kruis: gebruik alleen de namen uit de canon-referentie hierboven
 - Veranker ELKE kern-alinea in concrete chartdata uit de chart context
-- kern max 500 woorden totaal — kwaliteit boven kwantiteit, elke zin moet zijn plek verdienen
+- kern 480–560 woorden totaal — vul de pagina inhoudelijk; twee rijke pagina's zijn beter dan één dunne
 - Herhaal GEEN kanaal-, centrum- of profiel-beschrijving die al in een eerdere sectie staat — een korte verwijzing is toegestaan`;
 
   const useDeepThinking = shouldUseDeepThinking(sectionTitle);
@@ -1541,9 +1562,15 @@ export const orderDelivery = inngest.createFunction(
       sections.push({ title, ...(sectionData || {}) });
     }
 
+    // ── Post-process: limit adem pages to max 3 per report ────────────────
+    // Each section with `adem` renders as a separate full page in the PDF.
+    // AI often generates adem for 8-10 sections despite the "2-3" instruction,
+    // adding ~5-7 extra pages. Strip adem beyond the first 3 that have it.
+    const sectionsLimited = limitAdemPerReport(sections);
+
     // ── Step N+1: Render PDF ───────────────────────────────────────────────
     const pdfBytes = await step.run("render-pdf", async () => {
-      const buffer = await generatePDF({ order: enrichedOrderWithLessons, sections });
+      const buffer = await generatePDF({ order: enrichedOrderWithLessons, sections: sectionsLimited });
       // Convert Buffer to base64 string for serialisation through Inngest state
       return Buffer.from(buffer).toString("base64");
     });

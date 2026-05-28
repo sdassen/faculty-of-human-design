@@ -267,7 +267,7 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
   const lang  = order.language || "nl";
   const quote = lang === "en" ? quoteEN : quoteNL;
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="padding:0 32mm;text-align:center;position:relative;">
@@ -320,7 +320,7 @@ function buildIntroPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:3px;background:#1A1715;"></div>
   <div style="padding:18mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:18px;">${esc(c.label)}</div>
@@ -383,7 +383,7 @@ function buildHowToReadPage(order) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:3px;background:#1A1715;"></div>
   <div style="padding:14mm 24mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">${esc(c.label)}</div>
@@ -406,7 +406,7 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-inside:avoid;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-inside:avoid;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 260)}
@@ -484,7 +484,7 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
   }).join("");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:20mm;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:20mm;">
   <div style="height:2px;background:#1A1715;margin-bottom:3px;"></div>
   <div style="height:0.5px;background:#C9A85C;margin-bottom:32px;"></div>
   <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.25em;margin-bottom:16px;">${tocLabel}</div>
@@ -524,7 +524,7 @@ function buildProfilePage(order) {
   const definedCenters = (chart.definedCenters || []).join("  ·  ");
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:70mm;background:${ta.bg};position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${ta.bar};"></div>
     <div style="padding:20mm 20mm 0 24mm;">
@@ -552,7 +552,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;min-height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
+<div style="width:210mm;min-height:267mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -597,7 +597,7 @@ function sectionClosingHTML(section, idx, order, gridHTML) {
   const lang      = order.language || "nl";
   const partLabel = ui(lang, "ONDERDEEL", "PART") + "  " + String(idx + 1).padStart(2, "0");
   return `
-<div style="height:273mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="height:267mm;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:40mm;background:#1A1715;position:relative;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:9mm 16mm 0 20mm;">
@@ -645,7 +645,7 @@ function buildSectionClosingJSON(section, idx, order) {
   if (!hasAny) return "";
 
   return `
-<div style="background:#F7F5F0;position:relative;break-before:page;break-inside:avoid;min-height:273mm;">
+<div style="background:#F7F5F0;position:relative;break-before:page;break-inside:avoid;min-height:267mm;">
   <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
     <div style="padding:8mm 20mm 0 24mm;">
@@ -679,7 +679,7 @@ function buildSectionPagesJSON(section, idx, order) {
   // ── Pull quote strip (teaser) — prominent, between header and content ───
   const pullQuote = (section.teaser || "").trim();
   const pullQuoteStrip = pullQuote
-    ? `<div style="background:#FAF8F4;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;">
+    ? `<div style="background:#FFFFFF;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;">
         <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">${esc(pullQuote)}</div>
         <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
       </div>`
@@ -733,7 +733,7 @@ function buildSectionPagesJSON(section, idx, order) {
   // ── Breath page (adem) — minimalist pause before this section ────────────
   const ademText = (section.adem || "").trim();
   const ademPage = ademText
-    ? `<div style="break-before:page;min-height:273mm;background:#FAF8F4;display:flex;align-items:center;justify-content:center;position:relative;">
+    ? `<div style="break-before:page;min-height:267mm;background:#F7F5F0;display:flex;align-items:center;justify-content:center;position:relative;">
         <div style="max-width:120mm;text-align:center;padding:0 20mm;">
           <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:17pt;color:#1A1715;line-height:1.7;">${esc(ademText)}</div>
         </div>
@@ -871,7 +871,7 @@ function buildExecutiveSummaryPage(order) {
     : null;
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <!-- Dark header with type -->
   <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
@@ -919,7 +919,7 @@ function buildMethodologyPage(order) {
     : "";
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#F7F5F0;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
@@ -955,7 +955,7 @@ function buildMethodologyPage(order) {
       "Every calculation is unique to your birth data and cannot be generalised to others."
     )}</p>
 
-    <div style="background:#F7F5F0;border-left:3px solid #E5E0D8;padding:10px 14px;">
+    <div style="background:#FFFFFF;border-left:3px solid #E5E0D8;padding:10px 14px;">
       <p style="font-family:'Inter',sans-serif;font-size:8.5pt;line-height:1.65;color:#6B6560;font-style:italic;">${ui(lang,
         "Dit rapport is een persoonlijk werkdocument bedoeld voor zelfreflectie en bewustwording. Het is geen vervanging voor medisch, psychologisch, financieel of juridisch advies. Faculty of Human Design aanvaardt geen aansprakelijkheid voor beslissingen genomen op basis van de inhoud van dit rapport.",
         "This report is a personal working document intended for self-reflection and awareness. It is not a substitute for medical, psychological, financial or legal advice. Faculty of Human Design accepts no liability for decisions made based on the contents of this report."
@@ -973,7 +973,7 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:273mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:267mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 380)}
@@ -1112,7 +1112,7 @@ function buildGateAppendixPage(order) {
   const cols = gates.length <= 18 ? 3 : 4;
 
   return `
-<div style="background:#F7F5F0;position:relative;break-before:page;padding:0 0 20mm;">
+<div style="background:#FFFFFF;position:relative;break-before:page;padding:0 0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${esc(headerLabel)}</div>
@@ -1170,7 +1170,7 @@ ${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   @page { size: A4 portrait; margin: 0; }
-  html, body { width: 210mm; background: #F7F5F0; color-scheme: light; }
+  html, body { width: 210mm; background: #FFFFFF; color-scheme: light; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
     html, body { width: 210mm; }
