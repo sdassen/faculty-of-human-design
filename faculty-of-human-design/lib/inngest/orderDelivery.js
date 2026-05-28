@@ -1195,6 +1195,58 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
   }
 }
 
+// ─── EM-DASH STRIPPER ─────────────────────────────────────────────────────────
+// Replaces em-dashes (—) used as mid-sentence style elements with commas.
+// En-dashes in channel/gate notation (e.g. "3–5", "g1–g2") use a different
+// Unicode character (–) and are intentionally left untouched.
+function stripEmDashes(text) {
+  if (!text || typeof text !== "string") return text;
+  // " — " (space em-dash space) → ", "
+  // " —"  (space em-dash at end) → ","
+  // "— "  (em-dash space at start of clause) → ", "
+  // bare "—" → ","
+  return text
+    .replace(/ — /g, ", ")
+    .replace(/ —([^ ])/g, ", $1")
+    .replace(/([^ ])— /g, "$1, ")
+    .replace(/—/g, ",");
+}
+
+function stripEmDashesFromSection(section) {
+  if (!section || typeof section !== "object") return section;
+  const s = { ...section };
+
+  if (s.teaser) s.teaser = stripEmDashes(s.teaser);
+  if (s.adem)   s.adem   = stripEmDashes(s.adem);
+
+  if (Array.isArray(s.inJouwChart)) {
+    s.inJouwChart = s.inJouwChart.map(stripEmDashes);
+  }
+  if (Array.isArray(s.kern)) {
+    s.kern = s.kern.map(function(block) {
+      const b = { ...block };
+      if (b.subkop) b.subkop = stripEmDashes(b.subkop);
+      if (Array.isArray(b.paragraphs)) b.paragraphs = b.paragraphs.map(stripEmDashes);
+      return b;
+    });
+  }
+  if (Array.isArray(s.valkuilen))       s.valkuilen       = s.valkuilen.map(stripEmDashes);
+  if (Array.isArray(s.praktijk))        s.praktijk        = s.praktijk.map(stripEmDashes);
+  if (Array.isArray(s.dezeWeek))        s.dezeWeek        = s.dezeWeek.map(stripEmDashes);
+  if (Array.isArray(s.reflectievragen)) s.reflectievragen = s.reflectievragen.map(stripEmDashes);
+  if (Array.isArray(s.microInzichten)) {
+    s.microInzichten = s.microInzichten.map(function(item) {
+      return {
+        ...item,
+        label: stripEmDashes(item.label),
+        tekst: stripEmDashes(item.tekst),
+      };
+    });
+  }
+
+  return s;
+}
+
 // ─── GENERATE SECTION (with canon, interdep, and retry) ───────────────────────
 async function generateSectionText(sectionTitle, order, previousSections, attempt = 0, lastIssues = []) {
   const { customer_name, birth_data, language, report_id, report_title } = order;
@@ -1308,6 +1360,9 @@ REGELS (strikt):
   if (derivedReportId === "kind") {
     parsed = transformSectionForKindRapport(parsed, sectionTitle, lang);
   }
+
+  // Post-process: replace em-dashes with commas (model ignores prompt instruction ~10% of the time)
+  parsed = stripEmDashesFromSection(parsed);
 
   return parsed;
 }
