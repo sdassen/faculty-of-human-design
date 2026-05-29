@@ -552,7 +552,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;min-height:261mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
+<div style="width:210mm;height:247mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -560,7 +560,7 @@ function buildBodygraphPage(svgBodygraph, order) {
     <div style="width:48px;height:1px;background:#C9A85C;margin-top:6px;"></div>
   </div>
   <div style="display:flex;justify-content:center;margin-top:4px;">
-    <div style="width:170mm;aspect-ratio:360/500;">${svgBodygraph}</div>
+    <div style="height:215mm;aspect-ratio:360/500;">${svgBodygraph}</div>
   </div>
 </div>`;
 }
@@ -871,7 +871,7 @@ function buildExecutiveSummaryPage(order) {
     : null;
 
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:visible;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <!-- Dark header with type -->
   <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
@@ -919,7 +919,7 @@ function buildMethodologyPage(order) {
     : "";
 
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:visible;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
@@ -1169,7 +1169,7 @@ export function buildHTML({ order, sections, svgBodygraph }) {
 ${fontBlock}
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-  @page { size: A4 portrait; margin: 0; }
+  @page { size: A4 portrait; margin: 36mm 0mm 14mm 0mm; }
   html, body { width: 210mm; background: #F7F5F0; color-scheme: light; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
   @media print {
