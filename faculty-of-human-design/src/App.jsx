@@ -2032,7 +2032,7 @@ function Nav({page,go,menuOpen,setMenuOpen}){
           </div>
           <div className="nav-links">
             {links.map(([id,label])=>(
-              <span key={id} className={"nav-link"+(page===id||page.startsWith("rapport-")&&id==="rapporten"?" active":"")} onClick={()=>go(id)}>{label}</span>
+              <span key={id} className={"nav-link"+(page===id||(page.startsWith("rapport-")&&id==="rapporten")||(page.startsWith("inzichten-")&&id==="inzichten")?" active":"")} onClick={()=>go(id)}>{label}</span>
             ))}
           </div>
           <div className="nav-cta-wrap">
@@ -3761,11 +3761,13 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
   );
 }
 
-function InzichtenPage({go}){
-  const[activePost,setActivePost]=useState(null);
+function InzichtenPage({go,articleId}){
   const[articles,setArticles]=useState([]);
   const[loading,setLoading]=useState(true);
   const[activeCat,setActiveCat]=useState("all");
+  // Derive activePost from URL-driven articleId prop
+  const activePost=articleId||null;
+  const setActivePost=id=>go(id?"inzichten-"+id:"inzichten");
   const isEN=LANG==="en";
 
   const CATS=[
@@ -3935,7 +3937,7 @@ function InzichtenPage({go}){
   useSEO(activeArticle ? {
     title: al(activeArticle,"title"),
     description: al(activeArticle,"excerpt") || al(activeArticle,"title") + (isEN?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
-    canonical: SITE + "/inzichten",
+    canonical: SITE + "/inzichten/" + String(activeArticle.id),
     jsonLd: {
       "@context":"https://schema.org","@type":"Article",
       "headline": activeArticle.title,
@@ -4756,6 +4758,8 @@ function pathToPage(pathname) {
   if (!p || p === "/") return "home";
   const rapportMatch = p.match(/^\/rapport\/(.+)$/);
   if (rapportMatch) return "rapport-" + rapportMatch[1];
+  const inzichtenMatch = p.match(/^\/inzichten\/(.+)$/);
+  if (inzichtenMatch) return "inzichten-" + inzichtenMatch[1];
   const seg = p.replace(/^\//, "").replace(/\/$/, "");
   if (ROUTABLE.has(seg)) return seg;
   return "home";
@@ -4765,6 +4769,7 @@ function pageToPath(page) {
   const prefix = LANG === "en" ? "/en" : "";
   if (page === "home") return prefix + "/";
   if (page.startsWith("rapport-")) return prefix + "/rapport/" + page.slice("rapport-".length);
+  if (page.startsWith("inzichten-")) return prefix + "/inzichten/" + page.slice("inzichten-".length);
   return prefix + "/" + page;
 }
 
@@ -5110,7 +5115,7 @@ export default function App(){
             {page==="wat"&&<WatPage go={go}/>}
             {page==="rapporten"&&<RapportenPage go={go}/>}
             {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
-            {page==="inzichten"&&<InzichtenPage go={go}/>}
+            {(page==="inzichten"||page.startsWith("inzichten-"))&&<InzichtenPage go={go} articleId={page.startsWith("inzichten-")?page.slice("inzichten-".length):null}/>}
             {page==="over"&&<OverPage go={go}/>}
             {page==="contact"&&<ContactPage/>}
             {page==="voorwaarden"&&<TermsPage go={go}/>}
