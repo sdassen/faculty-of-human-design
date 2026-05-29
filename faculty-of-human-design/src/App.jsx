@@ -2649,30 +2649,19 @@ function HomePage({go}){
       <section className="hero" aria-label="Hoofdbanner">
         <div className="hero-bg">
           <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza — Faculty of Human Design persoonlijke blauwdrukken" loading="eager" fetchPriority="high"/>
-          {/* Second atmospheric layer: Melkweg gloed voor extra diepte */}
-          <img src={IMGS.milkyway} alt="" aria-hidden="true" loading="eager" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 40%",opacity:.28,mixBlendMode:"screen"}}/>
         </div>
         <div className="hero-stars"/>
         <div className="hero-glow"/>
-        {/* Subtle gold vignette bottom */}
-        <div style={{position:"absolute",bottom:0,left:0,right:0,height:"35%",background:"linear-gradient(to top, rgba(12,10,23,.65) 0%, transparent 100%)",pointerEvents:"none",zIndex:1}}/>
+        <div style={{position:"absolute",bottom:0,left:0,right:0,height:"40%",background:"linear-gradient(to top, rgba(8,7,16,.72) 0%, transparent 100%)",pointerEvents:"none",zIndex:1}}/>
         <div className="hero-content">
           <div className="hero-text">
             <div className="hero-eyebrow">{lang==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
             <h1 className="h1-hero">{lang==="en"?<>Your blueprint.<br/><em>Your truth.</em></>:<>Jouw blauwdruk.<br/><em>Jouw waarheid.</em></>}</h1>
-            <p className="hero-subtitle">{lang==="en"?"Uncover who you truly are. An intimate, in-depth portrait delivered as PDF within 1 business day.":"Ontdek wie jij werkelijk bent. Een intiem, diepgaand portret bezorgd als PDF binnen 1 werkdag."}</p>
-            <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:40}}>
+            <p className="hero-subtitle">{lang==="en"?"An intimate, in-depth portrait of who you are — drawn from your birth data and delivered as PDF within 1 business day.":"Een intiem, diepgaand portret van wie jij bent — getekend uit je geboortedata en bezorgd als PDF binnen 1 werkdag."}</p>
+            <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginTop:36}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 {t("home.heroCta")}
               </button>
-            </div>
-            <div className="hero-trust">
-              {[
-                "Swiss Ephemeris — "+( LANG==="en"?"planet positions to the degree":"planeetposities tot op de graad"),
-                (LANG==="en"?"Founded 2014 · Ibiza":"Opgericht 2014 · Ibiza"),
-              ].map(item=>(
-                <div key={item} className="hero-trust-item">{item}</div>
-              ))}
             </div>
           </div>
         </div>
@@ -2682,132 +2671,120 @@ function HomePage({go}){
         </div>
       </section>
 
-      {/* ── STAT ROW ─────────────────────────────────────────────────────── */}
-      <div className="stat-row">
-        <div className="stat-row-inner">
+      {/* ── EDITORIAL SIGNAL STRIP ───────────────────────────────────────── */}
+      <div style={{background:"var(--bg)",borderBottom:"1px solid var(--border)",padding:"20px 0"}}>
+        <div style={{maxWidth:900,margin:"0 auto",padding:"0 40px",display:"flex",justifyContent:"center",gap:"48px 72px",flexWrap:"wrap"}}>
           {(LANG==="en"
-            ?[["2,400+","Reports delivered"],["4.9 / 5","Average rating"],["2014","Founded in Ibiza"]]
-            :[["2.400+","Rapporten uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["2014","Opgericht op Ibiza"]]
+            ?[["2,400+","reports delivered"],["4.9 / 5","average rating"],["Est. 2014","Ibiza, Spain"],["Swiss Ephemeris","astronomical precision"]]
+            :[["2.400+","rapporten uitgebracht"],["4.9 / 5","gemiddelde beoordeling"],["Est. 2014","Ibiza, Spanje"],["Swiss Ephemeris","astronomische precisie"]]
           ).map(([n,l])=>(
-            <div key={l} className="stat-row-item">
-              <div className="stat-row-n">{n}</div>
-              <div className="stat-row-l">{l}</div>
+            <div key={l} style={{textAlign:"center",flexShrink:0}}>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",letterSpacing:".02em"}}>{n}</div>
+              <div style={{fontSize:".65rem",fontWeight:400,color:"var(--text-light)",textTransform:"uppercase",letterSpacing:".1em",marginTop:3}}>{l}</div>
             </div>
           ))}
-          <div className="stat-row-item" style={{position:"relative"}}>
-            <div className="stat-row-n" style={{fontSize:"1.2rem",letterSpacing:".04em"}}>Swiss Ephemeris</div>
-            <div className="stat-row-l">{LANG==="en"?"Professional standard":"Professionele standaard"}</div>
-            <div className="stat-row-ephemeris-desc" style={{fontSize:".6rem",fontWeight:300,color:"var(--text-light)",marginTop:3,maxWidth:172,lineHeight:1.55}}>{LANG==="en"?"Planetary positions accurate to the degree":"Planeetposities tot op de graad nauwkeurig"}</div>
-          </div>
         </div>
       </div>
 
-      {/* ── WAAROM ANDERS — 3 visual pillars ─────────────────────────────── */}
-      <section className="section-md bg-white">
+      {/* ── WAAROM ANDERS — open editorial pillars ───────────────────────── */}
+      <section style={{padding:"112px 0",background:"#fff"}}>
         <div className="container">
-          <div style={{marginBottom:52,display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:20}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:72,flexWrap:"wrap",gap:24}}>
             <div>
               <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
-              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>{t("home.waaromTitle")}</h2>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:480}}>{t("home.waaromTitle")}</h2>
             </div>
-            <div style={{width:48,height:1,background:"var(--gold)",opacity:.5,flexShrink:0,marginBottom:8}}/>
+            <div style={{width:48,height:1,background:"var(--gold)",opacity:.4,marginBottom:6}}/>
           </div>
-          <div className="grid-3">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 48px"}}>
             {(LANG==="en"?[
-              [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris — the professional standard for exact planetary positions to the degree. No rounded tables, no averages."],
-              [IMGS.w_depth,    "In-depth analysis",     "40+ pages",      "No bullet points, no generic texts. Extensive paragraphs tailored to your unique combination of Type, Authority and Profile."],
-              [IMGS.w_ibiza,    "Ibiza as origin",       "Est. 2014",      "Founded on the island where Ra Uru Hu received the Human Design system in 1987. Every report carries the clarity of that origin."],
+              [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris — the professional standard for exact planetary positions to the degree."],
+              [IMGS.w_depth,    "In-depth analysis",     "40+ pages",      "No bullet points, no generic texts. Extensive prose tailored to your unique combination of Type, Authority and Profile."],
+              [IMGS.w_ibiza,    "Ibiza as origin",       "Est. 2014",      "Founded on the island where Ra Uru Hu received the Human Design system in 1987. Every report carries that clarity."],
             ]:[
-              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — de professionele standaard voor exacte planeetposities tot op de graad. Geen afgeronde tabellen, geen gemiddelden."],
-              [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide alinea's afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
-              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Elk rapport draagt de helderheid van die oorsprong."],
+              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris — de professionele standaard voor exacte planeetposities tot op de graad."],
+              [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide proza afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
+              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Elk rapport draagt die helderheid."],
             ]).map(([img,title,badge,desc])=>(
-              <div className="waarom-card" key={title}>
-                <div className="waarom-card-img">
-                  <img src={img} alt={`Faculty of Human Design — ${title}`} loading="lazy"/>
-                  <div className="ov-grad-t"/>
-                  <div className="waarom-card-badge">{badge}</div>
+              <div key={title} style={{display:"flex",flexDirection:"column"}}>
+                <div style={{position:"relative",aspectRatio:"3/4",overflow:"hidden",marginBottom:28}}>
+                  <img src={img} alt={`Faculty of Human Design — ${title}`} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 55%,rgba(8,7,16,.45) 100%)"}}/>
+                  <div style={{position:"absolute",bottom:18,left:20,fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.7)",textTransform:"uppercase",letterSpacing:".14em"}}>{badge}</div>
                 </div>
-                <div className="waarom-card-body">
-                  <h4 className="waarom-card-title">{title}</h4>
-                  <p className="body-sm">{desc}</p>
-                </div>
+                <div style={{width:28,height:1,background:"var(--gold)",marginBottom:20,opacity:.6}}/>
+                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.25rem",fontWeight:400,color:"var(--text)",marginBottom:12,lineHeight:1.2}}>{title}</h4>
+                <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8}}>{desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── MEEST GEKOZEN — feature split ───────────────────────────────── */}
+      {/* ── EDITORIAL QUOTE PAUSE ────────────────────────────────────────── */}
+      <div style={{background:"var(--bg)",padding:"96px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:620,margin:"0 auto"}}>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 40px",opacity:.45}}/>
+          <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.35rem,2.2vw,1.75rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.55,letterSpacing:"-.01em",margin:0}}>
+            {lang==="en"
+              ? "\"Not a personality test. A precise map of your energetic architecture — drawn from the exact moment you arrived.\""
+              : "\"Geen persoonlijkheidstest. Een nauwkeurige kaart van jouw energetische architectuur — getekend uit het exacte moment waarop jij arriveerde.\""}
+          </blockquote>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"40px auto 0",opacity:.45}}/>
+        </div>
+      </div>
+
+      {/* ── MEEST GEKOZEN — editorial feature split ──────────────────────── */}
       <div className="feature-split">
         <div className="feature-content">
           <div className="label" style={{marginBottom:14}}>{t("home.featuredBadge")}</div>
           <h2 className="h2" style={{marginBottom:18}}>{tl(REPORTS[0].title)}</h2>
-          <p className="body-lg" style={{marginBottom:24}}>{tl(REPORTS[0].tagline)}</p>
-          <ul style={{listStyle:"none",display:"flex",flexDirection:"column",gap:10,marginBottom:32}}>
-            {REPORTS[0].includes.slice(0,6).map((item,i)=>(
-              <li key={i} style={{display:"flex",gap:12,alignItems:"flex-start",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)"}}>
-                <span style={{color:"var(--gold)",flexShrink:0,marginTop:1}}>✦</span>{item}
-              </li>
-            ))}
-          </ul>
+          <p className="body-lg" style={{marginBottom:32,maxWidth:420}}>{tl(REPORTS[0].tagline)}</p>
           <div style={{display:"flex",gap:14,flexWrap:"wrap",alignItems:"center"}}>
             <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
               {t("report.orderBtn",{price:"€75"})}
             </button>
-            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"40+ pages · Delivered within 1 business day":"40+ pagina's · Bezorgd binnen 1 werkdag"}</span>
+            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"40+ pages · Within 1 business day":"40+ pagina's · Binnen 1 werkdag"}</span>
           </div>
         </div>
         <div className="feature-image-wrap ph">
           <img src={IMGS.ibiza} alt="Ibiza golden hour" loading="lazy"/>
-          <div className="ov" style={{background:"linear-gradient(to bottom,rgba(12,10,23,.1) 0%,rgba(36,22,73,.2) 50%,rgba(12,10,23,.55) 100%)"}}/>
-          <div className="feature-price-card">
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:16}}>
-              <div>
-                <div style={{fontFamily:"var(--font-serif)",fontSize:"2.4rem",fontWeight:300,color:"white",lineHeight:1}}>€75</div>
-                <div style={{fontSize:".62rem",color:"rgba(255,255,255,.4)",marginTop:4,textTransform:"uppercase",letterSpacing:".08em"}}>{LANG==="en"?"One-time · Within 1 business day":"Eenmalig · Binnen 1 werkdag"}</div>
-              </div>
-              <div style={{textAlign:"right"}}>
-                <div style={{fontSize:".6rem",fontWeight:600,color:"rgba(201,168,92,.8)",textTransform:"uppercase",letterSpacing:".1em"}}>{LANG==="en"?"40+ pages":"40+ pagina's"}</div>
-                <div style={{fontSize:".6rem",color:"rgba(255,255,255,.35)",marginTop:2}}>{((typeof REPORTS[0].prompt_extra==="object"?REPORTS[0].prompt_extra[LANG]??REPORTS[0].prompt_extra.nl:REPORTS[0].prompt_extra)||"").split("\n").filter(l=>l.startsWith("###")).length} {t("report.sections")}</div>
-              </div>
-            </div>
-            {(LANG==="en"?[["Exact birth data","Date, time and place"],["Swiss Ephemeris","Astronomical precision"],["I Ching & Kabbalah","64 gates · 9 centers"]]:[["Exacte geboortedata","Datum, tijd en plaats"],["Swiss Ephemeris","Astronomische precisie"],["I Ching & Kabbalah","64 poorten · 9 centra"]]).map(([t,d])=>(
-              <div key={t} style={{borderTop:"1px solid rgba(255,255,255,.08)",padding:"10px 0",display:"flex",justifyContent:"space-between"}}>
-                <span style={{fontSize:".82rem",fontWeight:300,color:"rgba(255,255,255,.82)"}}>{t}</span>
-                <span style={{fontSize:".72rem",color:"rgba(255,255,255,.38)"}}>{d}</span>
-              </div>
-            ))}
-            <button className="btn btn-white btn-full" style={{marginTop:16}} onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"feature_card"});go("rapport-volledig");}}>
-              {t("home.ctaBtn")}
-            </button>
-          </div>
+          <div className="ov" style={{background:"linear-gradient(to bottom,rgba(12,10,23,.05) 0%,rgba(12,10,23,.4) 100%)"}}/>
         </div>
       </div>
 
-      {/* ── ALLE RAPPORTEN ───────────────────────────────────────────────── */}
-      <section className="section bg-white" style={{position:"relative",overflow:"hidden"}}>
-        {/* Subtiele cosmos achtergrond voor diepte */}
-        <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
-          <img src={IMGS.cosmos_rich} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",opacity:.04,filter:"saturate(.4) hue-rotate(20deg)"}}/>
-          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(247,245,240,0) 0%,rgba(247,245,240,.6) 60%,rgba(247,245,240,1) 100%)"}}/>
-        </div>
-        <div className="container" style={{position:"relative",zIndex:1}}>
-          <div style={{marginBottom:56,display:"flex",justifyContent:"space-between",alignItems:"flex-end",flexWrap:"wrap",gap:24}}>
+      {/* ── ALLE RAPPORTEN — open editorial grid ─────────────────────────── */}
+      <section style={{padding:"112px 0",background:"var(--bg)"}}>
+        <div className="container">
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:72,flexWrap:"wrap",gap:24}}>
             <div>
               <div className="label" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
               <h2 className="h2" style={{marginBottom:0,maxWidth:480}}>{t("rapporten.title")}</h2>
             </div>
-            <p className="body-md" style={{maxWidth:320,marginBottom:4,textAlign:"right"}}>{t("rapporten.sub")}</p>
+            <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>{t("rapporten.sub")}</p>
           </div>
-          <div className="grid-3">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 40px"}}>
             {REPORTS.filter(r=>["relatie_liefde","jaar","loopbaan"].includes(r.id)).map(r=>(
-              <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
+              <div key={r.id} style={{cursor:"pointer"}} onClick={()=>go("rapport-"+r.id)}>
+                <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
+                  <img src={r.img||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
+                    onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                    onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                  />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(8,7,16,.5) 100%)"}}/>
+                  <div style={{position:"absolute",bottom:20,left:20,right:20,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tagline)?.split(" ").slice(0,3).join(" ")}</span>
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>€{r.price}</span>
+                  </div>
+                </div>
+                <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
+                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
+                <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75,marginBottom:0}}>{tl(r.tagline)}</p>
+              </div>
             ))}
           </div>
-          <div style={{display:"flex",gap:28,justifyContent:"center",alignItems:"center",marginTop:40,flexWrap:"wrap"}}>
+          <div style={{textAlign:"center",marginTop:64}}>
             <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("home.viewAll")}</button>
-            <span style={{fontSize:".78rem",color:"var(--text-light)"}}>{LANG==="en"?"Numerology · Astrology · Relationship · and more":"Numerologie · Astrologie · Relatierapport · en meer"}</span>
           </div>
         </div>
       </section>
@@ -2835,54 +2812,32 @@ function HomePage({go}){
         </div>
       </div>
 
-      {/* ── HOE HET WERKT ────────────────────────────────────────────────── */}
-      <section className="section-md bg-muted" style={{position:"relative",overflow:"hidden"}}>
-        <div style={{position:"absolute",inset:0,pointerEvents:"none"}}>
-          <img src={IMGS.ibiza_white} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 55%",opacity:.07,filter:"saturate(.6) brightness(.9)"}}/>
-          <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 40%, rgba(61,44,94,.04) 0%, transparent 65%)"}}/>
-        </div>
-        <div className="container-md" style={{position:"relative",zIndex:1}}>
-          <div className="text-center" style={{marginBottom:56}}>
-            <div className="label" style={{marginBottom:14}}>{t("home.howLabel")}</div>
-            <h2 className="h2">{t("home.howSub")}</h2>
-          </div>
-          <div style={{display:"flex",flexDirection:"column",gap:28,maxWidth:620,margin:"0 auto"}}>
-            <StepCard num="1" title={t("home.step1")} desc={t("home.step1desc")}/>
-            <StepCard num="2" title={t("home.step2")} desc={t("home.step2desc")}/>
-            <StepCard num="3" title={t("home.step3")} desc={t("home.step3desc")}/>
-          </div>
-        </div>
-      </section>
-
-      {/* ── TESTIMONIALS ─────────────────────────────────────────────────── */}
-      <section className="section bg-white" style={{position:"relative"}}>
-        <div style={{position:"absolute",inset:0,overflow:"hidden",pointerEvents:"none"}}>
-          <img src={IMGS.milkyway} alt="" loading="lazy" aria-hidden="true" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%",opacity:.07,filter:"grayscale(40%) saturate(1.4)"}}/>
-          <div style={{position:"absolute",inset:0,background:"radial-gradient(ellipse at 50% 0%, rgba(247,245,240,0) 30%, rgba(247,245,240,.85) 100%)"}}/>
-        </div>
-        <div className="container" style={{position:"relative",zIndex:1}}>
-          <div className="text-center" style={{marginBottom:56}}>
+      {/* ── TESTIMONIALS — pure editorial quotes ─────────────────────────── */}
+      <section style={{padding:"112px 0",background:"#fff"}}>
+        <div className="container">
+          <div style={{textAlign:"center",marginBottom:80}}>
             <div className="label" style={{marginBottom:14}}>{t("home.testimonialsLabel")}</div>
-            <h2 className="h2">{t("home.testimonialsTitle")}</h2>
+            <h2 className="h2" style={{marginBottom:0}}>{t("home.testimonialsTitle")}</h2>
           </div>
-          <div className="grid-3">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 56px"}}>
             {(lang==="en"?[
-              ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report","Something in me settled"],
-              ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report","More understanding in one evening"],
-              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report","Read in a single breath"],
+              ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report"],
+              ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report"],
+              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report"],
             ]:[
-              ["Ik voelde me eindelijk emotioneel erkend in plaats van geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Volledig Rapport","Iets in mij raakte op zijn plek"],
-              ["Wij hadden al jaren moeite om elkaar te begrijpen. Het rapport noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relatierapport","Meer begrip in één avond"],
-              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport","Gelezen in één adem"],
-            ]).map(([q,n,r,result])=>(
-              <div className="tcard" key={n}>
-                <div className="stars" style={{marginBottom:20}}>★★★★★</div>
-                <div className="tcard-quote">{q}</div>
-                <div style={{display:"flex",gap:10,alignItems:"center",marginTop:20}}>
-                  <div style={{width:20,height:1,background:"var(--gold)",opacity:.6,flexShrink:0}}/>
+              ["Ik voelde me eindelijk emotioneel erkend in plaats van geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Volledig Rapport"],
+              ["Wij hadden al jaren moeite om elkaar te begrijpen. Het rapport noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relatierapport"],
+              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport"],
+            ]).map(([q,n,r])=>(
+              <div key={n} style={{paddingTop:32,borderTop:"1px solid var(--border)"}}>
+                <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.8,margin:"0 0 32px",letterSpacing:"-.005em"}}>
+                  "{q}"
+                </blockquote>
+                <div style={{display:"flex",alignItems:"center",gap:14}}>
+                  <div style={{width:20,height:1,background:"var(--gold)",opacity:.55,flexShrink:0}}/>
                   <div>
-                    <div className="tcard-author">{n}</div>
-                    <div className="tcard-report">{r}</div>
+                    <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)",letterSpacing:".02em"}}>{n}</div>
+                    <div style={{fontSize:".68rem",fontWeight:300,color:"var(--text-light)",textTransform:"uppercase",letterSpacing:".1em",marginTop:2}}>{r}</div>
                   </div>
                 </div>
               </div>
@@ -2891,65 +2846,21 @@ function HomePage({go}){
         </div>
       </section>
 
-      {/* ── SUBSCRIPTION BANNER ──────────────────────────────────────────── */}
-      <section className="section-md bg-muted">
-        <div className="container-md">
-          <div className="sub-card">
-            <div className="sub-card-moon">
-              <img src={IMGS.sub_moon} alt="" loading="lazy"/>
-            </div>
-            <div className="sub-card-body">
-              <div style={{maxWidth:520}}>
-                <div className="label-light" style={{marginBottom:14}}>{LANG==="en"?"Monthly subscription":"Maandabonnement"}</div>
-                <h2 className="h2" style={{color:"white",marginBottom:14}}>{t("report.monthlyOffer")}</h2>
-                <p style={{fontSize:".95rem",fontWeight:300,color:"rgba(255,255,255,.52)",lineHeight:1.78}}>{LANG==="en"?"Every month a personal report on the energetic themes of that month, tailored to your Human Design chart. Cancel anytime.":"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart. Maandelijks opzegbaar."}</p>
-              </div>
-              <div style={{textAlign:"center",flexShrink:0}}>
-                <div className="sub-price">€19</div>
-                <div className="sub-price-period">{LANG==="en"?"per month":"per maand"}</div>
-                <div style={{display:"flex",flexDirection:"column",gap:6,margin:"14px 0 18px",textAlign:"left"}}>
-                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.65)",display:"flex",alignItems:"flex-start",gap:7}}>
-                    <span style={{color:"var(--gold-warm)",flexShrink:0,marginTop:1}}>✦</span>
-                    <span>{LANG==="en"?"Sent every month on the first Monday":"Elke maand verstuurd op de eerste maandag"}</span>
-                  </div>
-                  <div style={{fontSize:".72rem",color:"rgba(255,255,255,.5)",display:"flex",alignItems:"center",gap:7}}><span style={{color:"var(--gold-warm)",flexShrink:0}}>✦</span>{LANG==="en"?"Average 11 months active":"Gemiddeld 11 maanden actief"}</div>
-                </div>
-                <button className="btn btn-gold btn-lg" onClick={()=>go("rapport-maandelijks")}>{LANG==="en"?"Start subscription":"Start abonnement"}</button>
-                <div style={{fontSize:".66rem",color:"rgba(255,255,255,.32)",marginTop:10,lineHeight:1.5}}>{LANG==="en"?"Cancel anytime · no obligation":"Elk moment opzegbaar · geen verplichting"}</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── PHOTO CTA ────────────────────────────────────────────────────── */}
+      {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
       <div className="photo-cta-section">
         <div className="photo-cta-bg">
           <img src={IMGS.cta} alt="Kosmische sterrenhemel" loading="lazy"/>
         </div>
         <div className="photo-cta-content">
-          <div className="divider divider-center" style={{marginBottom:32}}/>
-          <h2 className="h2" style={{color:"white",marginBottom:18,maxWidth:600,margin:"0 auto 18px"}}>{t("home.ctaTitle")}</h2>
-          <p className="body-lg" style={{color:"rgba(255,255,255,.48)",maxWidth:460,margin:"0 auto 36px"}}>{t("home.ctaSub")}</p>
-          <div style={{display:"flex",gap:16,justifyContent:"center",flexWrap:"wrap",marginBottom:36}}>
-            <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>
-              {t("home.ctaBtn")}
-            </button>
-            <button className="btn btn-ghost btn-lg" onClick={()=>go("rapporten")}>{t("home.ctaBtnSecondary")}</button>
-          </div>
-          <TrustStrip light/>
+          <div className="divider divider-center" style={{marginBottom:40}}/>
+          <h2 className="h2" style={{color:"white",marginBottom:20,maxWidth:560,margin:"0 auto 20px"}}>{t("home.ctaTitle")}</h2>
+          <p className="body-lg" style={{color:"rgba(255,255,255,.45)",maxWidth:420,margin:"0 auto 44px",lineHeight:1.8}}>{t("home.ctaSub")}</p>
+          <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"bottom"});go("rapport-volledig");}}>
+            {t("home.ctaBtn")}
+          </button>
         </div>
       </div>
 
-      <div className="sticky-cta">
-        <div style={{display:"flex",gap:10,alignItems:"center",justifyContent:"space-between"}}>
-          <div>
-            <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)"}}>{LANG==="en"?"Begin your personal reading":"Begin je persoonlijke lezing"}</div>
-            <div style={{fontSize:".68rem",color:"var(--text-muted)"}}>{LANG==="en"?"From €45 · Delivered within 1 business day":"Vanaf €45 · Bezorgd binnen 1 werkdag"}</div>
-          </div>
-          <button className="btn btn-primary" style={{flexShrink:0,whiteSpace:"nowrap"}} onClick={()=>{track("sticky_cta_click",{});go("rapporten");}}>{LANG==="en"?"Start now →":"Start nu →"}</button>
-        </div>
-      </div>
     </div>
   );
 }
