@@ -4088,11 +4088,6 @@ function OverPage({go}){
               <div style={{borderLeft:"3px solid var(--gold)",paddingLeft:20,marginBottom:32}}>
                 <p style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"var(--text)",lineHeight:1.78}}>{LANG==="en"?'"You do not receive a profile. You receive a mirror — accurately calculated at the moment you entered the world."':'"Je ontvangt geen profiel. Je ontvangt een spiegel — nauwkeurig berekend op het moment dat jij ter wereld kwam."'}</p>
               </div>
-              <div className="over-stats">
-                {[["2014",LANG==="en"?"Founded on Ibiza":"Opgericht op Ibiza"],["2.400+",LANG==="en"?"Blueprints assembled":"Blauwdrukken samengesteld"],["4.9 / 5",LANG==="en"?"Average rating":"Gemiddelde beoordeling"]].map(([n,l])=>(
-                  <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
-                ))}
-              </div>
             </div>
             <div>
               <div className="portrait-img">
