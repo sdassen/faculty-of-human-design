@@ -267,13 +267,14 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
   const lang  = order.language || "nl";
   const quote = lang === "en" ? quoteEN : quoteNL;
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#1A1715;position:relative;overflow:visible;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
   <div style="padding:0 32mm;text-align:center;position:relative;">
     <div style="font-family:'Cormorant Garamond',serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.35em;text-transform:uppercase;margin-bottom:24px;opacity:0.6;">— Faculty of Human Design —</div>
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:22pt;color:#FFFFFF;line-height:1.55;letter-spacing:0.01em;">${esc(quote)}</div>
   </div>
+  <div style="position:absolute;bottom:-14mm;left:0;right:0;height:16mm;background:#1A1715;"></div>
 </div>`;
 }
 
@@ -406,7 +407,7 @@ function buildCoverPage(order) {
   const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
 
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-inside:avoid;display:flex;flex-direction:column;align-items:center;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#1A1715;position:relative;overflow:visible;break-inside:avoid;display:flex;flex-direction:column;align-items:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 260)}
@@ -428,6 +429,7 @@ function buildCoverPage(order) {
   <div style="position:absolute;bottom:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.2em;">
     © 2026 FACULTY OF HUMAN DESIGN
   </div>
+  <div style="position:absolute;bottom:-14mm;left:0;right:0;height:16mm;background:#1A1715;"></div>
 </div>`;
 }
 
@@ -552,7 +554,7 @@ function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
 
   return `
-<div style="width:210mm;min-height:247mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
+<div style="width:210mm;min-height:261mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
@@ -871,7 +873,7 @@ function buildExecutiveSummaryPage(order) {
     : null;
 
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:visible;break-before:page;break-inside:avoid;">
   <!-- Dark header with type -->
   <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
@@ -900,6 +902,7 @@ function buildExecutiveSummaryPage(order) {
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
   </div>
+  <div style="position:absolute;bottom:-14mm;left:0;right:0;height:16mm;background:#FFFFFF;"></div>
 </div>`;
 }
 
@@ -919,7 +922,7 @@ function buildMethodologyPage(order) {
     : "";
 
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#FFFFFF;position:relative;overflow:visible;break-before:page;break-inside:avoid;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "BEREKENING", "CALCULATION")}</div>
@@ -962,6 +965,7 @@ function buildMethodologyPage(order) {
       )}</p>
     </div>
   </div>
+  <div style="position:absolute;bottom:-14mm;left:0;right:0;height:16mm;background:#FFFFFF;"></div>
 </div>`;
 }
 
@@ -973,7 +977,7 @@ function buildClosingPage(order) {
   const ta = typeAccent(chart.type);
 
   return `
-<div style="width:210mm;height:247mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+<div style="width:210mm;height:247mm;margin-top:0;background:#1A1715;position:relative;overflow:visible;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
   <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
   ${coverDecoration(297, 380)}
@@ -989,6 +993,7 @@ function buildClosingPage(order) {
     )}</div>
   </div>
   <div style="position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.18em;">© 2026 FACULTY OF HUMAN DESIGN  ·  IBIZA, SPANJE</div>
+  <div style="position:absolute;bottom:-14mm;left:0;right:0;height:16mm;background:#1A1715;"></div>
 </div>`;
 }
 
@@ -1112,7 +1117,7 @@ function buildGateAppendixPage(order) {
   const cols = gates.length <= 18 ? 3 : 4;
 
   return `
-<div style="background:#FFFFFF;position:relative;break-before:page;padding:0 0 20mm;">
+<div style="background:#FFFFFF;position:relative;break-before:page;padding:0 0 34mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${esc(headerLabel)}</div>
