@@ -288,7 +288,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .form-label { font-size:.65rem; font-weight:600; letter-spacing:.1em; text-transform:uppercase; color:var(--brand); }
 .form-input { border:1.5px solid var(--border); background:var(--bg); border-radius:var(--radius-sm); padding:11px 14px; font-family:var(--font-sans); font-size:.95rem; font-weight:300; color:var(--text); outline:none; transition:border-color 200ms; width:100%; }
 .form-input:focus { border-color:var(--brand); }
-.form-select { border:1.5px solid var(--border); background:var(--bg); border-radius:var(--radius-sm); padding:11px 14px; font-family:var(--font-sans); font-size:.95rem; font-weight:300; color:var(--text); outline:none; width:100%; cursor:pointer; }
+.form-select { border:1.5px solid var(--border); background:var(--bg); border-radius:var(--radius-sm); padding:11px 40px 11px 14px; font-family:var(--font-sans); font-size:.95rem; font-weight:300; color:var(--text); outline:none; width:100%; cursor:pointer; appearance:none; -webkit-appearance:none; -moz-appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='7' viewBox='0 0 12 7'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A7355' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; }
 .form-select:focus { border-color:var(--brand); }
 .form-row { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
 .form-note { font-size:.8rem; color:var(--text-light); text-align:center; line-height:1.6; margin-top:10px; }
