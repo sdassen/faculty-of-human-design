@@ -34,7 +34,7 @@ const IMGS = {
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
   r_volledig:        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&auto=format&fit=crop&q=80",
-  r_relatie_liefde:  "/img-relatie-liefde.jpg",
+  r_relatie_liefde:  "/img-relatie-liefde-new.jpg",
   r_relatie_business:"https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
   r_relatie_familie: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80",
   r_jaar:        "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
