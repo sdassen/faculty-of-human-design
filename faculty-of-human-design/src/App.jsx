@@ -4242,10 +4242,10 @@ function OverPage({go}){
       <section style={{background:"white",padding:"144px 40px"}}>
         <div className="grid-2" style={{maxWidth:860,margin:"0 auto",gap:"80px",alignItems:"center"}}>
           <div>
-            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.5rem,2.8vw,2.15rem)",fontWeight:300,color:"var(--text)",lineHeight:1.26,letterSpacing:"-.015em",margin:0}}>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.5rem,2.8vw,2.15rem)",fontWeight:300,color:"var(--text)",lineHeight:1.36,letterSpacing:"-.015em",margin:0,whiteSpace:"pre-line"}}>
               {isEN
-                ? <>"Insight does not arrive<br/>through analysis.<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>It arrives through recognition.</em>"</>
-                : <>"Inzicht ontstaat niet<br/>door analyse.<br/><em style={{fontStyle:"italic",color:"var(--text-muted)"}}>Het ontstaat door herkenning.</em>"</>}
+                ? `“Insight does not arrive\nthrough analysis.\n\nIt arrives through recognition.”`
+                : `“Inzicht ontstaat niet\ndoor analyse.\n\nHet ontstaat door herkenning.”`}
             </p>
           </div>
           <div>
