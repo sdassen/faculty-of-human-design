@@ -406,6 +406,27 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .method-step-body h3 { font-family:var(--font-serif); font-size:1.2rem; font-weight:400; color:var(--text); margin-bottom:10px; line-height:1.2; }
 /* Stats grid in dark section */
 .stats-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+/* Over-ons stats row */
+.over-stats { display:flex; gap:40px; flex-wrap:wrap; }
+/* Inzichten category section header */
+.inzichten-cat-header { margin-bottom:56px; }
+.inzichten-cat-header .cat-divider { width:28px; height:1px; background:var(--gold); margin-bottom:20px; opacity:.6; }
+.inzichten-cat-header .cat-label { font-family:var(--font-sans); font-size:.58rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
+.inzichten-cat-header .cat-desc { font-family:var(--font-serif); font-size:1rem; font-weight:300; font-style:italic; color:var(--text-muted); line-height:1.72; max-width:480px; }
+/* Signal strip inner row */
+.signal-strip-inner { max-width:900px; margin:0 auto; padding:0 40px; display:flex; justify-content:center; gap:48px 72px; flex-wrap:wrap; }
+/* Editorial section header (split label/title left, sub right on desktop) */
+.editorial-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:72px; flex-wrap:wrap; gap:24px; }
+/* Editorial pillars grid (homepage waarom + report discovery + testimonials) */
+.waarom-grid       { display:grid; grid-template-columns:repeat(3,1fr); gap:0 48px; }
+.reports-grid      { display:grid; grid-template-columns:repeat(3,1fr); gap:0 40px; }
+.testimonials-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:0 56px; align-items:start; }
+.testimonials-wrap { max-width:1100px; margin:0 auto; padding:0 80px; }
+/* Contact hero subtitle */
+.contact-hero-sub { max-width:420px; }
+/* Rapporten page grids */
+.rapporten-hd-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0 32px; }
+.rapporten-andere-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:0 40px; max-width:780px; }
 
 /* SUB CARD */
 .sub-card { background:var(--dark); border-radius:0; padding:48px; color:white; position:relative; overflow:hidden; }
@@ -436,6 +457,8 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .feature-content { padding:56px 40px; }
   .origin-content { grid-template-columns:1fr; gap:40px; }
   .origin-stat { grid-template-columns:repeat(3,1fr); }
+  /* HD grid: 4→2 columns at medium breakpoint */
+  .rapporten-hd-grid { grid-template-columns:repeat(2,1fr); gap:48px 32px; }
 }
 @media (max-width:1024px) {
   .detail-hero-inner { grid-template-columns:1fr; }
@@ -458,9 +481,11 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .loading-steps { width:100%; }
   .upsell-grid { grid-template-columns:1fr; }
   .report-summary-grid { grid-template-columns:1fr 1fr; }
-  .footer-top { grid-template-columns:1fr; gap:28px; }
-  .footer-desc { text-align:center; max-width:100%; }
-  .footer-bottom { flex-direction:column; align-items:flex-start; gap:16px; }
+  .footer-top { grid-template-columns:1fr; gap:28px; text-align:center; }
+  .footer-desc { text-align:center; max-width:100%; margin-left:auto; margin-right:auto; }
+  .footer-logo-main { text-align:center; }
+  .footer-logo-sub { text-align:center; }
+  .footer-bottom { flex-direction:column; align-items:center; gap:16px; }
   .footer-trust { flex-wrap:wrap; gap:10px; }
   .stat-row-inner { flex-wrap:wrap; }
   .stat-row-item { flex:none; width:50%; border-bottom:1px solid var(--border); text-align:center; padding:20px 12px; }
@@ -491,6 +516,27 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .price-box { padding:24px 20px; }
   /* Upsell button: allow text wrap on mobile */
   .upsell-card .btn { white-space:normal; line-height:1.4; padding:14px 24px; text-align:center; }
+  /* Over-ons stats: 3 equal columns so no orphaned item */
+  .over-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  /* Contact hero: full width + balanced line breaks on mobile */
+  .contact-hero-sub { max-width:100%; text-wrap:balance; }
+  /* Inzichten category header: center on mobile */
+  .inzichten-cat-header { text-align:center; }
+  .inzichten-cat-header .cat-divider { margin-left:auto; margin-right:auto; }
+  .inzichten-cat-header .cat-desc { max-width:100%; text-wrap:balance; }
+  /* Signal strip: equal-width 2-column grid on mobile */
+  .signal-strip-inner { display:grid; grid-template-columns:1fr 1fr; gap:32px 0; padding:0 24px; }
+  /* Editorial section header → centered on mobile */
+  .editorial-header { flex-direction:column; align-items:center; text-align:center; margin-bottom:48px; }
+  .editorial-header p { text-align:center; max-width:100%; }
+  /* Editorial grids → single column on mobile */
+  .waarom-grid       { grid-template-columns:1fr; gap:56px 0; }
+  .reports-grid      { grid-template-columns:1fr; gap:48px 0; }
+  .testimonials-grid { grid-template-columns:1fr; gap:48px 0; }
+  .testimonials-wrap { padding:0 20px; }
+  /* Rapporten grids → single column on mobile */
+  .rapporten-hd-grid { grid-template-columns:1fr; gap:48px 0; }
+  .rapporten-andere-grid { grid-template-columns:1fr; gap:48px 0; max-width:100%; }
 }
 @media (max-width:480px) {
   .hero-actions { flex-direction:column; }
@@ -2611,11 +2657,19 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               </div>
             </div>
             )}
-            <div className="order-block" style={{marginTop:24}}>
-              <div className="order-block-title">{LANG==="en"?"Step 3 — Receive your personalised digital blueprint":"Stap 3 — Ontvang je gepersonaliseerde digitale blauwdruk"}</div>
-              <div className="order-block-sub">{LANG==="en"?`Chart calculated. Your blueprint contains ${rpt.pages} pages of in-depth personal analysis — custom-assembled and delivered by email within 1 business day.`:`Chart berekend. Je blauwdruk bevat ${rpt.pages} pagina's diepgaande persoonlijke analyse — op maat samengesteld en bezorgd per e-mail binnen 1 werkdag.`}</div>
-              <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}>{t("report.orderBtn",{price:rpt.price})}</button>
-              <div style={{marginTop:10}}><TrustStrip light/></div>
+            <div style={{marginTop:40,padding:"48px 0 0",borderTop:"1px solid var(--border)",textAlign:"center"}}>
+              <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.8,marginBottom:32,maxWidth:480,margin:"0 auto 32px"}}>
+                {LANG==="en"
+                  ?"Personally assembled and written with care. Delivered as PDF within one business day."
+                  :"Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
+              </p>
+              <button
+                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:"pointer",transition:"all .3s ease",display:"inline-block"}}
+                onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+                onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}
+              >{rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your blueprint":"Ontvang je blauwdruk")}</button>
+              <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
             </div>
           </div>
         </div>
@@ -2673,7 +2727,7 @@ function HomePage({go}){
 
       {/* ── EDITORIAL SIGNAL STRIP ───────────────────────────────────────── */}
       <div style={{background:"var(--bg)",borderBottom:"1px solid var(--border)",padding:"20px 0"}}>
-        <div style={{maxWidth:900,margin:"0 auto",padding:"0 40px",display:"flex",justifyContent:"center",gap:"48px 72px",flexWrap:"wrap"}}>
+        <div className="signal-strip-inner">
           {(LANG==="en"
             ?[["2,400+","reports delivered"],["4.9 / 5","average rating"],["Est. 2014","Ibiza, Spain"],["Swiss Ephemeris","astronomical precision"]]
             :[["2.400+","rapporten uitgebracht"],["4.9 / 5","gemiddelde beoordeling"],["Est. 2014","Ibiza, Spanje"],["Swiss Ephemeris","astronomische precisie"]]
@@ -2689,14 +2743,14 @@ function HomePage({go}){
       {/* ── WAAROM ANDERS — open editorial pillars ───────────────────────── */}
       <section style={{padding:"112px 0",background:"#fff"}}>
         <div className="container">
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:72,flexWrap:"wrap",gap:24}}>
+          <div className="editorial-header">
             <div>
               <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
               <h2 className="h2" style={{marginBottom:0,maxWidth:480}}>{t("home.waaromTitle")}</h2>
             </div>
             <div style={{width:48,height:1,background:"var(--gold)",opacity:.4,marginBottom:6}}/>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 48px"}}>
+          <div className="waarom-grid">
             {(LANG==="en"?[
               [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris — the professional standard for exact planetary positions to the degree."],
               [IMGS.w_depth,    "In-depth analysis",     "40+ pages",      "No bullet points, no generic texts. Extensive prose tailored to your unique combination of Type, Authority and Profile."],
@@ -2740,11 +2794,11 @@ function HomePage({go}){
           <div className="label" style={{marginBottom:14}}>{t("home.featuredBadge")}</div>
           <h2 className="h2" style={{marginBottom:18}}>{tl(REPORTS[0].title)}</h2>
           <p className="body-lg" style={{marginBottom:32,maxWidth:420}}>{tl(REPORTS[0].tagline)}</p>
-          <div style={{display:"flex",gap:14,flexWrap:"wrap",alignItems:"center"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"center"}}>
             <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
               {t("report.orderBtn",{price:"€75"})}
             </button>
-            <span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"40+ pages · Within 1 business day":"40+ pagina's · Binnen 1 werkdag"}</span>
+            <span style={{fontSize:".8rem",color:"var(--text-light)",textAlign:"center"}}>{LANG==="en"?"40+ pages · Within 1 business day":"40+ pagina's · Binnen 1 werkdag"}</span>
           </div>
         </div>
         <div className="feature-image-wrap ph">
@@ -2756,25 +2810,25 @@ function HomePage({go}){
       {/* ── ALLE RAPPORTEN — open editorial grid ─────────────────────────── */}
       <section style={{padding:"112px 0",background:"var(--bg)"}}>
         <div className="container">
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:72,flexWrap:"wrap",gap:24}}>
+          <div className="editorial-header">
             <div>
               <div className="label" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
               <h2 className="h2" style={{marginBottom:0,maxWidth:480}}>{t("rapporten.title")}</h2>
             </div>
             <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>{t("rapporten.sub")}</p>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 40px"}}>
+          <div className="reports-grid">
             {REPORTS.filter(r=>["relatie_liefde","jaar","loopbaan"].includes(r.id)).map(r=>(
               <div key={r.id} style={{cursor:"pointer"}} onClick={()=>go("rapport-"+r.id)}>
                 <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
-                  <img src={r.img||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
+                  <img src={IMGS["r_"+r.id]||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
                     onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
                     onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
                   />
                   <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(8,7,16,.5) 100%)"}}/>
                   <div style={{position:"absolute",bottom:20,left:20,right:20,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
-                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tagline)?.split(" ").slice(0,3).join(" ")}</span>
-                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>€{r.price}</span>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tag)||""}</span>
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>{r.price}</span>
                   </div>
                 </div>
                 <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
@@ -2814,12 +2868,12 @@ function HomePage({go}){
 
       {/* ── TESTIMONIALS — pure editorial quotes ─────────────────────────── */}
       <section style={{padding:"112px 0",background:"#fff"}}>
-        <div className="container">
+        <div className="testimonials-wrap">
           <div style={{textAlign:"center",marginBottom:80}}>
             <div className="label" style={{marginBottom:14}}>{t("home.testimonialsLabel")}</div>
             <h2 className="h2" style={{marginBottom:0}}>{t("home.testimonialsTitle")}</h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:"0 56px"}}>
+          <div className="testimonials-grid">
             {(lang==="en"?[
               ["I felt emotionally recognised for the first time — not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report"],
               ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report"],
@@ -2829,11 +2883,11 @@ function HomePage({go}){
               ["Wij hadden al jaren moeite om elkaar te begrijpen. Het rapport noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relatierapport"],
               ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport"],
             ]).map(([q,n,r])=>(
-              <div key={n} style={{paddingTop:32,borderTop:"1px solid var(--border)"}}>
-                <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.8,margin:"0 0 32px",letterSpacing:"-.005em"}}>
+              <div key={n} style={{display:"flex",flexDirection:"column",paddingTop:28,borderTop:"1px solid var(--border)"}}>
+                <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.82,margin:"0 0 28px",letterSpacing:"-.005em",textAlign:"left"}}>
                   "{q}"
                 </blockquote>
-                <div style={{display:"flex",alignItems:"center",gap:14}}>
+                <div style={{display:"flex",alignItems:"center",gap:12,marginTop:"auto"}}>
                   <div style={{width:20,height:1,background:"var(--gold)",opacity:.55,flexShrink:0}}/>
                   <div>
                     <div style={{fontSize:".78rem",fontWeight:500,color:"var(--text)",letterSpacing:".02em"}}>{n}</div>
@@ -3327,6 +3381,8 @@ function RapportenPage({go}){
   });
   return(
     <div className="pg">
+
+      {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <div className="origin-section" style={{minHeight:360}}>
         <div className="origin-section-bg">
           <img src={IMGS.cosmos} alt="Kosmos" loading="eager"/>
@@ -3334,58 +3390,146 @@ function RapportenPage({go}){
         <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:72}}>
           <div className="label-light" style={{marginBottom:14}}>{t("rapporten.eyebrow")}</div>
           <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:580}}>{t("rapporten.title")}</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>{t("rapporten.sub")}</p>
+          <p className="contact-hero-sub" style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",lineHeight:1.78}}>{t("rapporten.sub")}</p>
         </div>
       </div>
-      <section className="section bg-muted">
+
+      {/* ── HUMAN DESIGN RAPPORTEN ───────────────────────────────────────── */}
+      <section style={{padding:"112px 0",background:"var(--bg)"}}>
         <div className="container">
-
-          {/* Human Design */}
-          <div className="label" style={{marginBottom:12}}>{t("rapporten.hdTitle")}</div>
-          <h2 className="h2" style={{marginBottom:36}}>{t("rapporten.hdTitle")}</h2>
-          <div className="grid-3" style={{gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))"}}>{hdPure.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
-
-          <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
-
-          {/* Relatierapport trio */}
-          <div className="label" style={{marginBottom:12}}>{t("rapporten.relatieTitle")}</div>
-          <h2 className="h2" style={{marginBottom:8}}>{t("rapporten.relatieTitle")}</h2>
-          <p className="body-md" style={{maxWidth:560,marginBottom:36,color:"var(--text-muted)"}}>{LANG==="en"?"Choose the perspective that suits your relationship. Each report analyses two complete Human Design charts side by side.":"Kies het perspectief dat past bij jullie relatie. Elk rapport analyseert twee volledige Human Design charts naast elkaar."}</p>
-          <div className="grid-3">
-            {relatie.map(r=>(
-              <ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>
-            ))}
+          <div className="editorial-header">
+            <div>
+              <div className="label" style={{marginBottom:14}}>{t("rapporten.hdTitle")}</div>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>
+                {LANG==="en"?"Your personal Human Design blueprint":"Jouw persoonlijke Human Design blauwdruk"}
+              </h2>
+            </div>
+            <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
+              {LANG==="en"?"In-depth personal analyses — from full HD to career, year and child.":"Diepgaande persoonlijke analyses — van volledig HD tot loopbaan, jaar en kind."}
+            </p>
           </div>
-
-          <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
-
-          {/* Aanvullende disciplines */}
-          <div className="label" style={{marginBottom:12}}>{t("rapporten.andereTitle")}</div>
-          <h2 className="h2" style={{marginBottom:36}}>{t("rapporten.andereTitle")}</h2>
-          <div className="grid-2" style={{maxWidth:780}}>{other.map(r=><ReportCard key={r.id} rpt={r} onClick={()=>go("rapport-"+r.id)}/>)}</div>
-
-          {sub&&<>
-            <div style={{height:1,background:"var(--border)",margin:"56px 0"}}/>
-            <div style={{maxWidth:760}}>
-              <div className="label" style={{marginBottom:12}}>{t("rapporten.subTitle")}</div>
-              <div className="sub-card" style={{cursor:"pointer"}} onClick={()=>go("rapport-maandelijks")}>
-                <div style={{position:"relative",zIndex:1,display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:28}}>
-                  <div>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.5rem",color:"white",marginBottom:10}}>{tl(sub.tagline)}</div>
-                    <p style={{fontSize:".92rem",color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{tl(sub.intro)}</p>
-                  </div>
-                  <div style={{textAlign:"center"}}>
-                    <div className="sub-price">€19</div>
-                    <div className="sub-price-period">{LANG==="en"?"per month":"per maand"}</div>
-                    <div style={{height:14}}/>
-                    <div className="btn btn-gold btn-sm">{t("report.monthlyViewBtn")}</div>
+          <div className="rapporten-hd-grid">
+            {hdPure.map(r=>(
+              <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
+                <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
+                  <img src={IMGS["r_"+r.id]||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
+                    onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                    onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                  />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(8,7,16,.5) 100%)"}}/>
+                  <div style={{position:"absolute",bottom:20,left:20,right:20,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tag)||""}</span>
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>{r.price}</span>
                   </div>
                 </div>
+                <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
+                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
+                <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
               </div>
-            </div>
-          </>}
+            ))}
+          </div>
         </div>
       </section>
+
+      {/* ── RELATIE RAPPORTEN ────────────────────────────────────────────── */}
+      <section style={{padding:"112px 0",background:"white"}}>
+        <div className="container">
+          <div className="editorial-header">
+            <div>
+              <div className="label" style={{marginBottom:14}}>{t("rapporten.relatieTitle")}</div>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>
+                {LANG==="en"?"Two designs in connection":"Twee designs in verbinding"}
+              </h2>
+            </div>
+            <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
+              {LANG==="en"?"Choose the perspective that suits your relationship. Each report analyses two complete Human Design charts.":"Kies het perspectief dat past bij jullie relatie. Elk rapport analyseert twee volledige Human Design charts."}
+            </p>
+          </div>
+          <div className="reports-grid">
+            {relatie.map(r=>(
+              <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
+                <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
+                  <img src={IMGS["r_"+r.id]||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
+                    onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                    onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                  />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(8,7,16,.5) 100%)"}}/>
+                  <div style={{position:"absolute",bottom:20,left:20,right:20,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tag)||""}</span>
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>{r.price}</span>
+                  </div>
+                </div>
+                <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
+                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
+                <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── AANVULLENDE DISCIPLINES ──────────────────────────────────────── */}
+      <section style={{padding:"112px 0",background:"var(--bg)"}}>
+        <div className="container">
+          <div className="editorial-header">
+            <div>
+              <div className="label" style={{marginBottom:14}}>{t("rapporten.andereTitle")}</div>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>
+                {LANG==="en"?"Complementary disciplines":"Aanvullende disciplines"}
+              </h2>
+            </div>
+            <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
+              {LANG==="en"?"Numerology and Astrology as depth layers alongside your Human Design.":"Numerologie en Astrologie als verdiepingslagen naast je Human Design."}
+            </p>
+          </div>
+          <div className="rapporten-andere-grid">
+            {other.map(r=>(
+              <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
+                <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
+                  <img src={IMGS["r_"+r.id]||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
+                    onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                    onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                  />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(8,7,16,.5) 100%)"}}/>
+                  <div style={{position:"absolute",bottom:20,left:20,right:20,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tag)||""}</span>
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>{r.price}</span>
+                  </div>
+                </div>
+                <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
+                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
+                <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── MAANDELIJKS ABONNEMENT ───────────────────────────────────────── */}
+      {sub&&(
+        <section style={{padding:"96px 0",background:"white"}}>
+          <div className="container">
+            <div style={{maxWidth:780,margin:"0 auto",textAlign:"center"}}>
+              <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 40px",opacity:.45}}/>
+              <div className="label" style={{marginBottom:14}}>{t("rapporten.subTitle")}</div>
+              <h2 className="h2" style={{marginBottom:20}}>{tl(sub.tagline)}</h2>
+              <p style={{fontSize:"1rem",fontWeight:300,color:"var(--text-muted)",maxWidth:520,margin:"0 auto 40px",lineHeight:1.82}}>{tl(sub.intro)}</p>
+              <div style={{display:"flex",alignItems:"flex-end",justifyContent:"center",gap:8,marginBottom:36}}>
+                <span style={{fontFamily:"var(--font-serif)",fontSize:"3rem",fontWeight:300,color:"var(--text)",lineHeight:1}}>€19</span>
+                <span style={{fontSize:".72rem",color:"var(--text-light)",textTransform:"uppercase",letterSpacing:".1em",paddingBottom:6}}>{LANG==="en"?"per month":"per maand"}</span>
+              </div>
+              <button
+                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:"pointer",transition:"all .3s ease",display:"inline-block"}}
+                onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+                onClick={()=>go("rapport-maandelijks")}
+              >{t("report.monthlyViewBtn")}</button>
+              <div style={{width:1,height:48,background:"var(--gold)",margin:"40px auto 0",opacity:.45}}/>
+            </div>
+          </div>
+        </section>
+      )}
+
     </div>
   );
 }
@@ -3426,131 +3570,160 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       ]
     }
   });
+  const isRelatie = rpt.id.startsWith("relatie_");
+  const heroCta = LANG==="en"
+    ? (isRelatie ? "Receive your reading" : "Receive your blueprint")
+    : (isRelatie ? "Ontvang jullie reading" : "Ontvang je blauwdruk");
+  const sections = promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*\d+\.\s*/,"").trim());
+  const reviews = Array.isArray(rpt.reviews)?rpt.reviews:(rpt.reviews?.[LANG]||rpt.reviews?.nl||[]);
+
   return(
     <div className="pg">
-      <div className="detail-hero" role="banner" aria-label={rptTitle}>
-        <div className="detail-hero-bg">
-          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rptTitle+" — Faculty of Human Design "+t("report.personalBadge")} loading="eager"/>
-        </div>
-        <div className="detail-hero-inner">
-          <div>
-            <div className="detail-hero-badge">{rpt.icon} Faculty of Human Design — Est. 2014, Ibiza</div>
-            <h1 className="detail-hero-title">{rptTitle}</h1>
-            <div className="detail-hero-tagline">{rptOutcome||rptTagline}</div>
-            <div className="detail-hero-meta">
-              <span className="detail-hero-m">{rpt.pages} {t("report.pages")}</span>
-              <span className="detail-hero-m">{sectionCount} {t("report.sections")}</span>
-              <span className="detail-hero-m">{t("report.personalBadge")}</span>
-              <span className="detail-hero-m">{rptSub}</span>
-            </div>
-          </div>
-          <div className="price-box">
-            {rptOutcome&&<div style={{fontSize:".68rem",fontWeight:500,color:"rgba(201,168,92,.85)",letterSpacing:".06em",marginBottom:14,lineHeight:1.5,borderBottom:"1px solid rgba(255,255,255,.08)",paddingBottom:14}}>→ {rptOutcome}</div>}
-            <div className="price-box-amount">{rpt.price}</div>
-            <div className="price-box-period">{rptSub}</div>
-            <div style={{display:"flex",flexDirection:"column",gap:7,margin:"14px 0 20px",textAlign:"left"}}>
-              {(LANG==="en"
-                ?[["Chart calculated for free","Pay only after seeing your chart"],["Delivered by email","Within 1 business day"],["Personal","No generic profiles"]]
-                :[["Chart gratis berekend","Betaal pas na het zien van je chart"],["Bezorgd per e-mail","Binnen 1 werkdag"],["Persoonlijk","Geen generieke profielen"]]
-              ).map(([label,desc])=>(
-                <div key={label} style={{display:"flex",gap:8,alignItems:"flex-start"}}>
-                  <span style={{color:"rgba(201,168,92,.7)",fontSize:".55rem",flexShrink:0,marginTop:3}}>✦</span>
-                  <div>
-                    <span style={{fontSize:".72rem",fontWeight:500,color:"rgba(255,255,255,.8)"}}>{label}</span>
-                    <span style={{fontSize:".72rem",fontWeight:300,color:"rgba(255,255,255,.38)"}}> — {desc}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <button className="btn btn-white btn-full" onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
-              {t("report.orderBtn",{price:rpt.price})}
-            </button>
-            <div style={{marginTop:12}}><TrustStrip light/></div>
-          </div>
-        </div>
-      </div>
 
-      {/* ── SOCIAL PROOF BAR ─ immediately below hero, above the fold on mobile ── */}
-      <div className="stat-row" role="region" aria-label={t("trust.delivery")}>
-        <div className="stat-row-inner">
-          {(LANG==="en"
-            ?[["2,400+","Blueprints delivered"],["4.9 / 5","Average rating"],["1 business day","Delivered by email"],["2014","Founded in Ibiza"]]
-            :[["2.400+","Blauwdrukken uitgebracht"],["4.9 / 5","Gemiddelde beoordeling"],["1 werkdag","Bezorgd per e-mail"],["2014","Opgericht op Ibiza"]]
-          ).map(([n,l])=>(
-            <div key={l} className="stat-row-item">
-              <div className="stat-row-n" style={{fontSize:"1.5rem"}}>{n}</div>
-              <div className="stat-row-l">{l}</div>
-            </div>
-          ))}
+      {/* ── CINEMATIC HERO ───────────────────────────────────────────────── */}
+      <section style={{position:"relative",height:"100vh",minHeight:600,maxHeight:900,overflow:"hidden",display:"flex",alignItems:"flex-end"}}>
+        <div style={{position:"absolute",inset:0}}>
+          <img src={IMGS["r_"+rpt.id]||IMGS.hero} alt={rptTitle} loading="eager" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%"}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom, rgba(8,7,14,.15) 0%, rgba(8,7,14,.08) 40%, rgba(8,7,14,.72) 100%)"}}/>
         </div>
-      </div>
-
-      <section className="section bg-muted">
-        <div className="container">
-          <div className="grid-2" style={{gap:56,alignItems:"start"}}>
-            <div>
-              <div className="label" style={{marginBottom:12}}>{LANG==="en"?"About this blueprint":"Over deze blauwdruk"}</div>
-              <h2 className="h2" style={{marginBottom:16}}>{rptTitle}</h2>
-              <p className="body-lg" style={{marginBottom:20}}>{rptIntro}</p>
-              <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"16px 20px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:24}}>
-                <div className="label" style={{marginBottom:6}}>{t("report.suitableFor")}</div>
-                <p className="body-sm">{rptFor}</p>
-              </div>
-              <div style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-lg)",padding:"24px"}}>
-                <div className="label" style={{marginBottom:14}}>{t("report.personalBadge")}</div>
-                <div className="grid-2" style={{gap:12}}>
-                  {(LANG==="en"
-                    ?[["Size",rpt.pages+" pages"],["Delivery",rpt.id==="maandelijks"?"Every month · first Monday":"Within 1 business day"],["Format","Digital Blueprint · PDF"],["Language","English"]]
-                    :[["Omvang",rpt.pages+" pagina's"],["Levering",rpt.id==="maandelijks"?"Elke maand · eerste maandag":"Binnen 1 werkdag"],["Formaat","Digitale Blauwdruk · PDF"],["Taal","Nederlands"]]
-                  ).map(([l,v])=>(
-                    <div key={l}><div style={{fontSize:".6rem",fontWeight:600,textTransform:"uppercase",color:"var(--text-light)",marginBottom:2}}>{l}</div><div style={{fontSize:".82rem",fontWeight:300}}>{v}</div></div>
-                  ))}
-                </div>
-              </div>
-            </div>
-            <div>
-              <div className="label" style={{marginBottom:12}}>{LANG==="en"?"Table of contents":"Inhoudsopgave"}</div>
-              <h2 className="h2" style={{marginBottom:20}}>{t("report.whatsIncluded")}</h2>
-              <ul className="includes-list">
-                {promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*\d+\.\s*/,"").trim()).map((item,i)=>(
-                  <li key={i} className="includes-item">
-                    <div className="includes-num">{i+1}</div>{item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+        <div style={{position:"relative",zIndex:1,width:"100%",padding:"0 0 72px",display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center"}}>
+          <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",marginBottom:24}}>{LANG==="en"?"Faculty of Human Design — Ibiza":"Faculty of Human Design — Ibiza"}</div>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.4rem,5vw,4rem)",fontWeight:300,color:"white",lineHeight:1.08,letterSpacing:"-.02em",marginBottom:20,maxWidth:680,padding:"0 32px"}}>{rptOutcome||rptTitle}</h1>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.6vw,1.15rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.55)",marginBottom:40,maxWidth:480,lineHeight:1.7,padding:"0 32px"}}>{rptTagline}</p>
+          <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
+            <button
+              style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"white",background:"transparent",border:"1px solid rgba(255,255,255,.45)",padding:"14px 40px",cursor:"pointer",transition:"all .3s ease"}}
+              onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.12)";e.currentTarget.style.borderColor="rgba(255,255,255,.7)";}}
+              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor="rgba(255,255,255,.45)";}}
+              onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
+            >{heroCta}</button>
+            <span style={{fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"rgba(255,255,255,.38)",textTransform:"uppercase"}}>{rpt.price} · {LANG==="en"?"personal · delivered by email":"persoonlijk · bezorgd per e-mail"}</span>
           </div>
         </div>
       </section>
-      <section className="section bg-white">
-        <div className="container-sm">
-          <div className="label" style={{marginBottom:12}}>{t("home.testimonialsLabel")}</div>
-          <h2 className="h2" style={{marginBottom:32}}>{t("report.reviews")}</h2>
-          <div className="grid-3">
-            {(Array.isArray(rpt.reviews)?rpt.reviews:(rpt.reviews?.[LANG]||rpt.reviews?.nl||[])).map(([q,n])=>(
-              <div className="tcard" key={n}><div className="stars">★★★★★</div><div className="tcard-quote">"{q}"</div><div className="tcard-author">{n}</div></div>
+
+      {/* ── EDITORIAL INTRO ──────────────────────────────────────────────── */}
+      <section style={{padding:"112px 40px",background:"var(--bg)"}}>
+        <div style={{maxWidth:680,margin:"0 auto"}}>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 48px",opacity:.4}}/>
+          <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:24,textAlign:"center",opacity:.7}}>{rptTitle}</div>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.1rem,1.8vw,1.3rem)",fontWeight:300,color:"var(--text)",lineHeight:1.85,textAlign:"center",marginBottom:32}}>{rptIntro}</p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:".95rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.82,textAlign:"center"}}>{rptFor}</p>
+        </div>
+      </section>
+
+      {/* ── EDITORIAL PAUSE ──────────────────────────────────────────────── */}
+      <div style={{background:"#fff",padding:"80px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:560,margin:"0 auto"}}>
+          <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.2rem,2vw,1.55rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.6,letterSpacing:"-.01em",margin:0}}>
+            {LANG==="en"
+              ? (isRelatie
+                  ? "\"Not every relationship asks for more effort. Sometimes love asks for a different way of seeing.\""
+                  : "\"You are not a profile. You are a precise architecture — drawn at the exact moment you arrived.\"")
+              : (isRelatie
+                  ? "\"Niet elke relatie vraagt om harder werken. Soms vraagt liefde om een andere manier van kijken.\""
+                  : "\"Je bent geen profiel. Je bent een precieze architectuur — getekend op het exacte moment dat jij arriveerde.\"")}
+          </blockquote>
+        </div>
+      </div>
+
+      {/* ── CHAPTERS ─────────────────────────────────────────────────────── */}
+      <section style={{padding:"112px 40px",background:"var(--bg)"}}>
+        <div style={{maxWidth:720,margin:"0 auto"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:64,flexWrap:"wrap",gap:16}}>
+            <div>
+              <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14,opacity:.8}}>{LANG==="en"?"Contents":"Inhoud"}</div>
+              <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2.2rem)",fontWeight:300,color:"var(--text)",lineHeight:1.1,margin:0}}>{LANG==="en"?"What the reading covers":"Wat de reading omvat"}</h2>
+            </div>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".65rem",color:"var(--text-light)",letterSpacing:".08em"}}>{rpt.pages} {LANG==="en"?"pages":"pagina's"} · {sectionCount} {LANG==="en"?"chapters":"hoofdstukken"}</div>
+          </div>
+          <div style={{display:"flex",flexDirection:"column"}}>
+            {sections.map((item,i)=>(
+              <div key={i} style={{display:"flex",alignItems:"baseline",gap:28,padding:"20px 0",borderBottom:"1px solid var(--border)"}}>
+                <span style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,color:"var(--gold)",letterSpacing:".1em",opacity:.6,flexShrink:0,minWidth:24}}>{String(i+1).padStart(2,"0")}</span>
+                <span style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{item}</span>
+              </div>
             ))}
           </div>
         </div>
       </section>
-      <section className="section bg-muted">
-        <div className="container-sm">
-          <div className="label" style={{marginBottom:12}}>{t("report.faq")}</div>
-          <h2 className="h2" style={{marginBottom:32}}>{LANG==="en"?"Questions about this report":"Vragen over dit rapport"}</h2>
+
+      {/* ── SOFT MID CTA ─────────────────────────────────────────────────── */}
+      <div style={{background:"#fff",padding:"80px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:480,margin:"0 auto"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32,fontStyle:"italic"}}>
+            {LANG==="en"
+              ? "Personally assembled and written with care. Delivered as PDF within one business day."
+              : "Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
+          </p>
+          <button
+            style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 36px",cursor:"pointer",transition:"all .3s ease"}}
+            onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
+            onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
+            onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"mid_cta"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
+          >{heroCta}</button>
+          <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
+        </div>
+      </div>
+
+      {/* ── FULL-BLEED EDITORIAL IMAGE ───────────────────────────────────── */}
+      <div style={{position:"relative",height:"65vh",minHeight:400,overflow:"hidden"}}>
+        <img
+          src={IMGS.ibiza}
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 40%"}}
+        />
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.08) 0%,rgba(8,7,14,.35) 100%)"}}/>
+      </div>
+
+      {/* ── EDITORIAL TESTIMONIALS ───────────────────────────────────────── */}
+      {reviews.length>0&&(
+        <section style={{padding:"112px 40px",background:"var(--bg)"}}>
+          <div style={{maxWidth:1000,margin:"0 auto"}}>
+            <div style={{textAlign:"center",marginBottom:72}}>
+              <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14,opacity:.8}}>{t("home.testimonialsLabel")}</div>
+              <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2.2rem)",fontWeight:300,color:"var(--text)",margin:0,lineHeight:1.1}}>{t("report.reviews")}</h2>
+            </div>
+            <div className="testimonials-grid">
+              {reviews.map(([q,n])=>(
+                <div key={n} style={{paddingTop:28,borderTop:"1px solid var(--border)"}}>
+                  <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.82,margin:"0 0 28px",letterSpacing:"-.005em",textAlign:"left"}}>
+                    "{q}"
+                  </blockquote>
+                  <div style={{display:"flex",alignItems:"center",gap:12}}>
+                    <div style={{width:20,height:1,background:"var(--gold)",opacity:.55,flexShrink:0}}/>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,color:"var(--text)",letterSpacing:".03em"}}>{n}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section style={{padding:"96px 40px",background:"#fff"}}>
+        <div style={{maxWidth:640,margin:"0 auto"}}>
+          <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14,opacity:.8}}>{t("report.faq")}</div>
+          <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2rem)",fontWeight:300,color:"var(--text)",marginBottom:52,lineHeight:1.1}}>{LANG==="en"?"Questions":"Vragen"}</h2>
           {faqs.map(([q,a],i)=>(
-            <div className="faq-item" key={i}>
-              <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span className={"faq-toggle"+(faq===i?" open":"")}>+</span></div>
-              {faq===i&&<div className="faq-a">{a}</div>}
+            <div key={i} style={{borderTop:"1px solid var(--border)",padding:"22px 0"}}>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,cursor:"pointer"}} onClick={()=>setFaq(faq===i?null:i)}>
+                <span style={{fontFamily:"var(--font-serif)",fontSize:".98rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{q}</span>
+                <span style={{fontFamily:"var(--font-sans)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,opacity:.6,transition:"transform .2s",transform:faq===i?"rotate(45deg)":"rotate(0)"}}>{faq===i?"×":"+"}</span>
+              </div>
+              {faq===i&&<p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,marginTop:16,paddingRight:32,textAlign:"left"}}>{a}</p>}
             </div>
           ))}
+          <div style={{borderTop:"1px solid var(--border)"}}/>
         </div>
       </section>
+
+      {/* ── REPORT FORM ──────────────────────────────────────────────────── */}
       <ReportForm rpt={rpt} onDone={onDone} postPayment={postPayment}/>
-      <div className="sticky-cta">
-        <button className="btn btn-primary btn-full" onClick={()=>{track("hero_cta_click",{location:"sticky",report:rpt.id});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}>
-          {t("report.orderBtn",{price:rpt.price})}
-        </button>
-      </div>
+
     </div>
   );
 }
@@ -3662,45 +3835,89 @@ function InzichtenPage({go}){
     const catLabel=CATS.find(c=>c.tag===post.tag)?.label||post.tag;
     return(
       <div className="pg">
-        <div className="origin-section" style={{minHeight:320}}>
-          <div className="origin-section-bg">
-            <img src={IMGS.cosmos} alt="Kosmische sfeer — Faculty of Human Design inzichten" loading="eager"/>
+
+        {/* ── ARTICLE HERO ── */}
+        <div style={{position:"relative",height:"60vh",minHeight:440,maxHeight:680,overflow:"hidden",display:"flex",alignItems:"flex-end"}}>
+          <div style={{position:"absolute",inset:0}}>
+            <img src={(post.images||[])[0]||IMGS.cosmos} alt={al(post,"title")} loading="eager" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%"}}/>
+            <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.18) 0%,rgba(8,7,14,.12) 35%,rgba(8,7,14,.78) 100%)"}}/>
           </div>
-          <div className="page-hero-pad" style={{paddingTop:108,paddingBottom:56}}>
-            <div style={{marginBottom:16,cursor:"pointer",fontSize:".65rem",letterSpacing:".1em",color:"rgba(255,255,255,.35)",textTransform:"uppercase"}} onClick={()=>setActivePost(null)}>← {isEN?"Back to insights":"Terug naar inzichten"}</div>
-            <div className="label-light" style={{marginBottom:8}}>{catLabel}</div>
-            <h1 className="h1" style={{color:"white",marginBottom:12,fontSize:"clamp(1.8rem,4vw,2.6rem)"}}>{al(post,"title")}</h1>
-            <div style={{fontSize:".65rem",letterSpacing:".08em",color:"rgba(255,255,255,.3)",textTransform:"uppercase"}}>{post.date} · {post.readtime} {isEN?"read":"leestijd"}</div>
+          <div style={{position:"relative",zIndex:1,width:"100%",maxWidth:760,margin:"0 auto",padding:"0 32px 64px"}}>
+            <div style={{marginBottom:18,cursor:"pointer",display:"inline-flex",alignItems:"center",gap:8,fontSize:".58rem",letterSpacing:".14em",color:"rgba(255,255,255,.35)",textTransform:"uppercase",transition:"color .2s"}}
+              onClick={()=>setActivePost(null)}
+              onMouseEnter={e=>e.currentTarget.style.color="rgba(255,255,255,.65)"}
+              onMouseLeave={e=>e.currentTarget.style.color="rgba(255,255,255,.35)"}
+            >← {isEN?"Insights":"Inzichten"}</div>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".18em",textTransform:"uppercase",color:"rgba(201,168,92,.75)",marginBottom:16}}>{catLabel}</div>
+            <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.8rem,4.5vw,2.8rem)",fontWeight:300,color:"white",lineHeight:1.1,letterSpacing:"-.01em",marginBottom:20,maxWidth:640}}>{al(post,"title")}</h1>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",letterSpacing:".1em",color:"rgba(255,255,255,.28)",textTransform:"uppercase"}}>{post.date} · {post.readtime} {isEN?"read":"leestijd"}</div>
           </div>
         </div>
-        <section className="section bg-white">
-          <div className="container-sm">
+
+        {/* ── ARTICLE BODY ── */}
+        <section style={{background:"var(--bg)",padding:"80px 32px 96px"}}>
+          <div style={{maxWidth:680,margin:"0 auto"}}>
             {(()=>{
               const paras=(al(post,"body")||"").trim().split("\n\n");
               const imgs=post.images||[];
-              const mid=Math.floor(paras.length/2);
+              const pullIdx=Math.floor(paras.length/3);
               return paras.map((p,i)=>(
                 <div key={i}>
-                  <p className="body-lg" style={{marginBottom:22,fontSize:"1rem",lineHeight:2}}>{p.trim()}</p>
-                  {i===2&&imgs[0]&&<img src={imgs[0]} alt="" style={{width:"100%",borderRadius:"var(--radius-md)",margin:"8px 0 32px",display:"block",objectFit:"cover",maxHeight:400}} loading="lazy"/>}
-                  {i===mid&&imgs[1]&&<img src={imgs[1]} alt="" style={{width:"100%",borderRadius:"var(--radius-md)",margin:"8px 0 32px",display:"block",objectFit:"cover",maxHeight:400}} loading="lazy"/>}
+                  {i===pullIdx&&(
+                    <div style={{borderLeft:"2px solid var(--gold)",paddingLeft:24,margin:"40px 0",opacity:.85}}>
+                      <p style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontStyle:"italic",fontWeight:300,color:"var(--text)",lineHeight:1.75}}>{paras[pullIdx].split(".")[0]}.</p>
+                    </div>
+                  )}
+                  {i!==pullIdx&&(
+                    <p style={{fontFamily:"var(--font-serif)",fontSize:"1.02rem",fontWeight:300,color:"var(--text)",lineHeight:2,marginBottom:28}}>{p.trim()}</p>
+                  )}
+                  {i===2&&imgs[1]&&<img src={imgs[1]} alt="" style={{width:"100%",display:"block",objectFit:"cover",maxHeight:420,margin:"12px 0 40px"}} loading="lazy"/>}
                 </div>
               ));
             })()}
-            <div style={{marginTop:40,paddingTop:28,borderTop:"1px solid var(--border)"}}>
-              <div className="label" style={{marginBottom:16}}>{isEN?"More reading":"Meer lezen"}</div>
-              <div className="grid-2">
+          </div>
+        </section>
+
+        {/* ── MORE READING ── */}
+        {articles.filter(a=>String(a.id)!==String(activePost)&&a.tag===post.tag).length>0&&(
+          <section style={{background:"white",padding:"72px 32px",borderTop:"1px solid var(--border)"}}>
+            <div style={{maxWidth:760,margin:"0 auto"}}>
+              <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>{isEN?"More reading":"Meer lezen"}</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:"40px 32px"}}>
                 {articles.filter(a=>String(a.id)!==String(activePost)&&a.tag===post.tag).slice(0,2).map(a=>(
-                  <div key={a.id} className="blog-card" onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
-                    <div className="blog-tag">{CATS.find(c=>c.tag===a.tag)?.label||a.tag}</div>
-                    <div className="blog-title" style={{fontSize:"1rem"}}>{al(a,"title")}</div>
+                  <div key={a.id} style={{cursor:"pointer"}} onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
+                    {(a.images||[])[0]&&<div style={{aspectRatio:"16/9",overflow:"hidden",marginBottom:18}}>
+                      <img src={a.images[0]} alt={al(a,"title")} style={{width:"100%",height:"100%",objectFit:"cover",transition:"transform .5s ease"}}
+                        onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                        onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                      />
+                    </div>}
+                    <div style={{width:20,height:1,background:"var(--gold)",marginBottom:14,opacity:.5}}/>
+                    <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.08rem",fontWeight:400,color:"var(--text)",lineHeight:1.3,marginBottom:8}}>{al(a,"title")}</h4>
+                    <span style={{fontSize:".62rem",fontWeight:400,color:"var(--text-light)",letterSpacing:".1em",textTransform:"uppercase"}}>{a.readtime} {isEN?"read":"leestijd"}</span>
                   </div>
                 ))}
               </div>
             </div>
-            <div style={{marginTop:32}}><button className="btn btn-primary" onClick={()=>go("rapporten")}>{isEN?"Order a report":"Bestel een rapport"}</button></div>
+          </section>
+        )}
+
+        {/* ── EDITORIAL CTA ── */}
+        <section style={{background:"var(--bg)",padding:"96px 32px",textAlign:"center"}}>
+          <div style={{maxWidth:480,margin:"0 auto"}}>
+            <div style={{width:1,height:40,background:"var(--gold)",margin:"0 auto 36px",opacity:.4}}/>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.1rem,2vw,1.3rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.7,marginBottom:36}}>
+              {isEN?"Understanding yourself is not a destination. It is a practice of returning.":"Jezelf begrijpen is geen bestemming. Het is een oefening in terugkeren."}
+            </p>
+            <button
+              style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 44px",cursor:"pointer",transition:"all .3s ease"}}
+              onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+              onClick={()=>go("rapporten")}
+            >{isEN?"Discover your blueprint":"Ontdek je blauwdruk"}</button>
           </div>
         </section>
+
       </div>
     );
   }
@@ -3717,85 +3934,110 @@ function InzichtenPage({go}){
   return(
     <div className="pg">
 
-      {/* ── Hero ── */}
-      <div className="origin-section" style={{minHeight:320}}>
-        <div className="origin-section-bg">
-          <img src={IMGS.cosmos} alt="Kosmische sfeer" loading="eager"/>
+      {/* ── CINEMATIC HERO ── */}
+      <div style={{position:"relative",height:"72vh",minHeight:520,maxHeight:780,overflow:"hidden",display:"flex",alignItems:"flex-end"}}>
+        <div style={{position:"absolute",inset:0}}>
+          <img src={IMGS.cosmos} alt="Faculty of Human Design — Inzichten" loading="eager" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 20%"}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.2) 0%,rgba(8,7,14,.08) 35%,rgba(8,7,14,.82) 100%)"}}/>
         </div>
-        <div className="page-hero-pad" style={{paddingTop:100,paddingBottom:64}}>
-          <div className="label-light" style={{marginBottom:14}}>{isEN?"Knowledge":"Kennis"}</div>
-          <h1 className="h1" style={{color:"white",marginBottom:14}}>{isEN?"Insights":"Inzichten"}</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:480,lineHeight:1.78}}>{isEN?"Articles on Human Design, Numerology and Astrology — organised by theme.":"Artikelen over Human Design, Numerologie en Astrologie — ingedeeld per thema."}</p>
+        <div style={{position:"relative",zIndex:1,width:"100%",padding:"0 0 80px",maxWidth:1240,margin:"0 auto",paddingLeft:"clamp(20px,5vw,80px)",paddingBottom:80}}>
+          <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"rgba(201,168,92,.7)",marginBottom:22}}>Faculty of Human Design — {isEN?"Knowledge":"Kennis"}</div>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.4rem,5.5vw,4.2rem)",fontWeight:300,color:"white",lineHeight:1.06,letterSpacing:"-.02em",marginBottom:20,maxWidth:640}}>
+            {isEN?"Insights.":"Inzichten."}<br/>
+            <em style={{fontStyle:"italic",color:"rgba(255,255,255,.38)"}}>{isEN?"For those who want to understand.":"Voor wie wil begrijpen."}</em>
+          </h1>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.95rem,1.5vw,1.05rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.48)",maxWidth:460,lineHeight:1.75}}>
+            {isEN?"Human Design, Numerology and Astrology — explored with depth.":"Human Design, Numerologie en Astrologie — diepgaand verkend."}
+          </p>
         </div>
       </div>
 
-      {/* ── Category filter bar ── */}
+      {/* ── MINIMAL FILTER BAR ── */}
       <div style={{background:"var(--bg)",borderBottom:"1px solid var(--border)",position:"sticky",top:64,zIndex:10}}>
-        <div className="container" style={{paddingTop:14,paddingBottom:14}}>
-          <div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}>
-            <span style={activeCat==="all"?pillActive:pillInactive} onClick={()=>setActiveCat("all")}>{isEN?"All":"Alle"}</span>
-            {CATS.map(c=>(
-              <span key={c.id} style={activeCat===c.id?pillActive:pillInactive} onClick={()=>setActiveCat(c.id)}>{c.label}</span>
-            ))}
+        <div className="container" style={{paddingTop:16,paddingBottom:16,paddingLeft:"clamp(20px,4vw,32px)",paddingRight:"clamp(20px,4vw,32px)"}}>
+          <div style={{display:"flex",gap:28,overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch",alignItems:"center"}}>
+            {[{id:"all",label:isEN?"All articles":"Alle artikelen"},...CATS].map(c=>{
+              const active=activeCat===c.id;
+              return(
+                <span key={c.id}
+                  style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:active?500:400,letterSpacing:".14em",textTransform:"uppercase",color:active?"var(--text)":"var(--text-light)",cursor:"pointer",flexShrink:0,paddingBottom:2,borderBottom:active?"1px solid var(--text)":"1px solid transparent",transition:"all .15s",whiteSpace:"nowrap"}}
+                  onClick={()=>setActiveCat(c.id)}
+                >{c.label}</span>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      {/* ── Loading ── */}
+      {/* ── LOADING ── */}
       {loading&&(
-        <div style={{textAlign:"center",padding:"80px 0",color:"var(--text-light)",fontSize:".8rem",letterSpacing:".08em",textTransform:"uppercase"}}>{isEN?"Loading articles...":"Artikelen laden..."}</div>
+        <div style={{textAlign:"center",padding:"96px 0",color:"var(--text-light)",fontSize:".7rem",letterSpacing:".14em",textTransform:"uppercase"}}>{isEN?"Loading…":"Laden…"}</div>
       )}
 
-      {/* ── Category sections ── */}
-      {!loading&&visibleCats.map(cat=>{
+      {/* ── EDITORIAL CATEGORY SECTIONS ── */}
+      {!loading&&visibleCats.map((cat,ci)=>{
         const arts=catArts(cat);
         if(!arts.length) return null;
         return(
-          <section key={cat.id} id={cat.id} style={{padding:"56px 0",borderBottom:"1px solid var(--border)"}}>
+          <section key={cat.id} id={cat.id} className="section-md" style={{borderBottom:"1px solid var(--border)",background:ci%2===0?"var(--bg)":"white"}}>
             <div className="container">
-              {/* Section header */}
-              <div style={{marginBottom:36}}>
-                <div className="label" style={{marginBottom:10}}>{cat.label}</div>
-                <p style={{fontSize:".9rem",color:"var(--text-muted)",fontWeight:300,lineHeight:1.7,maxWidth:540}}>{cat.desc}</p>
+
+              {/* Editorial section header */}
+              <div className="inzichten-cat-header">
+                <div className="cat-divider"/>
+                <div className="cat-label">{cat.label}</div>
+                <p className="cat-desc">{cat.desc}</p>
               </div>
-              {/* Article cards grid */}
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:24}}>
+
+              {/* Open editorial article grid */}
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:"52px 36px"}}>
                 {arts.map(a=>(
-                  <div key={a.id} style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-md)",overflow:"hidden",cursor:"pointer",transition:"box-shadow 200ms"}}
-                    onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}
-                    onMouseEnter={e=>{e.currentTarget.style.boxShadow="0 4px 24px rgba(0,0,0,.08)";}}
-                    onMouseLeave={e=>{e.currentTarget.style.boxShadow="none";}}>
+                  <div key={a.id} style={{cursor:"pointer"}} onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
                     {(a.images||[])[0]&&(
-                      <img src={a.images[0]} alt={al(a,"title")} style={{width:"100%",height:180,objectFit:"cover",display:"block"}} loading="lazy"/>
-                    )}
-                    <div style={{padding:"20px 22px 24px"}}>
-                      <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".14em",textTransform:"uppercase",color:"var(--brand)",marginBottom:8}}>{cat.label}</div>
-                      <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",lineHeight:1.3,marginBottom:10}}>{al(a,"title")}</div>
-                      <div style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65,marginBottom:16,display:"-webkit-box",WebkitLineClamp:3,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{al(a,"excerpt")}</div>
-                      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                        <span style={{fontSize:".7rem",fontWeight:500,color:"var(--brand)",letterSpacing:".08em",textTransform:"uppercase"}}>{isEN?"Read article":"Lees artikel"} →</span>
-                        <span style={{fontSize:".6rem",color:"var(--text-light)",letterSpacing:".06em",textTransform:"uppercase"}}>{a.readtime} {isEN?"read":"leestijd"}</span>
+                      <div style={{aspectRatio:"4/3",overflow:"hidden",marginBottom:22}}>
+                        <img src={a.images[0]} alt={al(a,"title")} style={{width:"100%",height:"100%",objectFit:"cover",transition:"transform .6s ease"}} loading="lazy"
+                          onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                          onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                        />
                       </div>
-                    </div>
+                    )}
+                    <div style={{width:20,height:1,background:"var(--gold)",marginBottom:14,opacity:.5}}/>
+                    <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.12rem",fontWeight:400,color:"var(--text)",lineHeight:1.28,marginBottom:10}}>{al(a,"title")}</h4>
+                    <p style={{fontSize:".875rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.72,marginBottom:14,display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",overflow:"hidden"}}>{al(a,"excerpt")}</p>
+                    <span style={{fontSize:".6rem",fontWeight:400,color:"var(--text-light)",letterSpacing:".1em",textTransform:"uppercase"}}>{a.readtime} {isEN?"read":"leestijd"}</span>
                   </div>
                 ))}
               </div>
+
             </div>
           </section>
         );
       })}
 
-      {/* ── CTA ── */}
+      {/* ── EDITORIAL PAUSE + CTA ── */}
       {!loading&&(
-        <section className="section bg-white" style={{textAlign:"center"}}>
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{isEN?"Ready to begin?":"Klaar om te beginnen?"}</div>
-            <h2 className="h2" style={{marginBottom:16,maxWidth:480,margin:"0 auto 16px"}}>{isEN?"Discover your personal blueprint":"Ontdek jouw persoonlijke blauwdruk"}</h2>
-            <p style={{fontSize:".95rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75,marginBottom:28,maxWidth:420,margin:"0 auto 28px"}}>{isEN?"Your chart is calculated free of charge. Your full report is delivered as a PDF within 1 business day.":"Je chart wordt gratis berekend. Je volledige rapport wordt als PDF bezorgd binnen 1 werkdag."}</p>
-            <button className="btn btn-primary" onClick={()=>go("rapporten")}>{isEN?"View reports":"Bekijk rapporten"}</button>
+        <section style={{background:"var(--bg)",padding:"112px 32px",textAlign:"center"}}>
+          <div style={{maxWidth:540,margin:"0 auto"}}>
+            <div style={{width:1,height:52,background:"var(--gold)",margin:"0 auto 44px",opacity:.4}}/>
+            <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.2rem,2.2vw,1.55rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.6,letterSpacing:"-.005em",margin:"0 0 44px"}}>
+              {isEN
+                ?'"Knowledge about yourself is not an answer. It is a different kind of question."'
+                :'"Kennis over jezelf is geen antwoord. Het is een andere manier van vragen stellen."'}
+            </blockquote>
+            <div style={{width:1,height:40,background:"var(--gold)",margin:"0 auto 44px",opacity:.4}}/>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.75,marginBottom:36}}>
+              {isEN?"Your blueprint goes deeper than any article can.":"Jouw blauwdruk gaat dieper dan elk artikel kan."}
+            </p>
+            <button
+              style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 44px",cursor:"pointer",transition:"all .3s ease"}}
+              onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+              onClick={()=>go("rapporten")}
+            >{isEN?"Discover your blueprint":"Ontdek je blauwdruk"}</button>
           </div>
         </section>
       )}
+
     </div>
   );
 }
@@ -3841,7 +4083,7 @@ function OverPage({go}){
               <div style={{borderLeft:"3px solid var(--gold)",paddingLeft:20,marginBottom:32}}>
                 <p style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"var(--text)",lineHeight:1.78}}>{LANG==="en"?'"You do not receive a profile. You receive a mirror — accurately calculated at the moment you entered the world."':'"Je ontvangt geen profiel. Je ontvangt een spiegel — nauwkeurig berekend op het moment dat jij ter wereld kwam."'}</p>
               </div>
-              <div style={{display:"flex",gap:40,flexWrap:"wrap"}}>
+              <div className="over-stats">
                 {[["2014",LANG==="en"?"Founded on Ibiza":"Opgericht op Ibiza"],["2.400+",LANG==="en"?"Blueprints assembled":"Blauwdrukken samengesteld"],["4.9 / 5",LANG==="en"?"Average rating":"Gemiddelde beoordeling"]].map(([n,l])=>(
                   <div key={l}><div className="stat-n">{n}</div><div className="stat-l">{l}</div></div>
                 ))}
@@ -4028,7 +4270,7 @@ function ContactPage(){
         <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:80}}>
           <div className="label-light" style={{marginBottom:14}}>{t("contact.eyebrow")}</div>
           <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>{t("contact.title")}</h1>
-          <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:420,lineHeight:1.78}}>{t("contact.sub")}</p>
+          <p className="contact-hero-sub" style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",lineHeight:1.78}}>{t("contact.sub")}</p>
         </div>
       </div>
       <section className="section" style={{background:"var(--muted)"}}>
