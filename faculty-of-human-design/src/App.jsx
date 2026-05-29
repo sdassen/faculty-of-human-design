@@ -4387,82 +4387,158 @@ function ContactPage(){
   });
   return(
     <div className="pg">
-      <div className="origin-section" style={{minHeight:360}}>
-        <div className="origin-section-bg">
-          <img src="/img-ibiza-moon.jpg" alt="Ibiza — Faculty of Human Design" loading="eager"/>
+
+      {/* ── CINEMATIC HERO ───────────────────────────────────────────────── */}
+      <section style={{position:"relative",height:"72vh",minHeight:520,maxHeight:800,overflow:"hidden",display:"flex",alignItems:"flex-end"}}>
+        <div style={{position:"absolute",inset:0}}>
+          <img src="/img-ibiza-moon.jpg" alt="Ibiza — Faculty of Human Design" loading="eager" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 40%"}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.1) 0%,rgba(8,7,14,.08) 40%,rgba(8,7,14,.68) 100%)"}}/>
         </div>
-        <div className="page-hero-pad" style={{paddingTop:120,paddingBottom:80}}>
-          <div className="label-light" style={{marginBottom:14}}>{t("contact.eyebrow")}</div>
-          <h1 className="h1" style={{color:"white",marginBottom:16,maxWidth:560}}>{t("contact.title")}</h1>
-          <p className="contact-hero-sub" style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.5)",lineHeight:1.78}}>{t("contact.sub")}</p>
+        <div style={{position:"relative",zIndex:1,width:"100%",padding:"0 40px 80px",maxWidth:760,margin:"0 auto",textAlign:"center"}}>
+          <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".22em",textTransform:"uppercase",color:"rgba(255,255,255,.45)",marginBottom:28}}>
+            {LANG==="en"?"Faculty of Human Design — Ibiza":"Faculty of Human Design — Ibiza"}
+          </div>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.2rem,4.5vw,3.4rem)",fontWeight:300,color:"white",lineHeight:1.1,letterSpacing:"-.02em",marginBottom:24}}>
+            {LANG==="en"?"A quiet conversation.":"Een rustig gesprek."}
+          </h1>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.5vw,1.1rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.5)",lineHeight:1.78,maxWidth:480,margin:"0 auto"}}>
+            {LANG==="en"
+              ? "Not everything needs to be clear right away."
+              : "Niet alles hoeft direct duidelijk te zijn."}
+          </p>
+        </div>
+      </section>
+
+      {/* ── EDITORIAL INVITATION ─────────────────────────────────────────── */}
+      <section style={{padding:"128px 40px",background:"var(--bg)"}}>
+        <div style={{maxWidth:560,margin:"0 auto",textAlign:"center"}}>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 56px",opacity:.3}}/>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.1rem,1.8vw,1.3rem)",fontWeight:300,color:"var(--text)",lineHeight:1.9,marginBottom:32,whiteSpace:"pre-line"}}>
+            {LANG==="en"
+              ? "Do you have a question, or does something feel unclear?\nWe're here — calmly and personally."
+              : "Heb je een vraag,\nof voelt iets nog niet helemaal helder?\n\nWe helpen je graag verder."}
+          </p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:".92rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.85}}>
+            {LANG==="en"
+              ? "You can reach us at info@facultyhd.com — or use the form below."
+              : "Je bereikt ons via info@facultyhd.com — of gebruik het formulier hieronder."}
+          </p>
+        </div>
+      </section>
+
+      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
+      <section style={{padding:"0 40px 120px",background:"var(--bg)"}}>
+        <div style={{maxWidth:600,margin:"0 auto"}}>
+          <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".22em",textTransform:"uppercase",color:"var(--gold)",marginBottom:48,opacity:.7,textAlign:"center"}}>
+            {LANG==="en"?"Common questions":"Veelgestelde vragen"}
+          </div>
+          {faqs.map((item,i)=>(
+            <div key={i} style={{borderTop:"1px solid var(--border)",padding:"0"}}>
+              <button
+                onClick={()=>setFaqOpen(faqOpen===i?null:i)}
+                style={{width:"100%",display:"flex",alignItems:"baseline",justifyContent:"space-between",gap:24,padding:"24px 0",background:"none",border:"none",textAlign:"left",cursor:"pointer"}}
+              >
+                <span style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text)",lineHeight:1.5,flex:1}}>{item.q}</span>
+                <span style={{fontFamily:"var(--font-sans)",fontSize:"1rem",color:"var(--gold)",flexShrink:0,opacity:.55,transition:"transform .2s",transform:faqOpen===i?"rotate(45deg)":"rotate(0)",lineHeight:1}}>+</span>
+              </button>
+              {faqOpen===i&&(
+                <div style={{paddingBottom:28,paddingRight:40}}>
+                  <p style={{fontFamily:"var(--font-serif)",fontSize:".92rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,margin:0}}>{item.a}</p>
+                </div>
+              )}
+            </div>
+          ))}
+          <div style={{borderTop:"1px solid var(--border)"}}/>
+        </div>
+      </section>
+
+      {/* ── VISUAL SILENCE ───────────────────────────────────────────────── */}
+      <div style={{background:"#fff",padding:"112px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:400,margin:"0 auto"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.05rem,1.6vw,1.2rem)",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:2.0,letterSpacing:".01em",margin:0,whiteSpace:"pre-line"}}>
+            {LANG==="en"
+              ? "Sometimes clarity begins\nwith a simple conversation."
+              : "Soms begint helderheid\nbij een eenvoudig gesprek."}
+          </p>
         </div>
       </div>
-      <section className="section" style={{background:"var(--muted)"}}>
-        <div className="container-sm">
-          <div style={{maxWidth:680,margin:"0 auto"}}>
-            <div className="label" style={{marginBottom:12,textAlign:"center"}}>{LANG==="en"?"FREQUENTLY ASKED QUESTIONS":"VEELGESTELDE VRAGEN"}</div>
-            <h2 className="h2" style={{textAlign:"center",marginBottom:48}}>{LANG==="en"?"Everything you need to know":"Alles wat je wilt weten"}</h2>
-            <div style={{display:"flex",flexDirection:"column",gap:2}}>
-              {faqs.map((item,i)=>(
-                <div key={i} style={{background:"var(--white)",borderRadius:"var(--radius-md)",overflow:"hidden",boxShadow:"var(--shadow-sm)"}}>
-                  <button
-                    onClick={()=>setFaqOpen(faqOpen===i?null:i)}
-                    style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"space-between",gap:16,padding:"18px 24px",background:"none",border:"none",textAlign:"left",cursor:"pointer"}}
-                  >
-                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:600,color:"var(--text)",lineHeight:1.4}}>{item.q}</span>
-                    <span style={{flexShrink:0,width:22,height:22,borderRadius:"50%",background:faqOpen===i?"var(--gold-warm)":"var(--muted)",display:"flex",alignItems:"center",justifyContent:"center",transition:"background 0.2s",color:faqOpen===i?"#fff":"var(--text-muted)",fontSize:"0.85rem",fontWeight:500}}>
-                      {faqOpen===i?"−":"+"}
-                    </span>
-                  </button>
-                  {faqOpen===i&&(
-                    <div style={{padding:"0 24px 20px",fontSize:"0.925rem",lineHeight:1.75,color:"var(--text-muted)",borderTop:"1px solid var(--border)",textAlign:"left"}}>
-                      <div style={{paddingTop:14}}>{item.a}</div>
-                    </div>
-                  )}
-                </div>
-              ))}
+
+      {/* ── CONTACT FORM ─────────────────────────────────────────────────── */}
+      <section style={{padding:"120px 40px 140px",background:"var(--bg)"}}>
+        <div style={{maxWidth:520,margin:"0 auto"}}>
+
+          <div style={{textAlign:"center",marginBottom:72}}>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".22em",textTransform:"uppercase",color:"var(--gold)",marginBottom:20,opacity:.7}}>
+              {LANG==="en"?"Write to us":"Schrijf ons"}
             </div>
-            <p style={{textAlign:"center",marginTop:32,fontSize:"0.875rem",color:"var(--text-light)"}}>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,2.8vw,2.1rem)",fontWeight:300,color:"var(--text)",lineHeight:1.15,margin:"0 0 20px"}}>
+              {LANG==="en"?"Leave a message.":"Laat een bericht achter."}
+            </h2>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:".92rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.8,margin:0}}>
               {LANG==="en"
-                ?"Still have a question? Fill in the form below and we'll respond within 1 business day."
-                :"Staat jouw vraag er niet bij? Vul het formulier hieronder in en we reageren binnen 1 werkdag."}
+                ? "We respond within one business day — personally."
+                : "We reageren binnen één werkdag — persoonlijk."}
             </p>
           </div>
-        </div>
-      </section>
-      <section className="section bg-white">
-        <div className="container-sm">
-          <div className="grid-2" style={{gap:56,alignItems:"start"}}>
-            <div>
-              <div className="label" style={{marginBottom:12}}>{t("contact.infoTitle")}</div>
-              <h2 className="h2" style={{marginBottom:28}}>{t("contact.infoName")}</h2>
-              {[[t("contact.emailLabel"),"info@facultyhd.com"],[t("contact.responseLabel"),t("contact.responseVal")],[t("contact.deliveryLabel"),t("contact.deliveryVal")]].map(([l,v])=>(
-                <div key={l} style={{marginBottom:20}}><div className="label" style={{marginBottom:5}}>{l}</div><div className="body-md">{v}</div></div>
-              ))}
-            </div>
-            <div className="form-wrap">
-              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.2rem",marginBottom:20}}>{t("contact.formTitle")}</div>
-              <div style={{display:"flex",flexDirection:"column",gap:14}}>
-                <div className="form-group"><label className="form-label">{t("contact.nameLabel")}</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder={t("contact.namePlaceholder")}/></div>
-                <div className="form-group"><label className="form-label">{t("contact.emailField")}</label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder={t("contact.emailPlaceholder")}/></div>
-                <div className="form-group"><label className="form-label">{t("contact.subjectLabel")}</label><input className="form-input" name="subject" value={form.subject} onChange={ch} placeholder={t("contact.subjectPlaceholder")}/></div>
-                <div className="form-group"><label className="form-label">{t("contact.msgLabel")}</label><textarea className="form-input" name="msg" value={form.msg} onChange={ch} placeholder={t("contact.msgPlaceholder")} style={{resize:"vertical",minHeight:110}}/></div>
-                {status==="ok"
-                  ? <div style={{background:"#F0FDF4",border:"1px solid #86EFAC",borderRadius:"var(--radius-md)",padding:"16px 20px",fontSize:".9rem",color:"#166534",lineHeight:1.6}}>
-                      ✓ &nbsp;{LANG==="en"?"Your message has been sent. We'll respond within 1 business day.":"Je bericht is verstuurd. We reageren binnen 1 werkdag."}
-                    </div>
-                  : <>
-                      <button className="btn btn-primary" onClick={send} disabled={status==="sending"||!form.name.trim()||!form.email.trim()||!form.msg.trim()}>
-                        {status==="sending"?(LANG==="en"?"Sending...":"Versturen..."):(t("contact.sendBtn"))}
-                      </button>
-                      {status==="error"&&<div style={{fontSize:".82rem",color:"#C62828",marginTop:6}}>{errMsg}</div>}
-                    </>
-                }
+
+          {status==="ok"
+            ? <div style={{textAlign:"center",padding:"64px 0"}}>
+                <div style={{width:1,height:40,background:"var(--gold)",margin:"0 auto 40px",opacity:.3}}/>
+                <p style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.8,whiteSpace:"pre-line"}}>
+                  {LANG==="en"
+                    ? "Your message has arrived.\nWe'll be in touch soon."
+                    : "Je bericht is aangekomen.\nWe nemen binnenkort contact op."}
+                </p>
               </div>
-            </div>
-          </div>
+            : <div style={{display:"flex",flexDirection:"column",gap:0}}>
+                {[
+                  {name:"name",type:"text",placeholder:LANG==="en"?"Your name":"Jouw naam"},
+                  {name:"email",type:"email",placeholder:LANG==="en"?"Your email address":"Je e-mailadres"},
+                  {name:"subject",type:"text",placeholder:LANG==="en"?"Subject (optional)":"Onderwerp (optioneel)"},
+                ].map(f=>(
+                  <div key={f.name} style={{borderBottom:"1px solid var(--border)",marginBottom:0}}>
+                    <input
+                      type={f.type}
+                      name={f.name}
+                      value={form[f.name]}
+                      onChange={ch}
+                      placeholder={f.placeholder}
+                      style={{width:"100%",padding:"20px 0",fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text)",background:"transparent",border:"none",outline:"none"}}
+                    />
+                  </div>
+                ))}
+                <div style={{borderBottom:"1px solid var(--border)",marginBottom:40}}>
+                  <textarea
+                    name="msg"
+                    value={form.msg}
+                    onChange={ch}
+                    placeholder={LANG==="en"?"Your message…":"Je bericht…"}
+                    rows={5}
+                    style={{width:"100%",padding:"20px 0",fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text)",background:"transparent",border:"none",outline:"none",resize:"none",lineHeight:1.7}}
+                  />
+                </div>
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
+                  <button
+                    onClick={send}
+                    disabled={status==="sending"||!form.name.trim()||!form.email.trim()||!form.msg.trim()}
+                    style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 44px",cursor:"pointer",transition:"all .3s ease",opacity:(status==="sending"||!form.name.trim()||!form.email.trim()||!form.msg.trim())?.45:1}}
+                    onMouseEnter={e=>{if(!e.currentTarget.disabled){e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}}
+                    onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+                  >
+                    {status==="sending"
+                      ? (LANG==="en"?"Sending…":"Versturen…")
+                      : (LANG==="en"?"Send message":"Verstuur bericht")}
+                  </button>
+                  {status==="error"&&(
+                    <p style={{fontFamily:"var(--font-serif)",fontSize:".85rem",fontStyle:"italic",color:"#C62828",margin:0}}>{errMsg}</p>
+                  )}
+                </div>
+              </div>
+          }
+
         </div>
       </section>
+
     </div>
   );
 }
