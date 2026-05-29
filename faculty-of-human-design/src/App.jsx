@@ -3790,7 +3790,12 @@ function InzichtenPage({go}){
         if(!url||!key){setArticles(STATIC);setLoading(false);return;}
         const res=await fetch(url+"/rest/v1/articles?select=*&order=published_at.desc&limit=20",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
         const data=await res.json();
-        setArticles(data&&data.length>0?data:STATIC);
+        // Merge Supabase articles with STATIC fallback so the page is never sparse.
+        // STATIC IDs are strings ("s1"…"s5"), Supabase IDs are numeric — no conflicts.
+        const live=data&&Array.isArray(data)?data:[];
+        const liveIds=new Set(live.map(a=>String(a.id)));
+        const merged=[...live,...STATIC.filter(s=>!liveIds.has(String(s.id)))];
+        setArticles(merged.length>0?merged:STATIC);
       }catch{setArticles(STATIC);}
       setLoading(false);
     };
