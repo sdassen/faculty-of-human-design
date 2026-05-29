@@ -3603,59 +3603,84 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       </section>
 
       {/* ── EDITORIAL INTRO ──────────────────────────────────────────────── */}
-      <section style={{padding:"112px 40px",background:"var(--bg)"}}>
-        <div style={{maxWidth:680,margin:"0 auto"}}>
-          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 48px",opacity:.4}}/>
-          <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:24,textAlign:"center",opacity:.7}}>{rptTitle}</div>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.1rem,1.8vw,1.3rem)",fontWeight:300,color:"var(--text)",lineHeight:1.85,textAlign:"center",marginBottom:32}}>{rptIntro}</p>
+      <section style={{padding:"144px 40px 128px",background:"var(--bg)"}}>
+        <div style={{maxWidth:600,margin:"0 auto"}}>
+          <div style={{width:1,height:56,background:"var(--gold)",margin:"0 auto 56px",opacity:.3}}/>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,1.9vw,1.35rem)",fontWeight:300,color:"var(--text)",lineHeight:1.9,textAlign:"center",marginBottom:40}}>{rptIntro}</p>
           <p style={{fontFamily:"var(--font-serif)",fontSize:".95rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.82,textAlign:"center"}}>{rptFor}</p>
         </div>
       </section>
 
       {/* ── EDITORIAL PAUSE ──────────────────────────────────────────────── */}
-      <div style={{background:"#fff",padding:"80px 40px",textAlign:"center"}}>
-        <div style={{maxWidth:560,margin:"0 auto"}}>
-          <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.2rem,2vw,1.55rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.6,letterSpacing:"-.01em",margin:0}}>
+      <div style={{background:"#fff",padding:isRelatie?"140px 40px":"100px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:480,margin:"0 auto"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.25rem,2.2vw,1.6rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.72,letterSpacing:"-.01em",margin:0,whiteSpace:"pre-line"}}>
             {LANG==="en"
               ? (isRelatie
-                  ? "\"Not every relationship asks for more effort. Sometimes love asks for a different way of seeing.\""
-                  : "\"You are not a profile. You are a precise architecture — drawn at the exact moment you arrived.\"")
+                  ? `Not every relationship\nasks for more effort.\nSometimes love asks for\na different way of seeing.`
+                  : `You are not a profile.\nYou are a precise architecture —\ndrawn at the exact moment\nyou arrived.`)
               : (isRelatie
-                  ? "\"Niet elke relatie vraagt om harder werken. Soms vraagt liefde om een andere manier van kijken.\""
+                  ? `Niet elke relatie\nvraagt om harder werken.\nSoms vraagt liefde om\neen andere manier van kijken.`
+                  : `Je bent geen profiel.\nJe bent een precieze architectuur —\ngetekend op het exacte moment\ndat jij arriveerde.`)}
+          </p>
+        </div>
+      </div>
+            {/* GARBAGE_DELETED Sometimes love asks for a different way of seeing. [QUOTE_FOUND]
+                  : "\"You are not a profile. You are a precise architecture — drawn at the exact moment you arrived. [FOUND_END]
+              : (isRelatie
+                  ? `Niet elke relatie\nvraagt om harder werken.\nSoms vraagt liefde om\neen andere manier van kijken.` 
+                  : `Je bent geen profiel.\nJe bent een precieze architectuur —\ngetekend op het exacte moment\ndat jij arriveerde.`)}
+          </p>
+        </div>
+      </div>
+      {/* Soms vraagt liefde om een andere manier van kijken.\""
                   : "\"Je bent geen profiel. Je bent een precieze architectuur — getekend op het exacte moment dat jij arriveerde.\"")}
-          </blockquote>
+          </p>
         </div>
       </div>
 
+      */}
       {/* ── CHAPTERS ─────────────────────────────────────────────────────── */}
-      <section style={{padding:"112px 40px",background:"var(--bg)"}}>
-        <div style={{maxWidth:720,margin:"0 auto"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-end",marginBottom:64,flexWrap:"wrap",gap:16}}>
-            <div>
-              <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14,opacity:.8}}>{LANG==="en"?"Contents":"Inhoud"}</div>
-              <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2.2rem)",fontWeight:300,color:"var(--text)",lineHeight:1.1,margin:0}}>{LANG==="en"?"What the reading covers":"Wat de reading omvat"}</h2>
-            </div>
-            <div style={{fontFamily:"var(--font-sans)",fontSize:".65rem",color:"var(--text-light)",letterSpacing:".08em"}}>{rpt.pages} {LANG==="en"?"pages":"pagina's"} · {sectionCount} {LANG==="en"?"chapters":"hoofdstukken"}</div>
+      <section style={{padding:"128px 40px",background:"var(--bg)"}}>
+        <div style={{maxWidth:640,margin:"0 auto"}}>
+          <div style={{marginBottom:72}}>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".22em",textTransform:"uppercase",color:"var(--gold)",marginBottom:20,opacity:.7}}>{LANG==="en"?"Contents":"Inhoud"}</div>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.5rem,2.8vw,2rem)",fontWeight:300,color:"var(--text)",lineHeight:1.15,margin:"0 0 8px"}}>{LANG==="en"?"What the reading explores":"Wat de reading verkent"}</h2>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".62rem",color:"var(--text-light)",letterSpacing:".08em"}}>{rpt.pages} {LANG==="en"?"pages":"pagina's"} · {sectionCount} {LANG==="en"?"chapters":"hoofdstukken"}</div>
           </div>
           <div style={{display:"flex",flexDirection:"column"}}>
             {sections.map((item,i)=>(
-              <div key={i} style={{display:"flex",alignItems:"baseline",gap:28,padding:"20px 0",borderBottom:"1px solid var(--border)"}}>
-                <span style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,color:"var(--gold)",letterSpacing:".1em",opacity:.6,flexShrink:0,minWidth:24}}>{String(i+1).padStart(2,"0")}</span>
-                <span style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{item}</span>
+              <div key={i} style={{display:"flex",alignItems:"baseline",gap:32,padding:"24px 0",borderBottom:"1px solid var(--border)"}}>
+                <span style={{fontFamily:"var(--font-sans)",fontSize:".56rem",fontWeight:400,color:"var(--gold)",letterSpacing:".12em",opacity:.5,flexShrink:0,minWidth:24}}>{String(i+1).padStart(2,"0")}</span>
+                <span style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--text)",lineHeight:1.45}}>{item}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ── SOFT MID CTA ─────────────────────────────────────────────────── */}
-      <div style={{background:"#fff",padding:"80px 40px",textAlign:"center"}}>
-        <div style={{maxWidth:480,margin:"0 auto"}}>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:32,fontStyle:"italic"}}>
-            {LANG==="en"
-              ? "Personally assembled and written with care. Delivered as PDF within one business day."
-              : "Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
-          </p>
+      {/* ── VISUAL SILENCE (relatie_liefde only) ─────────────────────────── */}
+      {rpt.id==="relatie_liefde"&&(
+        <div style={{background:"#fff",padding:"152px 40px",textAlign:"center"}}>
+          <div style={{maxWidth:380,margin:"0 auto"}}>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.5vw,1.15rem)",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:2.0,letterSpacing:".01em",margin:0,whiteSpace:"pre-line"}}>
+              {LANG==="en"
+                ? "Sometimes clarity arrives\nnot when you try harder,\nbut when you understand\nwhat you were each carrying."
+                : "Soms ontstaat helderheid\nniet door harder te proberen,\nmaar door te begrijpen\nwat jullie ieder meedragen."}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── SOFT MID CTA (non-relatie only) ──────────────────────────────── */}
+      {rpt.id!=="relatie_liefde"&&(
+        <div style={{background:"#fff",padding:"100px 40px",textAlign:"center"}}>
+          <div style={{maxWidth:480,margin:"0 auto"}}>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:40,fontStyle:"italic"}}>
+              {LANG==="en"
+                ? "Personally assembled and written with care. Delivered as PDF within one business day."
+                : "Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
+            </p>
           <button
             style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 36px",cursor:"pointer",transition:"all .3s ease"}}
             onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
@@ -3665,9 +3690,10 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
         </div>
       </div>
+      )}
 
       {/* ── FULL-BLEED EDITORIAL IMAGE ───────────────────────────────────── */}
-      <div style={{position:"relative",height:"65vh",minHeight:400,overflow:"hidden"}}>
+      <div style={{position:"relative",height:rpt.id==="relatie_liefde"?"75vh":"65vh",minHeight:400,overflow:"hidden"}}>
         <img
           src={rpt.id==="relatie_liefde"?"/img-relatie-liefde-new.jpg":IMGS.ibiza}
           alt=""
@@ -3675,7 +3701,14 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           loading="lazy"
           style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:rpt.id==="relatie_liefde"?"62% 85%":"center 40%",transform:rpt.id==="relatie_liefde"?"scale(1.25)":"none",transformOrigin:"62% 85%"}}
         />
-        <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.08) 0%,rgba(8,7,14,.35) 100%)"}}/>
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.08) 0%,rgba(8,7,14,.55) 100%)"}}/>
+        {rpt.id==="relatie_liefde"&&(
+          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:"0 40px 72px"}}>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.9rem,1.4vw,1.05rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.72)",letterSpacing:".03em",textAlign:"center",margin:0}}>
+              {LANG==="en"?"Seen, not constructed.":"Waargenomen, niet geconstrueerd."}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* ── EDITORIAL TESTIMONIALS ───────────────────────────────────────── */}
