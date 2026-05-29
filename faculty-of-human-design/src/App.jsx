@@ -11,7 +11,7 @@ const IMGS = {
   // ── Full-bleed section backgrounds ─────────────────────────────────
   hero:          "/img-meditation.jpg",
   ibiza:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  cosmos:        "https://images.unsplash.com/photo-1543722530-d2c3201371e7?w=2000&auto=format&fit=crop&q=82",
+  cosmos:        "/img-inzichten.jpg", // sla de linnenfoto op als public/img-inzichten.jpg
   origin:        "/img-ibiza-terrace.jpg",
   cta:           "/img-fabric.jpg",
 

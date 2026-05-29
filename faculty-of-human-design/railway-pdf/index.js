@@ -64,7 +64,7 @@ app.post("/pdf", async (req, res) => {
     const pdf = await page.pdf({
       format:          "A4",
       printBackground: true,
-      margin:          { top: "28mm", bottom: "10mm", left: "0mm", right: "0mm" },
+      margin:          { top: "36mm", bottom: "10mm", left: "0mm", right: "0mm" },
     });
 
     res.set("Content-Type", "application/pdf");
