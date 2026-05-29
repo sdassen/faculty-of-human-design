@@ -3673,7 +3673,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           alt=""
           aria-hidden="true"
           loading="lazy"
-          style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 40%"}}
+          style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:rpt.id==="relatie_liefde"?"62% 85%":"center 40%",transform:rpt.id==="relatie_liefde"?"scale(1.25)":"none",transformOrigin:"62% 85%"}}
         />
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.08) 0%,rgba(8,7,14,.35) 100%)"}}/>
       </div>
