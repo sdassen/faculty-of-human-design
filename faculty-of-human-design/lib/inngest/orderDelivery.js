@@ -1552,22 +1552,19 @@ export const orderDelivery = inngest.createFunction(
     const sections = [];
     const sectionTitles = enrichedOrderWithLessons.prompt_sections || [];
     const chartDebug = enrichedOrderWithLessons.birth_data?.chart || {};
-    // ── Quick API health check before generation ──────────────────────────
+    // ── List available models to find what's usable on this account ──────
     try {
-      const _tr = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
+      const _mr = await fetch("https://api.anthropic.com/v1/models", {
+        method: "GET",
         headers: {
-          "Content-Type": "application/json",
           "x-api-key": process.env.ANTHROPIC_API_KEY,
           "anthropic-version": "2023-06-01",
         },
-        body: JSON.stringify({ model: "claude-3-5-sonnet-20241022", max_tokens: 5, messages: [{ role: "user", content: "hi" }] }),
       });
-      const _tb = await _tr.text();
-      // Single error line — all info on one entry so Vercel can't hide it
-      console.error(`[APICHK] ${_tr.status}||${(process.env.ANTHROPIC_API_KEY||"MISSING").slice(0,15)}||${_tb.slice(0,180)}`);
-    } catch (_te) {
-      console.error(`[APICHK-EX] ${_te.message}`);
+      const _mb = await _mr.text();
+      console.error(`[MODELS] status=${_mr.status} body=${_mb.slice(0,400)}`);
+    } catch (_me) {
+      console.error(`[MODELS-EX] ${_me.message}`);
     }
     console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-5-sonnet-20241022`);
 
