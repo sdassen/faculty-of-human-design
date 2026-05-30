@@ -3487,8 +3487,8 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2rem)",fontWeight:300,color:"var(--text)",marginBottom:52,lineHeight:1.1}}>{LANG==="en"?"Questions":"Vragen"}</h2>
           {faqs.map(([q,a],i)=>(
             <div key={i} style={{borderTop:"1px solid var(--border)",padding:"22px 0"}}>
-              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,cursor:"pointer"}} onClick={()=>setFaq(faq===i?null:i)}>
-                <span style={{fontFamily:"var(--font-serif)",fontSize:".98rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{q}</span>
+              <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,cursor:"pointer",textAlign:"left"}} onClick={()=>setFaq(faq===i?null:i)}>
+                <span style={{fontFamily:"var(--font-serif)",fontSize:".98rem",fontWeight:300,color:"var(--text)",lineHeight:1.4,textAlign:"left"}}>{q}</span>
                 <span style={{fontFamily:"var(--font-sans)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,opacity:.6,transition:"transform .2s",transform:faq===i?"rotate(45deg)":"rotate(0)"}}>{faq===i?"×":"+"}</span>
               </div>
               {faq===i&&<p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,marginTop:16,paddingRight:32,textAlign:"left"}}>{a}</p>}
