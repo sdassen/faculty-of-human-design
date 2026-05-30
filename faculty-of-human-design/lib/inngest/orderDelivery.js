@@ -1542,6 +1542,36 @@ export const orderDelivery = inngest.createFunction(
       return { ...enrichedOrder, promptLessons: lessons };
     });
 
+    // ── Step 2.7: Validate Claude model is reachable ─────────────────────
+    // Fail fast before generating any sections. A 404 here means the model
+    // name is wrong for this Anthropic account — better to know now than to
+    // silently produce 12 empty sections and a blank PDF.
+    await step.run("validate-claude-model", async () => {
+      const MODEL = "claude-opus-4-8";
+      const res = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          max_tokens: 5,
+          messages: [{ role: "user", content: "ping" }],
+        }),
+      });
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(
+          `[validate-claude-model] Model "${MODEL}" not available on this account ` +
+          `(status=${res.status}). Fix the model name before any sections are generated. ` +
+          `API response: ${txt.slice(0, 300)}`
+        );
+      }
+      console.log(`[validate-claude-model] Model "${MODEL}" reachable ✓`);
+    });
+
     // ── Steps 3…N: Generate each section via Claude ────────────────────────
     // Each section is generated WITH:
     //   1. Canon ground-truth injection (centers/channels/gates/types/profiles)
