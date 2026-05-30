@@ -495,10 +495,13 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
 
 // ─── PAGE: PROFILE SUMMARY ────────────────────────────────────────────────────
 function buildProfilePage(order) {
-  const bd    = order.birth_data || {};
+  // For child reports, show the child's chart from partner_birth_data
+  const childReport = isChildReport(order);
+  const bd    = childReport ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
   const chart = bd.chart || {};
   const lang  = order.language || "nl";
   const ta    = typeAccent(chart.type);
+  const personName = childReport ? (bd.name || null) : null;
 
   const keyData = [
     chart.type    ? { label: ui(lang, "Type",        "Type"),        value: tvl(chart.type,    lang) } : null,
@@ -528,7 +531,7 @@ function buildProfilePage(order) {
   <div style="height:70mm;background:${ta.bg};position:relative;overflow:hidden;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:4px;background:${ta.bar};"></div>
     <div style="padding:20mm 20mm 0 24mm;">
-      <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.22em;opacity:0.7;text-transform:uppercase;margin-bottom:8px;">${ui(lang, "JOUW HUMAN DESIGN", "YOUR HUMAN DESIGN")}</div>
+      <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.22em;opacity:0.7;text-transform:uppercase;margin-bottom:8px;">${personName ? esc((lang === "en" ? "HUMAN DESIGN OF " : "HUMAN DESIGN VAN ") + personName.toUpperCase()) : ui(lang, "JOUW HUMAN DESIGN", "YOUR HUMAN DESIGN")}</div>
       <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32pt;font-weight:400;color:#FFFFFF;line-height:1.1;">${esc(tvl(chart.type, lang) || "")}</div>
       ${chart.profile ? `<div style="font-family:'Inter',sans-serif;font-size:9pt;font-weight:300;color:${ta.fg};opacity:0.75;margin-top:8px;">${ui(lang, "Profiel", "Profile")} ${esc(chart.profile)}</div>` : ""}
     </div>
@@ -550,13 +553,27 @@ function buildProfilePage(order) {
 // ─── PAGE: BODYGRAPH ──────────────────────────────────────────────────────────
 function buildBodygraphPage(svgBodygraph, order) {
   const lang = order.language || "nl";
+  const childReport = isChildReport(order);
+  const personName = childReport ? ((order.partner_birth_data || {}).name || null) : null;
+
+  const bgLabel = personName
+    ? (lang === "en" ? `BODYGRAPH OF ${personName.toUpperCase()}` : `BODYGRAPH VAN ${personName.toUpperCase()}`)
+    : (childReport
+        ? (lang === "en" ? `BODYGRAPH OF YOUR CHILD` : `BODYGRAPH VAN JE KIND`)
+        : ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH"));
+
+  const bgSubtitle = personName
+    ? (lang === "en" ? `The visual map of ${personName}'s design` : `Het visuele kaartwerk van het ontwerp van ${personName}`)
+    : (childReport
+        ? (lang === "en" ? `The visual map of your child's design` : `Het visuele kaartwerk van het ontwerp van je kind`)
+        : ui(lang, "Het visuele kaartwerk van jouw ontwerp", "The visual map of your design"));
 
   return `
 <div style="width:210mm;height:247mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;padding:0 20mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding-top:10px;margin-bottom:4px;">
-    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${ui(lang, "JOUW BODYGRAPH", "YOUR BODYGRAPH")}</div>
-    <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16pt;color:#1A1715;margin-top:3px;">${ui(lang, "Het visuele kaartwerk van jouw ontwerp", "The visual map of your design")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;">${esc(bgLabel)}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:16pt;color:#1A1715;margin-top:3px;">${esc(bgSubtitle)}</div>
     <div style="width:48px;height:1px;background:#C9A85C;margin-top:6px;"></div>
   </div>
   <div style="display:flex;justify-content:center;margin-top:4px;">
@@ -812,11 +829,15 @@ function buildSectionPages(section, idx, order) {
 
 // ─── PAGE: EXECUTIVE SUMMARY ─────────────────────────────────────────────────
 function buildExecutiveSummaryPage(order) {
-  const bd    = order.birth_data || {};
+  // For child reports, show the child's chart — parent's data is just context
+  const childReport = isChildReport(order);
+  const bd    = childReport ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
   const chart = bd.chart || {};
   const lang  = order.language || "nl";
   const ta    = typeAccent(chart.type);
   const isEN  = lang === "en";
+  // Label: "JOUW ONTWERP" for self, "ONTWERP VAN [name]" for child
+  const personName = childReport ? (bd.name || (isEN ? "your child" : "je kind")) : null;
 
   // Type taglines — short emotional framing per type
   const TYPE_TAGLINE = {
@@ -876,7 +897,7 @@ function buildExecutiveSummaryPage(order) {
   <div style="background:${ta.bg};position:relative;overflow:hidden;padding:14mm 20mm 12mm 24mm;">
     <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:${ta.bar};"></div>
     <div style="position:absolute;right:14mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:80pt;font-weight:400;color:${ta.fg};opacity:0.04;line-height:1;padding-top:4mm;white-space:nowrap;overflow:hidden;">HD</div>
-    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:${ta.fg};letter-spacing:0.28em;text-transform:uppercase;opacity:0.65;margin-bottom:8px;">${ui(lang, "JOUW ONTWERP", "YOUR DESIGN")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:${ta.fg};letter-spacing:0.28em;text-transform:uppercase;opacity:0.65;margin-bottom:8px;">${personName ? esc((isEN ? "DESIGN OF " : "ONTWERP VAN ") + personName.toUpperCase()) : ui(lang, "JOUW ONTWERP", "YOUR DESIGN")}</div>
     <div style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:36pt;color:#FFFFFF;line-height:1.1;letter-spacing:-0.01em;">${esc(tvl(chart.type, lang) || "")}</div>
     ${chart.profile ? `<div style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:${ta.fg};opacity:0.7;margin-top:6px;letter-spacing:0.06em;">${ui(lang, "Profiel", "Profile")} ${esc(chart.profile)}</div>` : ""}
     ${typeTagline ? `<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10pt;font-weight:300;color:#FFFFFF;opacity:0.45;margin-top:10px;max-width:140mm;line-height:1.5;">${esc(typeTagline)}</div>` : ""}
@@ -1076,12 +1097,14 @@ function isChildReport(order) {
 // ─── PAGE: GATE APPENDIX ──────────────────────────────────────────────────────
 function buildGateAppendixPage(order) {
   const lang  = order.language || "nl";
-  const chart = (order.birth_data || {}).chart || {};
+  // For child reports, the gate appendix shows the CHILD's gates (from partner_birth_data)
+  const childReport = isChildReport(order);
+  const chartSource = childReport ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
+  const chart = chartSource.chart || {};
   const gates = (chart.allGates || []).slice().sort(function(a, b) { return a - b; });
 
   if (!gates.length) return "";
 
-  const childReport = isChildReport(order);
   const childOverrides = CHILD_GATE_OVERRIDE[lang === "en" ? "en" : "nl"] || {};
 
   const headerLabel = ui(lang, "JOUW CHART", "YOUR CHART");
@@ -1127,12 +1150,22 @@ function buildGateAppendixPage(order) {
 }
 
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
-export function buildHTML({ order, sections, svgBodygraph }) {
+export function buildHTML({ order, sections, svgBodygraph, svgPartnerBodygraph }) {
   const lang = order.language || "nl";
   const bd = order.birth_data || {};
   const chart = bd.chart || {};
+  const childReport = isChildReport(order);
 
   const hasChart = chart.type && Array.isArray(chart.definedCenters);
+
+  // For child reports: profile/bodygraph/gate pages show the child's chart
+  const partnerBD = order.partner_birth_data || {};
+  const partnerChart = partnerBD.chart || {};
+  const hasPartnerChart = partnerChart.type && Array.isArray(partnerChart.definedCenters);
+  // Which chart has data for the profile/bodygraph pages
+  const hasProfileChart = childReport ? hasPartnerChart : hasChart;
+  // Which SVG to render on the bodygraph page
+  const profileSvg = childReport ? (svgPartnerBodygraph || svgBodygraph) : svgBodygraph;
 
   const bundledFonts = buildFontCSS();
   const fontBlock = bundledFonts
@@ -1182,12 +1215,12 @@ ${fontBlock}
 ${buildCoverPage(order)}
 ${buildIntroPage(order)}
 ${buildHowToReadPage(order)}
-${hasChart ? buildExecutiveSummaryPage(order) : ""}
+${hasProfileChart ? buildExecutiveSummaryPage(order) : ""}
 ${buildMethodologyPage(order)}
-${buildTOCPage(sections, order, hasChart, !!svgBodygraph)}
-${hasChart ? buildProfilePage(order) : ""}
-${hasChart && svgBodygraph ? buildBodygraphPage(svgBodygraph, order) : ""}
-${hasChart ? buildGateAppendixPage(order) : ""}
+${buildTOCPage(sections, order, hasProfileChart, !!profileSvg)}
+${hasProfileChart ? buildProfilePage(order) : ""}
+${hasProfileChart && profileSvg ? buildBodygraphPage(profileSvg, order) : ""}
+${hasProfileChart ? buildGateAppendixPage(order) : ""}
 ${sectionPagesWithTransition}
 ${buildClosingPage(order)}
 </body>

@@ -18,9 +18,18 @@ function getBodygraphSVG() {
 }
 
 export async function generatePDF({ order, sections }) {
+  const bodygraphSVG = getBodygraphSVG();
+
+  // Main (requester / parent) bodygraph
   const chart = (order.birth_data || {}).chart || {};
   const hasChart = chart.type && Array.isArray(chart.definedCenters);
-  const svgBodygraph = hasChart ? getBodygraphSVG()(chart) : null;
-  const html = buildHTML({ order, sections, svgBodygraph });
+  const svgBodygraph = hasChart ? bodygraphSVG(chart) : null;
+
+  // Partner / child bodygraph (used for child reports & relatie reports)
+  const partnerChart = (order.partner_birth_data || {}).chart || {};
+  const hasPartnerChart = partnerChart.type && Array.isArray(partnerChart.definedCenters);
+  const svgPartnerBodygraph = hasPartnerChart ? bodygraphSVG(partnerChart) : null;
+
+  const html = buildHTML({ order, sections, svgBodygraph, svgPartnerBodygraph });
   return renderPDF(html);
 }
