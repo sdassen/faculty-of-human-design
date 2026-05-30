@@ -2925,8 +2925,8 @@ function WatPage({go}){
   useSEO({
     title:isEN?"What is Human Design? — Numerology, Astrology & Self-Recognition":"Wat is Human Design? — Numerologie, Astrologie & Zelfherkenning",
     description:isEN?"Human Design, Numerology and Astrology as three lenses on the same person. Not to explain who you are — to recognise it.":"Human Design, Numerologie en Astrologie als drie lenzen op dezelfde persoon. Niet om uit te leggen wie je bent — maar om het te herkennen.",
-    canonical:SITE+(isEN?"/en/wat":"/wat"),
-    jsonLd:{"@context":"https://schema.org","@type":"WebPage","name":isEN?"What is Human Design?":"Wat is Human Design?","url":SITE+(isEN?"/en/wat":"/wat")}
+    canonical:SITE+(isEN?"/en/human-design":"/human-design"),
+    jsonLd:{"@context":"https://schema.org","@type":"WebPage","name":isEN?"What is Human Design?":"Wat is Human Design?","url":SITE+(isEN?"/en/human-design":"/human-design")}
   });
 
   return(
@@ -3111,7 +3111,7 @@ function RapportenPage({go}){
   useSEO({
     title:LANG==="en"?"Human Design Reports — Choose your personal analysis":"Human Design Rapporten — Kies je persoonlijke analyse",
     description:LANG==="en"?"Choose from 10 in-depth reports: Full Human Design, Relationship Report, Career, Year, Child, Numerology and Birth Horoscope. Personal and delivered within 1 business day. From €45.":"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
-    canonical:SITE+"/#rapporten",
+    canonical:SITE+"/readings",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
       "name":LANG==="en"?"Human Design Reports":"Human Design Rapporten",
@@ -3681,7 +3681,7 @@ function InzichtenPage({go,articleId}){
   useSEO(activeArticle ? {
     title: al(activeArticle,"title"),
     description: al(activeArticle,"excerpt") || al(activeArticle,"title") + (isEN?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
-    canonical: SITE + "/inzichten/" + String(activeArticle.id),
+    canonical: SITE + "/journal/" + String(activeArticle.id),
     jsonLd: {
       "@context":"https://schema.org","@type":"Article",
       "headline": activeArticle.title,
@@ -3694,7 +3694,7 @@ function InzichtenPage({go,articleId}){
   } : {
     title: isEN?"Insights on Human Design, Numerology & Astrology":"Inzichten over Human Design, Numerologie & Astrologie",
     description: isEN?"Articles on Human Design, Numerology and Astrology. Learn about Type, Strategy, Authority and the origin of Human Design on Ibiza.":"Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
-    canonical: SITE + "/inzichten",
+    canonical: SITE + "/journal",
     jsonLd: {
       "@context":"https://schema.org","@type":"Blog",
       "name":isEN?"Faculty of Human Design — Insights":"Faculty of Human Design — Inzichten",
@@ -3922,12 +3922,12 @@ function OverPage({go}){
   useSEO({
     title:isEN?"About — Faculty of Human Design":"Over — Faculty of Human Design",
     description:isEN?"Faculty of Human Design. Personalised blueprints based on Human Design, Numerology and Astrology. Founded on Ibiza.":"Faculty of Human Design. Persoonlijke blauwdrukken op basis van Human Design, Numerologie en Astrologie. Opgericht op Ibiza.",
-    canonical:SITE+(isEN?"/en/over":"/over"),
+    canonical:SITE+(isEN?"/en/philosophy":"/philosophy"),
     jsonLd:{
       "@context":"https://schema.org","@type":"AboutPage",
       "name":isEN?"About Faculty of Human Design":"Over Faculty of Human Design",
       "description":isEN?"Founded on Ibiza. Personalised reports based on Human Design, Numerology and Astrology.":"Opgericht op Ibiza. Persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
-      "url":SITE+(isEN?"/en/over":"/over"),
+      "url":SITE+(isEN?"/en/philosophy":"/philosophy"),
     }
   });
   return(
@@ -4508,7 +4508,10 @@ function DownloadPage({token}){
 }
 
 // ─── ROUTING HELPERS ─────────────────────────────────────────────────────────
-const ROUTABLE = new Set(["home","wat","rapporten","inzichten","over","contact","voorwaarden"]);
+const ROUTABLE = new Set(["home","human-design","readings","journal","philosophy","contact","voorwaarden","wat","rapporten","inzichten","over"]);
+
+// Map URL slug → internal page ID
+const SLUG_TO_PAGE = {"human-design":"wat","readings":"rapporten","journal":"inzichten","philosophy":"over","wat":"wat","rapporten":"rapporten","inzichten":"inzichten","over":"over"};
 
 function pathToPage(pathname) {
   // Strip language prefix first (/en/... → /...)
@@ -4516,10 +4519,13 @@ function pathToPage(pathname) {
   if (!p || p === "/") return "home";
   const rapportMatch = p.match(/^\/rapport\/(.+)$/);
   if (rapportMatch) return "rapport-" + rapportMatch[1];
+  const journalMatch = p.match(/^\/journal\/(.+)$/);
+  if (journalMatch) return "inzichten-" + journalMatch[1];
+  // keep old URL support for inzichten sub-pages
   const inzichtenMatch = p.match(/^\/inzichten\/(.+)$/);
   if (inzichtenMatch) return "inzichten-" + inzichtenMatch[1];
   const seg = p.replace(/^\//, "").replace(/\/$/, "");
-  if (ROUTABLE.has(seg)) return seg;
+  if (ROUTABLE.has(seg)) return SLUG_TO_PAGE[seg] || seg;
   return "home";
 }
 
@@ -4527,7 +4533,11 @@ function pageToPath(page) {
   const prefix = LANG === "en" ? "/en" : "";
   if (page === "home") return prefix + "/";
   if (page.startsWith("rapport-")) return prefix + "/rapport/" + page.slice("rapport-".length);
-  if (page.startsWith("inzichten-")) return prefix + "/inzichten/" + page.slice("inzichten-".length);
+  if (page.startsWith("inzichten-")) return prefix + "/journal/" + page.slice("inzichten-".length);
+  if (page === "wat") return prefix + "/human-design";
+  if (page === "rapporten") return prefix + "/readings";
+  if (page === "inzichten") return prefix + "/journal";
+  if (page === "over") return prefix + "/philosophy";
   return prefix + "/" + page;
 }
 
