@@ -1564,8 +1564,9 @@ export const orderDelivery = inngest.createFunction(
       const _mb = await _mr.text();
       try {
         const _mj = JSON.parse(_mb);
-        const _ids = (_mj.data || []).map((m) => m.id).join("|");
-        console.error(`[MODEL-IDS] ${_ids}`);
+        (_mj.data || []).slice(0, 8).forEach((m, i) => {
+          console.error(`[M${i}] ${m.id}`);
+        });
       } catch (_pe) {
         console.error(`[MODELS-RAW] status=${_mr.status} ${_mb.slice(0,200)}`);
       }
