@@ -1119,14 +1119,12 @@ function previousSectionsSummary(previousSections) {
 // ─── SINGLE CLAUDE CALL ───────────────────────────────────────────────────────
 async function callClaude(systemPrompt, userPrompt, { thinking = false } = {}) {
   const body = {
-    model: "claude-3-7-sonnet-20250219",
-    max_tokens: thinking ? 12000 : 2400,
+    model: "claude-3-5-sonnet-20241022",
+    max_tokens: 2400,
     system: systemPrompt,
     messages: [{ role: "user", content: userPrompt }],
   };
-  if (thinking) {
-    body.thinking = { type: "enabled", budget_tokens: 6000 };
-  }
+  // Extended thinking is not enabled (requires claude-3-7-sonnet which is plan-restricted)
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -1549,7 +1547,7 @@ export const orderDelivery = inngest.createFunction(
     //   1. Canon ground-truth injection (centers/channels/gates/types/profiles)
     //   2. Summary of previously written sections (avoids repetition)
     //   3. Quality scoring + up to 2 retries if score < threshold
-    //   4. Extended thinking for the key analytical sections
+    //   4. Quality scoring with claude-3-5-sonnet-20241022
     //   5. Structural lessons from all past admin revisions
     const sections = [];
     const sectionTitles = enrichedOrderWithLessons.prompt_sections || [];
@@ -1563,14 +1561,14 @@ export const orderDelivery = inngest.createFunction(
           "x-api-key": process.env.ANTHROPIC_API_KEY,
           "anthropic-version": "2023-06-01",
         },
-        body: JSON.stringify({ model: "claude-3-7-sonnet-20250219", max_tokens: 5, messages: [{ role: "user", content: "hi" }] }),
+        body: JSON.stringify({ model: "claude-3-5-sonnet-20241022", max_tokens: 5, messages: [{ role: "user", content: "hi" }] }),
       });
       const _tb = await _tr.text();
       console.log(`[API-TEST] status=${_tr.status} key=${(process.env.ANTHROPIC_API_KEY||"").slice(0,12)}... body=${_tb.slice(0,300)}`);
     } catch (_te) {
       console.error(`[API-TEST] fetch-exception: ${_te.message}`);
     }
-    console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-7-sonnet-20250219`);
+    console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-5-sonnet-20241022`);
 
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
