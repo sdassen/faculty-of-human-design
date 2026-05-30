@@ -1119,12 +1119,12 @@ function previousSectionsSummary(previousSections) {
 // ─── SINGLE CLAUDE CALL ───────────────────────────────────────────────────────
 async function callClaude(systemPrompt, userPrompt, { thinking = false } = {}) {
   const body = {
-    model: "claude-3-5-sonnet-20241022",
+    model: "claude-opus-4-8",
     max_tokens: 2400,
     system: systemPrompt,
     messages: [{ role: "user", content: userPrompt }],
   };
-  // Extended thinking is not enabled (requires claude-3-7-sonnet which is plan-restricted)
+  // Model: claude-opus-4-8 (only model available on this Anthropic account)
 
   const res = await fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
@@ -1547,33 +1547,9 @@ export const orderDelivery = inngest.createFunction(
     //   1. Canon ground-truth injection (centers/channels/gates/types/profiles)
     //   2. Summary of previously written sections (avoids repetition)
     //   3. Quality scoring + up to 2 retries if score < threshold
-    //   4. Quality scoring with claude-3-5-sonnet-20241022
-    //   5. Structural lessons from all past admin revisions
+    //   4. Structural lessons from all past admin revisions
     const sections = [];
     const sectionTitles = enrichedOrderWithLessons.prompt_sections || [];
-    const chartDebug = enrichedOrderWithLessons.birth_data?.chart || {};
-    // ── List available models to find what's usable on this account ──────
-    try {
-      const _mr = await fetch("https://api.anthropic.com/v1/models", {
-        method: "GET",
-        headers: {
-          "x-api-key": process.env.ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01",
-        },
-      });
-      const _mb = await _mr.text();
-      try {
-        const _mj = JSON.parse(_mb);
-        (_mj.data || []).slice(0, 8).forEach((m, i) => {
-          console.error(`[M${i}] ${m.id}`);
-        });
-      } catch (_pe) {
-        console.error(`[MODELS-RAW] status=${_mr.status} ${_mb.slice(0,200)}`);
-      }
-    } catch (_me) {
-      console.error(`[MODELS-EX] ${_me.message}`);
-    }
-    console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-5-sonnet-20241022`);
 
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
