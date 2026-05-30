@@ -4205,8 +4205,8 @@ function OverPage({go}){
         <div style={{maxWidth:460,margin:"0 auto"}}>
           <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.2rem,2.2vw,1.55rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.72,letterSpacing:"-.01em",margin:"0 0 56px",whiteSpace:"pre-line"}}>
             {isEN
-              ? "FacultyHD is not built\naround certainty.\n\nIt is built around recognition."
-              : "FacultyHD is niet gebouwd\nrond zekerheid.\n\nHet is gebouwd rond herkenning."}
+              ? "Faculty of Human Design is not built\naround certainty.\n\nIt is built around recognition."
+              : "Faculty of Human Design is niet gebouwd\nrond zekerheid.\n\nHet is gebouwd rond herkenning."}
           </p>
           <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto",opacity:.28}}/>
         </div>
