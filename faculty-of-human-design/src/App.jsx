@@ -408,6 +408,9 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .stats-2x2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 /* Over-ons stats row */
 .over-stats { display:flex; gap:40px; flex-wrap:wrap; }
+/* Checkout button spinner */
+@keyframes spin { to { transform: rotate(360deg); } }
+.btn-spinner { display:inline-block; width:13px; height:13px; border:1.5px solid currentColor; border-top-color:transparent; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:9px; opacity:.7; }
 /* Inzichten category section header */
 .inzichten-cat-header { margin-bottom:56px; text-align:center; }
 .inzichten-cat-header .cat-divider { width:28px; height:1px; background:var(--gold); margin:0 auto 20px; opacity:.6; }
@@ -2366,7 +2369,8 @@ function ReportForm({rpt,onDone,postPayment}){
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
-  const[loading,setLoading]=useState(false);const[autoTrigger,setAutoTrigger]=useState(false);useEffect(()=>{if(!postPayment)return;setChart(postPayment.chart);setForm(f=>({...f,...postPayment.form}));setAutoTrigger(true);},[postPayment]);useEffect(()=>{if(autoTrigger&&chart){setAutoTrigger(false);doReport();}},[autoTrigger,chart]);
+  const[loading,setLoading]=useState(false);
+  const[stripeLoading,setStripeLoading]=useState(false);const[autoTrigger,setAutoTrigger]=useState(false);useEffect(()=>{if(!postPayment)return;setChart(postPayment.chart);setForm(f=>({...f,...postPayment.form}));setAutoTrigger(true);},[postPayment]);useEffect(()=>{if(autoTrigger&&chart){setAutoTrigger(false);doReport();}},[autoTrigger,chart]);
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   // Clamp numeric fields on blur to prevent invalid values (e.g. minute=66, day=44)
   const numBlur=(name,min,max)=>e=>{
@@ -2735,11 +2739,23 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                   :"Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
               </p>
               <button
-                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:"pointer",transition:"all .3s ease",display:"inline-block"}}
-                onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
-                onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
-                onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}
-              >{rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading")}</button>
+                disabled={stripeLoading}
+                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",display:"inline-flex",alignItems:"center",justifyContent:"center",opacity:stripeLoading?.7:1}}
+                onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+                onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+                onClick={async()=>{
+                  if(stripeLoading)return;
+                  setStripeLoading(true);
+                  track("checkout_started",{report:rpt.id,price:rpt.priceNum});
+                  try{ await goToStripe(rpt.id,chart,form); }
+                  finally{ setStripeLoading(false); }
+                }}
+              >
+                {stripeLoading&&<span className="btn-spinner"/>}
+                {stripeLoading
+                  ?(LANG==="en"?"Redirecting…":"Doorsturen…")
+                  :(rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading"))}
+              </button>
               <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
             </div>
           </div>
