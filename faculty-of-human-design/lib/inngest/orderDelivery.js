@@ -1140,6 +1140,8 @@ async function callClaude(systemPrompt, userPrompt, { thinking = false } = {}) {
 
   if (!res.ok) {
     const txt = await res.text();
+    // Explicit separate log so status + body are always visible in Vercel logs
+    console.error(`[ANTHROPIC-ERROR] status=${res.status} key_set=${!!process.env.ANTHROPIC_API_KEY} model=${body.model} body=${txt.slice(0, 400)}`);
     throw new Error(`Anthropic API error ${res.status}: ${txt.slice(0, 200)}`);
   }
 
@@ -1551,6 +1553,8 @@ export const orderDelivery = inngest.createFunction(
     //   5. Structural lessons from all past admin revisions
     const sections = [];
     const sectionTitles = enrichedOrderWithLessons.prompt_sections || [];
+    const chartDebug = enrichedOrderWithLessons.birth_data?.chart || {};
+    console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-7-sonnet-20250219`);
 
     for (let i = 0; i < sectionTitles.length; i++) {
       const title = sectionTitles[i];
