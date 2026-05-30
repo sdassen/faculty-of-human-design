@@ -2920,438 +2920,182 @@ function HomePage({go}){
 }
 
 function WatPage({go}){
-  const[faq,setFaq]=useState(null);
-  const[tab,setTab]=useState("hd");
-
-  const TYPES=LANG==="en"?[
-    ["Generator","37%","Wait to respond","Satisfaction","Frustration","The primary energy source of the world. Generators are designed to respond to external impulses — not to initiate. When a Generator acts from a genuine sacral response (an instinctive 'yes' or 'no' from the body), energy flows effortlessly. Acting from others' expectations or from the mind leads to frustration and energy drain."],
-    ["Manifesting Generator","33%","Inform, then respond","Satisfaction & Peace","Frustration & Anger","Fast, versatile and multi-dimensional. Manifesting Generators can do multiple things at once and jump non-linearly from step to step. That is not a lack of focus — it is their design. They inform others before acting, then respond to the sacral response, and move at lightning speed. Guilt about 'not finishing' does not fit this type."],
-    ["Projector","20%","Wait for the invitation","Success","Bitterness","Born to lead, guide and optimise systems — but only when invited. Projectors have a sharp ability to see through others and situations. Without an invitation their insight meets resistance; with an invitation they can make transformative impact. Their challenge: learning to wait and knowing themselves well before the invitation arrives."],
-    ["Manifestor","9%","Inform before acting","Peace","Anger","The only type that can naturally take initiative without first responding or waiting. Manifestors have a closed, compact aura that keeps others at a distance — which can cause resistance. By informing others about what they are about to do (not to ask permission, but to reduce resistance) their energy flows most powerfully."],
-    ["Reflector","1%","Wait a lunar cycle","Surprise","Disappointment","The rarest and most unique type. Reflectors have no fixed definition — they are a mirror for the people and environments around them. They experience the world by absorbing and reflecting back the energies of others. Major decisions require a full lunar cycle of 28 days to feel all perspectives."],
-  ]:[
-    ["Generator","37%","Wacht om te reageren","Bevrediging","Frustratie","De primaire energiebron van de wereld. Generators zijn ontworpen om te reageren op impulsen van buitenaf — niet om te initiëren. Wanneer een Generator handelt vanuit een echte sacrale respons (een instinctief 'ja' of 'nee' vanuit het lichaam), stroomt energie moeiteloos. Handelt hij vanuit de verwachting van anderen of vanuit het hoofd, dan volgt frustratie en energieverlies."],
-    ["Manifesting Generator","33%","Informeer, reageer dan","Bevrediging & Vrede","Frustratie & Woede","Snel, veelzijdig en multidimensionaal. Manifesting Generators kunnen meerdere dingen tegelijk en springen niet-lineair van stap naar stap. Dat is geen gebrek aan focus — het is hun design. Ze informeren andere mensen voor ze handelen, reageren dan op de sacrale respons, en bewegen razendsnel. Schuldgevoel over 'niet afmaken' past niet bij dit type."],
-    ["Projector","20%","Wacht op de uitnodiging","Succes","Bitterheid","Geboren om te leiden, te begeleiden en systemen te optimaliseren — maar alleen wanneer uitgenodigd. Projectors hebben een scherp vermogen om anderen en situaties te doorgronden. Zonder uitnodiging leidt hun inzicht tot weerstand; met uitnodiging kunnen ze transformatieve impact maken. Hun uitdaging: leren wachten en zichzelf goed kennen voor de uitnodiging komt."],
-    ["Manifestor","9%","Informeer voor je handelt","Vrede","Woede","Het enige type dat van nature initiatief kan nemen zonder eerst te reageren of te wachten. Manifestors hebben een gesloten, compacte aura die anderen op afstand houdt — wat kan leiden tot weerstand. Door anderen te informeren over wat ze gaan doen (niet om toestemming te vragen, maar om weerstand te verminderen) stroomt hun energie het krachtigst."],
-    ["Reflector","1%","Wacht een maancyclus","Verrassing","Teleurstelling","De zeldzaamste en meest bijzondere type. Reflectors hebben geen vaste definitie — ze zijn een spiegel voor de mensen en omgevingen om hen heen. Ze ervaren de wereld door de energieën van anderen te absorberen en terug te reflecteren. Grote beslissingen vergen een volledige maancyclus van 28 dagen om alle perspectieven te doorvoelen."],
-  ];
-
-  const AUTHORITIES=LANG==="en"?[
-    ["Emotional","Solar Plexus defined","Never make decisions in the moment. Wait for emotional clarity — that can take hours, sometimes days. 'Sleep on it' is literally the best advice for this type."],
-    ["Sacral","Sacral center defined, Solar Plexus open","Speaks through the body: an instinctive 'uh-huh' or 'unh-unh'. Test decisions through direct yes/no questions and listen to the bodily response, not the mind."],
-    ["Splenic","Spleen defined, above open","The quietest authority. Speaks once, in the moment. A soft whisper of instinct — trust that first signal, even if you cannot easily explain it."],
-    ["Ego / Heart","Heart center defined","Speaks through will and desire. The central question: 'Do I really want this?' Not what others expect, but what you choose from your deepest will."],
-    ["G / Self","G-center defined","Finds clarity by speaking aloud with someone you trust — not for advice, but to hear your own voice and feel what is right."],
-    ["Mental","Ajna defined, all motor centers open","Exclusive to certain Projectors. Calibrates through conversation and external reflection. Needs trusted people as sounding boards."],
-    ["Lunar","Reflectors","Needs a full lunar cycle of 28 days to feel the energy of a decision through all conditions."],
-  ]:[
-    ["Emotioneel","Solar Plexus gedefinieerd","Neem nooit beslissingen in het moment. Wacht op emotionele helderheid — dat kan uren, soms dagen duren. 'Slaap er eens een nacht over' is voor dit type letterlijk het beste advies."],
-    ["Sacraal","Sacraalcentrum gedefinieerd, Solar Plexus open","Spreekt via het lichaam: een instinctief 'uh-huh' of 'unh-unh'. Test beslissingen via directe ja/nee-vragen en luister naar de lichamelijke respons, niet naar het hoofd."],
-    ["Splenisch","Milt gedefinieerd, bovenstaande open","De stilste autoriteit. Spreekt eenmalig, in het moment. Een zachte fluistering van instinct — vertrouw dat eerste signaal, ook al kun je het moeilijk verklaren."],
-    ["Ego / Hart","Hartcentrum gedefinieerd","Spreekt via wil en verlangen. De centrale vraag: 'Wil ik dit echt?' Niet wat anderen verwachten, maar wat jij vanuit je diepste wil kiest."],
-    ["G / Zelf","G-centrum gedefinieerd","Vindt helderheid door hardop te spreken met iemand die je vertrouwt — niet voor advies, maar om je eigen stem te horen en te voelen wat klopt."],
-    ["Mentaal","Ajna gedefinieerd, alle motorcentra open","Exclusief voor bepaalde Projectors. Kalibreert via gesprek en externe reflectie. Heeft vertrouwde mensen nodig als klankbord."],
-    ["Lunair","Reflectors","Heeft een volledige maancyclus van 28 dagen nodig om de energie van een beslissing door alle condities heen te voelen."],
-  ];
-
-  const NUM_KERNGETALLEN=LANG==="en"?[
-    ["Life Path Number","Calculated from date of birth","The thread running through your life — your central life lessons and the direction in which you naturally grow. The most fundamental number in your numerological profile."],
-    ["Expression Number","Calculated from full name","How you express your talents and gifts in the world. Describes your best contribution to others and to your work."],
-    ["Soul Number","Vowels in your name","What your deepest self desires — the inner motivation that is not always visible to the outside world but that strongly influences your choices."],
-    ["Personality Number","Consonants in your name","How others see and experience you. The impression you make, the facade you carry."],
-    ["Personal Year","Date of birth + current year","Each year has a different energetic quality. The personal year helps you understand which themes are central and when action or rest is appropriate."],
-    ["Maturity Number","Life Path + Expression","The number that increasingly influences the second half of your life — the destination toward which you are growing."],
-  ]:[
-    ["Levenspadgetal","Berekend uit geboortedatum","De rode draad van je leven — je centrale levenslessen en de richting waarin je van nature groeit. Het meest fundamentele getal in je numerologisch profiel."],
-    ["Uitdrukkingsgetal","Berekend uit volledige naam","Hoe jij je talenten en gaven uitdrukt in de wereld. Beschrijft je beste bijdrage aan anderen en aan je werk."],
-    ["Zielsgetal","Klinkers in je naam","Wat je diepste zelf verlangt — de innerlijke motivatie die niet altijd zichtbaar is voor de buitenwereld maar die je keuzes sterk beïnvloedt."],
-    ["Persoonlijkheidsgetal","Medeklinkers in je naam","Hoe anderen jou zien en ervaren. De indruk die je maakt, de façade die je draagt."],
-    ["Persoonlijk jaar","Geboortedatum + huidig jaar","Elk jaar heeft een andere energetische kwaliteit. Het persoonlijk jaar helpt je begrijpen welke thema's centraal staan en wanneer actie of rust past."],
-    ["Rijpingsgetal","Levenspad + Uitdrukking","Het getal dat je tweede helft van het leven steeds meer beïnvloedt — de bestemming waar je naartoe groeit."],
-  ];
-
-  const ASTRO_LAGEN=LANG==="en"?[
-    ["Sun — your conscious core","Your sun sign describes the core of your conscious self: how you experience and express your identity. It is the most well-known layer, but only one of ten."],
-    ["Ascendant — your first impression","The sign rising on the eastern horizon at your birth hour. Describes how you approach the world and how others first experience you."],
-    ["Moon — your emotional world","The planet of your inner life, your habitual patterns and your need for security. The Moon tells you what you need to feel emotionally at home."],
-    ["Mercury — thinking and communicating","How you think, process information and communicate. Essential for understanding your learning and communication style."],
-    ["Venus — love and values","What attracts you and what you find attractive in relationships, art and material things. Gives insight into how you give and receive love."],
-    ["Midheaven — your calling","The highest point of your chart describes your professional destination, your public role and what you want to contribute to the world."],
-  ]:[
-    ["Zon — je bewuste kern","Je zonneteken beschrijft de kern van je bewuste zelf: hoe je je identiteit beleeft en uitdrukt. Het is de meest bekende laag, maar slechts één van de tien."],
-    ["Ascendant — je eerste indruk","Het teken dat op je geboorteuur opkwam aan de oostelijke horizon. Beschrijft hoe je de wereld benadert en hoe anderen je als eerste ervaren."],
-    ["Maan — je emotionele wereld","De planeet van je binnenste leven, je gewoontepatronen en je behoefte aan veiligheid. De Maan vertelt wat je nodig hebt om je emotioneel thuis te voelen."],
-    ["Mercurius — denken en communiceren","Hoe je denkt, informatie verwerkt en communiceert. Essentieel voor het begrijpen van je leer- en communicatiestijl."],
-    ["Venus — liefde en waarden","Wat je aantrekt en aantrekkelijk vindt in relaties, kunst en materiële dingen. Geeft inzicht in hoe je liefde geeft en ontvangt."],
-    ["Midhemel — je roeping","Het hoogste punt van je chart beschrijft je professionele bestemming, je publieke rol en wat je wil bijdragen aan de wereld."],
-  ];
-
-  const COMBO=LANG==="en"?[
-    ["Human Design","Energetic blueprint","Who you are at the level of energy and mechanisms. How you make decisions, how you live with others, what conditioning is and what is authentic.","✦"],
-    ["Numerology","Life lessons and patterns","Which themes run through your life, which talents you carry from your name and birth date, and which beliefs you need to overcome.","∞"],
-    ["Astrology","Timing and context","How planetary cycles colour the atmosphere of your life — from the character traits in your birth horoscope to the themes of a specific year.","☽"],
-  ]:[
-    ["Human Design","Energetische blauwdruk","Wie je bent op het niveau van energie en mechanismen. Hoe je beslissingen neemt, hoe je leeft met anderen, wat conditionering is en wat authentiek.","✦"],
-    ["Numerologie","Levenslessen en patronen","Welke thema's door je leven heen lopen, welke talenten je meedraagt vanuit je naam en geboortedatum, en welke overtuigingen je te overwinnen hebt.","∞"],
-    ["Astrologie","Timing en context","Hoe planetaire cycli de sfeer van je leven kleuren — van de karaktereigenschappen in je geboortehoroscoop tot de thema's van een specifiek jaar.","☽"],
-  ];
-
-  const faqs=LANG==="en"?[
-    ["What is the basis for calculating a Human Design chart?","All HD charts are calculated using the Meeus ephemeris — the same astronomical algorithms as professional astronomical software. The calculation requires your exact date of birth, time of birth and place of birth."],
-    ["Is Human Design the same as a horoscope?","No. A horoscope works primarily with your sun sign and planetary positions at the time of your birth. Human Design uses that same astronomical data but combines it with the I Ching, the Kabbalistic Tree of Life and quantum physics principles into a fundamentally different system."],
-    ["What if I don't know my birth time?","The birth time affects some centers and your profile. Check your birth certificate for the most accurate calculation. Without an exact time, Type and Authority are usually still correct."],
-    ["Does a Numerology report differ from a Human Design report?","Yes, fundamentally. Numerology works with the numerical values of your name and birth date and describes life lessons, patterns and talents. Human Design works with planetary positions and describes your energetic mechanisms. Both are completely different disciplines that complement each other."],
-    ["What does a birth horoscope add to Human Design?","A birth horoscope goes deeper into planetary qualities, aspects and houses that are less central in Human Design. Where HD describes your energetic mechanism, the horoscope describes the qualities of your planetary placements — your Mercury, your Venus, your Moon — as additional layers."],
-    ["How quickly will I receive my blueprint?","Your personalised digital blueprint is fully assembled within 3 to 4 minutes based on your chart — and immediately available as a PDF."],
-    ["Is it a personal document or a template?","Every blueprint is fully customised based on your specific chart. No two blueprints are identical."],
-  ]:[
-    ["Op basis waarvan wordt de Human Design chart berekend?","Alle HD charts worden berekend met de Meeus ephemeris — dezelfde astronomische algoritmen als professionele astronomische software. De berekening vereist je exacte geboortedatum, geboortetijd en geboorteplaats."],
-    ["Is Human Design hetzelfde als een horoscoop?","Nee. Een horoscoop werkt primair met je zonneteken en planeetposities op je geboortemoment. Human Design gebruikt diezelfde astronomische data maar combineert deze met de I Ching, de Kabbalistische levensboom en kwantumfysische principes tot een fundamenteel ander systeem."],
-    ["Wat als ik mijn geboortetijd niet weet?","De geboortetijd beïnvloedt sommige centra en je profiel. Controleer je geboorteakte voor de meest nauwkeurige berekening. Zonder exacte tijd zijn Type en Autoriteit in de meeste gevallen nog steeds correct."],
-    ["Verschilt een Numerologie rapport van een Human Design rapport?","Ja, fundamenteel. Numerologie werkt met de numerieke waarden van je naam en geboortedatum en beschrijft levenslessen, patronen en talenten. Human Design werkt met planetaire posities en beschrijft je energetische mechanismen. Beide zijn volledig verschillende disciplines die elkaar aanvullen."],
-    ["Wat voegt een geboortehoroscoop toe aan Human Design?","Een geboortehoroscoop gaat dieper in op planetaire kwaliteiten, aspecten en huizen die in Human Design minder centraal staan. Waar HD je energetisch mechanisme beschrijft, beschrijft de horoscoop de kwaliteiten van je planetaire bezetting — je Mercurius, je Venus, je Maan — als aanvullende lagen."],
-    ["Hoe snel ontvang ik mijn blauwdruk?","Je gepersonaliseerde digitale blauwdruk is binnen 3 tot 4 minuten volledig samengesteld op basis van jouw chart — en direct beschikbaar als PDF."],
-    ["Is het een persoonlijk document of een template?","Elke blauwdruk wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee blauwdrukken zijn identiek."],
-  ];
-
-  const TabBtn=({id,label})=>(
-    <button onClick={()=>setTab(id)} style={{
-      padding:"11px 22px",border:"none",cursor:"pointer",fontFamily:"var(--font-sans)",
-      fontSize:".78rem",fontWeight:tab===id?500:300,letterSpacing:".06em",textTransform:"uppercase",
-      whiteSpace:"nowrap",flexShrink:0,
-      color:tab===id?"var(--brand)":"var(--text-muted)",
-      background:tab===id?"white":"transparent",
-      borderBottom:tab===id?"2px solid var(--brand)":"2px solid transparent",
-      transition:"all 200ms",
-    }}>{label}</button>
-  );
+  const isEN=LANG==="en";
 
   useSEO({
-    title:LANG==="en"?"What is Human Design? — Types, Authority & Numerology Explained":"Wat is Human Design? — Uitleg Typen, Autoriteit & Numerologie",
-    description:LANG==="en"?"Everything about Human Design, Numerology and Astrology. Learn the five types, inner authority, the nine centres and how the three disciplines connect. With in-depth background information.":"Alles over Human Design, Numerologie en Astrologie. Leer de vijf typen, innerlijke autoriteit, de negen centra en hoe de drie disciplines samenhangen. Met diepgaande achtergrondinformatie.",
-    canonical:SITE+"/#wat",
-    jsonLd: faqLD(faqs)
+    title:isEN?"What is Human Design? — Numerology, Astrology & Self-Recognition":"Wat is Human Design? — Numerologie, Astrologie & Zelfherkenning",
+    description:isEN?"Human Design, Numerology and Astrology as three lenses on the same person. Not to explain who you are — to recognise it.":"Human Design, Numerologie en Astrologie als drie lenzen op dezelfde persoon. Niet om uit te leggen wie je bent — maar om het te herkennen.",
+    canonical:SITE+(isEN?"/en/wat":"/wat"),
+    jsonLd:{"@context":"https://schema.org","@type":"WebPage","name":isEN?"What is Human Design?":"Wat is Human Design?","url":SITE+(isEN?"/en/wat":"/wat")}
   });
 
   return(
     <div className="pg">
 
-      {/* ── HERO ─────────────────────────────────────────────────────────── */}
-      <div className="origin-section" style={{minHeight:400}}>
-        <div className="origin-section-bg">
-          <img src={IMGS.hero} alt="Sterrenhemel" loading="eager"/>
-        </div>
-        <div className="page-hero-pad">
-          <div className="label-light" style={{marginBottom:14}}>{t("wat.eyebrow")}</div>
-          <h1 className="h1" style={{color:"white",marginBottom:18,maxWidth:620}}>Human Design,<br/>{LANG==="en"?"Numerology & Astrology":"Numerologie & Astrologie"}</h1>
-          <p style={{fontSize:"1.05rem",fontWeight:300,color:"rgba(255,255,255,.5)",maxWidth:540,lineHeight:1.82,marginBottom:32}}>{t("wat.sub")}</p>
-          <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("hd")}>Human Design</button>
-            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("num")}>{t("wat.tabNum")}</button>
-            <button className="btn btn-ghost btn-sm" onClick={()=>setTab("astro")}>{t("wat.tabAstro")}</button>
-          </div>
-        </div>
-      </div>
-
-      {/* ── TAB NAVIGATION ───────────────────────────────────────────────── */}
-      <div style={{background:"white",borderBottom:"1px solid var(--border)",position:"sticky",top:72,zIndex:100}}>
-        <div className="tab-scroll">
-          <div style={{maxWidth:1240,margin:"0 auto",display:"flex",gap:0,minWidth:"max-content"}}>
-            <TabBtn id="hd" label="Human Design"/>
-            <TabBtn id="num" label={t("wat.tabNum")}/>
-            <TabBtn id="astro" label={t("wat.tabAstro")}/>
-            <TabBtn id="combo" label={t("wat.tabCombo")}/>
-          </div>
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* TAB: HUMAN DESIGN                                                 */}
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {tab==="hd"&&<>
-
-        {/* Intro */}
-        <section className="section bg-white">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.hdIntroLabel")}</div>
-            <h2 className="h2" style={{marginBottom:22}}>{t("wat.hdIntroTitle")}</h2>
-            <p className="body-lg" style={{marginBottom:18}}>{t("wat.hdIntroBody1")}</p>
-            <p className="body-md" style={{marginBottom:32}}>{t("wat.hdIntroBody2")}</p>
-            <div className="grid-2" style={{gap:20}}>
-              {(LANG==="en"?[
-                ["I Ching","The 64 hexagrams of the Chinese I Ching form the backbone. Each hexagram corresponds to one of the 64 gates in your chart and describes a specific quality of consciousness or energy."],
-                ["Kabbalah","The Sefirot of the Jewish Kabbalah — the Tree of Life — provides the structure of the nine energy centers and their interconnections via 36 channels."],
-                ["Astrology","The positions of the planets on your birth day and your Design date activate specific gates in your chart. Without astronomical precision there is no accurate calculation."],
-                ["Quantum physics","The centers correspond to endocrine glands and neutrino streams. Ra Uru Hu used the discovery of the neutrino as the scientific foundation for information transfer."],
-              ]:[
-                ["I Ching","De 64 hexagrammen van de Chinese I Ching vormen de ruggengraat. Elk hexagram correspondeert met een van de 64 poorten in je chart en beschrijft een specifieke kwaliteit van bewustzijn of energie."],
-                ["Kabbalah","De Sefirot van de Joodse Kabbala — de levensboom — levert de structuur van de negen energiecentra en hun onderlinge verbindingen via 36 kanalen."],
-                ["Astrologie","De posities van de planeten op je geboortedag en je Design datum activeren specifieke poorten in je chart. Zonder astronomische precisie geen nauwkeurige berekening."],
-                ["Kwantumfysica","De centra corresponderen met hormoonklieren en neutrino-stromen. Ra Uru Hu gebruikte de ontdekking van het neutrino als wetenschappelijk fundament voor informatieoverdracht."],
-              ]).map(([t,d])=>(
-                <div key={t} style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"24px 28px",borderLeft:"3px solid var(--brand)"}}>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:400,color:"var(--text)",marginBottom:8}}>{t}</div>
-                  <p className="body-sm">{d}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Types */}
-        <section className="section bg-muted">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.hdTypesLabel")}</div>
-            <h2 className="h2" style={{marginBottom:8}}>{t("wat.hdTypesTitle")}</h2>
-            <p className="body-md" style={{marginBottom:36}}>{t("wat.hdTypesSub")}</p>
-            {TYPES.map(([typeName,pct,strat,sig,notSelf,desc])=>(
-              <div key={typeName} style={{borderBottom:"1px solid var(--border)",padding:"28px 0"}}>
-                <div className="split-row-lg">
-                  <div>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:5}}>{typeName}</div>
-                    <div style={{fontSize:".62rem",fontWeight:600,color:"var(--gold)",letterSpacing:".1em",textTransform:"uppercase",marginBottom:10}}>{t("wat.hdTypesPopulation",{pct})}</div>
-                    <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"var(--brand)"}}>{t("wat.hdTypesStrategy")}</span>{strat}</div>
-                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"var(--brand)"}}>{t("wat.hdTypesSignature")}</span>{sig}</div>
-                      <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)"}}><span style={{fontWeight:500,color:"#C05252"}}>{t("wat.hdTypesNotSelf")}</span>{notSelf}</div>
-                    </div>
-                  </div>
-                  <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
-                </div>
-              </div>
-            ))}
-            <div style={{marginTop:36,display:"flex",gap:14,flexWrap:"wrap"}}>
-              <button className="btn btn-primary" onClick={()=>go("rapport-volledig")}>{t("wat.hdTypesCta")}</button>
-              <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("wat.hdTypesAllReports")}</button>
-            </div>
-          </div>
-        </section>
-
-        {/* Autoriteit */}
-        <section className="section bg-white">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.hdAuthLabel")}</div>
-            <h2 className="h2" style={{marginBottom:12}}>{t("wat.hdAuthTitle")}</h2>
-            <p className="body-lg" style={{marginBottom:36}}>{t("wat.hdAuthBody")}</p>
-            <div style={{display:"flex",flexDirection:"column",gap:0}}>
-              {AUTHORITIES.map(([name,condition,desc],i)=>(
-                <div key={name} className="split-row">
-                  <div>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:4}}>{name}</div>
-                    <div style={{fontSize:".6rem",fontWeight:500,color:"var(--gold)",letterSpacing:".08em",textTransform:"uppercase",lineHeight:1.5}}>{condition}</div>
-                  </div>
-                  <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Centra kort */}
-        <section className="section bg-muted">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.hdCentersLabel")}</div>
-            <h2 className="h2" style={{marginBottom:12}}>{t("wat.hdCentersTitle")}</h2>
-            <p className="body-lg" style={{marginBottom:28}}>{t("wat.hdCentersBody")}</p>
-            <div className="grid-4" style={{gap:16}}>
-              {(LANG==="en"?[["Head","Inspiration and mental pressure"],["Ajna","Conceptualisation and certainty"],["Throat","Communication and manifestation"],["G/Self","Identity, love and direction"],["Heart/Ego","Will, ego and material success"],["Sacral","Life energy and reproduction"],["Solar Plexus","Emotions and the spiritual wave"],["Spleen","Instinct, health and wellbeing"],["Root","Adrenaline rush and pressure"]]:[["Hoofd","Inspiratie en mentale druk"],["Ajna","Conceptualisering en zekerheid"],["Keel","Communicatie en manifestatie"],["G/Zelf","Identiteit, liefde en richting"],["Hart/Ego","Wil, ego en materieel succes"],["Sacraal","Levensenergie en voortplanting"],["Solar Plexus","Emoties en spirituele golf"],["Milt","Instinct, gezondheid en welzijn"],["Wortel","Adrenalinerush en druk"]]).map(([c,d])=>(
-                <div key={c} style={{background:"white",border:"1px solid var(--border)",borderRadius:"var(--radius-md)",padding:"18px 20px"}}>
-                  <div style={{fontSize:".58rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:4}}>{c}</div>
-                  <div style={{fontSize:".85rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.6}}>{d}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-      </>}
-
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* TAB: NUMEROLOGIE                                                  */}
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {tab==="num"&&<>
-
-        <section className="section bg-white">
-          <div className="container">
-            <div className="two-col-lg">
-              <div>
-                <div className="label" style={{marginBottom:14}}>{t("wat.numIntroLabel")}</div>
-                <h2 className="h2" style={{marginBottom:22}}>{t("wat.numIntroTitle")}</h2>
-                <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Numerology is an ancient system based on the idea that numbers carry not only quantities but also qualities. Every letter of the alphabet has a numerical value. Every day has a number. And those numbers reveal — when correctly calculated — patterns that run through your life.":"Numerologie is een eeuwenoud systeem dat ervan uitgaat dat getallen niet alleen hoeveelheden zijn maar ook kwaliteiten dragen. Elke letter van het alfabet heeft een numerieke waarde. Elke dag heeft een getal. En die getallen onthullen — wanneer je ze juist berekent — patronen die door je leven heen lopen."}</p>
-                <p className="body-md" style={{marginBottom:18}}>{LANG==="en"?"The most widely used system is Pythagorean numerology, named after Pythagoras of Samos (c. 570–495 BC), who considered number to be the fundamental reality of the universe. The system works with the nine base digits 1–9 and three special Master Numbers: 11, 22 and 33.":"Het meest gebruikte systeem is de Pythagoreïsche numerologie, vernoemd naar Pythagoras van Samos (ca. 570–495 v.Chr.), die het getal beschouwde als de fundamentele realiteit van het universum. Het systeem werkt met de negen basiscijfers 1–9 en drie bijzondere Mastergetallen: 11, 22 en 33."}</p>
-                <p className="body-md" style={{marginBottom:28}}>{LANG==="en"?"Numerology is not about predicting. It is about recognising — seeing patterns in your past, understanding what is asked of you in the present, and gaining clarity about the direction of your future.":"Numerologie gaat niet over voorspellen. Het gaat over herkennen — patronen zien in je verleden, begrijpen wat er van je wordt gevraagd in het heden, en helderheid krijgen over de richting van je toekomst."}</p>
-                <button className="btn btn-primary" onClick={()=>go("rapport-numerologie")}>{LANG==="en"?"View Numerology report":"Bekijk Numerologie rapport"}</button>
-              </div>
-              <div>
-                <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-lg)",aspectRatio:"4/3",position:"relative",marginBottom:24}}>
-                  <img src={IMGS.r_numerologie} alt="Numerologie" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(12,10,23,.7) 100%)"}}/>
-                  <div style={{position:"absolute",bottom:22,left:24,right:24}}>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.6}}>{LANG==="en"?'"Numbers are the essence of all things."':'"Getallen zijn het wezen van alle dingen."'}</div>
-                    <div style={{fontSize:".62rem",letterSpacing:".1em",color:"rgba(255,255,255,.4)",textTransform:"uppercase",marginTop:6}}>Pythagoras, {LANG==="en"?"c. 500 BC":"ca. 500 v.Chr."}</div>
-                  </div>
-                </div>
-                <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px"}}>
-                  <div className="label" style={{marginBottom:12}}>{t("wat.numMasterLabel")} — {t("wat.numMasterTitle")}</div>
-                  {(LANG==="en"?[["11","The Master Intuitive — high sensitivity, spiritual antenna, intensity"],["22","The Master Builder — great potential for concrete impact on the world"],["33","The Master Teacher — compassion, responsibility, serving leadership"]]:[["11","De Meester Intuïtief — hoge gevoeligheid, spirituele antenne, intensiteit"],["22","De Meester Bouwer — groot potentieel voor concrete impact op de wereld"],["33","De Meester Leraar — compassie, verantwoordelijkheid, dienend leiderschap"]]).map(([n,d])=>(
-                    <div key={n} style={{display:"flex",gap:14,padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
-                      <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem",fontWeight:300,color:"var(--brand)",width:28,flexShrink:0,lineHeight:1}}>{n}</div>
-                      <div style={{fontSize:".85rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65}}>{d}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section bg-muted">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.numCoreLabel")}</div>
-            <h2 className="h2" style={{marginBottom:12}}>{t("wat.numCoreTitle")}</h2>
-            <p className="body-md" style={{marginBottom:36}}>{t("wat.numCoreSub")}</p>
-            <div style={{display:"flex",flexDirection:"column",gap:0}}>
-              {NUM_KERNGETALLEN.map(([naam,bron,desc])=>(
-                <div key={naam} className="split-row">
-                  <div>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:4}}>{naam}</div>
-                    <div style={{fontSize:".6rem",fontWeight:500,color:"var(--gold)",letterSpacing:".08em",textTransform:"uppercase",lineHeight:1.5}}>{bron}</div>
-                  </div>
-                  <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{marginTop:36}}>
-              <button className="btn btn-primary" onClick={()=>go("rapport-numerologie")}>{LANG==="en"?"Order Numerology Report — €65":"Bestel Numerologie Rapport — €65"}</button>
-            </div>
-          </div>
-        </section>
-
-      </>}
-
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* TAB: ASTROLOGIE                                                   */}
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {tab==="astro"&&<>
-
-        <section className="section bg-white">
-          <div className="container">
-            <div className="two-col-lg">
-              <div>
-                <div className="label" style={{marginBottom:14}}>{t("wat.astroIntroLabel")}</div>
-                <h2 className="h2" style={{marginBottom:22}}>{t("wat.astroIntroTitle")}</h2>
-                <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Western astrology is the study of the positions of the planets at the moment of your birth and their relationship to each other, to the signs of the zodiac and to the twelve houses of your horoscope chart. The premise: the position of the sky at the moment you entered the world reflects the character with which you meet that world.":"Westerse astrologie is het studie van de posities van de planeten op het moment van je geboorte en hun relatie tot elkaar, tot de tekens van de dierenriem en tot de twaalf huizen van je horoscoopkaart. Het uitgangspunt: de stand van de hemel op het moment dat je de wereld binnentrad, weerspiegelt het karakter waarmee je die wereld tegemoet treedt."}</p>
-                <p className="body-md" style={{marginBottom:18}}>{LANG==="en"?"Astrology is not a predictive art but a system of symbolic correspondence. Jupiter in Capricorn describes something different from Jupiter in Pisces. A strongly occupied seventh house tells something different from an empty one. No two birth horoscopes are identical — not even those of twins, because the house division shifts with every passing hour.":"Astrologie is geen voorspellingskunst maar een systeem van symbolische correspondentie. Jupiter in Steenbok beschrijft iets anders dan Jupiter in Vissen. Een sterk bezette zevende huis vertelt iets anders dan een lege. Geen twee geboortehoroscopen zijn identiek — zelfs niet die van een tweeling, omdat de huisverdeling verschuift met elk voorbijgaand uur."}</p>
-                <p className="body-md" style={{marginBottom:28}}>{LANG==="en"?"Our birth horoscope analyses all ten planets, the twelve houses, the Ascendant, the Midheaven and the most important aspects — the angles that planets make with each other. This gives a complete, layered portrait.":"Onze geboortehoroscoop analyseert alle tien planeten, de twaalf huizen, de Ascendant, het Midhemel en de belangrijkste aspecten — de hoeken die planeten met elkaar maken. Dat geeft een compleet, gelaagd portret."}</p>
-                <button className="btn btn-primary" onClick={()=>go("rapport-horoscoop")}>{LANG==="en"?"View Birth Horoscope report":"Bekijk Geboortehoroscoop rapport"}</button>
-              </div>
-              <div>
-                <div style={{borderRadius:"var(--radius-xl)",overflow:"hidden",boxShadow:"var(--shadow-lg)",aspectRatio:"4/3",position:"relative",marginBottom:24}}>
-                  <img src={IMGS.r_horoscoop} alt="Astrologie nachtelijke hemel" loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 45%,rgba(12,10,23,.75) 100%)"}}/>
-                  <div style={{position:"absolute",bottom:22,left:24,right:24}}>
-                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontStyle:"italic",color:"rgba(255,255,255,.8)",lineHeight:1.6}}>"Als boven, zo beneden — als binnen, zo buiten."</div>
-                    <div style={{fontSize:".62rem",letterSpacing:".1em",color:"rgba(255,255,255,.4)",textTransform:"uppercase",marginTop:6}}>Hermetisch principe, ca. 3e eeuw</div>
-                  </div>
-                </div>
-                <div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:"22px 24px"}}>
-                  <div className="label" style={{marginBottom:12}}>{LANG==="en"?"The three key elements":"De drie sleutelelementen"}</div>
-                  {(LANG==="en"?[["Signs","The 12 signs of the zodiac give quality to the planets within them — Aries is active and initiating, Taurus is patient and sensory, and so on."],["Houses","The 12 houses divide the horoscope chart into areas of life: house 1 is identity and body, house 7 is partnerships, house 10 is career and public role."],["Aspects","The angles between planets — conjunction, opposition, trine, square — describe tension or harmony between the energies they represent."]]:[["Tekens","De 12 tekens van de dierenriem geven kwaliteit aan de planeten die er in staan — Ram is actief en initiërend, Stier is geduldig en sensorisch, enzovoort."],["Huizen","De 12 huizen verdelen de horoscoopkaart in levensterreinen: huis 1 is identiteit en lichaam, huis 7 is partnerschappen, huis 10 is carrière en publieke rol."],["Aspecten","De hoeken tussen planeten — conjunctie, oppositie, trine, vierkant — beschrijven spanning of harmonie tussen de energieën die zij vertegenwoordigen."]]).map(([n,d])=>(
-                    <div key={n} style={{padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
-                      <div style={{fontSize:".82rem",fontWeight:500,color:"var(--text)",marginBottom:4}}>{n}</div>
-                      <div style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.65}}>{d}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="section bg-muted">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.astroLayersLabel")}</div>
-            <h2 className="h2" style={{marginBottom:12}}>{t("wat.astroLayersTitle")}</h2>
-            <p className="body-md" style={{marginBottom:36}}>{t("wat.astroLayersSub")}</p>
-            <div style={{display:"flex",flexDirection:"column",gap:0}}>
-              {ASTRO_LAGEN.map(([naam,desc])=>(
-                <div key={naam} className="split-row">
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",lineHeight:1.3}}>{naam}</div>
-                  <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
-                </div>
-              ))}
-            </div>
-            <div style={{marginTop:36}}>
-              <button className="btn btn-primary" onClick={()=>go("rapport-horoscoop")}>{LANG==="en"?"Order Birth Horoscope — €75":"Bestel Geboortehoroscoop — €75"}</button>
-            </div>
-          </div>
-        </section>
-
-      </>}
-
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {/* TAB: HOE ZE SAMENHANGEN                                           */}
-      {/* ══════════════════════════════════════════════════════════════════ */}
-      {tab==="combo"&&<>
-
-        <section className="section bg-white">
-          <div className="container-sm">
-            <div className="label" style={{marginBottom:14}}>{t("wat.comboDisciplinesLabel")}</div>
-            <h2 className="h2" style={{marginBottom:22}}>{t("wat.comboDisciplinesTitle")}</h2>
-            <p className="body-lg" style={{marginBottom:18}}>{LANG==="en"?"Human Design, Numerology and Astrology are three completely independent disciplines each with their own methodology, calculation and vocabulary. They do not speak the same language — and that is precisely their strength when you place them side by side.":"Human Design, Numerologie en Astrologie zijn drie volledig zelfstandige disciplines met elk hun eigen methodologie, berekening en vocabulaire. Ze spreken niet dezelfde taal — en dat is precies hun kracht als je ze naast elkaar legt."}</p>
-            <p className="body-md" style={{marginBottom:36}}>{LANG==="en"?"Each discipline illuminates a different layer of the same person. Where Human Design describes your energetic mechanism, Numerology describes your life lessons and Astrology the qualities of your planetary placements. Someone who studies all three gets a portrait with a depth that no single system can offer alone.":"Elke discipline verlicht een andere laag van dezelfde persoon. Waar Human Design je energetisch mechanisme beschrijft, beschrijft Numerologie je levenslessen en Astrologie de kwaliteiten van je planetaire bezetting. Iemand die alle drie bestudeert, krijgt een portret met een diepte die geen enkel systeem afzonderlijk kan bieden."}</p>
-            <div style={{display:"flex",flexDirection:"column",gap:20,marginBottom:40}}>
-              {COMBO.map(([naam,ondertitel,desc,ico])=>(
-                <div key={naam} style={{display:"flex",gap:24,padding:"24px",background:"var(--muted)",borderRadius:"var(--radius-lg)",alignItems:"flex-start"}}>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"2rem",color:"var(--brand)",opacity:.6,flexShrink:0,width:36,textAlign:"center",lineHeight:1}}>{ico}</div>
-                  <div>
-                    <div style={{display:"flex",gap:12,alignItems:"baseline",marginBottom:6,flexWrap:"wrap"}}>
-                      <div style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)"}}>{naam}</div>
-                      <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--gold)"}}>{ondertitel}</div>
-                    </div>
-                    <p className="body-sm" style={{lineHeight:1.82}}>{desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div style={{background:"var(--brand)",borderRadius:"var(--radius-xl)",padding:"36px",color:"white"}}>
-              <div className="label-light" style={{marginBottom:12}}>{LANG==="en"?"Practical example":"Praktisch voorbeeld"}</div>
-              <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.75)",lineHeight:1.85,marginBottom:20}}>{LANG==="en"?"Consider: you are a Generator (HD) with a Life Path Number 7 (Numerology) and a strongly occupied eighth house (Astrology). Human Design says you wait for sacral responses. Numerology says you need deep research and withdrawal to thrive. Astrology says that transformation, hidden knowledge and profound experiences are central themes. Together they sketch a profile of someone who does not need to be visibly active to make impact — who draws their strength from depth and response, not from initiative and visibility.":"Stel: je bent een Generator (HD) met een Levenspadgetal 7 (Numerologie) en een sterk bezette achtste huis (Astrologie). Human Design zegt dat je wacht op sacrale responsen. Numerologie zegt dat je diep onderzoek en teruggetrokkenheid nodig hebt om te gedijen. Astrologie zegt dat transformatie, verborgen kennis en diepgaande ervaringen centrale thema's zijn. Samen tekenen ze een profiel van iemand die niet zichtbaar actief hoeft te zijn om impact te maken — die zijn kracht haalt uit verdieping en respons, niet uit initiatief en zichtbaarheid."}</p>
-              <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-                <button className="btn btn-white" onClick={()=>go("rapport-volledig")}>{LANG==="en"?"Full HD Report":"Volledig HD Rapport"}</button>
-                <button className="btn btn-ghost" onClick={()=>go("rapporten")}>{LANG==="en"?"All reports":"Alle rapporten"}</button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-      </>}
-
-      {/* ── FAQ ──────────────────────────────────────────────────────────── */}
-      <section className="section bg-white">
-        <div className="container-sm">
-          <div className="label" style={{marginBottom:14}}>{t("wat.faqLabel")}</div>
-          <h2 className="h2" style={{marginBottom:36}}>{t("wat.faqTitle")}</h2>
-          {faqs.map(([q,a],i)=>(
-            <div className="faq-item" key={i}>
-              <div className="faq-q" onClick={()=>setFaq(faq===i?null:i)}>{q}<span className={"faq-toggle"+(faq===i?" open":"")}>+</span></div>
-              {faq===i&&<div className="faq-a">{a}</div>}
-            </div>
-          ))}
+      {/* ── CINEMATIC HERO ──────────────────────────────────────────────── */}
+      <section style={{position:"relative",height:"100vh",minHeight:600,maxHeight:960,overflow:"hidden"}}>
+        <img src={IMGS.hero} alt={isEN?"Starfield — Faculty of Human Design":"Sterrenhemel — Faculty of Human Design"} loading="eager"
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%"}}/>
+        <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(12,10,8,.2) 0%,rgba(12,10,8,.48) 55%,rgba(12,10,8,.8) 100%)"}}/>
+        <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"0 48px 72px",maxWidth:800}}>
+          <div style={{width:1,height:56,background:"var(--gold)",opacity:.65,marginBottom:32}}/>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.4rem,5.5vw,4.2rem)",fontWeight:300,color:"white",lineHeight:1.12,letterSpacing:"-.01em",marginBottom:22,whiteSpace:"pre-line"}}>
+            {isEN?`Three systems.\nOne portrait.`:`Drie systemen.\nEén portret.`}
+          </h1>
+          <p style={{fontFamily:"var(--font-sans)",fontSize:".78rem",fontWeight:300,color:"rgba(255,255,255,.42)",letterSpacing:".14em",textTransform:"uppercase"}}>
+            {isEN?"Human Design · Numerology · Astrology":"Human Design · Numerologie · Astrologie"}
+          </p>
         </div>
       </section>
 
-      {/* ── BOTTOM CTA ───────────────────────────────────────────────────── */}
-      <section className="section bg-muted">
-        <div className="container-md text-center">
-          <div className="label" style={{marginBottom:14}}>{t("wat.faqCtaLabel")}</div>
-          <h2 className="h2" style={{marginBottom:18}}>{t("wat.faqCtaTitle")}</h2>
-          <p className="body-lg" style={{maxWidth:460,margin:"0 auto 32px"}}>{t("wat.faqCtaBody")}</p>
-          <div style={{display:"flex",gap:14,justifyContent:"center",flexWrap:"wrap"}}>
-            <button className="btn btn-primary btn-lg" onClick={()=>go("rapport-volledig")}>{t("wat.faqCtaBtn")}</button>
-            <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("wat.faqCtaAll")}</button>
+      {/* ── EDITORIAL OPENING ───────────────────────────────────────────── */}
+      <section style={{background:"var(--bg)",padding:"136px 40px"}}>
+        <div style={{maxWidth:620,margin:"0 auto"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.25rem,2.2vw,1.52rem)",fontWeight:300,color:"var(--text)",lineHeight:1.8,marginBottom:36}}>
+            {isEN
+              ?"Most people don't need more information about themselves. They need a language for what they already sense — a reflection clear enough to say: yes, that is me."
+              :"De meeste mensen hebben geen nieuwe informatie over zichzelf nodig. Ze hebben een taal nodig voor wat ze al aanvoelen — een spiegel helder genoeg om te zeggen: ja, dat ben ik."}
+          </p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1.02rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
+            {isEN
+              ?"Human Design, Numerology and Astrology are not systems of explanation. They are systems of recognition. They don't tell you who to become — they describe who you already are."
+              :"Human Design, Numerologie en Astrologie zijn geen verklaringssystemen. Het zijn herkenningssystemen. Ze vertellen je niet wie je moet worden — ze beschrijven wie je al bent."}
+          </p>
+        </div>
+      </section>
+
+      {/* ── VISUAL SILENCE ──────────────────────────────────────────────── */}
+      <div style={{position:"relative",height:"62vh",minHeight:380,overflow:"hidden"}}>
+        <img src={IMGS.cosmos} alt={isEN?"Faculty of Human Design":"Faculty of Human Design"} loading="lazy"
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.15)"}}/>
+      </div>
+
+      {/* ── HUMAN DESIGN ────────────────────────────────────────────────── */}
+      <section style={{background:"white",padding:"130px 40px"}}>
+        <div style={{maxWidth:740,margin:"0 auto"}}>
+          <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:22}}>Human Design</div>
+          <div style={{width:24,height:1,background:"var(--gold)",marginBottom:52,opacity:.55}}/>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,2vw,1.4rem)",fontWeight:300,color:"var(--text)",lineHeight:1.84,marginBottom:34}}>
+            {isEN
+              ?"In 1987, Ra Uru Hu received a system that maps the mechanics of human energy. Not character traits — mechanics. How you are designed to move through the world, how decisions arise in you, and what happens when you act against your own nature."
+              :"In 1987 ontving Ra Uru Hu een systeem dat de mechanica van menselijke energie in kaart brengt. Geen karaktertrekken — mechanica. Hoe jij ontworpen bent om door de wereld te bewegen, hoe beslissingen in je ontstaan, en wat er gebeurt wanneer je tegen je eigen aard in handelt."}
+          </p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
+            {isEN
+              ?"The system draws on the I Ching, Kabbalah, astrology and quantum physics — not as decoration, but as structural pillars of a coherent framework. What emerges is a chart unique to you: your energy type, your decision-making authority, the centres that define your consistent nature."
+              :"Het systeem put uit de I Ching, Kabbala, astrologie en kwantumfysica — niet als decoratie, maar als structurele pijlers van een samenhangend raamwerk. Wat ontstaat is een chart uniek aan jou: je energietype, je beslissingsautoriteit, de centra die je constante natuur definiëren."}
+          </p>
+        </div>
+      </section>
+
+      {/* ── IMAGE TRANSITION ────────────────────────────────────────────── */}
+      <div style={{position:"relative",height:"52vh",minHeight:300,overflow:"hidden"}}>
+        <img src={IMGS.r_volledig} alt={isEN?"Human Design chart":"Human Design chart"} loading="lazy"
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 35%"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.3)"}}/>
+      </div>
+
+      {/* ── NUMEROLOGIE ─────────────────────────────────────────────────── */}
+      <section style={{background:"var(--bg)",padding:"130px 40px"}}>
+        <div style={{maxWidth:740,margin:"0 auto"}}>
+          <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:22}}>{isEN?"Numerology":"Numerologie"}</div>
+          <div style={{width:24,height:1,background:"var(--gold)",marginBottom:52,opacity:.55}}/>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,2vw,1.4rem)",fontWeight:300,color:"var(--text)",lineHeight:1.84,marginBottom:34}}>
+            {isEN
+              ?"Numbers don't predict. They recognise. In Pythagorean Numerology, your name and date of birth contain a precise numerical pattern that describes the themes running through your life — the lessons, the gifts, the recurring tensions."
+              :"Getallen voorspellen niet. Ze herkennen. In de Pythagoreïsche Numerologie bevatten je naam en geboortedatum een precies numeriek patroon dat de thema's beschrijft die door je leven heen lopen — de lessen, de gaven, de terugkerende spanningen."}
+          </p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
+            {isEN
+              ?"Your Life Path number is the thread. Your Expression number is the gift. Your Soul number is what you quietly long for. Together they draw a portrait of the life you were born into — not as destiny, but as orientation."
+              :"Je Levenspadgetal is de rode draad. Je Uitdrukkingsgetal is de gave. Je Zielsgetal is wat je stilletjes verlangt. Samen tekenen ze een portret van het leven dat je geboren bent in te leven — niet als lot, maar als oriëntatie."}
+          </p>
+        </div>
+      </section>
+
+      {/* ── ASTROLOGIE ──────────────────────────────────────────────────── */}
+      <section style={{background:"white",padding:"130px 40px"}}>
+        <div style={{maxWidth:740,margin:"0 auto"}}>
+          <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:22}}>{isEN?"Birth Astrology":"Geboorteastrologie"}</div>
+          <div style={{width:24,height:1,background:"var(--gold)",marginBottom:52,opacity:.55}}/>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,2vw,1.4rem)",fontWeight:300,color:"var(--text)",lineHeight:1.84,marginBottom:34}}>
+            {isEN
+              ?"The sky at the moment of your birth is a starting condition. Not a sentence — a fingerprint. The positions of the ten planets, the twelve houses and the rising sign on the eastern horizon form a constellation that is yours alone."
+              :"De hemel op het moment van je geboorte is een beginconditie. Geen vonnis — een vingerafdruk. De posities van de tien planeten, de twaalf huizen en het rijzende teken aan de oostelijke horizon vormen een constellatie die alleen van jou is."}
+          </p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
+            {isEN
+              ?"Western astrology is not about prediction. It is about correspondence — the idea that the qualities of a moment are mirrored in what is born within it. Your Sun, Moon and Ascendant are not labels. They are layers of a portrait."
+              :"Westerse astrologie gaat niet over voorspellen. Het gaat over correspondentie — het idee dat de kwaliteiten van een moment weerspiegeld worden in wat er in geboren wordt. Je Zon, Maan en Ascendant zijn geen labels. Het zijn lagen van een portret."}
+          </p>
+        </div>
+      </section>
+
+      {/* ── VISUAL PAUSE ────────────────────────────────────────────────── */}
+      <div style={{position:"relative",height:"55vh",minHeight:340,overflow:"hidden"}}>
+        <img src={IMGS.r_horoscoop} alt={isEN?"Night sky — astrology":"Nachtelijke hemel — astrologie"} loading="lazy"
+          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
+        <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.38)"}}/>
+      </div>
+
+      {/* ── THREE DISCIPLINES ───────────────────────────────────────────── */}
+      <section style={{background:"var(--bg)",padding:"140px 40px"}}>
+        <div style={{maxWidth:860,margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"80px 64px",alignItems:"start"}}>
+          <div>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.35rem,2.4vw,1.7rem)",fontWeight:300,color:"var(--text)",lineHeight:1.72}}>
+              {isEN
+                ?"Three independent systems. Three different languages. One person."
+                :"Drie onafhankelijke systemen. Drie verschillende talen. Één persoon."}
+            </p>
           </div>
+          <div>
+            <div style={{width:1,height:40,background:"var(--gold)",opacity:.5,marginBottom:40}}/>
+            {(isEN?[
+              ["Human Design","The mechanics of your energy — how you are designed to move, decide and live."],
+              ["Numerology","The patterns in your name and date of birth — your life lessons and gifts."],
+              ["Astrology","The qualities of your planetary placements — your inner landscape at the moment of birth."],
+            ]:[
+              ["Human Design","De mechanica van je energie — hoe jij ontworpen bent om te bewegen, te beslissen en te leven."],
+              ["Numerologie","De patronen in je naam en geboortedatum — je levenslessen en gaven."],
+              ["Astrologie","De kwaliteiten van je planetaire bezetting — je innerlijk landschap op het moment van geboorte."],
+            ]).map(([name,desc])=>(
+              <div key={name} style={{borderTop:"1px solid var(--border)",padding:"24px 0"}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:6}}>{name}</div>
+                <p style={{fontFamily:"var(--font-sans)",fontSize:".85rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{desc}</p>
+              </div>
+            ))}
+            <div style={{borderTop:"1px solid var(--border)"}}/>
+          </div>
+        </div>
+      </section>
+
+      {/* ── EDITORIAL PAUSE ─────────────────────────────────────────────── */}
+      <section style={{background:"white",padding:"160px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:520,margin:"0 auto"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.2rem,2.2vw,1.52rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.85,whiteSpace:"pre-line"}}>
+            {isEN
+              ? `“Together they don’t add up.\n\nTogether they recognise.”`
+              : `“Samen tellen ze niet op.\n\nSamen herkennen ze.”`}
+          </p>
+          <div style={{width:1,height:52,background:"var(--gold)",opacity:.5,margin:"56px auto 0"}}/>
+        </div>
+      </section>
+
+      {/* ── SOFT CTA ────────────────────────────────────────────────────── */}
+      <section style={{background:"var(--bg)",padding:"152px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:480,margin:"0 auto"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.05rem,1.8vw,1.3rem)",fontWeight:300,color:"var(--text)",lineHeight:1.88,marginBottom:52}}>
+            {isEN
+              ?"If something in you asks to be seen clearly — this is a quiet place to begin."
+              :"Als er iets in je vraagt om helder gezien te worden — dit is een stille plek om te beginnen."}
+          </p>
+          <button onClick={()=>go("rapporten")}
+            style={{fontFamily:"var(--font-sans)",fontSize:".75rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",padding:"16px 44px",background:"transparent",border:"1px solid var(--text)",color:"var(--text)",cursor:"pointer",transition:"opacity 200ms"}}
+            onMouseEnter={e=>e.currentTarget.style.opacity=".6"}
+            onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
+            {isEN?"Discover your blueprint":"Ontdek je blauwdruk"}
+          </button>
         </div>
       </section>
 
