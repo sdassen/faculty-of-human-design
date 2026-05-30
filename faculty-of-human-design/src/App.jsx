@@ -852,8 +852,8 @@ const REPORTS = [
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begrijp eindelijk wie je werkelijk bent", en:"Finally understand who you truly are" },
     tagline:{ nl:"Je complete persoonlijke blauwdruk", en:"Your complete personal blueprint" },
-    intro:{ nl:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart — van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.", en:"The most comprehensive report we offer. A complete analysis of your Human Design chart — from Type and Authority to Incarnation Cross and practical life guidance." },
-    includes:["Type, Strategie & Signature","Autoriteit — hoe je beslissingen neemt","Profiel — het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten — je natuurlijke kwaliteiten","Inkarnatie-Kruis — je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2026–2028"],
+    intro:{ nl:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart: van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.", en:"The most comprehensive report we offer. A complete analysis of your Human Design chart: from Type and Authority to Incarnation Cross and practical life guidance." },
+    includes:["Type, Strategie & Signature","Autoriteit: hoe je beslissingen neemt","Profiel: het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten: je natuurlijke kwaliteiten","Inkarnatie-Kruis: je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2026–2028"],
     for:{ nl:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.", en:"For everyone seeking deep and complete insight into their Human Design." },
     sections:12, pages:"40+",
     prompt_extra:{
@@ -862,14 +862,14 @@ const REPORTS = [
     },
     reviews:{
       nl:[
-        ["Ik had al eerder iets gelezen over Human Design maar dit rapport bracht het echt tot leven. De sectie over mijn open centra was confronterend en bevrijdend tegelijk — ik herkende zo veel conditionering die ik als 'mezelf' had aangenomen. Drie maanden later lees ik het nog steeds.","Marieke V., Amsterdam"],
+        ["Ik had al eerder iets gelezen over Human Design maar dit rapport bracht het echt tot leven. De sectie over mijn open centra was confronterend en bevrijdend tegelijk. Ik herkende zo veel conditionering die ik als 'mezelf' had aangenomen. Drie maanden later lees ik het nog steeds.","Marieke V., Amsterdam"],
         ["Precies wat ik zocht. Geen vage spirituele teksten maar concrete analyse van wie ik ben en hoe ik het beste functioneer.","Thomas D., Antwerpen"],
-        ["Het stuk over mijn Inkarnatie-Kruis heeft me echt geraakt. Ik begrijp nu waarom bepaalde dingen in mijn leven steeds terugkomen. De schrijfstijl is ook prettig — persoonlijk, niet droog of technisch.","Sofie M., Utrecht"],
+        ["Het stuk over mijn Inkarnatie-Kruis heeft me echt geraakt. Ik begrijp nu waarom bepaalde dingen in mijn leven steeds terugkomen. De schrijfstijl is prettig: persoonlijk en niet droog of technisch.","Sofie M., Utrecht"],
       ],
       en:[
-        ["I had read about Human Design before, but this report truly brought it to life. The section about my open centers was both confronting and liberating — I recognised so much conditioning I had assumed was just 'me'. Three months later I still read it.","Marieke V., Amsterdam"],
+        ["I had read about Human Design before, but this report truly brought it to life. The section about my open centers was both confronting and liberating. I recognised so much conditioning I had assumed was just 'me'. Three months later I still read it.","Marieke V., Amsterdam"],
         ["Exactly what I was looking for. No vague spiritual texts but concrete analysis of who I am and how I function best.","Thomas D., Antwerp"],
-        ["The section about my Incarnation Cross really moved me. I now understand why certain things keep returning in my life. The writing style is also pleasant — personal, not dry or technical.","Sofie M., Utrecht"],
+        ["The section about my Incarnation Cross really moved me. I now understand why certain things keep returning in my life. The writing style is pleasant: personal and not dry or technical.","Sofie M., Utrecht"],
       ],
     },
   },
@@ -880,7 +880,7 @@ const REPORTS = [
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Meer rust en begrip in je romantische verbinding", en:"More peace and understanding in your romantic connection" },
     tagline:{ nl:"Twee designs in romantische verbinding", en:"Two designs in romantic connection" },
-    intro:{ nl:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel — waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?", en:"An in-depth analysis of your and your partner's Human Design charts. How do you function energetically as a couple — where do you strengthen each other, where is the friction, and how do you grow together?" },
+    intro:{ nl:"Een diepgaande analyse van jouw en je partners Human Design charts. Hoe functioneren jullie energetisch als koppel: waar versterken jullie elkaar, waar is de wrijving, en hoe groeien jullie samen?", en:"An in-depth analysis of your and your partner's Human Design charts. How do you function energetically as a couple: where do you strengthen each other, where is the friction, and how do you grow together?" },
     includes:["Beide charts volledig geanalyseerd","Elektromagnetische verbindingen","Compatibiliteit van Types","Communicatie & intimiteitsstijl","Seksuele energie & aantrekking","Beslissingen nemen als stel","Conflictpatronen & doorbraken","Gezamenlijk groeipad","Praktisch advies voor harmonie"],
     for:{ nl:"Voor koppels die hun romantische verbinding dieper willen begrijpen en versterken.", en:"For couples who want to deepen their understanding of their romantic connection." },
     sections:9, pages:"28+", needsPartner:true,
@@ -891,12 +891,12 @@ const REPORTS = [
     },
     reviews:{
       nl:[
-        ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom — onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
+        ["Mijn partner en ik hadden al jaren moeite met communiceren. Het rapport legde precies uit waarom: onze energietypen botsen op een heel specifieke manier die we nu herkennen en kunnen ombuigen. Dat is goud waard.","Elena & Marc, Gent"],
         ["Ik had dit als verrassing voor mijn partner besteld. We hebben het samen gelezen en waren allebei stil bij hoe accuraat de beschrijving van onze dynamiek was.","Roos & Tim, Amsterdam"],
         ["Verrassend diepgaand. Niet alleen 'jullie vullen elkaar aan' maar echt concrete patronen en waar de wrijving vandaan komt.","Nathalie D., Brugge"],
       ],
       en:[
-        ["My partner and I had struggled to communicate for years. The report explained exactly why — our energy types clash in a very specific way that we can now recognise and redirect. That is worth its weight in gold.","Elena & Marc, Ghent"],
+        ["My partner and I had struggled to communicate for years. The report explained exactly why: our energy types clash in a very specific way that we can now recognise and redirect. That is worth its weight in gold.","Elena & Marc, Ghent"],
         ["I ordered this as a surprise for my partner. We read it together and were both struck by how accurately it described our dynamic.","Roos & Tim, Amsterdam"],
         ["Surprisingly in-depth. Not just 'you complement each other' but truly concrete patterns and where the friction comes from.","Nathalie D., Bruges"],
       ],
@@ -909,7 +909,7 @@ const REPORTS = [
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Samenwerking die werkt voor jullie allebei", en:"Collaboration that works for both of you" },
     tagline:{ nl:"Twee designs in zakelijke samenwerking", en:"Two designs in professional partnership" },
-    intro:{ nl:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten — en hoe bouwen jullie een samenwerking die werkt voor beiden?", en:"An analysis of two Human Design charts from a professional perspective. Who leads, who decides, where are the complementarities — and how do you build a collaboration that works for both?" },
+    intro:{ nl:"Een analyse van twee Human Design charts vanuit zakelijk perspectief. Wie leidt, wie beslist, waar liggen de complementariteiten en hoe bouwen jullie een samenwerking die werkt voor beiden?", en:"An analysis of two Human Design charts from a professional perspective. Who leads, who decides, where are the complementarities and how do you build a collaboration that works for both?" },
     includes:["Beide charts volledig geanalyseerd","Besluitvormingsdynamieken","Complementariteit van Types","Leiderschapsstijl per chart","Werkenergieën & ritmes","Communicatiepatronen op de werkvloer","Conflictpatronen & oplossingen","Rolverdeling & verantwoordelijkheden","Praktisch advies voor optimale samenwerking"],
     for:{ nl:"Voor zakenpartners, compagnons of collega's die hun samenwerking bewust willen verbeteren.", en:"For business partners, co-founders or colleagues who want to consciously improve their collaboration." },
     sections:9, pages:"24+", needsPartner:true,
@@ -921,12 +921,12 @@ const REPORTS = [
     reviews:{
       nl:[
         ["Ik had dit met mijn compagnon gedaan. De analyse van hoe wij beslissingen nemen was verbazend accuraat. We werken nu bewust anders samen.","Pieter K., Rotterdam"],
-        ["Het rapport liet zien dat mijn partner een Manifestor is en ik een Generator. Dat verklaarde zoveel van onze samenwerking — nu gaan we er bewust mee om.","Lars M., Utrecht"],
+        ["Het rapport liet zien dat mijn partner een Manifestor is en ik een Generator. Dat verklaarde zoveel van onze samenwerking. Nu gaan we er bewust mee om.","Lars M., Utrecht"],
         ["Als twee oprichters van een startup is het rapport ons leidraad geworden voor taakverdeling. Concreet, praktisch en verrassend nauwkeurig.","Sara & Joris, Gent"],
       ],
       en:[
         ["I did this with my business partner. The analysis of how we make decisions was remarkably accurate. We now consciously work together differently.","Pieter K., Rotterdam"],
-        ["The report showed that my partner is a Manifestor and I am a Generator. That explained so much about our collaboration — now we work with it consciously.","Lars M., Utrecht"],
+        ["The report showed that my partner is a Manifestor and I am a Generator. That explained so much about our collaboration. Now we work with it consciously.","Lars M., Utrecht"],
         ["As two founders of a startup, the report has become our guide for task division. Concrete, practical and surprisingly accurate.","Sara & Joris, Ghent"],
       ],
     },
@@ -967,7 +967,7 @@ const REPORTS = [
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Weet wat er dit jaar van je gevraagd wordt", en:"Know what is asked of you this year" },
     tagline:{ nl:"De energetische thema's van je jaar", en:"The energetic themes of your year" },
-    intro:{ nl:"Gebaseerd op je Solar Return — de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?", en:"Based on your Solar Return — the planetary positions on your birthday this year. What are the dominant themes and opportunities?" },
+    intro:{ nl:"Gebaseerd op je Solar Return: de posities van de planeten op je verjaardag dit jaar. Wat zijn de dominante thema's en kansen?", en:"Based on your Solar Return: the planetary positions on your birthday this year. What are the dominant themes and opportunities?" },
     includes:["Solar Return analyse","Dominante thema's voor 2026","Kwartaal-voor-kwartaal overzicht","Planetaire invloeden op je chart","Kansen en aandachtspunten","Intentie voor het jaar"],
     for:{ nl:"Voor wie het jaar bewust en gericht wil ingaan.", en:"For those who want to enter the year consciously and with direction." },
     sections:9, pages:"22+",
@@ -1034,12 +1034,12 @@ const REPORTS = [
     reviews:{
       nl:[
         ["Na twaalf jaar in loondienst twijfelde ik of ik voor mezelf moest beginnen. Het rapport was heel helder: mijn type en profiel passen beter bij zelfstandig werken, en het legde ook uit waarom ik me in teamverband altijd een beetje gevangen voel. Twee maanden later had ik mijn eerste eigen klant.","Laura M., Amsterdam"],
-        ["Het stuk over 'hoe ik geld aantrek' klonk in eerste instantie zweverig maar de uitleg was verrassend praktisch — het gaat over hoe je je werk aanbiedt en op welk moment je ja of nee zegt.","Kevin T., Antwerpen"],
+        ["Het stuk over 'hoe ik geld aantrek' klonk in eerste instantie zweverig maar de uitleg was verrassend praktisch: het gaat over hoe je je werk aanbiedt en op welk moment je ja of nee zegt.","Kevin T., Antwerpen"],
         ["Ik gebruik het rapport nog steeds als naslagwerk bij carrièrebeslissingen. Het geeft me een referentiepunt.","Isabel R., Utrecht"],
       ],
       en:[
         ["After twelve years in employment I was wondering whether to start for myself. The report was very clear: my type and profile suit independent work better, and it also explained why I always feel a little trapped in a team setting. Two months later I had my first client.","Laura M., Amsterdam"],
-        ["The section about 'how I attract money' initially sounded vague but the explanation was surprisingly practical — it's about how you present your work and when you say yes or no.","Kevin T., Antwerp"],
+        ["The section about 'how I attract money' initially sounded vague but the explanation was surprisingly practical: it's about how you present your work and when you say yes or no.","Kevin T., Antwerp"],
         ["I still use the report as a reference for career decisions. It gives me a point of reference.","Isabel R., Utrecht"],
       ],
     },
@@ -1062,12 +1062,12 @@ const REPORTS = [
     reviews:{
       nl:[
         ["Ik heb een levenspadgetal 11 en had altijd het gevoel anders te zijn. Voor het eerst las ik een uitleg die dat niet pathologiseerde maar als een gave behandelde. Dat deed iets met me.","Vera N., Nijmegen"],
-        ["Ik was benieuwd of numerologie iets zou toevoegen naast mijn Human Design rapport. Het bleek een andere invalshoek die elkaar goed aanvult — het ene gaat over energie, het andere over levenslessen en patronen.","Frank O., Den Bosch"],
+        ["Ik was benieuwd of numerologie iets zou toevoegen naast mijn Human Design rapport. Het bleek een andere invalshoek die elkaar goed aanvult: het ene gaat over energie, het andere over levenslessen en patronen.","Frank O., Den Bosch"],
         ["De sectie over mijn persoonlijk jaar was opvallend accuraat voor wat er dit jaar speelt.","Mirjam H., Groningen"],
       ],
       en:[
         ["I have a life path number 11 and always felt different. For the first time I read an explanation that didn't pathologise that but treated it as a gift. That touched something in me.","Vera N., Nijmegen"],
-        ["I was curious whether numerology would add something alongside my Human Design report. It turned out to be a different perspective that complements it well — one is about energy, the other about life lessons and patterns.","Frank O., Den Bosch"],
+        ["I was curious whether numerology would add something alongside my Human Design report. It turned out to be a different perspective that complements it well: one is about energy, the other about life lessons and patterns.","Frank O., Den Bosch"],
         ["The section about my personal year was strikingly accurate for what is happening this year.","Mirjam H., Groningen"],
       ],
     },
@@ -1080,7 +1080,7 @@ const REPORTS = [
     outcome:{ nl:"Je planeetstanden als persoonlijk kompas", en:"Your planetary positions as a personal compass" },
     tagline:{ nl:"Je complete astrologische chart", en:"Your complete astrological chart" },
     intro:{ nl:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.", en:"A complete birth horoscope based on the exact positions of all planets at the moment of your birth." },
-    includes:["Zonneteken","Ascendant","Maan — je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel — je roeping","Dominant element & modaliteit"],
+    includes:["Zonneteken","Ascendant","Maan: je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel: je roeping","Dominant element & modaliteit"],
     for:{ nl:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.", en:"For those who want to understand how the stars were positioned at their birth moment." },
     sections:12, pages:"32+",
     prompt_extra:{
@@ -1090,12 +1090,12 @@ const REPORTS = [
     reviews:{
       nl:[
         ["Ik heb veel horoscopen gelezen maar dit was de eerste die écht inging op de spanning tussen mijn Maan en Ascendant. Dat is precies waar ik mijn leven lang mee worstel. Het voelde alsof iemand mij eindelijk begreep.","Charlotte B., Leiden"],
-        ["Diepgaander dan ik had verwacht. Niet alleen de zonnetekens maar alle huizen, aspecten, de Midhemel — een volledig portret. Ik heb het met mijn therapeut gedeeld als extra context.","Bart V., Gent"],
+        ["Diepgaander dan ik had verwacht. Niet alleen de zonnetekens maar alle huizen, aspecten, de Midhemel, een volledig portret. Ik heb het met mijn therapeut gedeeld als extra context.","Bart V., Gent"],
         ["Goed geschreven en toegankelijk, ook als je niet veel weet van astrologie. De kern kwam meteen over.","Yasmine K., Rotterdam"],
       ],
       en:[
         ["I have read many horoscopes but this was the first that truly addressed the tension between my Moon and Ascendant. That is precisely what I have struggled with my whole life. It felt as though someone finally understood me.","Charlotte B., Leiden"],
-        ["More in-depth than I expected. Not just sun signs but all the houses, aspects, the Midheaven — a complete portrait. I shared it with my therapist as additional context.","Bart V., Ghent"],
+        ["More in-depth than I expected. Not just sun signs but all the houses, aspects, the Midheaven, a complete portrait. I shared it with my therapist as additional context.","Bart V., Ghent"],
         ["Well written and accessible, even if you don't know much about astrology. The essence came across immediately.","Yasmine K., Rotterdam"],
       ],
     },
@@ -1119,12 +1119,12 @@ const REPORTS = [
     reviews:{
       nl:[
         ["Ik ben nu acht maanden abonnee. Elke maand lees ik het rapport in de eerste week en gebruik ik de intentie als anker. Het is bescheiden in omvang maar precies genoeg.","Noor A., Amsterdam"],
-        ["Wat ik fijn vind is dat het niet overlaadt met informatie. Eén duidelijke intentie voor de maand, een paar aandachtspunten — dat is genoeg om bewust mee te leven.","Tom S., Breda"],
+        ["Wat ik fijn vind is dat het niet overlaadt met informatie. Eén duidelijke intentie voor de maand, een paar aandachtspunten. Dat is genoeg om bewust mee te leven.","Tom S., Breda"],
         ["Vorige maand beschreef het rapport een thema van 'terugkeer naar jezelf'. Ik had net een zware periode achter de rug en het voelde alsof het precies op het juiste moment kwam.","Lisa V., Utrecht"],
       ],
       en:[
         ["I have been a subscriber for eight months now. Every month I read the report in the first week and use the intention as an anchor. It's modest in size but exactly enough.","Noor A., Amsterdam"],
-        ["What I appreciate is that it doesn't overwhelm with information. One clear intention for the month, a few points of attention — that's enough to live consciously with.","Tom S., Breda"],
+        ["What I appreciate is that it doesn't overwhelm with information. One clear intention for the month, a few points of attention. That's enough to live consciously with.","Tom S., Breda"],
         ["Last month the report described a theme of 'returning to yourself'. I had just been through a difficult period and it felt as though it came at exactly the right moment.","Lisa V., Utrecht"],
       ],
     },
@@ -2957,12 +2957,12 @@ function HomePage({go}){
           <div style={{display:"flex",flexDirection:"column"}}>
             {(lang==="en"?[
               ["01","Your birth details are submitted","Date, time and place of birth. These are the coordinates from which your reading is drawn. The more precise, the more personal."],
-              ["02","Your chart is calculated","Using Swiss Ephemeris — the professional-grade astronomical standard. Exact planetary positions to the degree, the same as used by observatories."],
+              ["02","Your chart is calculated","Using Swiss Ephemeris, the professional-grade astronomical standard. Exact planetary positions to the degree, the same as used by observatories worldwide."],
               ["03","Your reading is composed","Section by section, written for your specific chart. No templates, no generic profiles. Each layer moves deeper into what makes you distinctly you."],
               ["04","Delivered to your inbox","Within one business day, a PDF arrives by email. Yours to keep, to return to, to read slowly. A document that does not expire."],
             ]:[
               ["01","Je geboortegegevens worden ingevoerd","Datum, tijd en geboorteplaats. Dit zijn de coördinaten waaruit jouw reading wordt samengesteld. Hoe nauwkeuriger, hoe persoonlijker."],
-              ["02","Je chart wordt berekend","Met Swiss Ephemeris — de professionele astronomische standaard. Exacte planeetposities tot op de graad, dezelfde als gebruikt door sterrenwachten wereldwijd."],
+              ["02","Je chart wordt berekend","Met Swiss Ephemeris, de professionele astronomische standaard. Exacte planeetposities tot op de graad, dezelfde als gebruikt door sterrenwachten wereldwijd."],
               ["03","Jouw reading wordt samengesteld","Sectie voor sectie, geschreven voor jouw specifieke chart. Geen templates, geen generieke profielen. Elke laag gaat dieper in op wat jou uniek maakt."],
               ["04","Afgeleverd in je inbox","Binnen één werkdag arriveert een PDF per e-mail. Om te bewaren, om naar terug te keren, om rustig te lezen. Een document dat niet veroudert."],
             ]).map(([num,title,desc],i,arr)=>(
@@ -2991,12 +2991,12 @@ function HomePage({go}){
           </div>
           <div className="credibility-grid">
             {(lang==="en"?[
-              ["Since 2014","Founded on Ibiza — the island where Human Design was received in 1987. That origin is not background. It is the reason."],
+              ["Since 2014","Founded on Ibiza, the island where Human Design was received in 1987. That origin is not background. It is the reason."],
               ["2,400+\npersonal\nreadings","Not generated from templates. Every reading drawn from its own chart, composed by hand, specific to the person."],
               ["Three\ndisciplines","Human Design, Numerology and Astrology — used together as a single, unified language for who you are."],
               ["Recognition\nover labels","A reading does not tell you who to become. It shows you what was always already true."],
             ]:[
-              ["Sinds 2014","Opgericht op Ibiza — het eiland waar Human Design in 1987 werd ontvangen. Die oorsprong is geen achtergrond. Het is de reden."],
+              ["Sinds 2014","Opgericht op Ibiza, het eiland waar Human Design in 1987 werd ontvangen. Die oorsprong is geen achtergrond. Het is de reden."],
               ["2.400+\npersoonlijke\nreadings","Niet gegenereerd uit templates. Elke reading getrokken uit zijn eigen chart, met de hand samengesteld, specifiek voor de persoon."],
               ["Drie\ndisciplines","Human Design, Numerologie en Astrologie — samen gebruikt als één, verenigde taal voor wie je bent."],
               ["Herkenning\nboven labels","Een reading vertelt je niet wie je moet worden. Het laat zien wat altijd al waar was."],
