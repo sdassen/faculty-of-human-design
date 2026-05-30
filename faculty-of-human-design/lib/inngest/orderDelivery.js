@@ -1554,6 +1554,22 @@ export const orderDelivery = inngest.createFunction(
     const sections = [];
     const sectionTitles = enrichedOrderWithLessons.prompt_sections || [];
     const chartDebug = enrichedOrderWithLessons.birth_data?.chart || {};
+    // ── Quick API health check before generation ──────────────────────────
+    try {
+      const _tr = await fetch("https://api.anthropic.com/v1/messages", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": process.env.ANTHROPIC_API_KEY,
+          "anthropic-version": "2023-06-01",
+        },
+        body: JSON.stringify({ model: "claude-3-7-sonnet-20250219", max_tokens: 5, messages: [{ role: "user", content: "hi" }] }),
+      });
+      const _tb = await _tr.text();
+      console.log(`[API-TEST] status=${_tr.status} key=${(process.env.ANTHROPIC_API_KEY||"").slice(0,12)}... body=${_tb.slice(0,300)}`);
+    } catch (_te) {
+      console.error(`[API-TEST] fetch-exception: ${_te.message}`);
+    }
     console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-7-sonnet-20250219`);
 
     for (let i = 0; i < sectionTitles.length; i++) {
