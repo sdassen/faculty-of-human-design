@@ -409,10 +409,10 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* Over-ons stats row */
 .over-stats { display:flex; gap:40px; flex-wrap:wrap; }
 /* Inzichten category section header */
-.inzichten-cat-header { margin-bottom:56px; }
-.inzichten-cat-header .cat-divider { width:28px; height:1px; background:var(--gold); margin-bottom:20px; opacity:.6; }
+.inzichten-cat-header { margin-bottom:56px; text-align:center; }
+.inzichten-cat-header .cat-divider { width:28px; height:1px; background:var(--gold); margin:0 auto 20px; opacity:.6; }
 .inzichten-cat-header .cat-label { font-family:var(--font-sans); font-size:.58rem; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--gold); margin-bottom:10px; }
-.inzichten-cat-header .cat-desc { font-family:var(--font-serif); font-size:1rem; font-weight:300; font-style:italic; color:var(--text-muted); line-height:1.72; max-width:480px; }
+.inzichten-cat-header .cat-desc { font-family:var(--font-serif); font-size:1rem; font-weight:300; font-style:italic; color:var(--text-muted); line-height:1.72; max-width:480px; margin:0 auto; }
 /* Signal strip inner row */
 .signal-strip-inner { max-width:900px; margin:0 auto; padding:0 40px; display:flex; justify-content:center; gap:48px 72px; flex-wrap:wrap; }
 /* Editorial section header (split label/title left, sub right on desktop) */
@@ -3953,7 +3953,14 @@ function InzichtenPage({go,articleId}){
   const pillInactive={...pillBase,background:"transparent",color:"var(--text-muted)"};
 
   // ── Articles per category ─────────────────────────────────────────────────
-  const catArts=(cat)=>articles.filter(a=>a.tag===cat.tag);
+  // On the EN page: only show articles that have been translated (title_en present).
+  // This also prevents Dutch-only STATIC articles from duplicating a Supabase article
+  // that covers the same topic but has a different ID.
+  const catArts=(cat)=>articles.filter(a=>{
+    if(a.tag!==cat.tag) return false;
+    if(LANG==="en"&&!a.title_en) return false;
+    return true;
+  });
   const visibleCats=activeCat==="all"?CATS:CATS.filter(c=>c.id===activeCat);
 
   return(
