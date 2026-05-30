@@ -4736,6 +4736,12 @@ function TermsPage({go}){
               ?<>Faculty of Human Design is an independent provider of personalised digital reports in the fields of Human Design, Numerology and Astrology. For questions you can contact us at <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</>
               :<>Faculty of Human Design is een zelfstandige aanbieder van gepersonaliseerde digitale rapporten op het gebied van Human Design, Numerologie en Astrologie. Voor vragen kun je contact opnemen via <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.</>
             }</P>
+            <P style={{marginTop:8}}>
+              {isEn
+                ?<><strong>Faculty of Human Design</strong><br/>Hennepstraat 7, 3572 TR Utrecht, Nederland<br/>KvK: 42055841</>
+                :<><strong>Faculty of Human Design</strong><br/>Hennepstraat 7, 3572 TR Utrecht, Nederland<br/>KvK: 42055841</>
+              }
+            </P>
           </Section>
 
           <Section title={isEn?"2. Applicability":"2. Toepasselijkheid"}>
