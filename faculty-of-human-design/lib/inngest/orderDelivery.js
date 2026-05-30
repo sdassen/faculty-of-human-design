@@ -1195,6 +1195,56 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
   }
 }
 
+// ─── YEAR REPORT CONTEXT ──────────────────────────────────────────────────────
+// For Annual Reading reports the personal year starts on the customer's birthday,
+// NOT on January 1st. Without explicit context Claude defaults to calendar year,
+// producing text like "Je maakt een lijstje voor januari…" which is factually wrong.
+// This function calculates the exact quarter date ranges and injects them as a
+// hard constraint into the prompt.
+const MONTHS_NL = ["januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
+const MONTHS_EN = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+function buildYearReportContext(order, isEN) {
+  const bd = order.birth_data || {};
+  const day   = bd.day;
+  const month = bd.month;   // 1-indexed
+  if (!day || !month) return "";
+
+  const months = isEN ? MONTHS_EN : MONTHS_NL;
+  const m0 = month - 1; // 0-indexed
+
+  function qLabel(offsetMonths) {
+    const total = m0 + offsetMonths;
+    return { name: months[total % 12], year: 2026 + Math.floor(total / 12) };
+  }
+
+  const q1 = qLabel(0);
+  const q2 = qLabel(3);
+  const q3 = qLabel(6);
+  const q4 = qLabel(9);
+  const end = qLabel(12);
+
+  if (isEN) {
+    return `\n\nANNUAL READING — YEAR START CONTEXT (MANDATORY):
+The personal year does NOT start on January 1st. It starts on the customer's birthday.
+Personal year: ${day} ${q1.name} ${q1.year} → ${day} ${end.name} ${end.year}
+- Quarter 1 (Q1): ${q1.name} ${q1.year} – ${q2.name} ${q2.year}
+- Quarter 2 (Q2): ${q2.name} ${q2.year} – ${q3.name} ${q3.year}
+- Quarter 3 (Q3): ${q3.name} ${q3.year} – ${q4.name} ${q4.year}
+- Quarter 4 (Q4): ${q4.name} ${q4.year} – ${end.name} ${end.year}
+NEVER write "make a list in January", "start of the year in January", or anything implying the year begins in January. All quarter and year references must be anchored to these birthday-relative dates.`;
+  } else {
+    return `\n\nJAARRAPPORT — JAARSTART CONTEXT (VERPLICHT):
+Het persoonlijk jaar begint NIET op 1 januari. Het begint op de verjaardag van de klant.
+Persoonlijk jaar: ${day} ${q1.name} ${q1.year} → ${day} ${end.name} ${end.year}
+- Kwartaal 1 (K1): ${q1.name} ${q1.year} – ${q2.name} ${q2.year}
+- Kwartaal 2 (K2): ${q2.name} ${q2.year} – ${q3.name} ${q3.year}
+- Kwartaal 3 (K3): ${q3.name} ${q3.year} – ${q4.name} ${q4.year}
+- Kwartaal 4 (K4): ${q4.name} ${q4.year} – ${end.name} ${end.year}
+Schrijf NOOIT "je maakt een lijstje voor januari", "begin van het jaar in januari" of iets dat impliceert dat het jaar in januari begint. Alle kwartaal- en jaarreferenties moeten verankerd zijn aan deze verjaardag-relatieve data.`;
+  }
+}
+
 // ─── ADEM LIMITER ─────────────────────────────────────────────────────────────
 // The system prompt says "2–3 adem moments per report" but the model often
 // generates one for every section (~8-10), each becoming a separate full page.
@@ -1313,6 +1363,10 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
         : `\n\n✏️ REDACTIE REVISIE-INSTRUCTIE — de volgende feedback is gegeven voor dit rapport:\n${order.revisionFeedback}\nVerwerk deze feedback waar relevant voor deze sectie. Als deze sectie niet geraakt wordt, houd dan dezelfde kwaliteitsstandaarden aan.`)
     : "";
 
+  // ── Year report context (personal year starts on birthday, not Jan 1) ───────
+  const isJaarReport = (report_id === "jaar") || /annual reading|jaarrapport/i.test(report_title || "");
+  const yearBlock = isJaarReport ? buildYearReportContext(order, lang === "en") : "";
+
   // ── Structural lessons from past revisions ────────────────────────────────
   const lessons = lessonsForSection(order.promptLessons || [], sectionTitle);
   const lessonsBlock = lessons.length
@@ -1324,7 +1378,7 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const criticalAlert = buildCriticalAlert(chart, lang === "en");
 
   const prompt = lang === "en"
-    ? `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
+    ? `${criticalAlert}${chartCtx}${yearBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
 Write section "${sectionTitle}" for ${customer_name}.
 
@@ -1337,7 +1391,7 @@ RULES (strict):
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
 - kern 480–560 words total — fill the page with substance; two rich pages are better than one thin one
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
-    : `${criticalAlert}${chartCtx}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
+    : `${criticalAlert}${chartCtx}${yearBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
