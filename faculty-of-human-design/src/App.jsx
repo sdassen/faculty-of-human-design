@@ -642,6 +642,47 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .cd-title { font-size:1.3rem; }
   .cd-int-ttl { font-size:1rem; }
 }
+
+/* ── PRINT ──────────────────────────────────────────────────────────────── */
+@media print {
+  /* Hide interactive & repeated UI */
+  .nav, .sticky-cta, .mobile-menu, .footer,
+  .hero-scroll, #dlb, .cd-pill, .cd-foot,
+  .upsell-card { display:none !important; }
+
+  /* White backgrounds — removes the cream bleed that creates "blank" pages */
+  body, .report-pg, .section, .section-md, .section-sm,
+  .pg, .cd-left, .cd-right, .cd-int { background:white !important; }
+
+  /* Dark elements keep their color (chart header, hero) */
+  .cd-hdr, .thankyou-hero { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  /* Kill min-height — the #1 cause of blank trailing pages */
+  .pg, .report-pg { min-height:0 !important; height:auto !important; }
+
+  /* Trim large padding */
+  .report-pg { padding:0 24px 24px !important; }
+  .thankyou-hero { padding:32px 24px !important; }
+  .section, .section-md, .section-sm { padding:40px 24px !important; }
+
+  /* Report body: no card shadow, full width */
+  .report-body { border:none !important; box-shadow:none !important;
+    padding:0 !important; max-width:100% !important; }
+  .report-summary { box-shadow:none !important; }
+  .report-header { max-width:100% !important; }
+
+  /* Keep titles with the content that follows */
+  .report-section-title { page-break-after:avoid; break-after:avoid; }
+  h2, h3 { page-break-after:avoid; break-after:avoid; }
+
+  /* ChartDashboard: single column so bodygraph prints fully */
+  .cd { box-shadow:none !important; border:1px solid #e8e5e0 !important; }
+  .cd-body { grid-template-columns:1fr !important; }
+  .cd-left { border-right:none !important; border-bottom:1px solid #e8e5e0 !important; }
+
+  /* Ensure colours print correctly */
+  * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}
 `;
 
 
@@ -4316,7 +4357,7 @@ function ThankYouPage({result,go}){
     const bh=secs.map(s=>"<h2>"+s.t+"</h2>"+s.b.split("\n").map(x=>x?"<p>"+x+"</p>":"").join("")).join("");
     const metaObj=chart?.isNumerology?(LANG==="en"?{"Life Path":chart.lp,"Expression":chart.exp}:{Levenspad:chart.lp,Uitdrukking:chart.exp}):chart?.isHoroscoop?(LANG==="en"?{"Sun sign":chart.sun_sign,"Ascendant":chart.ascendant?.sign}:{Zonneteken:chart.sun_sign,Ascendant:chart.ascendant?.sign}):(LANG==="en"?{Type:chart?.type,Strategy:xlateStrat(chart?.strat),Authority:xlateAuth(chart?.auth),Profile:chart?.profile}:{Type:chart?.type,Strategie:chart?.strat,Autoriteit:chart?.auth,Profiel:chart?.profile});
     const meta=Object.entries(metaObj||{}).map(([k,v])=>"<tr><td>"+k+"</td><td>"+v+"</td></tr>").join("");
-    win.document.write("<!DOCTYPE html><html><head><meta charset=UTF-8><title>"+tl(rpt.title)+" - "+form.name+"</title><link href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap' rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Jost,sans-serif;font-weight:300;background:#fff;color:#1C1917}.cover{min-height:100vh;background:#1C1917;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:72px;page-break-after:always}.ci{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:24px}.ct{font-family:Cormorant Garamond,serif;font-size:48px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}.cn{font-family:Cormorant Garamond,serif;font-size:26px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:32px}.cm{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;line-height:2.2}.content{max-width:720px;margin:0 auto;padding:56px}.mb{border-left:2px solid rgba(154,128,80,.35);padding:18px 22px;margin:0 0 40px;background:#f9f8f6}table{width:100%;border-collapse:collapse}td{padding:6px 12px 6px 0;font-size:12px;color:#444;border-bottom:1px solid #f0ede8}td:first-child{font-weight:600;color:#3D2C5E;width:160px}h2{font-family:Cormorant Garamond,serif;font-size:20px;font-weight:400;color:#1C1917;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid #e8e5e0;page-break-after:avoid}p{font-size:13px;line-height:2;color:#3a3a32;margin-bottom:12px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class=cover><div class=ci>Faculty of Human Design - Ibiza</div><div class=ct>"+tl(rpt.title)+"</div><div class=cn>"+form.name+"</div><div class=cm>"+(LANG==="en"?"Born ":"Geboren ")+form.day+"-"+form.month+"-"+form.year+"</div></div><div class=content><div class=mb><table>"+meta+"</table></div>"+bh+"</div><script>window.onload=function(){window.print();}<\/script></body></html>");
+    win.document.write("<!DOCTYPE html><html><head><meta charset=UTF-8><title>"+tl(rpt.title)+" - "+form.name+"</title><link href='https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@300;400&display=swap' rel=stylesheet><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Jost,sans-serif;font-weight:300;background:#fff;color:#1C1917}.cover{height:100vh;background:#1C1917;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:72px;break-after:page;page-break-after:always}.ci{font-size:9px;letter-spacing:5px;text-transform:uppercase;color:rgba(154,128,80,.6);margin-bottom:24px}.ct{font-family:Cormorant Garamond,serif;font-size:48px;font-weight:300;color:#fff;line-height:1.05;margin-bottom:12px}.cn{font-family:Cormorant Garamond,serif;font-size:26px;font-style:italic;color:rgba(255,255,255,.5);margin-bottom:32px}.cm{font-size:10px;letter-spacing:3px;color:rgba(255,255,255,.25);text-transform:uppercase;line-height:2.2}.content{max-width:720px;margin:0 auto;padding:56px}.mb{border-left:2px solid rgba(154,128,80,.35);padding:18px 22px;margin:0 0 40px;background:#f9f8f6}table{width:100%;border-collapse:collapse}td{padding:6px 12px 6px 0;font-size:12px;color:#444;border-bottom:1px solid #f0ede8}td:first-child{font-weight:600;color:#3D2C5E;width:160px}h2{font-family:Cormorant Garamond,serif;font-size:20px;font-weight:400;color:#1C1917;margin:44px 0 12px;padding-bottom:8px;border-bottom:1px solid #e8e5e0;page-break-after:avoid}p{font-size:13px;line-height:2;color:#3a3a32;margin-bottom:12px}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}</style></head><body><div class=cover><div class=ci>Faculty of Human Design - Ibiza</div><div class=ct>"+tl(rpt.title)+"</div><div class=cn>"+form.name+"</div><div class=cm>"+(LANG==="en"?"Born ":"Geboren ")+form.day+"-"+form.month+"-"+form.year+"</div></div><div class=content><div class=mb><table>"+meta+"</table></div>"+bh+"</div><script>document.fonts.ready.then(function(){window.print();});<\/script></body></html>");
     win.document.close();
     if(btn){btn.textContent="Download PDF";btn.disabled=false;}
   };
