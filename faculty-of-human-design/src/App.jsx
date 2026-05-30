@@ -879,7 +879,7 @@ const REPORTS = [
   },
   {
     id:"relatie_liefde", icon:"◎", tag:"",
-    title:{ nl:"Relationship Reading", en:"Relationship Reading" },
+    title:{ nl:"Relatie Reading", en:"Relationship Reading" },
     price:"€95", priceNum:95,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Meer rust en begrip in je romantische verbinding", en:"More peace and understanding in your romantic connection" },
@@ -908,7 +908,7 @@ const REPORTS = [
   },
   {
     id:"relatie_business", icon:"◈", tag:"",
-    title:{ nl:"Business Reading", en:"Business Reading" },
+    title:{ nl:"Zakelijke Reading", en:"Business Reading" },
     price:"€85", priceNum:85,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Samenwerking die werkt voor jullie allebei", en:"Collaboration that works for both of you" },
@@ -937,7 +937,7 @@ const REPORTS = [
   },
   {
     id:"relatie_familie", icon:"◇", tag:"",
-    title:{ nl:"Family Reading", en:"Family Reading" },
+    title:{ nl:"Familie Reading", en:"Family Reading" },
     price:"€75", priceNum:75,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Meer begrip en verbinding in het gezin", en:"More understanding and connection in the family" },
@@ -966,7 +966,7 @@ const REPORTS = [
   },
   {
     id:"jaar", icon:"◈", tag:"",
-    title:{ nl:"Annual Reading 2026", en:"Annual Reading 2026" },
+    title:{ nl:"Jaarrapport 2026", en:"Annual Reading 2026" },
     price:"€55", priceNum:55,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Weet wat er dit jaar van je gevraagd wordt", en:"Know what is asked of you this year" },
@@ -994,7 +994,7 @@ const REPORTS = [
   },
   {
     id:"kind", icon:"◇", tag:"",
-    title:{ nl:"Child Reading", en:"Child Reading" },
+    title:{ nl:"Kinderrapport", en:"Child Reading" },
     price:"€45", priceNum:45,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begeleid je kind vanuit wie het werkelijk is", en:"Guide your child from who they truly are" },
@@ -1022,7 +1022,7 @@ const REPORTS = [
   },
   {
     id:"loopbaan", icon:"◆", tag:"",
-    title:{ nl:"Career & Money Reading", en:"Career & Money Reading" },
+    title:{ nl:"Loopbaan Reading", en:"Career & Money Reading" },
     price:"€65", priceNum:65,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Verdien geld op een manier die bij je past", en:"Earn money in a way that suits you" },
@@ -1050,7 +1050,7 @@ const REPORTS = [
   },
   {
     id:"numerologie", icon:"∞", tag:"",
-    title:{ nl:"Numerology Reading", en:"Numerology Reading" },
+    title:{ nl:"Numerologie Reading", en:"Numerology Reading" },
     price:"€65", priceNum:65,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begrijp de patronen achter je levensverhaal", en:"Understand the patterns behind your life story" },
@@ -1078,7 +1078,7 @@ const REPORTS = [
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
-    title:{ nl:"Birth Horoscope Reading", en:"Birth Horoscope Reading" },
+    title:{ nl:"Geboortehoroscoop Reading", en:"Birth Horoscope Reading" },
     price:"€75", priceNum:75,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Je planeetstanden als persoonlijk kompas", en:"Your planetary positions as a personal compass" },
