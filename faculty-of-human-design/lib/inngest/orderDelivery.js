@@ -1562,7 +1562,13 @@ export const orderDelivery = inngest.createFunction(
         },
       });
       const _mb = await _mr.text();
-      console.error(`[MODELS] status=${_mr.status} body=${_mb.slice(0,400)}`);
+      try {
+        const _mj = JSON.parse(_mb);
+        const _ids = (_mj.data || []).map((m) => m.id).join("|");
+        console.error(`[MODEL-IDS] ${_ids}`);
+      } catch (_pe) {
+        console.error(`[MODELS-RAW] status=${_mr.status} ${_mb.slice(0,200)}`);
+      }
     } catch (_me) {
       console.error(`[MODELS-EX] ${_me.message}`);
     }
