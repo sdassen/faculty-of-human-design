@@ -1195,6 +1195,28 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
   }
 }
 
+// ─── RELATIE REPORT: NO GENDERED PRONOUNS ────────────────────────────────────
+// Gender is not stored in the data. Claude must never use "hij/zij/hem/haar"
+// for either person — always refer by name or "jij / je partner".
+function buildRelatieContext(order, isEN) {
+  const name1 = order.customer_name || (isEN ? "person 1" : "persoon 1");
+  const name2 = (order.partner_birth_data || {}).name || (isEN ? "your partner" : "je partner");
+
+  if (isEN) {
+    return `\n\nRELATIONSHIP READING — MANDATORY PRONOUN RULE:
+Gender is NOT available in the data. NEVER use "he", "she", "him", "her", "his" or "hers" to refer to either person.
+Always refer to people by name: "${name1}" for the first person, "${name2}" for the second person.
+If a name is unavailable, use "you" (for the reader) and "your partner" (for the other person).
+This rule applies to every single sentence — no exceptions.`;
+  } else {
+    return `\n\nRELATIE READING — VERPLICHTE VOORNAAMWOORDREGEL:
+Geslacht is NIET beschikbaar in de data. Gebruik NOOIT "hij", "zij", "ze" (als persoonsverwijs), "hem", of "haar" (als geslachtsverwijs) voor één van beide personen.
+Verwijs altijd bij naam: "${name1}" voor de aanvrager, "${name2}" voor de tweede persoon.
+Als een naam ontbreekt, gebruik dan "jij" (voor de lezer) en "je partner" (voor de ander).
+Deze regel geldt voor elke zin in elke sectie — geen uitzonderingen.`;
+  }
+}
+
 // ─── YEAR REPORT CONTEXT ──────────────────────────────────────────────────────
 // For Annual Reading reports the personal year starts on the customer's birthday,
 // NOT on January 1st. Without explicit context Claude defaults to calendar year,
@@ -1367,6 +1389,10 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const isJaarReport = (report_id === "jaar") || /annual reading|jaarrapport/i.test(report_title || "");
   const yearBlock = isJaarReport ? buildYearReportContext(order, lang === "en") : "";
 
+  // ── Relatie report: forbid gendered pronouns (gender not in data) ────────
+  const isRelatieReport = (report_id || "").toLowerCase().startsWith("relatie_");
+  const relatieBlock = isRelatieReport ? buildRelatieContext(order, lang === "en") : "";
+
   // ── Structural lessons from past revisions ────────────────────────────────
   const lessons = lessonsForSection(order.promptLessons || [], sectionTitle);
   const lessonsBlock = lessons.length
@@ -1378,7 +1404,7 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const criticalAlert = buildCriticalAlert(chart, lang === "en");
 
   const prompt = lang === "en"
-    ? `${criticalAlert}${chartCtx}${yearBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
+    ? `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
 Write section "${sectionTitle}" for ${customer_name}.
 
@@ -1391,7 +1417,7 @@ RULES (strict):
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
 - kern 480–560 words total — fill the page with substance; two rich pages are better than one thin one
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
-    : `${criticalAlert}${chartCtx}${yearBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
+    : `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${customer_name}.
 
