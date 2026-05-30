@@ -529,8 +529,10 @@ button { cursor:pointer; font-family:var(--font-sans); }
   /* Signal strip: equal-width 2-column grid on mobile */
   .signal-strip-inner { display:grid; grid-template-columns:1fr 1fr; gap:32px 0; padding:0 24px; }
   /* Brand philosophy: single column on mobile, left-aligned */
-  .philosophy-grid { grid-template-columns:1fr; gap:24px 0; }
-  .philosophy-quote { text-align:left; }
+  .philosophy-grid { grid-template-columns:1fr; gap:24px 0; text-align:left; }
+  .philosophy-grid p, .philosophy-grid div { text-align:left; }
+  .philosophy-quote { text-align:left; font-size:.95rem; }
+  .philosophy-quotes { margin-top:24px; padding-top:24px; gap:18px; }
   /* Brand credibility: keep 2-column on mobile */
   .credibility-grid { grid-template-columns:1fr 1fr; gap:36px 28px; }
   /* Reduce generous padding on mobile for new brand sections */
@@ -580,7 +582,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* ── BRAND PHILOSOPHY SECTION ────────────────────────────────────────────── */
 .philosophy-grid { display:grid; grid-template-columns:180px 1fr; gap:0 88px; align-items:start; }
 .philosophy-quotes { display:flex; flex-direction:column; gap:24px; padding-top:32px; border-top:1px solid var(--border); margin-top:32px; }
-.philosophy-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; font-weight:300; color:var(--text-muted); line-height:1.72; }
+.philosophy-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; font-weight:300; color:var(--text-muted); line-height:1.72; text-align:left; }
 
 /* ── READING EXPERIENCE SECTION ──────────────────────────────────────────── */
 .experience-step { display:grid; grid-template-columns:64px 1fr; gap:0 28px; position:relative; }
@@ -2816,7 +2818,7 @@ function HomePage({go}){
               </div>
             </div>
             <div>
-              <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,1.9vw,1.38rem)",fontWeight:300,color:"var(--text)",lineHeight:1.82,margin:0}}>
+              <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.9vw,1.38rem)",fontWeight:300,color:"var(--text)",lineHeight:1.78,margin:0}}>
                 {lang==="en"
                   ?"Many people spend years trying to fix parts of themselves that were never broken. Sometimes what you call a flaw is simply how your system was designed to work."
                   :"Veel mensen brengen jaren door met het proberen te repareren van delen van zichzelf die nooit kapot waren. Soms is wat je een gebrek noemt gewoon hoe jouw systeem ontworpen is om te werken."}
