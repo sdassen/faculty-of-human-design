@@ -1520,6 +1520,8 @@ export const orderDelivery = inngest.createFunction(
         to: data.customer_email,
         name: data.customer_name || "klant",
         reportTitle: data.report_title,
+        reportId: data.report_id || "",
+        partnerName: (data.partner_birth_data || {}).name || null,
         language: data.language || "nl",
       });
 
@@ -1765,6 +1767,8 @@ export const orderDelivery = inngest.createFunction(
         to: order.customer_email,
         name: order.customer_name || "klant",
         reportTitle: order.report_title,
+        reportId: order.report_id || "",
+        partnerName: (order.partner_birth_data || {}).name || null,
         downloadUrl,
         language: order.language || "nl",
       });
