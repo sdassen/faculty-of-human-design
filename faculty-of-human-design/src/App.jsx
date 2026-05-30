@@ -3005,29 +3005,6 @@ function HomePage({go}){
         </div>
       </section>
 
-      {/* ── ORIGINE — Ibiza origin section ───────────────────────────────── */}
-      <div className="origin-section">
-        <div className="origin-section-bg">
-          <img src="/ibiza-es-vedra.jpg" alt="Es Vedrà bij schemering — Ibiza, de geboorteplaats van Human Design" loading="lazy"/>
-        </div>
-        <div className="origin-content" style={{gridTemplateColumns:"1fr",textAlign:"center"}}>
-          <div style={{maxWidth:620,margin:"0 auto"}}>
-            <div className="label-light" style={{marginBottom:16}}>{LANG==="en"?"The institute":"Het instituut"}</div>
-            <h2 className="h2" style={{color:"white",marginBottom:20,lineHeight:1.08}}>{LANG==="en"?"Founded on the island":"Opgericht op het eiland"}<br/><em style={{fontStyle:"italic",color:"rgba(255,255,255,.45)"}}>{LANG==="en"?"where it began":"waar het begon"}</em></h2>
-            <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,marginBottom:28}}>{LANG==="en"?"The Faculty of Human Design was founded in 2014 on Ibiza, the island where Ra Uru Hu received the Human Design system in 1987. Exact astronomical calculation. Personal, in-depth analysis.":"De Faculty of Human Design is in 2014 opgericht op Ibiza, het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse."}</p>
-            <button className="btn btn-ghost" onClick={()=>go("over")}>{LANG==="en"?"About our institute":"Over ons instituut"}</button>
-            <div className="origin-stat">
-              {(LANG==="en"?[["2014","Founded"],["2,400+","Readings"],["4.9","Rating"]]:[["2014","Opgericht"],["2.400+","Readings"],["4.9","Beoordeling"]]).map(([n,l])=>(
-                <div key={l}>
-                  <div className="origin-stat-n">{n}</div>
-                  <div className="origin-stat-l">{l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
       {/* ── TESTIMONIALS — pure editorial quotes ─────────────────────────── */}
       <section style={{padding:"112px 0",background:"#fff"}}>
         <div className="testimonials-wrap">
