@@ -104,7 +104,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .section.bg-muted, .section-md.bg-muted, .section-sm.bg-muted { background:var(--muted); }
 .section.bg-dark, .section-md.bg-dark, .section-sm.bg-dark { background:var(--dark); }
 .section.bg-cosmos, .section-md.bg-cosmos, .section-sm.bg-cosmos { background:var(--cosmos); }
-.container { max-width:1240px; margin:0 auto; width:100%; }
+.container { max-width:1240px; margin:0 auto; width:100%; padding:0 32px; }
 .container-sm { max-width:760px; margin:0 auto; width:100%; }
 .container-md { max-width:960px; margin:0 auto; width:100%; }
 .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:32px; }
@@ -486,6 +486,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .mobile-nav { display:flex; }
   .section, .section-md { padding:72px 20px; }
   .section-sm { padding:52px 20px; }
+  .container { padding:0 20px; }
   .grid-2, .grid-3 { grid-template-columns:1fr; }
   .grid-4 { grid-template-columns:1fr 1fr; }
   .form-grid { grid-template-columns:1fr; }
@@ -572,6 +573,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   /* Extra-small screens */
   .section, .section-md { padding:56px 16px; }
   .section-sm { padding:44px 16px; }
+  .container { padding:0 16px; }
   .page-hero-pad { padding:84px 16px 48px; }
   .origin-content { padding:56px 16px; }
   .detail-hero { padding:60px 16px 40px; }
@@ -3295,7 +3297,7 @@ function RapportenPage({go}){
               </h2>
             </div>
             <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
-              {LANG==="en"?"In-depth personal analyses — from full HD to career, year and child.":"Diepgaande persoonlijke analyses — van volledig HD tot loopbaan, jaar en kind."}
+              {LANG==="en"?"In-depth personal analyses: from full Human Design to career, year and child.":"Diepgaande persoonlijke analyses: van volledig Human Design tot loopbaan, jaar en kind."}
             </p>
           </div>
           <div className="rapporten-hd-grid">
