@@ -1119,7 +1119,7 @@ function previousSectionsSummary(previousSections) {
 // ─── SINGLE CLAUDE CALL ───────────────────────────────────────────────────────
 async function callClaude(systemPrompt, userPrompt, { thinking = false } = {}) {
   const body = {
-    model: "claude-sonnet-4-5",
+    model: "claude-3-7-sonnet-20250219",
     max_tokens: thinking ? 12000 : 2400,
     system: systemPrompt,
     messages: [{ role: "user", content: userPrompt }],
