@@ -459,6 +459,8 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .origin-stat { grid-template-columns:repeat(3,1fr); }
   /* HD grid: 4→2 columns at medium breakpoint */
   .rapporten-hd-grid { grid-template-columns:repeat(2,1fr); gap:48px 32px; }
+  /* Credibility: 4→2 columns early to prevent overflow */
+  .credibility-grid { grid-template-columns:1fr 1fr; gap:40px 48px; }
 }
 @media (max-width:1024px) {
   .detail-hero-inner { grid-template-columns:1fr; }
@@ -526,10 +528,13 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .inzichten-cat-header .cat-desc { max-width:100%; text-wrap:balance; }
   /* Signal strip: equal-width 2-column grid on mobile */
   .signal-strip-inner { display:grid; grid-template-columns:1fr 1fr; gap:32px 0; padding:0 24px; }
-  /* Brand philosophy: single column on mobile */
-  .philosophy-grid { grid-template-columns:1fr; gap:32px 0; }
-  /* Brand credibility: 2-column grid on mobile */
-  .credibility-grid { grid-template-columns:1fr 1fr; gap:40px 32px; }
+  /* Brand philosophy: single column on mobile, left-aligned */
+  .philosophy-grid { grid-template-columns:1fr; gap:24px 0; }
+  .philosophy-quote { text-align:left; }
+  /* Brand credibility: keep 2-column on mobile */
+  .credibility-grid { grid-template-columns:1fr 1fr; gap:36px 28px; }
+  /* Reduce generous padding on mobile for new brand sections */
+  .brand-section-pad { padding:72px 24px !important; }
   /* Editorial section header → centered on mobile */
   .editorial-header { flex-direction:column; align-items:center; text-align:center; margin-bottom:48px; }
   .editorial-header p { text-align:center; max-width:100%; }
@@ -569,7 +574,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .footer-bottom { align-items:center; text-align:center; }
   .footer-trust { justify-content:center; }
   /* Brand credibility: single column on very small screens */
-  .credibility-grid { grid-template-columns:1fr; gap:32px 0; }
+  .credibility-grid { grid-template-columns:1fr; gap:28px 0; }
 }
 
 /* ── BRAND PHILOSOPHY SECTION ────────────────────────────────────────────── */
@@ -2801,7 +2806,7 @@ function HomePage({go}){
       </div>
 
       {/* ── WHY FACULTYHD EXISTS — brand philosophy ──────────────────────── */}
-      <section style={{padding:"128px 40px",background:"var(--bg)"}}>
+      <section className="brand-section-pad" style={{padding:"128px 40px",background:"var(--bg)"}}>
         <div style={{maxWidth:840,margin:"0 auto"}}>
           <div className="philosophy-grid">
             <div>
@@ -2938,7 +2943,7 @@ function HomePage({go}){
       </section>
 
       {/* ── THE READING EXPERIENCE — calm journey ────────────────────────── */}
-      <section style={{padding:"128px 40px",background:"var(--muted)"}}>
+      <section className="brand-section-pad" style={{padding:"128px 40px",background:"var(--muted)"}}>
         <div style={{maxWidth:640,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:80}}>
             <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 36px",opacity:.45}}/>
@@ -2979,7 +2984,7 @@ function HomePage({go}){
       </section>
 
       {/* ── BRAND CREDIBILITY — quiet editorial markers ───────────────────── */}
-      <section style={{background:"var(--dark)",padding:"88px 40px"}}>
+      <section className="brand-section-pad" style={{background:"var(--dark)",padding:"88px 40px"}}>
         <div style={{maxWidth:960,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:64}}>
             <div style={{width:28,height:1,background:"rgba(201,168,92,.5)",margin:"0 auto 0",opacity:1}}/>
