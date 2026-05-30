@@ -450,6 +450,19 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .price-box-amount { font-family:var(--font-serif); font-size:3.2rem; font-weight:300; color:white; line-height:1; }
 .price-box-period { font-size:.66rem; color:rgba(255,255,255,.36); margin-top:5px; margin-bottom:22px; }
 
+/* ── BRAND PHILOSOPHY SECTION ────────────────────────────────────────────── */
+.philosophy-grid { display:grid; grid-template-columns:180px 1fr; gap:0 88px; align-items:start; }
+.philosophy-quotes { display:flex; flex-direction:column; gap:24px; padding-top:32px; border-top:1px solid var(--border); margin-top:32px; }
+.philosophy-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; font-weight:300; color:var(--text-muted); line-height:1.72; text-align:left; }
+
+/* ── READING EXPERIENCE SECTION ──────────────────────────────────────────── */
+.experience-step { display:grid; grid-template-columns:64px 1fr; gap:0 28px; position:relative; }
+.experience-step-num { width:28px; height:28px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:white; flex-shrink:0; }
+.experience-connector { position:absolute; left:13px; top:44px; bottom:-48px; width:1px; background:var(--border); }
+
+/* ── BRAND CREDIBILITY SECTION ───────────────────────────────────────────── */
+.credibility-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0 48px; }
+
 /* RESPONSIVE */
 @media (max-width:1100px) {
   .feature-split { grid-template-columns:1fr; }
@@ -578,19 +591,6 @@ button { cursor:pointer; font-family:var(--font-sans); }
   /* Brand credibility: single column on very small screens */
   .credibility-grid { grid-template-columns:1fr; gap:28px 0; }
 }
-
-/* ── BRAND PHILOSOPHY SECTION ────────────────────────────────────────────── */
-.philosophy-grid { display:grid; grid-template-columns:180px 1fr; gap:0 88px; align-items:start; }
-.philosophy-quotes { display:flex; flex-direction:column; gap:24px; padding-top:32px; border-top:1px solid var(--border); margin-top:32px; }
-.philosophy-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; font-weight:300; color:var(--text-muted); line-height:1.72; text-align:left; }
-
-/* ── READING EXPERIENCE SECTION ──────────────────────────────────────────── */
-.experience-step { display:grid; grid-template-columns:64px 1fr; gap:0 28px; position:relative; }
-.experience-step-num { width:28px; height:28px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:white; flex-shrink:0; }
-.experience-connector { position:absolute; left:13px; top:44px; bottom:-48px; width:1px; background:var(--border); }
-
-/* ── BRAND CREDIBILITY SECTION ───────────────────────────────────────────── */
-.credibility-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0 48px; }
 
 /* ── PLACE AUTOCOMPLETE ───────────────────────────────────────────────────── */
 .place-wrap { position:relative; }
