@@ -1564,9 +1564,12 @@ export const orderDelivery = inngest.createFunction(
         body: JSON.stringify({ model: "claude-3-5-sonnet-20241022", max_tokens: 5, messages: [{ role: "user", content: "hi" }] }),
       });
       const _tb = await _tr.text();
-      console.log(`[API-TEST] status=${_tr.status} key=${(process.env.ANTHROPIC_API_KEY||"").slice(0,12)}... body=${_tb.slice(0,300)}`);
+      // Log in short separate lines so Vercel doesn't truncate
+      console.log(`[DBG-STATUS] ${_tr.status}`);
+      console.log(`[DBG-KEY] ${(process.env.ANTHROPIC_API_KEY||"").slice(0,20)}`);
+      console.log(`[DBG-BODY] ${_tb.slice(0,250)}`);
     } catch (_te) {
-      console.error(`[API-TEST] fetch-exception: ${_te.message}`);
+      console.error(`[DBG-EXCEPTION] ${_te.message}`);
     }
     console.log(`[GENERATION-START] sections=${sectionTitles.length} chart_type=${chartDebug.type||"MISSING"} has_key=${!!process.env.ANTHROPIC_API_KEY} model=claude-3-5-sonnet-20241022`);
 
