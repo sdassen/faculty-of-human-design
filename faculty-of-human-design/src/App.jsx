@@ -823,7 +823,7 @@ const REPORTS = [
   {
     id:"volledig", icon:"✦",
     tag:{ nl:"Meest gekozen", en:"Most popular" },
-    title:{ nl:"Volledig Human Design Rapport", en:"Complete Human Design Report" },
+    title:{ nl:"Human Design Reading", en:"Human Design Reading" },
     price:"€75", priceNum:75,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begrijp eindelijk wie je werkelijk bent", en:"Finally understand who you truly are" },
@@ -851,7 +851,7 @@ const REPORTS = [
   },
   {
     id:"relatie_liefde", icon:"◎", tag:"",
-    title:{ nl:"Relatierapport — Liefde", en:"Relationship Report — Love" },
+    title:{ nl:"Relationship Reading", en:"Relationship Reading" },
     price:"€95", priceNum:95,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Meer rust en begrip in je romantische verbinding", en:"More peace and understanding in your romantic connection" },
@@ -880,7 +880,7 @@ const REPORTS = [
   },
   {
     id:"relatie_business", icon:"◈", tag:"",
-    title:{ nl:"Relatierapport — Business", en:"Relationship Report — Business" },
+    title:{ nl:"Business Reading", en:"Business Reading" },
     price:"€85", priceNum:85,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Samenwerking die werkt voor jullie allebei", en:"Collaboration that works for both of you" },
@@ -909,7 +909,7 @@ const REPORTS = [
   },
   {
     id:"relatie_familie", icon:"◇", tag:"",
-    title:{ nl:"Relatierapport — Familie", en:"Relationship Report — Family" },
+    title:{ nl:"Family Reading", en:"Family Reading" },
     price:"€75", priceNum:75,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Meer begrip en verbinding in het gezin", en:"More understanding and connection in the family" },
@@ -938,7 +938,7 @@ const REPORTS = [
   },
   {
     id:"jaar", icon:"◈", tag:"",
-    title:{ nl:"Jaarrapport 2026", en:"Annual Report 2026" },
+    title:{ nl:"Annual Reading 2026", en:"Annual Reading 2026" },
     price:"€55", priceNum:55,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Weet wat er dit jaar van je gevraagd wordt", en:"Know what is asked of you this year" },
@@ -966,7 +966,7 @@ const REPORTS = [
   },
   {
     id:"kind", icon:"◇", tag:"",
-    title:{ nl:"Kinderrapport", en:"Child Report" },
+    title:{ nl:"Child Reading", en:"Child Reading" },
     price:"€45", priceNum:45,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begeleid je kind vanuit wie het werkelijk is", en:"Guide your child from who they truly are" },
@@ -994,7 +994,7 @@ const REPORTS = [
   },
   {
     id:"loopbaan", icon:"◆", tag:"",
-    title:{ nl:"Loopbaan & Geld Rapport", en:"Career & Money Report" },
+    title:{ nl:"Career & Money Reading", en:"Career & Money Reading" },
     price:"€65", priceNum:65,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Verdien geld op een manier die bij je past", en:"Earn money in a way that suits you" },
@@ -1022,7 +1022,7 @@ const REPORTS = [
   },
   {
     id:"numerologie", icon:"∞", tag:"",
-    title:{ nl:"Numerologie Rapport", en:"Numerology Report" },
+    title:{ nl:"Numerology Reading", en:"Numerology Reading" },
     price:"€65", priceNum:65,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begrijp de patronen achter je levensverhaal", en:"Understand the patterns behind your life story" },
@@ -1050,7 +1050,7 @@ const REPORTS = [
   },
   {
     id:"horoscoop", icon:"☽", tag:"",
-    title:{ nl:"Geboortehoroscoop", en:"Birth Horoscope" },
+    title:{ nl:"Birth Horoscope Reading", en:"Birth Horoscope Reading" },
     price:"€75", priceNum:75,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Je planeetstanden als persoonlijk kompas", en:"Your planetary positions as a personal compass" },
@@ -2723,13 +2723,13 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
 function HomePage({go}){
   const lang = useDynamicLang();  // Get reactive language from context
   useSEO({
-    title:lang==="en"?"Human Design Report — Personal & In-Depth":"Human Design Rapport — Persoonlijk & Diepgaand",
-    description:lang==="en"?"Receive an in-depth, personal Human Design report based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.":"Ontvang een diepgaand, persoonlijk Human Design rapport op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, direct als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
+    title:lang==="en"?"Human Design Reading — Personal & In-Depth":"Human Design Reading — Persoonlijk & Diepgaand",
+    description:lang==="en"?"Receive an in-depth, personal Human Design reading based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.":"Ontvang een diepgaande, persoonlijke Human Design reading op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, bezorgd als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
     canonical:SITE+"/",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
-      "name":lang==="en"?"Human Design Reports — Faculty of Human Design":"Human Design Rapporten — Faculty of Human Design",
-      "description":lang==="en"?"In-depth personal reports based on Human Design, Numerology and Astrology.":"Diepgaande persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "name":lang==="en"?"Human Design Readings — Faculty of Human Design":"Human Design Readings — Faculty of Human Design",
+      "description":lang==="en"?"In-depth personal readings based on Human Design, Numerology and Astrology.":"Diepgaande persoonlijke readings op basis van Human Design, Numerologie en Astrologie.",
       "itemListElement": REPORTS.slice(0,4).map((r,i)=>({
         "@type":"ListItem","position":i+1,
         "name":tl(r.title),"description":tl(r.tagline),
@@ -2743,7 +2743,7 @@ function HomePage({go}){
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <section className="hero" aria-label="Hoofdbanner">
         <div className="hero-bg">
-          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza — Faculty of Human Design persoonlijke blauwdrukken" loading="eager" fetchPriority="high"/>
+          <img src={IMGS.hero} alt="Sterrenhemel boven Ibiza — Faculty of Human Design persoonlijke readings" loading="eager" fetchPriority="high"/>
         </div>
         <div className="hero-stars"/>
         <div className="hero-glow"/>
@@ -2751,7 +2751,7 @@ function HomePage({go}){
         <div className="hero-content">
           <div className="hero-text">
             <div className="hero-eyebrow">{lang==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
-            <h1 className="h1-hero">{lang==="en"?<>Your blueprint.<br/><em>Your truth.</em></>:<>Jouw blauwdruk.<br/><em>Jouw waarheid.</em></>}</h1>
+            <h1 className="h1-hero">{lang==="en"?<>Your reading.<br/><em>Your truth.</em></>:<>Jouw reading.<br/><em>Jouw waarheid.</em></>}</h1>
             <p className="hero-subtitle">{lang==="en"?"An intimate, in-depth portrait of who you are, drawn from your birth data and delivered as PDF within 1 business day.":"Een intiem, diepgaand portret van wie jij bent, getekend uit je geboortedata en bezorgd als PDF binnen 1 werkdag."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginTop:36}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
@@ -2770,8 +2770,8 @@ function HomePage({go}){
       <div style={{background:"var(--bg)",borderBottom:"1px solid var(--border)",padding:"20px 0"}}>
         <div className="signal-strip-inner">
           {(LANG==="en"
-            ?[["2,400+","reports delivered"],["4.9 / 5","average rating"],["Est. 2014","Ibiza, Spain"],["Swiss Ephemeris","astronomical precision"]]
-            :[["2.400+","rapporten uitgebracht"],["4.9 / 5","gemiddelde beoordeling"],["Est. 2014","Ibiza, Spanje"],["Swiss Ephemeris","astronomische precisie"]]
+            ?[["2,400+","readings delivered"],["4.9 / 5","average rating"],["Est. 2014","Ibiza, Spain"],["Swiss Ephemeris","astronomical precision"]]
+            :[["2.400+","readings bezorgd"],["4.9 / 5","gemiddelde beoordeling"],["Est. 2014","Ibiza, Spanje"],["Swiss Ephemeris","astronomische precisie"]]
           ).map(([n,l])=>(
             <div key={l} style={{textAlign:"center",flexShrink:0}}>
               <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",letterSpacing:".02em"}}>{n}</div>
@@ -2896,7 +2896,7 @@ function HomePage({go}){
             <p style={{fontSize:"1rem",fontWeight:300,color:"rgba(255,255,255,.55)",lineHeight:1.82,marginBottom:28}}>{LANG==="en"?"The Faculty of Human Design was founded in 2014 on Ibiza, the island where Ra Uru Hu received the Human Design system in 1987. Exact astronomical calculation. Personal, in-depth analysis.":"De Faculty of Human Design is in 2014 opgericht op Ibiza, het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Exacte astronomische berekening. Persoonlijke, diepgaande analyse."}</p>
             <button className="btn btn-ghost" onClick={()=>go("over")}>{LANG==="en"?"About our institute":"Over ons instituut"}</button>
             <div className="origin-stat">
-              {(LANG==="en"?[["2014","Founded"],["2,400+","Reports"],["4.9","Rating"]]:[["2014","Opgericht"],["2.400+","Rapporten"],["4.9","Beoordeling"]]).map(([n,l])=>(
+              {(LANG==="en"?[["2014","Founded"],["2,400+","Readings"],["4.9","Rating"]]:[["2014","Opgericht"],["2.400+","Readings"],["4.9","Beoordeling"]]).map(([n,l])=>(
                 <div key={l}>
                   <div className="origin-stat-n">{n}</div>
                   <div className="origin-stat-l">{l}</div>
@@ -2916,13 +2916,13 @@ function HomePage({go}){
           </div>
           <div className="testimonials-grid">
             {(lang==="en"?[
-              ["I felt emotionally recognised for the first time, not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Full Report"],
-              ["We had struggled to understand each other for years. The report named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Report"],
-              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Full Report"],
+              ["I felt emotionally recognised for the first time, not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Human Design Reading"],
+              ["We had struggled to understand each other for years. The reading named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Reading"],
+              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Human Design Reading"],
             ]:[
-              ["Ik voelde me voor het eerst emotioneel erkend, niet geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Volledig Rapport"],
-              ["Wij hadden al jaren moeite om elkaar te begrijpen. Het rapport noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relatierapport"],
-              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Volledig Rapport"],
+              ["Ik voelde me voor het eerst emotioneel erkend, niet geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Human Design Reading"],
+              ["Wij hadden al jaren moeite om elkaar te begrijpen. De reading noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relationship Reading"],
+              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Human Design Reading"],
             ]).map(([q,n,r])=>(
               <div key={n} style={{display:"flex",flexDirection:"column",paddingTop:28,borderTop:"1px solid var(--border)"}}>
                 <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.82,margin:"0 0 28px",letterSpacing:"-.005em",textAlign:"left"}}>
@@ -3135,7 +3135,7 @@ function WatPage({go}){
             style={{fontFamily:"var(--font-sans)",fontSize:".75rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",padding:"16px 44px",background:"transparent",border:"1px solid var(--text)",color:"var(--text)",cursor:"pointer",transition:"opacity 200ms"}}
             onMouseEnter={e=>e.currentTarget.style.opacity=".6"}
             onMouseLeave={e=>e.currentTarget.style.opacity="1"}>
-            {isEN?"Discover your blueprint":"Ontdek je blauwdruk"}
+            {isEN?"Discover your reading":"Ontdek je reading"}
           </button>
         </div>
       </section>
@@ -3150,12 +3150,12 @@ function RapportenPage({go}){
   const other=REPORTS.filter(r=>["numerologie","horoscoop"].includes(r.id));
   const sub=REPORTS.find(r=>r.id==="maandelijks");
   useSEO({
-    title:LANG==="en"?"Human Design Reports — Choose your personal analysis":"Human Design Rapporten — Kies je persoonlijke analyse",
-    description:LANG==="en"?"Choose from 10 in-depth reports: Full Human Design, Relationship Report, Career, Year, Child, Numerology and Birth Horoscope. Personal and delivered within 1 business day. From €45.":"Kies uit 10 diepgaande rapporten: Volledig Human Design, Relatierapport, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
+    title:LANG==="en"?"Human Design Readings — Choose your personal reading":"Human Design Readings — Kies je persoonlijke reading",
+    description:LANG==="en"?"Choose from 10 in-depth readings: Human Design Reading, Relationship, Career, Year, Child, Numerology and Birth Horoscope. Personal and delivered within 1 business day. From €45.":"Kies uit 10 diepgaande readings: Human Design Reading, Relationship, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
     canonical:SITE+"/readings",
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
-      "name":LANG==="en"?"Human Design Reports":"Human Design Rapporten",
+      "name":LANG==="en"?"Human Design Readings":"Human Design Readings",
       "itemListElement":REPORTS.map((r,i)=>({
         "@type":"ListItem","position":i+1,
         "name":tl(r.title),
@@ -3186,7 +3186,7 @@ function RapportenPage({go}){
             <div>
               <div className="label" style={{marginBottom:14}}>{t("rapporten.hdTitle")}</div>
               <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>
-                {LANG==="en"?"Your personal Human Design blueprint":"Jouw persoonlijke Human Design blauwdruk"}
+                {LANG==="en"?"Your personal Human Design reading":"Jouw persoonlijke Human Design reading"}
               </h2>
             </div>
             <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
@@ -3227,7 +3227,7 @@ function RapportenPage({go}){
               </h2>
             </div>
             <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
-              {LANG==="en"?"Choose the perspective that suits your relationship. Each report analyses two complete Human Design charts.":"Kies het perspectief dat past bij jullie relatie. Elk rapport analyseert twee volledige Human Design charts."}
+              {LANG==="en"?"Choose the perspective that suits your relationship. Each reading analyses two complete Human Design charts.":"Kies het perspectief dat past bij jullie relatie. Elke reading analyseert twee volledige Human Design charts."}
             </p>
           </div>
           <div className="reports-grid">
@@ -3323,13 +3323,13 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
   const[faq,setFaq]=useState(null);
   const genericFaqs = LANG==="en" ? [
     ["Do I need my exact birth time?","We use professional-grade astronomical algorithms. The more accurate the time, the more personal the result."],
-    ["Is the report truly personal?","Every report is uniquely compiled based on your specific chart. No two reports are identical."],
-    ["What format will I receive my report in?","As a PDF by email — save it to your archive or print it out. Delivered within 1 business day after payment."],
+    ["Is the reading truly personal?","Every reading is uniquely compiled based on your specific chart. No two readings are identical."],
+    ["What format will I receive my reading in?","As a PDF by email — save it to your archive or print it out. Delivered within 1 business day after payment."],
     ["What if I don't know my birth time?","Use the most accurate time you have. Type and Authority are usually correct even with an approximate time."],
   ] : [
-    ["Hoe nauwkeurig is de berekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele software. De blauwdruk is gebaseerd op je exacte geboortedata."],
-    ["Is de blauwdruk echt persoonlijk?","Elk rapport wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee rapporten zijn identiek."],
-    ["In welk format ontvang ik mijn blauwdruk?","Als PDF per e-mail — bewaar hem in je archief of print hem uit. Bezorgd binnen 1 werkdag na betaling."],
+    ["Hoe nauwkeurig is de berekening?","Wij gebruiken dezelfde astronomische algoritmen als professionele software. Je reading is gebaseerd op je exacte geboortedata."],
+    ["Is de reading echt persoonlijk?","Elke reading wordt volledig op maat samengesteld op basis van jouw specifieke chart. Geen twee readings zijn identiek."],
+    ["In welk format ontvang ik mijn reading?","Als PDF per e-mail — bewaar hem in je archief of print hem uit. Bezorgd binnen 1 werkdag na betaling."],
     ["Wat als ik mijn geboortetijd niet weet?","Gebruik de meest nauwkeurige tijd die je heeft. Type en Autoriteit zijn meestal al correct."],
   ];
   const faqs = REPORT_FAQS[rpt.id]?.[LANG] ?? REPORT_FAQS[rpt.id]?.nl ?? genericFaqs;
@@ -3351,14 +3351,14 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       "@graph":[
         productLD(rpt),
         faqLD(faqs),
-        breadcrumbLD([["Home","/"],[ LANG==="en"?"Reports":"Rapporten","/#rapporten"],[rptTitle,"/#rapport-"+rpt.id]])
+        breadcrumbLD([["Home","/"],[ LANG==="en"?"Readings":"Readings","/#rapporten"],[rptTitle,"/#rapport-"+rpt.id]])
       ]
     }
   });
   const isRelatie = rpt.id.startsWith("relatie_");
   const heroCta = LANG==="en"
-    ? (isRelatie ? "Receive your reading" : "Receive your blueprint")
-    : (isRelatie ? "Ontvang jullie reading" : "Ontvang je blauwdruk");
+    ? "Receive your reading"
+    : (isRelatie ? "Ontvang jullie reading" : "Ontvang je reading");
   const sections = promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*\d+\.\s*/,"").trim());
   const reviews = Array.isArray(rpt.reviews)?rpt.reviews:(rpt.reviews?.[LANG]||rpt.reviews?.nl||[]);
 
@@ -3830,7 +3830,7 @@ function InzichtenPage({go,articleId}){
               onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
               onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
               onClick={()=>go("rapporten")}
-            >{isEN?"Discover your blueprint":"Ontdek je blauwdruk"}</button>
+            >{isEN?"Discover your reading":"Ontdek je reading"}</button>
           </div>
         </section>
 
@@ -3942,14 +3942,14 @@ function InzichtenPage({go,articleId}){
             </blockquote>
             <div style={{width:1,height:40,background:"var(--gold)",margin:"0 auto 44px",opacity:.4}}/>
             <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.75,marginBottom:36}}>
-              {isEN?"Your blueprint goes deeper than any article can.":"Jouw blauwdruk gaat dieper dan elk artikel kan."}
+              {isEN?"Your reading goes deeper than any article can.":"Jouw reading gaat dieper dan elk artikel kan."}
             </p>
             <button
               style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 44px",cursor:"pointer",transition:"all .3s ease"}}
               onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
               onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
               onClick={()=>go("rapporten")}
-            >{isEN?"Discover your blueprint":"Ontdek je blauwdruk"}</button>
+            >{isEN?"Discover your reading":"Ontdek je reading"}</button>
           </div>
         </section>
       )}
@@ -3962,12 +3962,12 @@ function OverPage({go}){
   const isEN=LANG==="en";
   useSEO({
     title:isEN?"About — Faculty of Human Design":"Over — Faculty of Human Design",
-    description:isEN?"Faculty of Human Design. Personalised blueprints based on Human Design, Numerology and Astrology. Founded on Ibiza.":"Faculty of Human Design. Persoonlijke blauwdrukken op basis van Human Design, Numerologie en Astrologie. Opgericht op Ibiza.",
+    description:isEN?"Faculty of Human Design. Personal readings based on Human Design, Numerology and Astrology. Founded on Ibiza.":"Faculty of Human Design. Persoonlijke readings op basis van Human Design, Numerologie en Astrologie. Opgericht op Ibiza.",
     canonical:SITE+(isEN?"/en/philosophy":"/philosophy"),
     jsonLd:{
       "@context":"https://schema.org","@type":"AboutPage",
       "name":isEN?"About Faculty of Human Design":"Over Faculty of Human Design",
-      "description":isEN?"Founded on Ibiza. Personalised reports based on Human Design, Numerology and Astrology.":"Opgericht op Ibiza. Persoonlijke rapporten op basis van Human Design, Numerologie en Astrologie.",
+      "description":isEN?"Founded on Ibiza. Personal readings based on Human Design, Numerology and Astrology.":"Opgericht op Ibiza. Persoonlijke readings op basis van Human Design, Numerologie en Astrologie.",
       "url":SITE+(isEN?"/en/philosophy":"/philosophy"),
     }
   });
@@ -4006,8 +4006,8 @@ function OverPage({go}){
           </p>
           <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.92rem,1.35vw,1.05rem)",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.92,margin:0}}>
             {isEN
-              ? "A blueprint does not tell you who to become. It shows what was already there, before the conditioning, before the expectations, before the years of adapting to what was asked of you."
-              : "Een blauwdruk vertelt je niet wie je moet worden. Het laat zien wat er al was, vóór de conditionering, vóór de verwachtingen, vóór de jaren van aanpassen aan wat van je gevraagd werd."}
+              ? "A reading does not tell you who to become. It reveals what was already there, before the conditioning, before the expectations, before the years of adapting to what was asked of you."
+              : "Een reading vertelt je niet wie je moet worden. Het onthult wat er al was, vóór de conditionering, vóór de verwachtingen, vóór de jaren van aanpassen aan wat van je gevraagd werd."}
           </p>
         </div>
       </section>
@@ -4037,8 +4037,8 @@ function OverPage({go}){
             <div style={{width:1,height:40,background:"var(--gold)",marginBottom:36,opacity:.35}}/>
             <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.9rem,1.3vw,1rem)",fontWeight:300,color:"var(--text-muted)",lineHeight:1.9,marginBottom:24}}>
               {isEN
-                ? "That is why our blueprints are written, not assembled from templates. Each analysis is composed specifically for your chart, in language that allows you to recognise yourself in what you read."
-                : "Daarom zijn onze blauwdrukken geschreven, niet samengesteld vanuit templates. Elke analyse wordt specifiek voor jouw chart opgebouwd, in taal die je in staat stelt om jezelf te herkennen in wat je leest."}
+                ? "That is why our readings are written, not assembled from templates. Each reading is composed specifically for your chart, in language that allows you to recognise yourself in what you read."
+                : "Daarom zijn onze readings geschreven, niet samengesteld vanuit templates. Elke reading wordt specifiek voor jouw chart opgebouwd, in taal die je in staat stelt om jezelf te herkennen in wat je leest."}
             </p>
             <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.9rem,1.3vw,1rem)",fontWeight:300,color:"var(--text-muted)",lineHeight:1.9,margin:0}}>
               {isEN
@@ -4115,15 +4115,15 @@ function OverPage({go}){
           <div style={{width:1,height:52,background:"var(--gold)",margin:"0 auto 52px",opacity:.28}}/>
           <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.55vw,1.18rem)",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.92,marginBottom:48,whiteSpace:"pre-line"}}>
             {isEN
-              ? "If something in you is asking\nto be seen clearly —\nthat is where a blueprint begins."
-              : "Als er iets in je vraagt\nom helder gezien te worden —\ndaar begint een blauwdruk."}
+              ? "If something in you is asking\nto be seen clearly —\nthat is where a reading begins."
+              : "Als er iets in je vraagt\nom helder gezien te worden —\ndaar begint een reading."}
           </p>
           <button
             style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".18em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.28)",padding:"15px 48px",cursor:"pointer",transition:"all .32s ease"}}
             onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
             onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.28)";}}
             onClick={()=>go("rapporten")}
-          >{isEN?"Discover your blueprint":"Ontdek je blauwdruk"}</button>
+          >{isEN?"Discover your reading":"Ontdek je reading"}</button>
         </div>
       </section>
 
@@ -4138,22 +4138,22 @@ function ContactPage(){
   const[faqOpen,setFaqOpen]=useState(null);
 
   const FAQ_NL=[
-    {q:"Wat heb ik nodig om een rapport te bestellen?",a:"Alleen je exacte geboortedatum, geboortetijd en geboorteplaats. Hoe nauwkeuriger de geboortetijd, hoe preciezer het rapport. Een afwijking van 15 minuten heeft al merkbaar effect op sommige chart-elementen."},
-    {q:"Hoe snel ontvang ik mijn rapport?",a:"Rapporten worden bezorgd binnen 18–23 uur na betaling, op werkdagen tussen 9:00 en 17:30 uur."},
-    {q:"In welke taal is het rapport geschreven?",a:"Je kiest zelf de taal bij het bestellen: Nederlands of Engels. Het rapport wordt volledig in de gekozen taal opgeleverd."},
-    {q:"Wat als ik mijn exacte geboortetijd niet weet?",a:"Een geschatte tijd is vaak voldoende voor de meeste chart-elementen. Neem bij twijfel contact op — we adviseren je welk rapport nog steeds waardevol is voor jouw situatie."},
-    {q:"Wat maakt dit rapport anders dan andere Human Design lezingen?",a:"Onze rapporten worden individueel gegenereerd op basis van jouw chartdata en geschreven in een literaire, emotioneel resonante stijl. Geen generieke templates — elk rapport is uniek voor jou."},
-    {q:"Kan ik een rapport retourneren of terugbetaling aanvragen?",a:"Omdat elk rapport persoonlijk voor jou wordt samengesteld, is terugbetaling niet mogelijk na levering. Bij vragen of opmerkingen kun je ons altijd bereiken via info@facultyhd.com."},
-    {q:"Hoe lang blijft de download-link geldig?",a:"De link naar jouw rapport blijft permanent beschikbaar. Je kunt het PDF-bestand altijd opslaan of opnieuw downloaden via de link die je per e-mail ontvangt."},
+    {q:"Wat heb ik nodig om een reading te bestellen?",a:"Alleen je exacte geboortedatum, geboortetijd en geboorteplaats. Hoe nauwkeuriger de geboortetijd, hoe persoonlijker de reading. Een afwijking van 15 minuten heeft al merkbaar effect op sommige chart-elementen."},
+    {q:"Hoe snel ontvang ik mijn reading?",a:"Readings worden bezorgd binnen 18–23 uur na betaling, op werkdagen tussen 9:00 en 17:30 uur."},
+    {q:"In welke taal is de reading geschreven?",a:"Je kiest zelf de taal bij het bestellen: Nederlands of Engels. De reading wordt volledig in de gekozen taal opgeleverd."},
+    {q:"Wat als ik mijn exacte geboortetijd niet weet?",a:"Een geschatte tijd is vaak voldoende voor de meeste chart-elementen. Neem bij twijfel contact op — we adviseren je welke reading nog steeds waardevol is voor jouw situatie."},
+    {q:"Wat maakt deze reading anders dan andere Human Design lezingen?",a:"Onze readings worden individueel samengesteld op basis van jouw chartdata en geschreven in een literaire, emotioneel resonante stijl. Geen generieke templates — elke reading is uniek voor jou."},
+    {q:"Kan ik een reading retourneren of terugbetaling aanvragen?",a:"Omdat elke reading persoonlijk voor jou wordt samengesteld, is terugbetaling niet mogelijk na levering. Bij vragen of opmerkingen kun je ons altijd bereiken via info@facultyhd.com."},
+    {q:"Hoe lang blijft de download-link geldig?",a:"De link naar jouw reading blijft permanent beschikbaar. Je kunt het PDF-bestand altijd opslaan of opnieuw downloaden via de link die je per e-mail ontvangt."},
   ];
   const FAQ_EN=[
-    {q:"What do I need to order a report?",a:"Only your exact date of birth, time of birth and place of birth. The more accurate the birth time, the more precise the report. Even a 15-minute difference can meaningfully affect certain chart elements."},
-    {q:"How soon will I receive my report?",a:"Reports are delivered within 18–23 hours after payment, on business days between 9:00 and 17:30."},
-    {q:"What language is the report written in?",a:"You choose the language when ordering: Dutch or English. The report will be delivered entirely in your chosen language."},
-    {q:"What if I don't know my exact birth time?",a:"An approximate time is often sufficient for most chart elements. If you're unsure, feel free to contact us — we can advise which report still provides meaningful insight for your situation."},
-    {q:"What makes this report different from other Human Design readings?",a:"Our reports are individually generated based on your chart data, written in a literary, emotionally resonant style. No generic templates — every report is unique to you."},
-    {q:"Can I return a report or request a refund?",a:"Because each report is personally compiled for you, refunds are not available after delivery. For any questions or concerns, you can always reach us at info@facultyhd.com."},
-    {q:"How long does the download link remain valid?",a:"The link to your report remains permanently available. You can save the PDF or re-download it at any time using the link you receive by email."},
+    {q:"What do I need to order a reading?",a:"Only your exact date of birth, time of birth and place of birth. The more accurate the birth time, the more personal the reading. Even a 15-minute difference can meaningfully affect certain chart elements."},
+    {q:"How soon will I receive my reading?",a:"Readings are delivered within 18–23 hours after payment, on business days between 9:00 and 17:30."},
+    {q:"What language is the reading written in?",a:"You choose the language when ordering: Dutch or English. The reading will be delivered entirely in your chosen language."},
+    {q:"What if I don't know my exact birth time?",a:"An approximate time is often sufficient for most chart elements. If you're unsure, feel free to contact us — we can advise which reading still provides meaningful insight for your situation."},
+    {q:"What makes this reading different from other Human Design readings?",a:"Our readings are individually compiled based on your chart data, written in a literary, emotionally resonant style. No generic templates — every reading is unique to you."},
+    {q:"Can I return a reading or request a refund?",a:"Because each reading is personally compiled for you, refunds are not available after delivery. For any questions or concerns, you can always reach us at info@facultyhd.com."},
+    {q:"How long does the download link remain valid?",a:"The link to your reading remains permanently available. You can save the PDF or re-download it at any time using the link you receive by email."},
   ];
   const faqs=LANG==="en"?FAQ_EN:FAQ_NL;
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
@@ -4173,7 +4173,7 @@ function ContactPage(){
   };
   useSEO({
     title:"Contact — Faculty of Human Design",
-    description:LANG==="en"?"Contact Faculty of Human Design. Questions about reports, orders or Human Design? We respond within 1 business day. Email: info@facultyhd.com":"Neem contact op met Faculty of Human Design. Vragen over rapporten, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
+    description:LANG==="en"?"Contact Faculty of Human Design. Questions about readings, orders or Human Design? We respond within 1 business day. Email: info@facultyhd.com":"Neem contact op met Faculty of Human Design. Vragen over readings, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
     canonical:SITE+"/#contact",
     jsonLd:{
       "@context":"https://schema.org","@type":"ContactPage",
@@ -4425,7 +4425,7 @@ function ThankYouPage({result,go}){
 
 // ─── ORDER CONFIRMATION PAGE ──────────────────────────────────────────────────
 function OrderConfirmationPage({result,go}){
-  useSEO({title:LANG==="en"?"Order confirmed":"Bestelling bevestigd",description:LANG==="en"?"Your order has been received. Your report will be delivered by email within 1 business day.":"Je bestelling is ontvangen. Je rapport wordt binnen 1 werkdag per e-mail bezorgd.",canonical:SITE+"/"});
+  useSEO({title:LANG==="en"?"Order confirmed":"Bestelling bevestigd",description:LANG==="en"?"Your order has been received. Your reading will be delivered by email as a PDF within 1 business day.":"Je bestelling is ontvangen. Je reading wordt binnen 1 werkdag als PDF per e-mail bezorgd.",canonical:SITE+"/"});
   return(
     <div style={{minHeight:"100vh",background:"var(--bg)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"40px 20px"}}>
       <div style={{maxWidth:560,width:"100%",textAlign:"center"}}>
@@ -4810,7 +4810,7 @@ function TermsPage({go}){
               <a href="mailto:info@facultyhd.com" style={{color:"var(--brand)",textDecoration:"none",fontWeight:500}}>info@facultyhd.com</a>.
             </p>
             <button className="btn btn-secondary" onClick={()=>go("rapporten")}>
-              {isEn?"View our reports":"Bekijk onze rapporten"}
+              {isEn?"View our readings":"Bekijk onze readings"}
             </button>
           </div>
         </div>
