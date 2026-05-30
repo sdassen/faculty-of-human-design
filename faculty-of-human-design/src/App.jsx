@@ -526,6 +526,10 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .inzichten-cat-header .cat-desc { max-width:100%; text-wrap:balance; }
   /* Signal strip: equal-width 2-column grid on mobile */
   .signal-strip-inner { display:grid; grid-template-columns:1fr 1fr; gap:32px 0; padding:0 24px; }
+  /* Brand philosophy: single column on mobile */
+  .philosophy-grid { grid-template-columns:1fr; gap:32px 0; }
+  /* Brand credibility: 2-column grid on mobile */
+  .credibility-grid { grid-template-columns:1fr 1fr; gap:40px 32px; }
   /* Editorial section header → centered on mobile */
   .editorial-header { flex-direction:column; align-items:center; text-align:center; margin-bottom:48px; }
   .editorial-header p { text-align:center; max-width:100%; }
@@ -564,7 +568,22 @@ button { cursor:pointer; font-family:var(--font-sans); }
   /* Footer bottom: center on tiny screens */
   .footer-bottom { align-items:center; text-align:center; }
   .footer-trust { justify-content:center; }
+  /* Brand credibility: single column on very small screens */
+  .credibility-grid { grid-template-columns:1fr; gap:32px 0; }
 }
+
+/* ── BRAND PHILOSOPHY SECTION ────────────────────────────────────────────── */
+.philosophy-grid { display:grid; grid-template-columns:180px 1fr; gap:0 88px; align-items:start; }
+.philosophy-quotes { display:flex; flex-direction:column; gap:24px; padding-top:32px; border-top:1px solid var(--border); margin-top:32px; }
+.philosophy-quote { font-family:var(--font-serif); font-size:1.05rem; font-style:italic; font-weight:300; color:var(--text-muted); line-height:1.72; }
+
+/* ── READING EXPERIENCE SECTION ──────────────────────────────────────────── */
+.experience-step { display:grid; grid-template-columns:64px 1fr; gap:0 28px; position:relative; }
+.experience-step-num { width:28px; height:28px; border:1px solid var(--border); display:flex; align-items:center; justify-content:center; background:white; flex-shrink:0; }
+.experience-connector { position:absolute; left:13px; top:44px; bottom:-48px; width:1px; background:var(--border); }
+
+/* ── BRAND CREDIBILITY SECTION ───────────────────────────────────────────── */
+.credibility-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0 48px; }
 
 /* ── PLACE AUTOCOMPLETE ───────────────────────────────────────────────────── */
 .place-wrap { position:relative; }
@@ -2709,7 +2728,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
                 onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
                 onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
                 onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum});goToStripe(rpt.id,chart,form);}}
-              >{rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your blueprint":"Ontvang je blauwdruk")}</button>
+              >{rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading")}</button>
               <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
             </div>
           </div>
@@ -2780,6 +2799,40 @@ function HomePage({go}){
           ))}
         </div>
       </div>
+
+      {/* ── WHY FACULTYHD EXISTS — brand philosophy ──────────────────────── */}
+      <section style={{padding:"128px 40px",background:"var(--bg)"}}>
+        <div style={{maxWidth:840,margin:"0 auto"}}>
+          <div className="philosophy-grid">
+            <div>
+              <div style={{width:28,height:1,background:"var(--gold)",marginBottom:20,opacity:.6}}/>
+              <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",lineHeight:1.8}}>
+                {lang==="en"?"Our reason for being":"Waarom wij bestaan"}
+              </div>
+            </div>
+            <div>
+              <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,1.9vw,1.38rem)",fontWeight:300,color:"var(--text)",lineHeight:1.82,margin:0}}>
+                {lang==="en"
+                  ?"Many people spend years trying to fix parts of themselves that were never broken. Sometimes what you call a flaw is simply how your system was designed to work."
+                  :"Veel mensen brengen jaren door met het proberen te repareren van delen van zichzelf die nooit kapot waren. Soms is wat je een gebrek noemt gewoon hoe jouw systeem ontworpen is om te werken."}
+              </p>
+              <div className="philosophy-quotes">
+                {(lang==="en"?[
+                  "Recognition is often more valuable than advice.",
+                  "Clarity can arrive when you stop trying to become someone else.",
+                  "Not everything that feels heavy belongs to you.",
+                ]:[
+                  "Herkenning is vaak waardevoller dan advies.",
+                  "Helderheid kan ontstaan als je stopt met proberen iemand anders te worden.",
+                  "Niet alles wat zwaar aanvoelt is van jou.",
+                ]).map((q,i)=>(
+                  <p key={i} className="philosophy-quote">"{q}"</p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── WAAROM ANDERS — open editorial pillars ───────────────────────── */}
       <section style={{padding:"112px 0",background:"#fff"}}>
@@ -2880,6 +2933,74 @@ function HomePage({go}){
           </div>
           <div style={{textAlign:"center",marginTop:64}}>
             <button className="btn btn-secondary" onClick={()=>go("rapporten")}>{t("home.viewAll")}</button>
+          </div>
+        </div>
+      </section>
+
+      {/* ── THE READING EXPERIENCE — calm journey ────────────────────────── */}
+      <section style={{padding:"128px 40px",background:"var(--muted)"}}>
+        <div style={{maxWidth:640,margin:"0 auto"}}>
+          <div style={{textAlign:"center",marginBottom:80}}>
+            <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 36px",opacity:.45}}/>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:22}}>
+              {lang==="en"?"The reading experience":"De reading"}
+            </div>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.9rem,3.5vw,2.6rem)",fontWeight:300,color:"var(--text)",lineHeight:1.1,margin:0}}>
+              {lang==="en"?"What happens after you begin":"Wat er na je bestelling gebeurt"}
+            </h2>
+          </div>
+          <div style={{display:"flex",flexDirection:"column"}}>
+            {(lang==="en"?[
+              ["01","Your birth details are submitted","Date, time and place of birth. These are the coordinates from which your reading is drawn. The more precise, the more personal."],
+              ["02","Your chart is calculated","Using Swiss Ephemeris — the professional-grade astronomical standard. Exact planetary positions to the degree, the same as used by observatories."],
+              ["03","Your reading is composed","Section by section, written for your specific chart. No templates, no generic profiles. Each layer moves deeper into what makes you distinctly you."],
+              ["04","Delivered to your inbox","Within one business day, a PDF arrives by email. Yours to keep, to return to, to read slowly. A document that does not expire."],
+            ]:[
+              ["01","Je geboortegegevens worden ingevoerd","Datum, tijd en geboorteplaats. Dit zijn de coördinaten waaruit jouw reading wordt samengesteld. Hoe nauwkeuriger, hoe persoonlijker."],
+              ["02","Je chart wordt berekend","Met Swiss Ephemeris — de professionele astronomische standaard. Exacte planeetposities tot op de graad, dezelfde als gebruikt door sterrenwachten wereldwijd."],
+              ["03","Jouw reading wordt samengesteld","Sectie voor sectie, geschreven voor jouw specifieke chart. Geen templates, geen generieke profielen. Elke laag gaat dieper in op wat jou uniek maakt."],
+              ["04","Afgeleverd in je inbox","Binnen één werkdag arriveert een PDF per e-mail. Om te bewaren, om naar terug te keren, om rustig te lezen. Een document dat niet veroudert."],
+            ]).map(([num,title,desc],i,arr)=>(
+              <div key={num} className="experience-step" style={{paddingBottom:i<arr.length-1?56:0}}>
+                {i<arr.length-1&&<div className="experience-connector"/>}
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center",paddingTop:6,zIndex:1}}>
+                  <div className="experience-step-num">
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)"}}>{num}</span>
+                  </div>
+                </div>
+                <div>
+                  <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.12rem",fontWeight:400,color:"var(--text)",marginBottom:10,lineHeight:1.2}}>{title}</h4>
+                  <p style={{fontSize:".875rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,margin:0}}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── BRAND CREDIBILITY — quiet editorial markers ───────────────────── */}
+      <section style={{background:"var(--dark)",padding:"88px 40px"}}>
+        <div style={{maxWidth:960,margin:"0 auto"}}>
+          <div style={{textAlign:"center",marginBottom:64}}>
+            <div style={{width:28,height:1,background:"rgba(201,168,92,.5)",margin:"0 auto 0",opacity:1}}/>
+          </div>
+          <div className="credibility-grid">
+            {(lang==="en"?[
+              ["Since 2014","Founded on Ibiza — the island where Human Design was received in 1987. That origin is not background. It is the reason."],
+              ["2,400+\npersonal\nreadings","Not generated from templates. Every reading drawn from its own chart, composed by hand, specific to the person."],
+              ["Three\ndisciplines","Human Design, Numerology and Astrology — used together as a single, unified language for who you are."],
+              ["Recognition\nover labels","A reading does not tell you who to become. It shows you what was always already true."],
+            ]:[
+              ["Sinds 2014","Opgericht op Ibiza — het eiland waar Human Design in 1987 werd ontvangen. Die oorsprong is geen achtergrond. Het is de reden."],
+              ["2.400+\npersoonlijke\nreadings","Niet gegenereerd uit templates. Elke reading getrokken uit zijn eigen chart, met de hand samengesteld, specifiek voor de persoon."],
+              ["Drie\ndisciplines","Human Design, Numerologie en Astrologie — samen gebruikt als één, verenigde taal voor wie je bent."],
+              ["Herkenning\nboven labels","Een reading vertelt je niet wie je moet worden. Het laat zien wat altijd al waar was."],
+            ]).map(([n,desc])=>(
+              <div key={n} style={{borderTop:"1px solid rgba(255,255,255,.08)",paddingTop:28}}>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.55rem",fontWeight:300,color:"white",lineHeight:1.15,marginBottom:16,whiteSpace:"pre-line"}}>{n}</div>
+                <p style={{fontSize:".82rem",fontWeight:300,color:"rgba(255,255,255,.4)",lineHeight:1.78,margin:0}}>{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
