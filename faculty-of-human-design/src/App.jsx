@@ -753,7 +753,7 @@ const track = (event, props = {}) => {
 };
 
 // ─── SEO HELPERS ──────────────────────────────────────────────────────────────
-const SITE = "https://www.facultyofhumandesign.com";
+const SITE = "https://www.facultyhd.com";
 
 function useSEO({ title, description, canonical, jsonLd }) {
   useEffect(() => {
