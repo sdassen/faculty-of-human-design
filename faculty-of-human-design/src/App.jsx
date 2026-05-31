@@ -1289,14 +1289,14 @@ const REPORT_FAQS = {
   maandelijks:{
     nl:[
       ["Wanneer ontvang ik mijn eerste maandrapport?","Binnen 1 werkdag na je eerste betaling. Daarna ontvang je elke maand een nieuw rapport — afgestemd op de energetische thema's van die specifieke maand en jouw chart."],
-      ["Hoe opzeg ik mijn abonnement?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Scroll naar het onderdeel 'Beheer je abonnement' onderaan deze pagina, vul je e-mailadres in en je wordt doorgestuurd naar de beveiligde Stripe-portal. Daar kun je opzeggen, facturen inzien of je betaalgegevens aanpassen. Je ontvangt daarna een bevestigingsmail."],
+      ["Hoe opzeg ik mijn abonnement?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Scroll naar het onderdeel 'Beheer je abonnement' onderaan deze pagina, vul je e-mailadres in en je wordt doorgestuurd naar de beveiligde portal. Daar kun je opzeggen, facturen inzien of je betaalgegevens aanpassen. Je ontvangt daarna een bevestigingsmail."],
       ["Is elk maandrapport anders?","Ja. Elk rapport is gebaseerd op de planetaire invloeden van die specifieke maand in relatie tot jouw persoonlijke chart. Thema's, kansen en aandachtspunten wisselen elke maand."],
       ["Heb ik ook een Volledig Rapport nodig?","Het maandabonnement is op zichzelf staand. Als je ook een Volledig Rapport hebt, is de maandelijkse guidance nog rijker — omdat je de context van je eigen chart al kent."],
       ["Hoeveel pagina's is een maandrapport?","Gemiddeld 12 pagina's — compact en gericht op de thema's van die maand."],
     ],
     en:[
       ["When do I receive my first monthly report?","Within 1 business day after your first payment. After that you receive a new report every month — aligned with the energetic themes of that specific month and your chart."],
-      ["How do I cancel my subscription?","Cancel monthly, without notice period or hidden costs. Scroll to the 'Manage your subscription' section at the bottom of this page, enter your email address and you'll be redirected to the secure Stripe portal. There you can cancel, view invoices or update your payment details. You'll receive a confirmation email afterwards."],
+      ["How do I cancel my subscription?","Cancel monthly, without notice period or hidden costs. Scroll to the 'Manage your subscription' section at the bottom of this page, enter your email address and you'll be redirected to the secure portal. There you can cancel, view invoices or update your payment details. You'll receive a confirmation email afterwards."],
       ["Is each monthly report different?","Yes. Each report is based on the planetary influences of that specific month in relation to your personal chart. Themes, opportunities and points of attention change every month."],
       ["Do I also need a Complete Report?","The monthly subscription stands on its own. If you also have a Complete Report, the monthly guidance is even richer — because you already know the context of your own chart."],
       ["How many pages is a monthly report?","On average 12 pages — compact and focused on the themes of that month."],
@@ -2402,8 +2402,8 @@ function SubscriptionManage(){
         </h2>
         <p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:36}}>
           {isEN
-            ?"Enter the e-mail address you used to subscribe. We'll redirect you to the secure Stripe portal where you can view invoices, update payment details or cancel."
-            :"Vul het e-mailadres in waarmee je je hebt aangemeld. We sturen je door naar de beveiligde Stripe-portal waar je facturen kunt bekijken, betaalgegevens bijwerken of opzeggen."}
+            ?"Enter the e-mail address you used to subscribe. We'll redirect you to the secure portal where you can view invoices, update payment details or cancel."
+            :"Vul het e-mailadres in waarmee je je hebt aangemeld. We sturen je door naar de beveiligde portal waar je facturen kunt bekijken, betaalgegevens bijwerken of opzeggen."}
         </p>
         <form onSubmit={openPortal} style={{display:"flex",gap:12,flexWrap:"wrap",alignItems:"flex-start"}}>
           <input
