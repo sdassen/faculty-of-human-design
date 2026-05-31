@@ -12,9 +12,6 @@ export default defineConfig({
           vendor: ['react', 'react-dom'],
         },
       },
-      // Never bundle server-only packages into the frontend
-      external: (id) =>
-        ['puppeteer-core', 'inngest', 'resend', '@vercel/blob'].includes(id),
     },
     // Warn if any chunk exceeds 500 kB
     chunkSizeWarningLimit: 500,
