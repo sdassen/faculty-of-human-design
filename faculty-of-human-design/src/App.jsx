@@ -714,6 +714,28 @@ button { cursor:pointer; font-family:var(--font-sans); }
   /* Ensure colours print correctly */
   * { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 }
+
+/* ── TYPE PAGES ─────────────────────────────────────────────────────────── */
+.type-section    { padding:96px 40px; }
+.type-section-lg { padding:112px 40px; }
+.type-section-sm { padding:72px 40px; }
+.type-hero-inner { position:relative; z-index:1; width:100%; max-width:900px; margin:0 auto; padding:0 40px 80px; }
+.type-split      { display:grid; grid-template-columns:200px 1fr; gap:0 64px; align-items:start; max-width:960px; margin:0 auto; }
+.type-other-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:24px; }
+@media (max-width:768px) {
+  .type-section    { padding:64px 20px; }
+  .type-section-lg { padding:72px 20px; }
+  .type-section-sm { padding:52px 20px; }
+  .type-hero-inner { padding:0 20px 60px; }
+  .type-split      { grid-template-columns:1fr; gap:20px; }
+  .type-other-grid { grid-template-columns:1fr 1fr; gap:16px; }
+}
+@media (max-width:480px) {
+  .type-section    { padding:52px 16px; }
+  .type-section-lg { padding:60px 16px; }
+  .type-section-sm { padding:44px 16px; }
+  .type-hero-inner { padding:0 16px 48px; }
+}
 `;
 
 
@@ -4962,7 +4984,7 @@ function FaqItem({q,a}){
         <span style={{fontFamily:"var(--font-serif)",fontSize:".98rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{q}</span>
         <span style={{fontFamily:"var(--font-sans)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,opacity:.6,transition:"transform .2s",transform:open?"rotate(45deg)":"none"}}>{open?"×":"+"}</span>
       </div>
-      {open&&<p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,marginTop:16,paddingRight:32}}>{a}</p>}
+      {open&&<p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,marginTop:16,paddingRight:32,textAlign:"left"}}>{a}</p>}
     </div>
   );
 }
@@ -5186,7 +5208,7 @@ function TypePage({typeId,go}){
             style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 35%"}}/>
           <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.15) 0%,rgba(8,7,14,.2) 35%,rgba(8,7,14,.85) 100%)"}}/>
         </div>
-        <div style={{position:"relative",zIndex:1,width:"100%",maxWidth:900,margin:"0 auto",padding:"0 40px 80px"}}>
+        <div className="type-hero-inner">
           <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".2em",textTransform:"uppercase",color:"rgba(201,168,92,.7)",marginBottom:16}}>
             {isEN?"Human Design Type":"Human Design Type"} · {tl2(tp.population)} {isEN?"of the population":"van de bevolking"}
           </div>
@@ -5213,7 +5235,7 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── INTRO ── */}
-      <section style={{background:"var(--bg)",padding:"112px 40px"}}>
+      <section className="type-section-lg" style={{background:"var(--bg)"}}>
         <div style={{maxWidth:720,margin:"0 auto"}}>
           <div style={{width:1,height:48,background:"var(--gold)",opacity:.5,marginBottom:48}}/>
           {para(c.intro)}
@@ -5221,8 +5243,8 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── STRATEGIE ── */}
-      <section style={{background:"white",padding:"96px 40px"}}>
-        <div style={{maxWidth:960,margin:"0 auto",display:"grid",gridTemplateColumns:"200px 1fr",gap:"0 64px",alignItems:"start"}}>
+      <section className="type-section" style={{background:"white"}}>
+        <div className="type-split">
           <div style={{paddingTop:6}}>
             <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>{isEN?"Strategy":"Strategie"}</div>
             <div style={{fontFamily:"var(--font-serif)",fontSize:"1.55rem",fontWeight:300,color:"var(--text)",lineHeight:1.2,marginBottom:20}}>{tl2(tp.strategy)}</div>
@@ -5237,8 +5259,8 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── ENERGIE & AUTORITEIT ── */}
-      <section style={{background:"var(--bg)",padding:"96px 40px"}}>
-        <div style={{maxWidth:960,margin:"0 auto",display:"grid",gridTemplateColumns:"200px 1fr",gap:"0 64px",alignItems:"start"}}>
+      <section className="type-section" style={{background:"var(--bg)"}}>
+        <div className="type-split">
           <div style={{paddingTop:6}}>
             <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>{isEN?"Energy":"Energie"}</div>
             <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"var(--text)",lineHeight:1.3,marginBottom:20}}>{isEN?"Authority":"Autoriteit"}</div>
@@ -5250,7 +5272,7 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── WERK & RELATIES ── */}
-      <section style={{background:"white",padding:"96px 40px"}}>
+      <section className="type-section" style={{background:"white"}}>
         <div style={{maxWidth:720,margin:"0 auto"}}>
           <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:32}}>{isEN?"Work & Relationships":"Werk & Relaties"}</div>
           {para(c.work)}
@@ -5258,7 +5280,7 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── UITDAGINGEN ── */}
-      <section style={{background:"var(--muted)",padding:"96px 40px"}}>
+      <section className="type-section" style={{background:"var(--muted)"}}>
         <div style={{maxWidth:720,margin:"0 auto"}}>
           <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>{isEN?"Not-self theme":"Niet-zelf thema"}</div>
           <div style={{fontFamily:"var(--font-serif)",fontSize:"1.3rem",fontWeight:300,color:"var(--text)",marginBottom:32}}>{tl2(tp.notSelf)}</div>
@@ -5268,7 +5290,7 @@ function TypePage({typeId,go}){
 
       {/* ── FAQ ── */}
       {typeFaqEntries.length>0&&(
-        <section style={{background:"var(--bg)",padding:"96px 40px"}}>
+        <section className="type-section" style={{background:"var(--bg)"}}>
           <div style={{maxWidth:720,margin:"0 auto"}}>
             <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>FAQ</div>
             {typeFaqEntries.map(([q,a],i)=>(
@@ -5280,7 +5302,7 @@ function TypePage({typeId,go}){
       )}
 
       {/* ── LEES OOK — Journal s6 ── */}
-      <section style={{background:"white",padding:"72px 40px",borderTop:"1px solid var(--border)"}}>
+      <section className="type-section-sm" style={{background:"white",borderTop:"1px solid var(--border)"}}>
         <div style={{maxWidth:720,margin:"0 auto"}}>
           <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:20}}>
             {isEN?"Read also":"Lees ook"}
@@ -5305,7 +5327,7 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── CTA ── */}
-      <section style={{background:"var(--dark)",padding:"112px 40px",textAlign:"center"}}>
+      <section className="type-section-lg" style={{background:"var(--dark)",textAlign:"center"}}>
         <div style={{maxWidth:560,margin:"0 auto"}}>
           <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 48px",opacity:.4}}/>
           <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2.4rem)",fontWeight:300,color:"white",marginBottom:20,lineHeight:1.1}}>
@@ -5328,7 +5350,7 @@ function TypePage({typeId,go}){
       </section>
 
       {/* ── OTHER TYPES ── */}
-      <section style={{background:"var(--bg)",padding:"96px 40px"}}>
+      <section className="type-section" style={{background:"var(--bg)"}}>
         <div style={{maxWidth:1100,margin:"0 auto"}}>
           <div style={{textAlign:"center",marginBottom:64}}>
             <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14}}>{isEN?"Other types":"Andere types"}</div>
@@ -5336,7 +5358,7 @@ function TypePage({typeId,go}){
               {isEN?"Explore all five Human Design types":"Ontdek alle vijf Human Design types"}
             </h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:24}}>
+          <div className="type-other-grid">
             {otherTypes.map(ot=>(
               <div key={ot.id}
                 style={{borderTop:"1px solid var(--border)",paddingTop:24,cursor:"pointer"}}
