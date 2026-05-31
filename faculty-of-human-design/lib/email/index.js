@@ -279,14 +279,20 @@ function deliveryHtml({ name, reportTitle, reportId, partnerName, downloadUrl, l
 
   // ── Reading tips (start tip is report-type aware) ─────────────────────────
   let startTip;
+  const isNumerologie = reportId === "numerologie";
+  const isHoroscoop   = reportId === "horoscoop";
   if (isEN) {
-    if (cat === "kind")    startTip = "Start with <strong>Type & Strategy</strong> — this gives you immediate, practical tools for guidance and understanding your child.";
+    if (cat === "kind")         startTip = "Start with <strong>Type & Strategy</strong> — this gives you immediate, practical tools for guidance and understanding your child.";
     else if (cat === "relatie") startTip = "Start with the <strong>electromagnetic channels</strong> — these show the core dynamic between the two designs.";
-    else                   startTip = "Start with <strong>Type, Strategy and Authority</strong> — these are the foundations you can begin experimenting with straight away.";
+    else if (isNumerologie)     startTip = "Start with your <strong>Life Path number</strong> — this is the foundational energy that runs through your entire journey.";
+    else if (isHoroscoop)       startTip = "Start with your <strong>Sun sign and Ascendant</strong> — these form the foundation of your personal astrology.";
+    else                        startTip = "Start with <strong>Type, Strategy and Authority</strong> — these are the foundations you can begin experimenting with straight away.";
   } else {
-    if (cat === "kind")    startTip = "Begin bij <strong>Type & Strategie</strong> — dit geeft direct praktische handvatten voor begeleiding en begrip van je kind.";
+    if (cat === "kind")         startTip = "Begin bij <strong>Type & Strategie</strong> — dit geeft direct praktische handvatten voor begeleiding en begrip van je kind.";
     else if (cat === "relatie") startTip = "Begin bij de <strong>elektromagnetische kanalen</strong> — daar zit de kern van de dynamiek tussen jullie twee designs.";
-    else                   startTip = "Begin bij <strong>Type, Strategie en Autoriteit</strong> — dit zijn de fundamenten waarmee je direct kunt gaan experimenteren.";
+    else if (isNumerologie)     startTip = "Begin bij je <strong>Levenspadgetal</strong> — dit is de fundamentele energie die door je hele levensreis loopt.";
+    else if (isHoroscoop)       startTip = "Begin bij je <strong>Zonneteken en Ascendant</strong> — dit vormen het fundament van jouw persoonlijke astrologie.";
+    else                        startTip = "Begin bij <strong>Type, Strategie en Autoriteit</strong> — dit zijn de fundamenten waarmee je direct kunt gaan experimenteren.";
   }
 
   const tipsTitle     = isEN ? "Tips for reading" : "Tips voor het lezen";
