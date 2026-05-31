@@ -33,7 +33,7 @@ const IMGS = {
   ibiza_white:   "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=2000&auto=format&fit=crop&q=80",
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
-  r_volledig:        "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=900&auto=format&fit=crop&q=80",
+  r_volledig:        "/img-volledig-hero.jpg",
   r_relatie_liefde:  "/img-relatie-liefde.jpg",
   r_relatie_business:"https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
   r_relatie_familie: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80",
