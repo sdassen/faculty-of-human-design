@@ -797,6 +797,13 @@ function useSEO({ title, description, canonical, jsonLd }) {
     let can = document.querySelector('link[rel="canonical"]');
     if (!can) { can = document.createElement("link"); can.rel = "canonical"; document.head.appendChild(can); }
     can.href = canonical || SITE + "/";
+    // GA4 page_view (SPA navigation)
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "page_view", {
+        page_title: title + " | Faculty of Human Design",
+        page_location: canonical || window.location.href,
+      });
+    }
     // JSON-LD
     const prev = document.getElementById("__page_jsonld");
     if (prev) prev.remove();
