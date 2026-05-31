@@ -4853,8 +4853,334 @@ function DownloadPage({token}){
   );
 }
 
+// ─── HUMAN DESIGN TYPE PAGES ──────────────────────────────────────────────────
+const TYPES = [
+  {
+    id:"generator",
+    slug:"generator",
+    icon:"◎",
+    population:{nl:"~37%",en:"~37%"},
+    title:{nl:"Generator",en:"Generator"},
+    tagline:{nl:"De ruggengraat van de mensheid",en:"The backbone of humanity"},
+    strategy:{nl:"Reageren",en:"Respond"},
+    signature:{nl:"Tevredenheid",en:"Satisfaction"},
+    notSelf:{nl:"Frustratie",en:"Frustration"},
+    authority:{nl:"Sacraal (meest voorkomend) of Emotioneel",en:"Sacral (most common) or Emotional"},
+    img:"https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80",
+  },
+  {
+    id:"manifesting-generator",
+    slug:"manifesting-generator",
+    icon:"◈",
+    population:{nl:"~33%",en:"~33%"},
+    title:{nl:"Manifesting Generator",en:"Manifesting Generator"},
+    tagline:{nl:"Snel, veelzijdig, onuitputtelijk",en:"Fast, versatile, inexhaustible"},
+    strategy:{nl:"Reageren — dan informeren",en:"Respond — then inform"},
+    signature:{nl:"Tevredenheid & Vrede",en:"Satisfaction & Peace"},
+    notSelf:{nl:"Frustratie & Boosheid",en:"Frustration & Anger"},
+    authority:{nl:"Sacraal of Emotioneel",en:"Sacral or Emotional"},
+    img:"https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
+  },
+  {
+    id:"projector",
+    slug:"projector",
+    icon:"◇",
+    population:{nl:"~20%",en:"~20%"},
+    title:{nl:"Projector",en:"Projector"},
+    tagline:{nl:"De gids die ziet wat anderen niet zien",en:"The guide who sees what others cannot"},
+    strategy:{nl:"Wachten op de uitnodiging",en:"Wait for the invitation"},
+    signature:{nl:"Succes",en:"Success"},
+    notSelf:{nl:"Bitterheid",en:"Bitterness"},
+    authority:{nl:"Emotioneel, Splenisch, Zelf-geprojecteerd, Ego of Mentaal",en:"Emotional, Splenic, Self-Projected, Ego or Mental"},
+    img:"https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=1200&auto=format&fit=crop&q=80",
+  },
+  {
+    id:"manifestor",
+    slug:"manifestor",
+    icon:"◆",
+    population:{nl:"~9%",en:"~9%"},
+    title:{nl:"Manifestor",en:"Manifestor"},
+    tagline:{nl:"Het enige type dat van nature kan initiëren",en:"The only type designed to initiate"},
+    strategy:{nl:"Informeren",en:"Inform"},
+    signature:{nl:"Vrede",en:"Peace"},
+    notSelf:{nl:"Boosheid",en:"Anger"},
+    authority:{nl:"Emotioneel, Ego of Splenisch",en:"Emotional, Ego or Splenic"},
+    img:"https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&auto=format&fit=crop&q=80",
+  },
+  {
+    id:"reflector",
+    slug:"reflector",
+    icon:"◯",
+    population:{nl:"~1%",en:"~1%"},
+    title:{nl:"Reflector",en:"Reflector"},
+    tagline:{nl:"De spiegel van de gemeenschap",en:"The mirror of the community"},
+    strategy:{nl:"Wachten — een volledige maancyclus",en:"Wait — a full lunar cycle"},
+    signature:{nl:"Verrassing",en:"Surprise"},
+    notSelf:{nl:"Teleurstelling",en:"Disappointment"},
+    authority:{nl:"Lunair (28 dagen)",en:"Lunar (28 days)"},
+    img:"https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
+  },
+];
+
+function TypePage({typeId,go}){
+  const isEN=LANG==="en";
+  const tp=TYPES.find(t=>t.id===typeId);
+  if(!tp)return null;
+  const tl2=f=>isEN?(f.en||f.nl):f.nl;
+
+  const CONTENT={
+    generator:{
+      nl:{
+        intro:"Van alle vijf typen in Human Design is de Generator het meest voorkomende. Zo'n 37 procent van de wereldbevolking draagt dit design in zich — en dat is geen toeval. Generators zijn de bouwers van de wereld. Ze bezitten een gedefinieerd Sacraalcentrum, de energiebron van het menselijk lichaam, en zijn ontworpen om te werken, te creëren en te produceren. Niet als verplichting, maar als bron van vreugde wanneer die energie gericht wordt op het juiste.\n\nDe essentie van het Generator-design is de sacrale levensenergie. Waar andere typen hun energie moeten bewaken of doseren, beschikt de Generator over een duurzame, hernieuwbare kracht die zichzelf aanvult zodra ze ingezet wordt voor werk dat werkelijk resoneert. De Generator die zijn passie gevonden heeft, vermoeit zichzelf niet — hij laadt zichzelf op.",
+        strategy:"De strategie van de Generator is reageren, niet initiëren. Dat klinkt passief, maar het is het tegenovergestelde. Reageren betekent dat je wacht op iets in de buitenwereld — een vraag, een aanbod, een impuls — dat een instinctieve sacrale respons oproept. Die respons is lichamelijk: een 'uh-huh' of 'unh-unh' die dieper zit dan gedachten. Het is de stem van het Sacraalcentrum dat aangeeft of ergens echte energie voor aanwezig is.\n\nWanneer een Generator iets initieert vanuit het hoofd in plaats van vanuit die sacrale respons, verbruikt hij energie die hij niet heeft. Het resultaat is frustratie — de handtekening van het niet-zelf van de Generator. Frustratie is geen teken van falen; het is een signaal dat je te lang iets hebt gedaan waarvoor je sacrale energie niet werkelijk beschikbaar was.",
+        energy:"De Generator heeft niet één vaste autoriteit. De meest voorkomende is de Sacrale autoriteit: beslissingen komen vanuit een lichamelijke respons, niet vanuit de geest. Maar Generators met een gedefinieerd emotioneel centrum hebben de Emotionele autoriteit — voor hen geldt dat ze nooit in het moment beslissen, maar wachten op emotionele helderheid.\n\nIn beide gevallen is het principe hetzelfde: de beslissing komt van binnenuit het lichaam, niet vanuit rationele analyse. De Generator die leert zijn sacrale respons te vertrouwen en zijn frustratie als navigatiemiddel te gebruiken, ontdekt dat het leven minder wrijving kent en meer van nature stroomt.",
+        work:"Op het werk is de Generator op zijn best wanneer hij een vak of vakgebied heeft gevonden dat hem werkelijk boeit. De Generator die zijn roeping volgt, is een kracht van de natuur: productief, betrouwbaar, gedreven. Hij bouwt, verfijnt en verdiept — en kan dat urenlang volhouden zonder uitgeput te raken.\n\nIn relaties is de Generator een stabiele aanwezigheid. Zijn sacrale energie is voelbaar voor anderen — Projectors en Manifestors voelen de kracht van een Generator als ze in zijn nabijheid zijn. Die aantrekkingskracht is krachtig maar kan ook een last zijn wanneer anderen meer van die energie willen dan goed is voor de Generator zelf.",
+        challenges:"Het grootste struikelblok voor de Generator is conditionering. Van jongs af aan leert hij om te initiëren: doelen stellen, actie ondernemen, de wereld tegemoet gaan. Dat is niet zijn aard. Wanneer hij initieert zonder sacrale respons, raakt hij zijn energie kwijt aan dingen die niet echt bij hem passen — en groeit de frustratie.\n\nDe de-conditionering begint met een simpele vraag die hij zichzelf steeds vaker stelt: reageert mijn lichaam echt op dit, of doe ik dit omdat ik het gevoel heb dat ik het moet doen?",
+      },
+      en:{
+        intro:"Of all five types in Human Design, the Generator is the most common. Around 37 percent of the world's population carries this design — and that is no coincidence. Generators are the builders of the world. They possess a defined Sacral centre, the energy source of the human body, and are designed to work, create and produce. Not as an obligation, but as a source of joy when that energy is directed toward the right things.\n\nThe essence of the Generator design is sacral life force energy. Where other types must manage or ration their energy, the Generator possesses a sustainable, renewable power that replenishes itself as long as it is directed toward work that truly resonates. The Generator who has found their passion does not exhaust themselves — they recharge themselves.",
+        strategy:"The strategy of the Generator is to respond, not to initiate. That sounds passive, but it is the opposite. Responding means waiting for something in the outer world — a question, an offer, an impulse — that evokes an instinctive sacral response. That response is physical: an 'uh-huh' or 'unh-unh' that sits deeper than thought. It is the voice of the Sacral centre indicating whether genuine energy is available for something.\n\nWhen a Generator initiates something from the mind rather than from that sacral response, they consume energy they do not have. The result is frustration — the signature of the Generator's not-self. Frustration is not a sign of failure; it is a signal that you have been doing something for too long for which your sacral energy was not truly available.",
+        energy:"The Generator does not have a single fixed authority. The most common is Sacral authority: decisions come from a bodily response, not from the mind. But Generators with a defined emotional centre have Emotional authority — for them the rule is never to decide in the moment, but to wait for emotional clarity.\n\nIn both cases the principle is the same: the decision comes from within the body, not from rational analysis. The Generator who learns to trust their sacral response and use their frustration as a navigation tool discovers that life carries less friction and flows more naturally.",
+        work:"At work, the Generator is at their best when they have found a craft or field that genuinely fascinates them. The Generator who follows their calling is a force of nature: productive, reliable, driven. They build, refine and deepen — and can sustain that for hours without becoming exhausted.\n\nIn relationships the Generator is a stable presence. Their sacral energy is palpable to others — Projectors and Manifestors feel the power of a Generator when they are in their proximity. That magnetism is powerful but can also become a burden when others want more of that energy than is good for the Generator themselves.",
+        challenges:"The greatest obstacle for the Generator is conditioning. From an early age they are taught to initiate: set goals, take action, go out and meet the world. That is not their nature. When they initiate without sacral response, they lose their energy to things that do not truly suit them — and frustration grows.\n\nDe-conditioning begins with a simple question they ask themselves more and more often: is my body genuinely responding to this, or am I doing this because I feel I must?",
+      },
+    },
+    "manifesting-generator":{
+      nl:{
+        intro:"De Manifesting Generator is een van de meest dynamische typen in Human Design. Ze combineren de sacrale levensenergie van de Generator met het vermogen om direct naar de keel te manifesteren — wat hen snel, veelzijdig en soms lastig bij te houden maakt. Ze vormen samen met de Generator de grootste groep: zo'n 33 procent van de wereldbevolking.\n\nWaar de Generator vaak één diepe passie volgt, heeft de Manifesting Generator er dikwijls meerdere tegelijk. Ze zijn multi-getalenteerd, nemen shortcuts, slaan stappen over en leren het best door gewoon te beginnen en terug te gaan wanneer iets niet werkt. Dat kan er chaotisch uitzien voor anderen, maar het is precies hoe hun systeem werkt.",
+        strategy:"De strategie van de Manifesting Generator is tweeledig: reageren, en dan informeren. Net als de Generator wacht hij op een sacrale respons — een instinctieve lichamelijke bevestiging dat er energie beschikbaar is voor iets. Maar vanwege zijn vermogen om direct actie te nemen, heeft hij ook de verantwoordelijkheid om de mensen om hem heen op de hoogte te stellen van wat hij van plan is.\n\nDie informeerstap is essentieel. De Manifesting Generator die handelt zonder te informeren stuit op weerstand — mensen die zich overvallen voelen, die niet begrijpen waarom dingen zo snel gaan. Wanneer hij informeert, vermindert die weerstand en kan zijn energie vrij stromen.",
+        energy:"De Manifesting Generator bezit sacrale energie en kan die dus net als de Generator onbeperkt inzetten voor werk dat resoneert. Maar hij verbruikt die energie sneller en intensiever dan de Generator, en heeft daardoor ook meer herstel nodig. Zijn sacrale autoriteit (of emotionele autoriteit indien van toepassing) werkt hetzelfde als bij de Generator: beslissingen komen vanuit het lichaam.\n\nEen kenmerk van de Manifesting Generator is zijn vermogen om meerdere dingen tegelijk te doen. Waar dat voor andere typen uitputtend zou zijn, geeft het de Manifesting Generator juist energie — zolang al die dingen werkelijk resoneren met zijn sacrale ja.",
+        work:"Op het werk schittert de Manifesting Generator wanneer hij de ruimte krijgt om snel te bewegen, bij te sturen en nieuwe wegen te verkennen. Hij is niet gemaakt voor één pad van begin tot einde; hij is gemaakt voor dynamiek. Projecten die klaar zijn worden losgelaten, nieuwe passies worden opgepakt — en dat is geen gebrek aan doorzettingsvermogen maar een eigenschap van het design.\n\nIn teams is de Manifesting Generator een enorm productieve kracht, maar hij heeft begripvolle mensen nodig die zijn tempo kunnen volgen en niet schrikken van zijn plotselinge richtingswijzigingen.",
+        challenges:"De grootste uitdaging voor de Manifesting Generator is de druk die anderen op hem uitoefenen om consistent en voorspelbaar te zijn. Zijn niet-zelf thema — frustratie en boosheid — ontstaat wanneer hij zijn energie inzet voor dingen die zijn sacrale ja niet hebben gekregen, of wanneer hij zijn snelheid en veelzijdigheid moet inruilen voor een rigide structuur die niet bij hem past.\n\nDe de-conditionering vraagt van de Manifesting Generator dat hij zijn 'stappen overslaan' niet als fout beschouwt, maar leert omgaan met de gevolgen door tijdig te communiceren.",
+      },
+      en:{
+        intro:"The Manifesting Generator is one of the most dynamic types in Human Design. They combine the sacral life force energy of the Generator with the ability to manifest directly to the throat — making them fast, versatile and sometimes difficult to keep up with. Together with the Generator they form the largest group: around 33 percent of the world's population.\n\nWhere the Generator often follows one deep passion, the Manifesting Generator often has several simultaneously. They are multi-talented, take shortcuts, skip steps and learn best by simply starting and going back when something does not work. That can look chaotic to others, but it is precisely how their system works.",
+        strategy:"The strategy of the Manifesting Generator is twofold: respond, and then inform. Like the Generator they wait for a sacral response — an instinctive bodily confirmation that energy is available for something. But because of their ability to take direct action, they also have the responsibility to inform the people around them of what they plan to do.\n\nThat informing step is essential. The Manifesting Generator who acts without informing meets resistance — people who feel ambushed, who do not understand why things are moving so fast. When they inform, that resistance diminishes and their energy can flow freely.",
+        energy:"The Manifesting Generator possesses sacral energy and can therefore, like the Generator, direct it without limit toward work that resonates. But they consume that energy faster and more intensely than the Generator, and therefore need more recovery. Their sacral authority (or emotional authority where applicable) works the same as the Generator's: decisions come from the body.\n\nA characteristic of the Manifesting Generator is their ability to do several things simultaneously. Where that would be exhausting for other types, it actually gives the Manifesting Generator energy — as long as all those things genuinely resonate with their sacral yes.",
+        work:"At work the Manifesting Generator shines when given the space to move fast, adjust and explore new paths. They are not made for one path from beginning to end; they are made for dynamism. Projects that are complete are released, new passions are picked up — and that is not a lack of perseverance but a characteristic of the design.\n\nIn teams the Manifesting Generator is an enormously productive force, but they need understanding people who can follow their pace and are not startled by their sudden changes of direction.",
+        challenges:"The greatest challenge for the Manifesting Generator is the pressure others place on them to be consistent and predictable. Their not-self theme — frustration and anger — arises when they direct their energy toward things that have not received their sacral yes, or when they have to trade their speed and versatility for a rigid structure that does not suit them.\n\nDe-conditioning asks the Manifesting Generator to stop seeing their 'skipping steps' as a flaw, and learn to deal with the consequences by communicating in time.",
+      },
+    },
+    projector:{
+      nl:{
+        intro:"Projectoren maken zo'n 20 procent van de bevolking uit en zijn fundamenteel anders dan de generatieve typen. Ze hebben geen gedefinieerd Sacraalcentrum en zijn niet ontworpen om continu te werken met de aanhoudende levensenergie die Generators en Manifesting Generators bezitten. Maar ze hebben iets dat die typen niet hebben: een bijzonder vermogen om anderen diep te lezen, systemen en mensen scherp te zien, en begeleiding te bieden die rechtstreeks het hart raakt.\n\nDe Projector is ontworpen om de energie van anderen te richten en te begeleiden — niet om zelf de motor te zijn. In een wereld die steeds minder afhankelijk wordt van pure fysieke arbeid en steeds meer van strategisch inzicht, is de Projector een type voor de toekomst.",
+        strategy:"De strategie van de Projector is wachten op de uitnodiging. Dat is de meest onbegrepen en tegelijkertijd krachtigste strategie in Human Design. Een uitnodiging is meer dan een vriendelijke vraag; het is erkenning. Het is dat iemand de kwaliteiten, het inzicht of het vermogen van de Projector heeft herkend en hem vraagt om die in te zetten.\n\nWanneer de Projector zijn wijsheid deelt zonder uitnodiging — hoe goed zijn advies ook is — stuit het op weerstand. Niet omdat de mensen om hem heen het niet willen horen, maar omdat de energie van erkenning ontbreekt die nodig is om de informatie echt te laten landen. De uitnodiging is de sleutel.",
+        energy:"Zonder gedefinieerd Sacraalcentrum heeft de Projector geen onbeperkte werkenenergie. Hij is gemaakt voor korte periodes van geconcentreerde activiteit en heeft meer rust en terugtrektijd nodig dan generatieve typen. Dat wordt in onze prestatiecultuur makkelijk als zwakte gezien — het is het tegenovergestelde. De Projector die zijn energie beheert en niet probeert het tempo van een Generator bij te houden, bewaart de helderheid die zijn kracht is.\n\nZijn autoriteit kan Emotioneel, Splenisch, Zelf-geprojecteerd, Ego of Mentaal zijn. Afhankelijk van de autoriteit neemt hij beslissingen via een andere weg — maar nooit via de sacrale respons, want dat centrum heeft hij niet.",
+        work:"Op het werk is de Projector op zijn best in rollen die begeleiding, leiderschap of systemen vereisen. Hij ziet patronen die anderen missen, herkent hoe mensen het best ingezet kunnen worden, en heeft een uniek vermogen om het potentieel van anderen te ontgrendelen. Consultants, coaches, therapeuten, directeuren — dit zijn rollen die de Projector van nature aantrekken.\n\nMaar zijn bijdrage vereist erkenning. De Projector die werkt in omgevingen waar zijn inzicht structureel genegeerd of onderschat wordt, raakt uitgeput. Niet alleen fysiek, maar existentieel.",
+        challenges:"Bitterheid is het niet-zelf thema van de Projector — en het is een signaal dat hij te lang energie heeft gestoken in situaties die hem niet werkelijk erkennen. Bitterheid is geen karakter gebrek; het is een navigatiemiddel. Het geeft aan dat iets moet veranderen.\n\nDe grootste uitdaging voor Projectoren is geduld. In een wereld die handelen beloont, is wachten op uitnodiging een radicale keuze. Maar de Projector die heeft geleerd te wachten, merkt dat de uitnodigingen die komen groter, waardevoller en beter passend zijn dan alles wat hij zelf had kunnen afdwingen.",
+      },
+      en:{
+        intro:"Projectors make up around 20 percent of the population and are fundamentally different from the generative types. They have no defined Sacral centre and are not designed to work continuously with the sustained life force energy that Generators and Manifesting Generators possess. But they have something those types do not: a remarkable ability to read others deeply, to see people and systems with clarity, and to offer guidance that goes straight to the heart.\n\nThe Projector is designed to direct and guide the energy of others — not to be the motor themselves. In a world that is becoming increasingly less dependent on pure physical labour and increasingly more on strategic insight, the Projector is a type for the future.",
+        strategy:"The strategy of the Projector is to wait for the invitation. That is the most misunderstood and at the same time most powerful strategy in Human Design. An invitation is more than a friendly question; it is recognition. It is someone having recognised the qualities, insight or capacity of the Projector and asking them to apply those.\n\nWhen the Projector shares their wisdom without an invitation — however good their advice may be — it meets resistance. Not because the people around them do not want to hear it, but because the energy of recognition is absent that is needed to allow the information to truly land. The invitation is the key.",
+        energy:"Without a defined Sacral centre, the Projector has no unlimited work energy. They are made for short periods of concentrated activity and need more rest and withdrawal time than generative types. In our performance culture that is easily seen as weakness — it is the opposite. The Projector who manages their energy and does not try to keep pace with a Generator preserves the clarity that is their strength.\n\nTheir authority can be Emotional, Splenic, Self-Projected, Ego or Mental. Depending on the authority they make decisions through a different path — but never through the sacral response, as they do not have that centre.",
+        work:"At work the Projector is at their best in roles that require guidance, leadership or systems thinking. They see patterns others miss, recognise how people can best be deployed, and have a unique capacity to unlock the potential of others. Consultants, coaches, therapists, directors — these are roles the Projector is naturally drawn to.\n\nBut their contribution requires recognition. The Projector who works in environments where their insight is systematically ignored or underestimated becomes exhausted. Not only physically, but existentially.",
+        challenges:"Bitterness is the not-self theme of the Projector — and it is a signal that they have invested energy too long in situations that do not genuinely recognise them. Bitterness is not a character flaw; it is a navigation tool. It indicates that something needs to change.\n\nThe greatest challenge for Projectors is patience. In a world that rewards action, waiting for an invitation is a radical choice. But the Projector who has learned to wait finds that the invitations that come are larger, more valuable and better suited than anything they could have forced.",
+      },
+    },
+    manifestor:{
+      nl:{
+        intro:"Met slechts 9 procent van de wereldbevolking zijn Manifestoren zeldzaam — en dat merk je wanneer je er een tegenkomt. Manifestoren zijn het enige type in Human Design dat van nature kan initiëren. Ze hebben een directe verbinding tussen een motorcentrum en de keel, wat hun de capaciteit geeft om dingen in beweging te zetten zonder eerst te wachten of te reageren. Ze zijn onafhankelijk, impactvol en volgen een innerlijk kompas dat niet altijd verklaarbaar is voor de buitenwereld.\n\nHistorisch gezien hebben Manifestoren dikwijls leiderschapsposities bezet — niet omdat ze dat wilden, maar omdat ze het vermogen hebben om dingen te laten beginnen. De samenleving heeft altijd Manifestoren nodig gehad om impulsen te initiëren die anderen vervolgens kunnen uitvoeren en verfijnen.",
+        strategy:"De strategie van de Manifestor is informeren — niet om toestemming te vragen, maar om de mensen die door zijn acties geraakt worden vooraf op de hoogte te stellen. Dat onderscheid is cruciaal. De Manifestor vraagt niet of hij iets mag doen; hij deelt wat hij gaat doen.\n\nWanneer de Manifestor handelt zonder te informeren, stuit zijn energie op weerstand. Mensen voelen de kracht van zijn impact maar begrijpen niet waar die vandaan komt, en reageren met angst, controle of tegenwerking. Wanneer hij informeert, verdwijnt die weerstand grotendeels — en kan zijn creatieve kracht ongehinderd werken.",
+        energy:"De Manifestor heeft geen gedefinieerd Sacraalcentrum en bezit dus niet de onbeperkte werkenenergie van de Generator. Zijn energie komt in golven: intense periodes van actie en creatie, gevolgd door herstelperiodes die hij serieus moet nemen. De Manifestor die zijn rustperiodes negeert en doorgaat op momentum, raakt eerder uitgeput dan hij verwacht.\n\nZijn autoriteit kan Emotioneel, Ego of Splenisch zijn. De Manifestor met Emotionele autoriteit neemt nooit beslissingen in het moment — hij wacht op emotionele helderheid. De Manifestor met Splenische autoriteit reageert op een stille, instinctieve stem die in het moment spreekt.",
+        work:"Op het werk is de Manifestor het krachtigst wanneer hij de ruimte krijgt om te initiëren. Structuur en procedures die hem moeten verantwoorden voor elk besluit kosten hem energie en ondermijnen zijn kracht. Hij is een pionier, een concept-ontwikkelaar, een ondernemer — iemand die ideeën in beweging brengt die anderen vervolgens uitvoeren.\n\nDe Manifestor die begrijpt dat zijn kracht in het initiëren ligt, en niet in het uitvoeren of volhouden, kan zichzelf aanzienlijk veel energie besparen door de juiste mensen om zich heen te verzamelen die de uitvoering op zich nemen.",
+        challenges:"Boosheid is het niet-zelf thema van de Manifestor — en het ontstaat typisch wanneer hij het gevoel heeft dat anderen zijn vrijheid beperken, zijn acties blokkeren of hem voortdurend om verantwoording vragen. Die boosheid is een signaal: er is weerstand die opgelost kan worden door te informeren.\n\nDe grootste uitdaging voor Manifestoren is leren dat informeren geen zwakte is. In hun beleving communiceert het gevoel van 'ik hoef geen toestemming te vragen' soms als arrogantie naar buiten. Maar wanneer de Manifestor informeert vanuit kracht — niet vanuit verplichting — verdwijnt die weerstand en ontstaat er vrede.",
+      },
+      en:{
+        intro:"With only 9 percent of the world's population, Manifestors are rare — and you notice it when you meet one. Manifestors are the only type in Human Design designed to naturally initiate. They have a direct connection between a motor centre and the throat, giving them the capacity to set things in motion without first waiting or responding. They are independent, impactful and follow an inner compass that is not always explicable to the outside world.\n\nHistorically, Manifestors have often occupied leadership positions — not because they wanted to, but because they have the ability to start things that others can then carry out and refine. Society has always needed Manifestors to initiate impulses that others can execute and develop.",
+        strategy:"The strategy of the Manifestor is to inform — not to ask permission, but to let the people affected by their actions know in advance what they are going to do. That distinction is crucial. The Manifestor does not ask whether they may do something; they share what they are going to do.\n\nWhen the Manifestor acts without informing, their energy meets resistance. People feel the force of their impact but do not understand where it comes from, and respond with fear, control or opposition. When they inform, that resistance largely disappears — and their creative power can work unimpeded.",
+        energy:"The Manifestor has no defined Sacral centre and therefore does not possess the unlimited work energy of the Generator. Their energy comes in waves: intense periods of action and creation, followed by recovery periods they must take seriously. The Manifestor who ignores their rest periods and continues on momentum becomes exhausted sooner than they expect.\n\nTheir authority can be Emotional, Ego or Splenic. The Manifestor with Emotional authority never makes decisions in the moment — they wait for emotional clarity. The Manifestor with Splenic authority responds to a quiet, instinctive voice that speaks in the moment.",
+        work:"At work the Manifestor is most powerful when given the space to initiate. Structures and procedures that require them to account for every decision cost them energy and undermine their power. They are a pioneer, a concept developer, an entrepreneur — someone who sets ideas in motion that others then execute.\n\nThe Manifestor who understands that their strength lies in initiating, not in executing or sustaining, can save themselves considerable energy by gathering the right people around them who take on the execution.",
+        challenges:"Anger is the not-self theme of the Manifestor — and it typically arises when they feel that others are limiting their freedom, blocking their actions or constantly asking them to account for themselves. That anger is a signal: there is resistance that can be resolved by informing.\n\nThe greatest challenge for Manifestors is learning that informing is not weakness. Their sense of 'I do not need to ask permission' can sometimes read as arrogance to the outside world. But when the Manifestor informs from strength — not from obligation — that resistance disappears and peace arises.",
+      },
+    },
+    reflector:{
+      nl:{
+        intro:"Reflectoren zijn zeldzaam — slechts 1 procent van de wereldbevolking draagt dit design. Ze hebben geen enkel centrum gedefinieerd, wat betekent dat ze volledig open zijn voor de energieën om hen heen. Ze zijn als de maan: ze reflecteren en versterken wat er in hun omgeving aanwezig is. Dat maakt hen bijzonder gevoelig voor de kwaliteit van mensen, plekken en gemeenschappen — en bijzonder waardevol als barometer van gezondheid en welzijn in een groep.\n\nEen Reflector in een bloeiende, gezonde omgeving straalt. Dezelfde Reflector in een toxische, ongezonde omgeving kwijnt weg — niet als metafoor, maar als directe energetische ervaring. Hun welzijn is dan ook in grote mate afhankelijk van de keuzes die ze maken over waar ze zijn en met wie.",
+        strategy:"De strategie van de Reflector is wachten — een volledige maancyclus van 28 dagen — voor grote beslissingen. Dat is de langste wachttijd van alle typen en tegelijk de meest essentiële. Omdat de Reflector zo diep beïnvloed wordt door zijn omgeving, varieert zijn ervaring van dezelfde situatie sterk afhankelijk van wanneer hij ernaar kijkt.\n\nDoor te wachten totdat de maan zijn volledige cyclus heeft doorlopen, kan de Reflector voelen hoe een beslissing aanvoelt door alle energetische kleuren heen. Niet om de beslissing uit te stellen, maar om haar vanuit een complete en geïnformeerde plek te nemen.",
+        energy:"Omdat geen van zijn centra gedefinieerd is, heeft de Reflector geen consistente interne energie. Hij is volledig afhankelijk van wat er om hem heen is — wat hem niet kwetsbaar maar multidimensionaal maakt. In de aanwezigheid van een Generator voelt hij sacrale energie. In de aanwezigheid van een Manifestor voelt hij de impuls om te initiëren. Die mobiliteit van ervaring is zijn kracht, niet zijn zwakte.\n\nZijn autoriteit is lunair: hij volgt de beweging van de maan door de 64 poorten van het Human Design chart. Elke dag brengt een ander energetisch perspectief op dezelfde vraag. De Reflector die dit bewust volgt, leert de vragen die hij zichzelf stelt te kalibreren op de cyclus van de maan.",
+        work:"De Reflector is op zijn best in omgevingen waar zijn bijzondere vermogen gewaardeerd wordt. Hij ziet wat anderen niet zien, voelt wat er onder de oppervlakte speelt, en kan met opmerkelijke helderheid beschrijven hoe een gemeenschap, team of organisatie werkelijk functioneert. Dat maakt hem waardevol als adviseur, waarnemer of vertrouwenspersoon.\n\nZijn grootste bijdrage is zijn aanwezigheid. Een Reflector die goed voelt, die een gezonde en ondersteunende omgeving heeft, fungeert als spiegel voor iedereen om hem heen. Zijn kwaliteit van zijn is aanstekelijk — letterlijk, want via zijn open centra versterkt hij de energie van wie hij omgeeft.",
+        challenges:"Teleurstelling is het niet-zelf thema van de Reflector — en het komt voort uit het leven in omgevingen die niet bij hem passen. Die teleurstelling is geen sentimentele reactie; het is een diep signaal dat er iets structureel niet klopt in zijn context.\n\nDe grootste uitdaging voor de Reflector is het vinden van gemeenschappen en plekken die zijn gevoeligheid begrijpen en koesteren. In een cultuur die consistentie en sterke eigen meningen beloont, voelt de Reflector zich soms onzichtbaar of onstabiel. De bevrijding komt wanneer hij zijn beweeglijkheid begrijpt als een gave — en niet langer probeert een consistentie te simuleren die niet van hem is.",
+      },
+      en:{
+        intro:"Reflectors are rare — only 1 percent of the world's population carries this design. They have no centre defined at all, meaning they are completely open to the energies around them. They are like the moon: they reflect and amplify what is present in their environment. That makes them uniquely sensitive to the quality of people, places and communities — and uniquely valuable as a barometer of health and wellbeing in a group.\n\nA Reflector in a flourishing, healthy environment shines. The same Reflector in a toxic, unhealthy environment fades — not as a metaphor, but as a direct energetic experience. Their wellbeing is therefore largely dependent on the choices they make about where they are and with whom.",
+        strategy:"The strategy of the Reflector is to wait — a full lunar cycle of 28 days — for major decisions. That is the longest waiting period of all types and at the same time the most essential. Because the Reflector is so deeply influenced by their environment, their experience of the same situation varies greatly depending on when they look at it.\n\nBy waiting until the moon has completed its full cycle, the Reflector can feel how a decision feels across all energetic colours. Not to delay the decision, but to make it from a complete and informed place.",
+        energy:"Because none of their centres are defined, the Reflector has no consistent internal energy. They are completely dependent on what is around them — which makes them not vulnerable but multidimensional. In the presence of a Generator they feel sacral energy. In the presence of a Manifestor they feel the impulse to initiate. That mobility of experience is their strength, not their weakness.\n\nTheir authority is lunar: they follow the movement of the moon through the 64 gates of the Human Design chart. Each day brings a different energetic perspective on the same question. The Reflector who consciously follows this learns to calibrate the questions they ask themselves to the cycle of the moon.",
+        work:"The Reflector is at their best in environments where their special capacity is valued. They see what others do not see, feel what is playing beneath the surface, and can describe with remarkable clarity how a community, team or organisation is truly functioning. That makes them valuable as an advisor, observer or trusted confidant.\n\nTheir greatest contribution is their presence. A Reflector who is well, who has a healthy and supportive environment, functions as a mirror for everyone around them. Their quality of being is contagious — literally, because through their open centres they amplify the energy of those they surround.",
+        challenges:"Disappointment is the not-self theme of the Reflector — and it stems from living in environments that do not suit them. That disappointment is not a sentimental reaction; it is a deep signal that something is structurally wrong in their context.\n\nThe greatest challenge for the Reflector is finding communities and places that understand and cherish their sensitivity. In a culture that rewards consistency and strong personal opinions, the Reflector sometimes feels invisible or unstable. Liberation comes when they understand their mobility as a gift — and stop trying to simulate a consistency that is not theirs.",
+      },
+    },
+  };
+
+  const c=isEN?CONTENT[typeId]?.en:CONTENT[typeId]?.nl;
+  if(!c)return null;
+
+  useSEO({
+    title: isEN
+      ? `${tl2(tp.title)} Human Design — ${tl2(tp.strategy)} & ${tl2(tp.signature)} | Faculty of Human Design`
+      : `${tl2(tp.title)} Human Design — Strategie, Energie & Autoriteit | Faculty of Human Design`,
+    description: isEN
+      ? `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategy: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. ${tl2(tp.population)} of the world's population. Discover your complete Human Design reading.`
+      : `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategie: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. ${tl2(tp.population)} van de wereldbevolking. Ontdek je volledige Human Design reading.`,
+    canonical: SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`),
+    jsonLd:{
+      "@context":"https://schema.org","@type":"Article",
+      "headline": isEN?`${tl2(tp.title)} in Human Design`:`${tl2(tp.title)} in Human Design`,
+      "description": tl2(tp.tagline),
+      "author":{"@type":"Organization","name":"Faculty of Human Design"},
+      "publisher":{"@type":"Organization","name":"Faculty of Human Design"},
+      "mainEntityOfPage":{"@type":"WebPage","@id":SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`)},
+    }
+  });
+
+  const para=(text)=>text.split("\n\n").map((p,i)=>(
+    <p key={i} style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.6vw,1.12rem)",fontWeight:300,color:"var(--text)",lineHeight:1.9,marginBottom:28}}>{p}</p>
+  ));
+
+  const otherTypes=TYPES.filter(t=>t.id!==tp.id);
+
+  return(
+    <div className="pg">
+
+      {/* ── CINEMATIC HERO ── */}
+      <section style={{position:"relative",height:"80vh",minHeight:520,maxHeight:860,overflow:"hidden",display:"flex",alignItems:"flex-end"}}>
+        <div style={{position:"absolute",inset:0}}>
+          <img src={tp.img} alt={tl2(tp.title)+" Human Design"} loading="eager"
+            style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 35%"}}/>
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.15) 0%,rgba(8,7,14,.2) 35%,rgba(8,7,14,.85) 100%)"}}/>
+        </div>
+        <div style={{position:"relative",zIndex:1,width:"100%",maxWidth:900,margin:"0 auto",padding:"0 40px 80px"}}>
+          <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".2em",textTransform:"uppercase",color:"rgba(201,168,92,.7)",marginBottom:16}}>
+            {isEN?"Human Design Type":"Human Design Type"} · {tl2(tp.population)} {isEN?"of the population":"van de bevolking"}
+          </div>
+          <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.8rem,7vw,5.5rem)",fontWeight:300,color:"white",lineHeight:1.05,letterSpacing:"-.02em",marginBottom:20}}>
+            {tl2(tp.title)}
+          </h1>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.8vw,1.3rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.5)",lineHeight:1.6,maxWidth:560,marginBottom:40}}>
+            {tl2(tp.tagline)}
+          </p>
+          {/* Quick stats */}
+          <div style={{display:"flex",gap:40,flexWrap:"wrap"}}>
+            {[
+              [isEN?"Strategy":"Strategie", tl2(tp.strategy)],
+              [isEN?"Signature":"Signature", tl2(tp.signature)],
+              [isEN?"Not-self":"Niet-zelf", tl2(tp.notSelf)],
+            ].map(([l,v])=>(
+              <div key={l}>
+                <div style={{fontSize:".5rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"rgba(201,168,92,.6)",marginBottom:4}}>{l}</div>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"white"}}>{v}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── INTRO ── */}
+      <section style={{background:"var(--bg)",padding:"112px 40px"}}>
+        <div style={{maxWidth:720,margin:"0 auto"}}>
+          <div style={{width:1,height:48,background:"var(--gold)",opacity:.5,marginBottom:48}}/>
+          {para(c.intro)}
+        </div>
+      </section>
+
+      {/* ── STRATEGIE ── */}
+      <section style={{background:"white",padding:"96px 40px"}}>
+        <div style={{maxWidth:960,margin:"0 auto",display:"grid",gridTemplateColumns:"200px 1fr",gap:"0 64px",alignItems:"start"}}>
+          <div style={{paddingTop:6}}>
+            <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>{isEN?"Strategy":"Strategie"}</div>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.55rem",fontWeight:300,color:"var(--text)",lineHeight:1.2,marginBottom:20}}>{tl2(tp.strategy)}</div>
+            <div style={{width:28,height:1,background:"var(--gold)",opacity:.5}}/>
+            <div style={{marginTop:24,fontSize:".78rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.7}}>
+              <div style={{marginBottom:8}}><span style={{fontWeight:500,color:"var(--text)"}}>{isEN?"Signature":"Signature"}:</span> {tl2(tp.signature)}</div>
+              <div><span style={{fontWeight:500,color:"var(--text)"}}>{isEN?"Not-self":"Niet-zelf"}:</span> {tl2(tp.notSelf)}</div>
+            </div>
+          </div>
+          <div>{para(c.strategy)}</div>
+        </div>
+      </section>
+
+      {/* ── ENERGIE & AUTORITEIT ── */}
+      <section style={{background:"var(--bg)",padding:"96px 40px"}}>
+        <div style={{maxWidth:960,margin:"0 auto",display:"grid",gridTemplateColumns:"200px 1fr",gap:"0 64px",alignItems:"start"}}>
+          <div style={{paddingTop:6}}>
+            <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>{isEN?"Energy":"Energie"}</div>
+            <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"var(--text)",lineHeight:1.3,marginBottom:20}}>{isEN?"Authority":"Autoriteit"}</div>
+            <div style={{width:28,height:1,background:"var(--gold)",opacity:.5}}/>
+            <div style={{marginTop:24,fontSize:".75rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.7}}>{tl2(tp.authority)}</div>
+          </div>
+          <div>{para(c.energy)}</div>
+        </div>
+      </section>
+
+      {/* ── WERK & RELATIES ── */}
+      <section style={{background:"white",padding:"96px 40px"}}>
+        <div style={{maxWidth:720,margin:"0 auto"}}>
+          <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:32}}>{isEN?"Work & Relationships":"Werk & Relaties"}</div>
+          {para(c.work)}
+        </div>
+      </section>
+
+      {/* ── UITDAGINGEN ── */}
+      <section style={{background:"var(--muted)",padding:"96px 40px"}}>
+        <div style={{maxWidth:720,margin:"0 auto"}}>
+          <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:12}}>{isEN?"Not-self theme":"Niet-zelf thema"}</div>
+          <div style={{fontFamily:"var(--font-serif)",fontSize:"1.3rem",fontWeight:300,color:"var(--text)",marginBottom:32}}>{tl2(tp.notSelf)}</div>
+          {para(c.challenges)}
+        </div>
+      </section>
+
+      {/* ── CTA ── */}
+      <section style={{background:"var(--dark)",padding:"112px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:560,margin:"0 auto"}}>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 48px",opacity:.4}}/>
+          <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3vw,2.4rem)",fontWeight:300,color:"white",marginBottom:20,lineHeight:1.1}}>
+            {isEN
+              ?`Discover your ${tl2(tp.title)} reading`
+              :`Ontdek jouw ${tl2(tp.title)}-reading`}
+          </h2>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.42)",lineHeight:1.8,marginBottom:48,maxWidth:420,margin:"0 auto 48px"}}>
+            {isEN
+              ?"Your Human Design reading goes into depth on your specific Type, Authority, Profile and all defined centres. Personal and delivered within 1 business day."
+              :"Je Human Design reading gaat diep in op jouw specifieke Type, Autoriteit, Profiel en alle gedefinieerde centra. Persoonlijk en bezorgd binnen 1 werkdag."}
+          </p>
+          <button className="btn btn-white btn-lg" onClick={()=>go("rapport-volledig")}>
+            {isEN?"Order your Human Design Reading — €75":"Bestel je Human Design Reading — €75"}
+          </button>
+          <div style={{marginTop:16,fontSize:".72rem",color:"rgba(255,255,255,.25)",letterSpacing:".1em",textTransform:"uppercase"}}>
+            {isEN?"40+ pages · Within 1 business day":"40+ pagina's · Binnen 1 werkdag"}
+          </div>
+        </div>
+      </section>
+
+      {/* ── OTHER TYPES ── */}
+      <section style={{background:"var(--bg)",padding:"96px 40px"}}>
+        <div style={{maxWidth:1100,margin:"0 auto"}}>
+          <div style={{textAlign:"center",marginBottom:64}}>
+            <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14}}>{isEN?"Other types":"Andere types"}</div>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.5rem,2.8vw,2.1rem)",fontWeight:300,color:"var(--text)",lineHeight:1.1}}>
+              {isEN?"Explore all five Human Design types":"Ontdek alle vijf Human Design types"}
+            </h2>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:24}}>
+            {otherTypes.map(ot=>(
+              <div key={ot.id}
+                style={{borderTop:"1px solid var(--border)",paddingTop:24,cursor:"pointer"}}
+                onClick={()=>go("type-"+ot.id)}>
+                <div style={{fontSize:"1.1rem",marginBottom:8,opacity:.4}}>{ot.icon}</div>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:6,lineHeight:1.2}}>{isEN?ot.title.en:ot.title.nl}</div>
+                <div style={{fontSize:".75rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.6,marginBottom:10}}>{isEN?ot.tagline.en:ot.tagline.nl}</div>
+                <span style={{fontSize:".6rem",fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",color:"var(--gold)"}}>{isEN?ot.population.en:ot.population.nl}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+    </div>
+  );
+}
+
 // ─── ROUTING HELPERS ─────────────────────────────────────────────────────────
-const ROUTABLE = new Set(["home","human-design","readings","journal","philosophy","contact","voorwaarden","wat","rapporten","inzichten","over"]);
+const ROUTABLE = new Set(["home","human-design","readings","journal","philosophy","contact","voorwaarden","wat","rapporten","inzichten","over","type"]);
 
 // Map URL slug → internal page ID
 const SLUG_TO_PAGE = {"human-design":"wat","readings":"rapporten","journal":"inzichten","philosophy":"over","wat":"wat","rapporten":"rapporten","inzichten":"inzichten","over":"over"};
@@ -4867,6 +5193,8 @@ function pathToPage(pathname) {
   if (rapportMatch) return "rapport-" + rapportMatch[1];
   const journalMatch = p.match(/^\/journal\/(.+)$/);
   if (journalMatch) return "inzichten-" + journalMatch[1];
+  const typeMatch = p.match(/^\/type\/(.+)$/);
+  if (typeMatch) return "type-" + typeMatch[1];
   // keep old URL support for inzichten sub-pages
   const inzichtenMatch = p.match(/^\/inzichten\/(.+)$/);
   if (inzichtenMatch) return "inzichten-" + inzichtenMatch[1];
@@ -4880,6 +5208,7 @@ function pageToPath(page) {
   if (page === "home") return prefix + "/";
   if (page.startsWith("rapport-")) return prefix + "/rapport/" + page.slice("rapport-".length);
   if (page.startsWith("inzichten-")) return prefix + "/journal/" + page.slice("inzichten-".length);
+  if (page.startsWith("type-")) return prefix + "/type/" + page.slice("type-".length);
   if (page === "wat") return prefix + "/human-design";
   if (page === "rapporten") return prefix + "/readings";
   if (page === "inzichten") return prefix + "/journal";
@@ -5236,6 +5565,7 @@ export default function App(){
             {page==="rapporten"&&<RapportenPage go={go}/>}
             {page.startsWith("rapport-")&&currentRpt&&<ReportDetailPage rpt={currentRpt} go={go} onDone={onDone}/>}
             {(page==="inzichten"||page.startsWith("inzichten-"))&&<InzichtenPage go={go} articleId={page.startsWith("inzichten-")?page.slice("inzichten-".length):null}/>}
+            {page.startsWith("type-")&&<TypePage typeId={page.slice("type-".length)} go={go}/>}
             {page==="over"&&<OverPage go={go}/>}
             {page==="contact"&&<ContactPage/>}
             {page==="voorwaarden"&&<TermsPage go={go}/>}

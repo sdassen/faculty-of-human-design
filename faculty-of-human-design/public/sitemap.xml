@@ -264,6 +264,48 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyhd.com/en/journal/s16"/>
   </url>
 
+  <!-- Human Design Type pagina's -->
+  <url>
+    <loc>https://www.facultyhd.com/type/generator</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyhd.com/type/generator"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyhd.com/en/type/generator"/>
+  </url>
+  <url>
+    <loc>https://www.facultyhd.com/type/manifesting-generator</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyhd.com/type/manifesting-generator"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyhd.com/en/type/manifesting-generator"/>
+  </url>
+  <url>
+    <loc>https://www.facultyhd.com/type/projector</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyhd.com/type/projector"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyhd.com/en/type/projector"/>
+  </url>
+  <url>
+    <loc>https://www.facultyhd.com/type/manifestor</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyhd.com/type/manifestor"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyhd.com/en/type/manifestor"/>
+  </url>
+  <url>
+    <loc>https://www.facultyhd.com/type/reflector</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyhd.com/type/reflector"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyhd.com/en/type/reflector"/>
+  </url>
+
   <!-- Contact -->
   <url>
     <loc>https://www.facultyhd.com/contact</loc>

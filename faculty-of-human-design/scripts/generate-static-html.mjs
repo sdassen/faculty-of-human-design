@@ -220,6 +220,38 @@ const ROUTES = [
     canonical: `${SITE}/journal/s16`,
   },
 
+  // ── HD TYPE PAGES ─────────────────────────────────────────────────────────
+  {
+    path: '/type/generator',
+    title: 'Generator Human Design — Strategie, Energie & Autoriteit | Faculty of Human Design',
+    description: 'Alles over het Generator type in Human Design. Strategie: Reageren. Handtekening: Tevredenheid. Niet-zelf: Frustratie. Ontdek hoe je als Generator optimaal functioneert.',
+    canonical: `${SITE}/type/generator`,
+  },
+  {
+    path: '/type/manifesting-generator',
+    title: 'Manifesting Generator Human Design — Snel, veelzijdig & onuitputtelijk | Faculty of Human Design',
+    description: 'Alles over het Manifesting Generator type in Human Design. Strategie: Reageren en informeren. Handtekening: Tevredenheid & Vrede. Ontdek jouw unieke energie en levensstrategie.',
+    canonical: `${SITE}/type/manifesting-generator`,
+  },
+  {
+    path: '/type/projector',
+    title: 'Projector Human Design — De gids die ziet wat anderen niet zien | Faculty of Human Design',
+    description: 'Alles over het Projector type in Human Design. Strategie: Wachten op de uitnodiging. Handtekening: Succes. Niet-zelf: Bitterheid. Leer hoe je als Projector tot bloei komt.',
+    canonical: `${SITE}/type/projector`,
+  },
+  {
+    path: '/type/manifestor',
+    title: 'Manifestor Human Design — Het enige type dat van nature kan initiëren | Faculty of Human Design',
+    description: 'Alles over het Manifestor type in Human Design. Strategie: Informeren. Handtekening: Vrede. Niet-zelf: Boosheid. Ontdek de kracht en uitdagingen van de Manifestor.',
+    canonical: `${SITE}/type/manifestor`,
+  },
+  {
+    path: '/type/reflector',
+    title: 'Reflector Human Design — De spiegel van de gemeenschap | Faculty of Human Design',
+    description: 'Alles over het Reflector type in Human Design. Strategie: Wachten — een volledige maancyclus. Handtekening: Verrassing. Het zeldzaamste type: ~1% van de bevolking.',
+    canonical: `${SITE}/type/reflector`,
+  },
+
   // ── PHILOSOPHY / OVER ─────────────────────────────────────────────────────
   {
     path: '/philosophy',
@@ -427,6 +459,36 @@ const ROUTES = [
     title: 'Planets in Human Design: Which Planet Activates Which Gate? | Faculty of Human Design',
     description: 'When a Human Design chart is calculated, the positions of ten celestial bodies are used. Each celestial body brings its own theme to the gate it activates.',
     canonical: `${SITE}/en/journal/s16`,
+  },
+  {
+    path: '/en/type/generator',
+    title: 'Generator Human Design — Strategy, Energy & Authority | Faculty of Human Design',
+    description: 'Everything about the Generator type in Human Design. Strategy: Respond. Signature: Satisfaction. Not-self: Frustration. Discover how to thrive as a Generator.',
+    canonical: `${SITE}/en/type/generator`,
+  },
+  {
+    path: '/en/type/manifesting-generator',
+    title: 'Manifesting Generator Human Design — Fast, Versatile & Inexhaustible | Faculty of Human Design',
+    description: 'Everything about the Manifesting Generator type in Human Design. Strategy: Respond then inform. Signature: Satisfaction & Peace. Discover your unique energy and life strategy.',
+    canonical: `${SITE}/en/type/manifesting-generator`,
+  },
+  {
+    path: '/en/type/projector',
+    title: 'Projector Human Design — The Guide Who Sees What Others Cannot | Faculty of Human Design',
+    description: 'Everything about the Projector type in Human Design. Strategy: Wait for the invitation. Signature: Success. Not-self: Bitterness. Learn how to flourish as a Projector.',
+    canonical: `${SITE}/en/type/projector`,
+  },
+  {
+    path: '/en/type/manifestor',
+    title: 'Manifestor Human Design — The Only Type Designed to Initiate | Faculty of Human Design',
+    description: 'Everything about the Manifestor type in Human Design. Strategy: Inform. Signature: Peace. Not-self: Anger. Discover the power and challenges of the Manifestor.',
+    canonical: `${SITE}/en/type/manifestor`,
+  },
+  {
+    path: '/en/type/reflector',
+    title: 'Reflector Human Design — The Mirror of the Community | Faculty of Human Design',
+    description: 'Everything about the Reflector type in Human Design. Strategy: Wait — a full lunar cycle. Signature: Surprise. The rarest type: ~1% of the population.',
+    canonical: `${SITE}/en/type/reflector`,
   },
   {
     path: '/en/philosophy',
