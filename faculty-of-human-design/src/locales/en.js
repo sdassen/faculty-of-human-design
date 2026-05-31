@@ -76,7 +76,7 @@ export default {
     orderBtn: "Order · {price}",
     orderNote: "Secure payment via Stripe · Invoice by email",
     chartCta: "View your chart →",
-    chartFooter: "Spiritual insight, scientifically calculated.",
+    chartFooter: "",
     deeperLabel: "Deeper integrations",
     deeperLink: "Full analysis →",
     signatureDesc: "The state that shows you are living in alignment with your true design",

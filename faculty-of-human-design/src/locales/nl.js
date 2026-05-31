@@ -76,7 +76,7 @@ export default {
     orderBtn: "Bestellen · {price}",
     orderNote: "Veilige betaling via Stripe · Factuur per e-mail",
     chartCta: "Bekijk je chart →",
-    chartFooter: "Spiritueel inzicht, wetenschappelijk berekend.",
+    chartFooter: "",
     deeperLabel: "Diepere integraties",
     deeperLink: "Volledige analyse →",
     signatureDesc: "De staat die aangeeft dat je in lijn leeft met je ware design",

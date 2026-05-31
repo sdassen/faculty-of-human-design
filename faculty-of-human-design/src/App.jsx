@@ -2377,10 +2377,10 @@ function SubscriptionManage(){
     if(!email){setErr(isEN?"Enter your e-mail address.":"Vul je e-mailadres in.");return;}
     setLoading(true);setErr(null);
     try{
-      const res=await fetch("/api/customer-portal",{
+      const res=await fetch("/api/checkout",{
         method:"POST",
         headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({email}),
+        body:JSON.stringify({portal:true,email}),
       });
       const data=await res.json();
       if(!res.ok){setErr(data.error||"Error");setLoading(false);return;}

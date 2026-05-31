@@ -5,6 +5,7 @@
       "name": "dev",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/stevendassen/Desktop/fhd/faculty-of-human-design",
       "port": 5173
     }
   ]
