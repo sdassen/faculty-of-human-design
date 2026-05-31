@@ -1355,6 +1355,7 @@ async function goToStripe(rptId, chartData, formData) {
 
     const fullName1 = (formData.firstName + " " + (formData.lastName || "")).trim();
     const fullName2 = formData.pFirstName ? (formData.pFirstName + " " + (formData.pLastName || "")).trim() : null;
+    const fullNameChild = (rpt?.needsChild && formData.cFirstName) ? (formData.cFirstName + " " + (formData.cLastName || "")).trim() : null;
     const orderRes = await fetch("/api/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1396,6 +1397,17 @@ async function goToStripe(rptId, chartData, formData) {
           lon: formData.plon || null,
           timezone: formData.ptimezone || null,
           tz: formData.ptz ? parseFloat(formData.ptz) : null,
+        } : fullNameChild ? {
+          name: fullNameChild,
+          firstName: formData.cFirstName,
+          lastName: formData.cLastName || "",
+          day: formData.cday, month: formData.cmonth, year: formData.cyear,
+          hour: formData.chour, minute: formData.cminute,
+          place: formData.cplace || "",
+          lat: formData.clat || null,
+          lon: formData.clon || null,
+          timezone: formData.ctimezone || null,
+          tz: formData.ctz ? parseFloat(formData.ctz) : null,
         } : null,
         promptSections: sections,
       }),
@@ -1597,7 +1609,7 @@ function buildPrompt(chart,form,rpt){
   // Standaard HD chart
   const pStr=Object.entries(chart.pers).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
   const dStr=Object.entries(chart.des).map(e=>e[0]+": Poort "+e[1].gate+"."+e[1].line).join(", ");
-  return["HD CHART voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),"Plaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerd: "+(chart.definedCenters.join(", ")||"geen"),"Open: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",promptExtra].join("\n");
+  return["HD CHART voor "+_fn1,"Datum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),"Plaats: "+form.place,"","Type: "+chart.type,"Strategie: "+chart.strat,"Autoriteit: "+chart.auth,"Profiel: "+chart.profile,"Inkarnatie-Kruis: Poort "+chart.cross,"Gedefinieerd: "+(chart.definedCenters.join(", ")||"geen"),"Open: "+chart.openCenters.join(", "),"Kanalen: "+(chart.channels.map(c=>c.g1+"-"+c.g2).join(", ")||"geen"),"Poorten: "+chart.allGates.join(", "),"Bewust: "+pStr,"Onbewust: "+dStr,"",promptExtra].join("\n");
 }
 
 
@@ -2463,7 +2475,7 @@ function SubscriptionManage(){
 
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone,postPayment}){
-  const[form,setForm]=useState({firstName:"",lastName:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pFirstName:"",pLastName:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:"",familyRolesSwapped:false});
+  const[form,setForm]=useState({firstName:"",lastName:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pFirstName:"",pLastName:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cFirstName:"",cLastName:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:"",familyRolesSwapped:false});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
@@ -2703,7 +2715,8 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div className="form-divider"/>
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{LANG==="en"?"Child's details":"Gegevens kind"}</div>
               <div className="form-grid">
-                <div className="form-group full"><label className="form-label">{LANG==="en"?"Child's name":"Naam kind"}</label><input className="form-input" name="cname" value={form.cname} onChange={ch} placeholder={LANG==="en"?"Child's name":"Naam kind"}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"} {LANG==="en"?"child":"kind"}</label><input className="form-input" name="cFirstName" value={form.cFirstName} onChange={ch} placeholder={LANG==="en"?"Emma":"Emma"}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"} {LANG==="en"?"child":"kind"}</label><input className="form-input" name="cLastName" value={form.cLastName} onChange={ch} placeholder={LANG==="en"?"De Vries":"De Vries"}/></div>
                 <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch} onBlur={numBlur("cday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="cyear" min="1900" max={new Date().getFullYear()} value={form.cyear} onChange={ch} onBlur={numBlur("cyear",1900,new Date().getFullYear())}/></div>
@@ -2792,13 +2805,13 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               return(
                 <>
                   {childChart
-                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.firstName} name2={form.cname||childLabel}/>
+                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.firstName} name2={form.cFirstName||childLabel}/>
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
                       <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details to see the combined chart":"Vul de gegevens van het kind in om de gecombineerde chart te zien"}</p>
                     </div>}
                   <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
                     <HDRow c={chart} name={form.firstName}/>
-                    {childChart?<HDRow c={childChart} name={form.cname||childLabel}/>:
+                    {childChart?<HDRow c={childChart} name={form.cFirstName||childLabel}/>:
                       <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
                         <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details":"Vul de gegevens van het kind in"}</p>
                       </div>}
