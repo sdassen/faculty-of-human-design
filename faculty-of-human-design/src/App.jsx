@@ -2228,6 +2228,12 @@ function Footer({go}){
             <span className="footer-link" onClick={()=>go("wat")}>Human Design</span>
             <span className="footer-link" onClick={()=>go("inzichten")}>Journal</span>
             <span className="footer-link" onClick={()=>go("over")}>Philosophy</span>
+            <div style={{width:"100%",height:1,background:"rgba(255,255,255,.06)",margin:"14px 0 10px"}}/>
+            <span className="footer-link" onClick={()=>go("type-generator")}>Generator</span>
+            <span className="footer-link" onClick={()=>go("type-manifesting-generator")}>Manifesting Generator</span>
+            <span className="footer-link" onClick={()=>go("type-projector")}>Projector</span>
+            <span className="footer-link" onClick={()=>go("type-manifestor")}>Manifestor</span>
+            <span className="footer-link" onClick={()=>go("type-reflector")}>Reflector</span>
           </div>
           <div>
             <div className="footer-col-title">Contact</div>
@@ -3378,8 +3384,43 @@ function WatPage({go}){
         </div>
       </section>
 
+      {/* ── DE VIJF TYPES ────────────────────────────────────────────────── */}
+      <section style={{background:"var(--bg)",padding:"120px 40px"}}>
+        <div style={{maxWidth:900,margin:"0 auto"}}>
+          <div style={{textAlign:"center",marginBottom:64}}>
+            <div style={{width:24,height:1,background:"var(--gold)",margin:"0 auto 20px",opacity:.55}}/>
+            <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:20}}>
+              {isEN?"The five types":"De vijf types"}
+            </div>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.5rem,2.8vw,2rem)",fontWeight:300,color:"var(--text)",lineHeight:1.2,margin:"0 auto",maxWidth:520}}>
+              {isEN?"Every person is born with one of five energetic designs":"Elke persoon is geboren met één van vijf energetische designs"}
+            </h2>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(152px,1fr))",gap:2,background:"var(--border)"}}>
+            {[
+              {id:"generator",   icon:"◎",nl:"Generator",         en:"Generator",          tagNl:"~37% · Reageren",              tagEn:"~37% · Respond"},
+              {id:"manifesting-generator",icon:"◈",nl:"Manifesting Generator",en:"Manifesting Generator",tagNl:"~33% · Reageren & informeren",tagEn:"~33% · Respond & inform"},
+              {id:"projector",   icon:"◇",nl:"Projector",         en:"Projector",          tagNl:"~20% · Wachten op uitnodiging",tagEn:"~20% · Wait for invitation"},
+              {id:"manifestor",  icon:"◆",nl:"Manifestor",        en:"Manifestor",         tagNl:"~9% · Informeren",             tagEn:"~9% · Inform"},
+              {id:"reflector",   icon:"◯",nl:"Reflector",         en:"Reflector",          tagNl:"~1% · Maancyclus",             tagEn:"~1% · Lunar cycle"},
+            ].map(tp=>(
+              <div key={tp.id} onClick={()=>go("type-"+tp.id)}
+                style={{background:"white",padding:"28px 20px 24px",cursor:"pointer",transition:"background 180ms",minHeight:160,display:"flex",flexDirection:"column"}}
+                onMouseEnter={e=>{e.currentTarget.style.background="var(--muted)";}}
+                onMouseLeave={e=>{e.currentTarget.style.background="white";}}
+              >
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.3rem",marginBottom:14,opacity:.25,lineHeight:1}}>{tp.icon}</div>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.2}}>{isEN?tp.en:tp.nl}</div>
+                <div style={{fontSize:".7rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.55,marginTop:"auto"}}>{isEN?tp.tagEn:tp.tagNl}</div>
+                <div style={{width:16,height:1,background:"var(--gold)",marginTop:16,opacity:.5}}/>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── SOFT CTA ────────────────────────────────────────────────────── */}
-      <section style={{background:"var(--bg)",padding:"152px 40px",textAlign:"center"}}>
+      <section style={{background:"white",padding:"152px 40px",textAlign:"center"}}>
         <div style={{maxWidth:480,margin:"0 auto"}}>
           <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.05rem,1.8vw,1.3rem)",fontWeight:300,color:"var(--text)",lineHeight:1.88,marginBottom:52}}>
             {isEN
