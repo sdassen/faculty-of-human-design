@@ -42,15 +42,11 @@ export async function renderPDF(html) {
     await page.setContent(html, { waitUntil: "networkidle0", timeout: 45000 });
     await page.evaluate(() => document.fonts.ready);
 
-    const footerTemplate = `<div style="width:100%;text-align:center;font-family:'Helvetica Neue',Arial,sans-serif;font-size:7pt;color:#A09890;letter-spacing:0.14em;padding-bottom:4mm;"><span class="pageNumber"></span></div>`;
-
     const pdf = await page.pdf({
       format:               "A4",
       printBackground:      true,
-      margin:               { top: "36mm", bottom: "14mm", left: "0mm", right: "0mm" },
-      displayHeaderFooter:  true,
-      headerTemplate:       `<div></div>`,
-      footerTemplate,
+      margin:               { top: "0", bottom: "0", left: "0", right: "0" },
+      displayHeaderFooter:  false,
     });
 
     return Buffer.from(pdf);
