@@ -3204,6 +3204,41 @@ function HomePage({go}){
         </div>
       </section>
 
+      {/* ── TYPES STRIP ──────────────────────────────────────────────────── */}
+      <section style={{background:"var(--bg)",padding:"96px 40px 104px"}}>
+        <div style={{maxWidth:1040,margin:"0 auto"}}>
+          <div style={{textAlign:"center",marginBottom:56}}>
+            <div style={{width:24,height:1,background:"var(--gold)",margin:"0 auto 18px",opacity:.55}}/>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.35rem,2.4vw,1.75rem)",fontWeight:300,color:"var(--text)",lineHeight:1.2,margin:0}}>
+              {lang==="en"?"Which type are you?":"Welk type ben jij?"}
+            </h2>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(170px,1fr))",gap:2,background:"var(--border)"}}>
+            {[
+              {id:"generator",          icon:"◎",nl:"Generator",           en:"Generator",           statNl:"~37%",statEn:"~37%",tagNl:"Reageren",               tagEn:"Respond"},
+              {id:"manifesting-generator",icon:"◈",nl:"Manifesting Generator",en:"Manifesting Generator",statNl:"~33%",statEn:"~33%",tagNl:"Reageren & informeren",tagEn:"Respond & inform"},
+              {id:"projector",          icon:"◇",nl:"Projector",           en:"Projector",           statNl:"~20%",statEn:"~20%",tagNl:"Wachten op uitnodiging",tagEn:"Wait for invitation"},
+              {id:"manifestor",         icon:"◆",nl:"Manifestor",          en:"Manifestor",          statNl:"~9%", statEn:"~9%", tagNl:"Informeren",             tagEn:"Inform"},
+              {id:"reflector",          icon:"◯",nl:"Reflector",           en:"Reflector",           statNl:"~1%", statEn:"~1%", tagNl:"Maancyclus",             tagEn:"Lunar cycle"},
+            ].map(tp=>(
+              <div key={tp.id} onClick={()=>go("type-"+tp.id)}
+                style={{background:"white",padding:"32px 24px 28px",cursor:"pointer",transition:"background 180ms",display:"flex",flexDirection:"column",gap:0}}
+                onMouseEnter={e=>e.currentTarget.style.background="var(--muted)"}
+                onMouseLeave={e=>e.currentTarget.style.background="white"}
+              >
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.4rem",color:"var(--text)",opacity:.2,marginBottom:16,lineHeight:1}}>{tp.icon}</div>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:400,color:"var(--text)",marginBottom:6,lineHeight:1.2}}>{lang==="en"?tp.en:tp.nl}</div>
+                <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.5}}>{lang==="en"?tp.tagEn:tp.tagNl}</div>
+                <div style={{marginTop:"auto",paddingTop:18,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+                  <span style={{fontSize:".6rem",fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",color:"var(--gold)"}}>{lang==="en"?tp.statEn:tp.statNl}</span>
+                  <span style={{fontSize:".6rem",fontWeight:400,letterSpacing:".08em",textTransform:"uppercase",color:"var(--text-light)"}}>{lang==="en"?"Learn more":"Lees meer"} →</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── FINAL CTA ────────────────────────────────────────────────────── */}
       <div className="photo-cta-section">
         <div className="photo-cta-bg">
@@ -3644,12 +3679,12 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
   useSEO({
     title:rptTitle+" — "+rptOutcome,
     description:rptTitle+" — Faculty of Human Design. "+rptIntro.slice(0,160)+" "+rpt.pages+" "+t("report.pages")+". "+t("trust.delivery")+". "+rpt.price+".",
-    canonical:SITE+"/#rapport-"+rpt.id,
+    canonical:SITE+(LANG==="en"?"/en":"")+"/rapport/"+rpt.id,
     jsonLd:{
       "@graph":[
         productLD(rpt),
         faqLD(faqs),
-        breadcrumbLD([["Home","/"],[ LANG==="en"?"Readings":"Readings","/#rapporten"],[rptTitle,"/#rapport-"+rpt.id]])
+        breadcrumbLD([["Home","/"],["Readings",(LANG==="en"?"/en":"")+"/readings"],[rptTitle,(LANG==="en"?"/en":"")+"/rapport/"+rpt.id]])
       ]
     }
   });
