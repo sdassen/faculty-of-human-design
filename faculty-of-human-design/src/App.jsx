@@ -33,7 +33,7 @@ const IMGS = {
   ibiza_white:   "https://images.unsplash.com/photo-1523531294919-4bcd7c65e216?w=2000&auto=format&fit=crop&q=80",
 
   // ── Report cards (center-safe, 900w) ───────────────────────────────
-  r_volledig:        "/img-volledig-terras.jpg",
+  r_volledig:        "/img-volledig-hero.jpg",
   r_relatie_liefde:  "/img-relatie-liefde.jpg",
   r_relatie_business:"https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
   r_relatie_familie: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80",
@@ -4062,7 +4062,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       {/* ── FULL-BLEED EDITORIAL IMAGE ───────────────────────────────────── */}
       <div style={{position:"relative",height:rpt.id==="relatie_liefde"?"75vh":"65vh",minHeight:400,overflow:"hidden"}}>
         <img
-          src={rpt.id==="relatie_liefde"?"/img-relatie-liefde-new.jpg":IMGS.ibiza}
+          src={rpt.id==="relatie_liefde"?"/img-relatie-liefde-new.jpg":rpt.id==="volledig"?"/img-volledig-terras.jpg":IMGS.ibiza}
           alt=""
           aria-hidden="true"
           loading="lazy"
