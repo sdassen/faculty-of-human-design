@@ -735,6 +735,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .type-section-lg { padding:60px 16px; }
   .type-section-sm { padding:44px 16px; }
   .type-hero-inner { padding:0 16px 48px; }
+  .type-cta-btn    { white-space:normal; text-align:center; line-height:1.4; width:100%; }
 }
 `;
 
@@ -5347,7 +5348,7 @@ function TypePage({typeId,go}){
               ?"Your Human Design reading goes into depth on your specific Type, Authority, Profile and all defined centres. Personal and delivered within 1 business day."
               :"Je Human Design reading gaat diep in op jouw specifieke Type, Autoriteit, Profiel en alle gedefinieerde centra. Persoonlijk en bezorgd binnen 1 werkdag."}
           </p>
-          <button className="btn btn-white btn-lg" onClick={()=>go("rapport-volledig")}>
+          <button className="btn btn-white btn-lg type-cta-btn" onClick={()=>go("rapport-volledig")}>
             {isEN?"Order your Human Design Reading — €75":"Bestel je Human Design Reading — €75"}
           </button>
           <div style={{marginTop:16,fontSize:".72rem",color:"rgba(255,255,255,.25)",letterSpacing:".1em",textTransform:"uppercase"}}>
