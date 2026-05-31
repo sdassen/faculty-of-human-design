@@ -4433,7 +4433,7 @@ function OverPage({go}){
 }
 
 function ContactPage(){
-  const[form,setForm]=useState({name:"",email:"",subject:"",msg:""});
+  const[form,setForm]=useState({name:"",email:"",subject:"",msg:"",website:""});
   const[status,setStatus]=useState(null); // null | "sending" | "ok" | "error"
   const[errMsg,setErrMsg]=useState("");
   const[faqOpen,setFaqOpen]=useState(null);
@@ -4464,9 +4464,9 @@ function ContactPage(){
     try{
       const res=await fetch("/api/review-approve",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...form,contact:1})});
       const data=await res.json();
-      if(!res.ok)throw new Error(data.error||"Onbekende fout");
+      if(!res.ok)throw new Error(data.error||(LANG==="en"?"Unknown error":"Onbekende fout"));
       setStatus("ok");
-      setForm({name:"",email:"",subject:"",msg:""});
+      setForm({name:"",email:"",subject:"",msg:"",website:""});
     }catch(e){
       setErrMsg(e.message);
       setStatus("error");
@@ -4618,6 +4618,10 @@ function ContactPage(){
                     rows={5}
                     style={{width:"100%",padding:"20px 0",fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text)",background:"transparent",border:"none",outline:"none",resize:"none",lineHeight:1.7}}
                   />
+                </div>
+                {/* Honeypot — invisible to humans, bots fill it in */}
+                <div style={{position:"absolute",left:"-9999px",top:"auto",width:1,height:1,overflow:"hidden"}} aria-hidden="true">
+                  <input type="text" name="website" tabIndex={-1} autoComplete="off" value={form.website} onChange={ch}/>
                 </div>
                 <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
                   <button

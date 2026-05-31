@@ -13,6 +13,22 @@ import { createClient } from "@supabase/supabase-js";
 import { inngest } from "../lib/inngest/client.js";
 import { Resend } from "resend";
 
+// ── Contact form rate limiting (5 submissions / IP / 60 s) ───────────────────
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 5;
+const _rateBuckets = new Map(); // ip → { count, resetAt }
+
+function isRateLimited(ip) {
+  const now = Date.now();
+  let bucket = _rateBuckets.get(ip);
+  if (!bucket || now > bucket.resetAt) {
+    bucket = { count: 0, resetAt: now + RATE_WINDOW_MS };
+    _rateBuckets.set(ip, bucket);
+  }
+  bucket.count++;
+  return bucket.count > RATE_MAX;
+}
+
 class _NoopWS {
   constructor() { this.readyState = 3; }
   send() {} close() {} addEventListener() {} removeEventListener() {}
@@ -31,10 +47,29 @@ export default async function handler(req, res) {
 
   // ── POST: contact form ───────────────────────────────────────────────────
   if (req.method === "POST" && req.body?.contact) {
+    // Honeypot — bots fill hidden fields, humans don't
+    if (req.body.website) {
+      // Silently accept so bots think it worked
+      return res.status(200).json({ ok: true });
+    }
+
+    // Rate limiting
+    const ip = req.headers["x-forwarded-for"]?.split(",")[0]?.trim() || req.socket?.remoteAddress || "unknown";
+    if (isRateLimited(ip)) {
+      console.warn("[contact] Rate limit hit for IP:", ip);
+      return res.status(429).json({ error: "Te veel berichten. Probeer het over een minuut opnieuw." });
+    }
+
     const { name, email, subject, msg } = req.body;
     if (!name?.trim() || !email?.trim() || !msg?.trim()) {
       return res.status(400).json({ error: "Vul alle verplichte velden in." });
     }
+
+    // Basic email format check
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      return res.status(400).json({ error: "Vul een geldig e-mailadres in." });
+    }
+
     try {
       const resend = new Resend(process.env.RESEND_API_KEY);
       const { data, error: sendError } = await resend.emails.send({

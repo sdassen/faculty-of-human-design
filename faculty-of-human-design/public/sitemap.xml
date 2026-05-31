@@ -5,7 +5,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://www.facultyofhumandesign.com/</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/"/>
@@ -15,7 +15,7 @@
   <!-- Readings / Rapporten -->
   <url>
     <loc>https://www.facultyofhumandesign.com/readings</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/readings"/>
@@ -25,69 +25,89 @@
   <!-- Rapport detail pagina's -->
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/volledig</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/volledig"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/volledig"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/relatie_liefde</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/relatie_liefde"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/relatie_liefde"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/relatie_business</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/relatie_business"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/relatie_business"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/relatie_familie</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/relatie_familie"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/relatie_familie"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/jaar</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/jaar"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/jaar"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/kind</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/kind"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/kind"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/loopbaan</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/loopbaan"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/loopbaan"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/numerologie</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/numerologie"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/numerologie"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/horoscoop</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/horoscoop"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/horoscoop"/>
   </url>
   <url>
     <loc>https://www.facultyofhumandesign.com/rapport/maandelijks</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/rapport/maandelijks"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/rapport/maandelijks"/>
   </url>
 
   <!-- Human Design pagina -->
   <url>
     <loc>https://www.facultyofhumandesign.com/human-design</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/human-design"/>
@@ -97,31 +117,171 @@
   <!-- Philosophy / Over ons -->
   <url>
     <loc>https://www.facultyofhumandesign.com/philosophy</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/philosophy"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/philosophy"/>
   </url>
 
-  <!-- Journal / Inzichten -->
+  <!-- Journal / Inzichten — overzicht -->
   <url>
     <loc>https://www.facultyofhumandesign.com/journal</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal"/>
   </url>
 
+  <!-- Journal artikelen s1–s16 -->
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s1</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s1"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s1"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s2</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s2"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s2"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s3</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s3"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s3"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s4</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s4"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s4"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s5</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s5"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s5"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s6</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s6"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s6"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s7</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s7"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s7"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s8</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s8"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s8"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s9</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s9"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s9"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s10</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s10"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s10"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s11</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s11"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s11"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s12</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s12"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s12"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s13</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s13"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s13"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s14</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s14"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s14"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s15</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s15"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s15"/>
+  </url>
+  <url>
+    <loc>https://www.facultyofhumandesign.com/journal/s16</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/journal/s16"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/journal/s16"/>
+  </url>
+
   <!-- Contact -->
   <url>
     <loc>https://www.facultyofhumandesign.com/contact</loc>
-    <lastmod>2026-05-30</lastmod>
+    <lastmod>2026-05-31</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
     <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/contact"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/contact"/>
+  </url>
+
+  <!-- Voorwaarden / Terms -->
+  <url>
+    <loc>https://www.facultyofhumandesign.com/voorwaarden</loc>
+    <lastmod>2026-05-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.facultyofhumandesign.com/voorwaarden"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.facultyofhumandesign.com/en/voorwaarden"/>
   </url>
 
 </urlset>
