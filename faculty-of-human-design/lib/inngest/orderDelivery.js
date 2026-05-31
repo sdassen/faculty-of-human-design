@@ -1200,20 +1200,32 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
 // for either person — always refer by name or "jij / je partner".
 function buildRelatieContext(order, isEN) {
   const name1 = order.customer_name || (isEN ? "person 1" : "persoon 1");
-  const name2 = (order.partner_birth_data || {}).name || (isEN ? "your partner" : "je partner");
+  const name2 = (order.partner_birth_data || {}).name || (isEN ? "your family member" : "je familielid");
+  const familyRelation = (order.birth_data || {}).familyRelation || null;
+  const isFamilie = (order.report_id || "").toLowerCase() === "relatie_familie";
+
+  const relationLine = familyRelation
+    ? (isEN
+        ? `\nRelationship type: ${familyRelation}. Frame every section from this specific relationship — use language and dynamics appropriate to ${familyRelation}, not generic "partner" language.`
+        : `\nSoort relatie: ${familyRelation}. Schrijf elke sectie vanuit deze specifieke relatie — gebruik taal en dynamieken die passen bij ${familyRelation}, geen generieke "partner"-taal.`)
+    : (isFamilie
+        ? (isEN
+            ? `\nRelationship type: family (unspecified). Write in terms of a family bond — avoid romantic or business language.`
+            : `\nSoort relatie: familie (niet gespecificeerd). Schrijf in termen van een familieband — vermijd romantische of zakelijke taal.`)
+        : "");
 
   if (isEN) {
     return `\n\nRELATIONSHIP READING — MANDATORY PRONOUN RULE:
 Gender is NOT available in the data. NEVER use "he", "she", "him", "her", "his" or "hers" to refer to either person.
 Always refer to people by name: "${name1}" for the first person, "${name2}" for the second person.
-If a name is unavailable, use "you" (for the reader) and "your partner" (for the other person).
-This rule applies to every single sentence — no exceptions.`;
+If a name is unavailable, use "you" (for the reader) and "your family member" (for the other person).
+This rule applies to every single sentence — no exceptions.${relationLine}`;
   } else {
     return `\n\nRELATIE READING — VERPLICHTE VOORNAAMWOORDREGEL:
 Geslacht is NIET beschikbaar in de data. Gebruik NOOIT "hij", "zij", "ze" (als persoonsverwijs), "hem", of "haar" (als geslachtsverwijs) voor één van beide personen.
 Verwijs altijd bij naam: "${name1}" voor de aanvrager, "${name2}" voor de tweede persoon.
-Als een naam ontbreekt, gebruik dan "jij" (voor de lezer) en "je partner" (voor de ander).
-Deze regel geldt voor elke zin in elke sectie — geen uitzonderingen.`;
+Als een naam ontbreekt, gebruik dan "jij" (voor de lezer) en "je familielid" (voor de ander).
+Deze regel geldt voor elke zin in elke sectie — geen uitzonderingen.${relationLine}`;
   }
 }
 

@@ -1356,6 +1356,7 @@ async function goToStripe(rptId, chartData, formData) {
           tz: formData.tz ? parseFloat(formData.tz) : null,
           // Embed calculated chart so Inngest can use it for AI generation
           chart: chartData,
+          familyRelation: formData.familyRelation || null,
         },
         partnerBirthData: formData.pname ? {
           name: formData.pname,
@@ -2633,6 +2634,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{t("form.partnerSection",{label:tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")})}</div>
               <div className="form-grid">
                 <div className="form-group full"><label className="form-label">{LANG==="en"?"Name":"Naam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={(LANG==="en"?"Name ":"Naam ")+(tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner"))}/></div>
+                {rpt.id==="relatie_familie"&&<div className="form-group full"><label className="form-label">{LANG==="en"?"Relationship":"Relatie"}</label><select className="form-select" name="familyRelation" value={form.familyRelation||""} onChange={ch}><option value="">{LANG==="en"?"Select relationship…":"Selecteer relatie…"}</option><option value={LANG==="en"?"Parent & child":"Ouder & kind"}>{LANG==="en"?"Parent & child":"Ouder & kind"}</option><option value={LANG==="en"?"Siblings":"Broer & zus"}>{LANG==="en"?"Siblings":"Broer & zus"}</option><option value={LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}>{LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}</option><option value={LANG==="en"?"Other family relationship":"Andere familierelatie"}>{LANG==="en"?"Other family relationship":"Andere familierelatie"}</option></select></div>}
                 <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
