@@ -2217,14 +2217,14 @@ function Footer({go}){
             <p className="footer-desc">{t("footer.desc")}</p>
           </div>
           <div>
-            <div className="footer-col-title">Readings</div>
-            <span className="footer-link" onClick={()=>go("rapport-volledig")}>Human Design Reading</span>
-            <span className="footer-link" onClick={()=>go("rapport-relatie_liefde")}>Relationship Reading</span>
-            <span className="footer-link" onClick={()=>go("rapport-relatie_business")}>Business Reading</span>
-            <span className="footer-link" onClick={()=>go("rapport-relatie_familie")}>Family Reading</span>
+            <div className="footer-col-title">{t("footer.reportsCol")}</div>
+            <span className="footer-link" onClick={()=>go("rapport-volledig")}>{tl(REPORTS.find(r=>r.id==="volledig").title)}</span>
+            <span className="footer-link" onClick={()=>go("rapport-relatie_liefde")}>{tl(REPORTS.find(r=>r.id==="relatie_liefde").title)}</span>
+            <span className="footer-link" onClick={()=>go("rapport-relatie_business")}>{tl(REPORTS.find(r=>r.id==="relatie_business").title)}</span>
+            <span className="footer-link" onClick={()=>go("rapport-relatie_familie")}>{tl(REPORTS.find(r=>r.id==="relatie_familie").title)}</span>
           </div>
           <div>
-            <div className="footer-col-title">Explore</div>
+            <div className="footer-col-title">{t("footer.explore")}</div>
             <span className="footer-link" onClick={()=>go("wat")}>Human Design</span>
             <span className="footer-link" onClick={()=>go("inzichten")}>Journal</span>
             <span className="footer-link" onClick={()=>go("over")}>Philosophy</span>

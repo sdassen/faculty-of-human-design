@@ -312,6 +312,7 @@ export default {
     personalPdf: "Personal PDF",
     directDelivery: "Delivered within 1 business day",
     email: "info@facultyhd.com",
+    explore: "Explore",
     terms: "Terms & Privacy",
     ssl: "SSL secured",
     ideal: "iDEAL available",
