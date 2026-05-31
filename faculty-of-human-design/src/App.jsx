@@ -998,7 +998,7 @@ const REPORTS = [
   {
     id:"kind", icon:"◇", tag:"",
     title:{ nl:"Kinderrapport", en:"Child Reading" },
-    price:"€45", priceNum:45,
+    price:"€75", priceNum:75,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
     outcome:{ nl:"Begeleid je kind vanuit wie het werkelijk is", en:"Guide your child from who they truly are" },
     tagline:{ nl:"Je kind begrijpen vanuit zijn of haar design", en:"Understanding your child through their design" },
