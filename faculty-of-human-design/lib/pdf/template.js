@@ -279,10 +279,14 @@ function buildTransitionPage(quoteNL, quoteEN, order) {
 
 // ─── PAGE: CINEMATIC INTRODUCTION ────────────────────────────────────────────
 function buildIntroPage(order) {
-  const lang = order.language || "nl";
-  const name = order.customer_name || "";
+  const lang     = order.language || "nl";
+  const name     = order.customer_name || "";
+  const reportId = order.report_id || "";
+  const isKind   = reportId === "kind";
+  const isRelatie = reportId.startsWith("relatie_");
 
-  const contentNL = {
+  // ── Zelf (volledig, jaar, loopbaan, etc.) ──────────────────────────────────
+  const selfNL = {
     label:    "VOOR JOU",
     headline: "Een woord vooraf",
     body: [
@@ -296,7 +300,7 @@ function buildIntroPage(order) {
     org:  "Faculty of Human Design · Ibiza",
   };
 
-  const contentEN = {
+  const selfEN = {
     label:    "FOR YOU",
     headline: "A word before we begin",
     body: [
@@ -309,6 +313,67 @@ function buildIntroPage(order) {
     sign: "With respect for your design,",
     org:  "Faculty of Human Design · Ibiza",
   };
+
+  // ── Kind ───────────────────────────────────────────────────────────────────
+  const kindNL = {
+    label:    "VOOR JOU ALS OUDER",
+    headline: "Een woord vooraf",
+    body: [
+      `Dit rapport is niet geschreven om je te vertellen wie jouw kind zou moeten worden.`,
+      `Het is geschreven om je te helpen zien wie jouw kind al is — voor de wereld hem of haar vroeg zich aan te passen.`,
+      `Human Design is geen persoonlijkheidstest. Het is een kaart van de energie die door jouw kind stroomt. Van de manier waarop hij of zij beslissingen het best neemt. Van de patronen die zijn of haar leven kleuren.`,
+      `Dit rapport zal jouw kind niet veranderen. Maar het kan jou iets teruggeven: herkenning. De stille bevestiging dat wat jij al voelde over jouw kind — zijn eigenheid, zijn ritme, zijn gevoeligheid — niet toevallig is.`,
+      `Lees dit niet als een handleiding voor je kind. Lees het als een spiegel voor jou als ouder.`,
+    ],
+    sign: "Met respect voor het ontwerp van je kind,",
+    org:  "Faculty of Human Design · Ibiza",
+  };
+
+  const kindEN = {
+    label:    "FOR YOU AS A PARENT",
+    headline: "A word before we begin",
+    body: [
+      `This report was not written to tell you who your child should become.`,
+      `It was written to help you see who your child already is — before the world asked them to adapt.`,
+      `Human Design is not a personality test. It is a map of the energy that moves through your child. Of the way they make decisions best. Of the patterns that colour their life.`,
+      `This report will not change your child. But it can give something back to you: recognition. The quiet confirmation that what you already sensed about your child — their particular nature, their rhythm, their sensitivity — is not random.`,
+      `Read this not as a manual for your child. Read it as a mirror for you as a parent.`,
+    ],
+    sign: "With respect for your child's design,",
+    org:  "Faculty of Human Design · Ibiza",
+  };
+
+  // ── Relatie ────────────────────────────────────────────────────────────────
+  const relatieNL = {
+    label:    "VOOR JULLIE SAMEN",
+    headline: "Een woord vooraf",
+    body: [
+      `Dit rapport is niet geschreven om te vertellen hoe jullie relatie zou moeten zijn.`,
+      `Het is geschreven om te laten zien wie jullie elk zijn — en hoe die twee ontwerpen met elkaar in contact komen.`,
+      `Human Design is geen relatietest. Het is een kaart van de energie die door elk van jullie stroomt. Van de manier waarop jullie ieder beslissingen het best nemen. Van de patronen die jullie verbinding kleuren.`,
+      `Dit rapport zal jullie relatie niet veranderen. Maar het kan jullie iets teruggeven: begrip. De stille erkenning dat jullie verschillen geen obstakels zijn — maar de textuur van jullie verbinding.`,
+      `Lees dit niet als een handleiding voor jullie relatie. Lees het als een spiegel voor jullie samen.`,
+    ],
+    sign: "Met respect voor jullie ontwerp,",
+    org:  "Faculty of Human Design · Ibiza",
+  };
+
+  const relatieEN = {
+    label:    "FOR YOU TOGETHER",
+    headline: "A word before we begin",
+    body: [
+      `This report was not written to tell you how your relationship should be.`,
+      `It was written to show who you each are — and how those two designs come into contact.`,
+      `Human Design is not a relationship test. It is a map of the energy that moves through each of you. Of the way you each make decisions best. Of the patterns that colour your connection.`,
+      `This report will not change your relationship. But it can give something back: understanding. The quiet recognition that your differences are not obstacles — but the texture of your connection.`,
+      `Read this not as a manual for your relationship. Read it as a mirror for you together.`,
+    ],
+    sign: "With respect for your shared design,",
+    org:  "Faculty of Human Design · Ibiza",
+  };
+
+  const contentNL = isKind ? kindNL : isRelatie ? relatieNL : selfNL;
+  const contentEN = isKind ? kindEN : isRelatie ? relatieEN : selfEN;
 
   const c = lang === "en" ? contentEN : contentNL;
 
