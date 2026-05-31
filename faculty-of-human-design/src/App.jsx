@@ -737,6 +737,16 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .type-hero-inner { padding:0 16px 48px; }
   .type-cta-btn    { white-space:normal; text-align:center; line-height:1.4; width:100%; }
 }
+
+/* ── 5-TYPE GRID ORPHAN FIX ─────────────────────────────────────────────── */
+@media (max-width:580px){
+  .types-grid-5>*:last-child:nth-child(odd){
+    grid-column:1/-1;
+    justify-self:center;
+    max-width:50%;
+    width:100%;
+  }
+}
 `;
 
 
@@ -2532,7 +2542,8 @@ function ReportForm({rpt,onDone,postPayment}){
   const needsTime=!isNum;
   const isRelatie=rpt.id.startsWith("relatie_");
   const partnerOk=!isRelatie||(form.pFirstName&&form.pday&&form.pmonth&&form.pyear);
-  const ok=form.firstName&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
+  const childOk=!rpt.needsChild||(form.cFirstName&&form.cday&&form.cmonth&&form.cyear&&form.cplace);
+  const ok=form.firstName&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk&&childOk;
   const promptExtraStr=(typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)?(rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??""):(rpt.prompt_extra||"");
   const sections=promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
 
@@ -3243,7 +3254,7 @@ function HomePage({go}){
               {lang==="en"?"Which type are you?":"Welk type ben jij?"}
             </h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:2,background:"var(--border)"}}>
+          <div className="types-grid-5" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:2,background:"var(--border)"}}>
             {[
               {id:"generator",          icon:"◎",nl:"Generator",           en:"Generator",           statNl:"~37%",statEn:"~37%",tagNl:"Reageren",               tagEn:"Respond"},
               {id:"manifesting-generator",icon:"◈",nl:"Manifesting Generator",en:"Manifesting Generator",statNl:"~33%",statEn:"~33%",tagNl:"Reageren & informeren",tagEn:"Respond & inform"},
@@ -3463,7 +3474,7 @@ function WatPage({go}){
               {isEN?"Every person is born with one of five energetic designs":"Elke persoon is geboren met één van vijf energetische designs"}
             </h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(152px,1fr))",gap:2,background:"var(--border)"}}>
+          <div className="types-grid-5" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(152px,1fr))",gap:2,background:"var(--border)"}}>
             {[
               {id:"generator",   icon:"◎",nl:"Generator",         en:"Generator",          tagNl:"~37% · Reageren",              tagEn:"~37% · Respond"},
               {id:"manifesting-generator",icon:"◈",nl:"Manifesting Generator",en:"Manifesting Generator",tagNl:"~33% · Reageren & informeren",tagEn:"~33% · Respond & inform"},
@@ -4203,7 +4214,7 @@ function InzichtenPage({go,articleId}){
               <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>
                 {isEN?"Explore each type in depth":"Verdiep je per type"}
               </div>
-              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"28px 20px"}}>
+              <div className="types-grid-5" style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"28px 20px"}}>
                 {TYPES.map(tp=>(
                   <div key={tp.id}
                     style={{cursor:"pointer",borderTop:"1px solid var(--border)",paddingTop:20}}
