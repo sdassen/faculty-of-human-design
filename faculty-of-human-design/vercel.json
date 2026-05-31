@@ -21,6 +21,9 @@
   "functions": {
     "api/inngest.js": {
       "includeFiles": "lib/pdf/bodygraph-svg.cjs"
+    },
+    "api/stripe-webhook.js": {
+      "maxDuration": 10
     }
   }
 }

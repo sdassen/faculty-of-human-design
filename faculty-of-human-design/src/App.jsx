@@ -2363,6 +2363,71 @@ function PlaceAutocomplete({ value, onSelect, placeholder }) {
   );
 }
 
+// ─── SUBSCRIPTION MANAGE ─────────────────────────────────────────────────────
+// Small self-service block on the maandelijks detail page.
+// Lets existing subscribers open the Stripe Customer Portal to cancel/manage.
+function SubscriptionManage(){
+  const isEN=LANG==="en";
+  const[email,setEmail]=useState("");
+  const[loading,setLoading]=useState(false);
+  const[err,setErr]=useState(null);
+
+  const openPortal=async(e)=>{
+    e.preventDefault();
+    if(!email){setErr(isEN?"Enter your e-mail address.":"Vul je e-mailadres in.");return;}
+    setLoading(true);setErr(null);
+    try{
+      const res=await fetch("/api/customer-portal",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({email}),
+      });
+      const data=await res.json();
+      if(!res.ok){setErr(data.error||"Error");setLoading(false);return;}
+      window.location.href=data.url;
+    }catch(ex){
+      setErr(ex.message);
+      setLoading(false);
+    }
+  };
+
+  return(
+    <section style={{padding:"80px 40px",background:"var(--bg)",borderTop:"1px solid var(--border)"}}>
+      <div style={{maxWidth:540,margin:"0 auto"}}>
+        <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:14,opacity:.8}}>
+          {isEN?"Subscription":"Abonnement"}
+        </div>
+        <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.4rem,2.5vw,1.75rem)",fontWeight:300,color:"var(--text)",marginBottom:12,lineHeight:1.2}}>
+          {isEN?"Manage your subscription":"Beheer je abonnement"}
+        </h2>
+        <p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:36}}>
+          {isEN
+            ?"Enter the e-mail address you used to subscribe. We'll redirect you to the secure Stripe portal where you can view invoices, update payment details or cancel."
+            :"Vul het e-mailadres in waarmee je je hebt aangemeld. We sturen je door naar de beveiligde Stripe-portal waar je facturen kunt bekijken, betaalgegevens bijwerken of opzeggen."}
+        </p>
+        <form onSubmit={openPortal} style={{display:"flex",gap:12,flexWrap:"wrap",alignItems:"flex-start"}}>
+          <input
+            type="email"
+            value={email}
+            onChange={e=>setEmail(e.target.value)}
+            placeholder={isEN?"your@email.com":"jouw@email.com"}
+            required
+            style={{flex:"1 1 220px",padding:"12px 16px",fontFamily:"var(--font-sans)",fontSize:".85rem",border:"1px solid var(--border)",background:"#fff",color:"var(--text)",outline:"none",minWidth:0}}
+          />
+          <button
+            type="submit"
+            disabled={loading}
+            style={{padding:"12px 28px",background:"var(--text)",color:"#fff",fontFamily:"var(--font-sans)",fontSize:".75rem",fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",border:"none",cursor:loading?"wait":"pointer",opacity:loading?.6:1,whiteSpace:"nowrap"}}
+          >
+            {loading?(isEN?"Redirecting…":"Doorsturen…"):(isEN?"Manage subscription":"Beheer abonnement")}
+          </button>
+        </form>
+        {err&&<p style={{fontFamily:"var(--font-sans)",fontSize:".8rem",color:"#c0392b",marginTop:14}}>{err}</p>}
+      </div>
+    </section>
+  );
+}
+
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone,postPayment}){
   const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:""});
@@ -3663,6 +3728,9 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           <div style={{borderTop:"1px solid var(--border)"}}/>
         </div>
       </section>
+
+      {/* ── SUBSCRIPTION MANAGEMENT (maandelijks only) ───────────────────── */}
+      {rpt.id==="maandelijks"&&<SubscriptionManage/>}
 
       {/* ── REPORT FORM ──────────────────────────────────────────────────── */}
       <ReportForm rpt={rpt} onDone={onDone} postPayment={postPayment}/>
