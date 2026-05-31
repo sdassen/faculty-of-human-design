@@ -5,11 +5,11 @@
     </style>
   </defs>
 
-  <!-- Warm dark background -->
-  <rect width="32" height="32" rx="5" fill="#160F0A"/>
+  <!-- Sand / cream background -->
+  <rect width="32" height="32" rx="5" fill="#EDE8DF"/>
 
   <!-- Top decorative line -->
-  <line x1="9" y1="8.5" x2="23" y2="8.5" stroke="#C9A85C" stroke-width="0.6" opacity="0.65"/>
+  <line x1="9" y1="8.5" x2="23" y2="8.5" stroke="#1A1714" stroke-width="0.6" opacity="0.4"/>
 
   <!-- FHD monogram -->
   <text
@@ -18,12 +18,12 @@
     font-size="13"
     font-style="italic"
     font-weight="300"
-    fill="#C9A85C"
+    fill="#1A1714"
     text-anchor="middle"
     letter-spacing="1.8"
   >FHD</text>
 
   <!-- Bottom decorative line -->
-  <line x1="9" y1="25.5" x2="23" y2="25.5" stroke="#C9A85C" stroke-width="0.6" opacity="0.65"/>
+  <line x1="9" y1="25.5" x2="23" y2="25.5" stroke="#1A1714" stroke-width="0.6" opacity="0.4"/>
 
 </svg>
