@@ -85,7 +85,7 @@ export const IMGS = {
   detail_volledig:         "/img-volledig-terras.jpg",
   detail_relatie_liefde:   "/img-relatie-liefde-new.jpg",
   detail_relatie_business: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  detail_relatie_familie:  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  detail_relatie_familie:  "/img-family-middle.jpg",
   detail_jaar:             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   detail_kind:             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   detail_loopbaan:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
