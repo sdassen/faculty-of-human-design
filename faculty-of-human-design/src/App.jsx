@@ -372,7 +372,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 /* FOOTER */
 .footer { background:var(--cosmos); padding:68px 32px 36px; }
 .footer-inner { max-width:1240px; margin:0 auto; }
-.footer-top { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr; gap:48px; padding-bottom:44px; border-bottom:1px solid rgba(255,255,255,.06); }
+.footer-top { display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 1fr; gap:40px; padding-bottom:44px; border-bottom:1px solid rgba(255,255,255,.06); }
 .footer-logo-main { font-family:var(--font-serif); font-size:1.05rem; font-weight:400; color:white; letter-spacing:.09em; text-transform:uppercase; }
 .footer-logo-sub { font-size:.54rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.28); margin-top:2px; }
 .footer-desc { font-size:.82rem; font-weight:300; color:rgba(255,255,255,.35); line-height:1.74; margin-top:14px; max-width:256px; }
@@ -480,7 +480,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 }
 @media (max-width:1024px) {
   .detail-hero-inner { grid-template-columns:1fr; }
-  .footer-top { grid-template-columns:1fr 1fr; gap:32px; }
+  .footer-top { grid-template-columns:1fr 1fr 1fr; gap:28px; }
   .stat-row-item { padding:20px 18px; }
 }
 @media (max-width:768px) {
@@ -2228,7 +2228,9 @@ function Footer({go}){
             <span className="footer-link" onClick={()=>go("wat")}>Human Design</span>
             <span className="footer-link" onClick={()=>go("inzichten")}>Journal</span>
             <span className="footer-link" onClick={()=>go("over")}>Philosophy</span>
-            <div style={{width:"100%",height:1,background:"rgba(255,255,255,.06)",margin:"14px 0 10px"}}/>
+          </div>
+          <div>
+            <div className="footer-col-title">HD Types</div>
             <span className="footer-link" onClick={()=>go("type-generator")}>Generator</span>
             <span className="footer-link" onClick={()=>go("type-manifesting-generator")}>Manifesting Generator</span>
             <span className="footer-link" onClick={()=>go("type-projector")}>Projector</span>
