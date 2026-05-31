@@ -5201,7 +5201,7 @@ export default function App(){
       while(retries>=0){
         try{
           const res=await fetch("/api/generate-report",{
-            method:"POST",headers:{"Content-Type":"application/json"},
+            method:"POST",headers:{"Content-Type":"application/json","x-internal-secret":import.meta.env.VITE_INTERNAL_SECRET||""},
             body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2400,system:SYSTEM,
               messages:[{role:"user",content:prompt}]})
           });

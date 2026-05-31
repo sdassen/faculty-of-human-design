@@ -1,6 +1,21 @@
+const MAX_TOKENS_LIMIT = 4000;
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
-  const { system, messages, max_tokens = 1500, model } = req.body;
+
+  // ── Auth: verify internal secret ──────────────────────────────────────────
+  const expectedSecret = process.env.INTERNAL_API_SECRET;
+  const providedSecret = req.headers["x-internal-secret"];
+  if (!expectedSecret || providedSecret !== expectedSecret) {
+    console.warn("[generate-report] Unauthorized request blocked");
+    return res.status(403).json({ error: "Forbidden" });
+  }
+
+  const { system, messages, max_tokens = 2400, model } = req.body;
+
+  // ── Cap max_tokens to prevent abuse ───────────────────────────────────────
+  const safMaxTokens = Math.min(Number(max_tokens) || 2400, MAX_TOKENS_LIMIT);
+
   try {
     const r = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
@@ -11,7 +26,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: model || "claude-sonnet-4-20250514",
-        max_tokens,
+        max_tokens: safMaxTokens,
         system,
         messages,
       }),
