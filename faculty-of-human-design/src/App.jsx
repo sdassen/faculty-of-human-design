@@ -3997,8 +3997,9 @@ function InzichtenPage({go,articleId}){
         // STATIC IDs are strings ("s1"…"s5"), Supabase IDs are numeric — no conflicts.
         const live=data&&Array.isArray(data)?data:[];
         const liveIds=new Set(live.map(a=>String(a.id)));
-        const liveTitles=new Set(live.map(a=>a.title).filter(Boolean));
-        const merged=[...live,...STATIC.filter(s=>!liveIds.has(String(s.id))&&!liveTitles.has(s.title))];
+        const norm=t=>(t||"").trim().toLowerCase();
+        const liveTitles=new Set(live.flatMap(a=>[norm(a.title),norm(a.title_en)]).filter(Boolean));
+        const merged=[...live,...STATIC.filter(s=>!liveIds.has(String(s.id))&&!liveTitles.has(norm(s.title))&&!liveTitles.has(norm(s.title_en)))];
         setArticles(merged.length>0?merged:STATIC);
       }catch{setArticles(STATIC);}
       setLoading(false);
