@@ -1,46 +1,29 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300&amp;display=swap');
+    </style>
+  </defs>
 
   <!-- Warm dark background -->
   <rect width="32" height="32" rx="5" fill="#160F0A"/>
 
-  <!-- ── Channels (connecting lines) ─────────────────────────── -->
-  <!-- Head → Ajna -->
-  <line x1="16" y1="4.2" x2="16" y2="8.2"  stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- Ajna → Throat -->
-  <line x1="16" y1="8.2"  x2="16" y2="12.8" stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- Throat → G -->
-  <line x1="16" y1="12.8" x2="16" y2="17.2" stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- Throat → Will/Heart -->
-  <line x1="16" y1="12.8" x2="21.5" y2="16.8" stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- G → Spleen -->
-  <line x1="16" y1="17.2" x2="10"   y2="21"   stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- G → Sacral -->
-  <line x1="16" y1="17.2" x2="16"   y2="21.8" stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- Will → Solar Plexus -->
-  <line x1="21.5" y1="16.8" x2="23" y2="21"   stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- Sacral → Root -->
-  <line x1="16" y1="21.8" x2="16"   y2="27.8" stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
-  <!-- Spleen → Root -->
-  <line x1="10" y1="21"   x2="16"   y2="27.8" stroke="#C9A85C" stroke-width="0.75" stroke-linecap="round" opacity="0.55"/>
+  <!-- Top decorative line -->
+  <line x1="9" y1="8.5" x2="23" y2="8.5" stroke="#C9A85C" stroke-width="0.6" opacity="0.65"/>
 
-  <!-- ── Centres ───────────────────────────────────────────────── -->
-  <!-- Head (defined) -->
-  <circle cx="16"   cy="4.2"  r="2"   fill="#C9A85C"/>
-  <!-- Ajna (open) -->
-  <circle cx="16"   cy="8.2"  r="1.8" fill="#160F0A" stroke="#C9A85C" stroke-width="0.9"/>
-  <!-- Throat (defined) -->
-  <circle cx="16"   cy="12.8" r="2.2" fill="#C9A85C"/>
-  <!-- G / Identity (open) -->
-  <circle cx="16"   cy="17.2" r="2"   fill="#160F0A" stroke="#C9A85C" stroke-width="0.9"/>
-  <!-- Will / Heart (defined) -->
-  <circle cx="21.5" cy="16.8" r="1.7" fill="#C9A85C"/>
-  <!-- Solar Plexus (open) -->
-  <circle cx="23"   cy="21"   r="1.7" fill="#160F0A" stroke="#C9A85C" stroke-width="0.9"/>
-  <!-- Sacral (defined) -->
-  <circle cx="16"   cy="21.8" r="2.2" fill="#C9A85C"/>
-  <!-- Spleen (open) -->
-  <circle cx="10"   cy="21"   r="1.7" fill="#160F0A" stroke="#C9A85C" stroke-width="0.9"/>
-  <!-- Root (defined) -->
-  <circle cx="16"   cy="27.8" r="2"   fill="#C9A85C"/>
+  <!-- FHD monogram -->
+  <text
+    x="16" y="21.5"
+    font-family="'Cormorant Garamond', Georgia, serif"
+    font-size="13"
+    font-style="italic"
+    font-weight="300"
+    fill="#C9A85C"
+    text-anchor="middle"
+    letter-spacing="1.8"
+  >FHD</text>
+
+  <!-- Bottom decorative line -->
+  <line x1="9" y1="25.5" x2="23" y2="25.5" stroke="#C9A85C" stroke-width="0.6" opacity="0.65"/>
 
 </svg>
