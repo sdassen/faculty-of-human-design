@@ -4444,7 +4444,7 @@ function ContactPage(){
     {q:"Wat als ik mijn exacte geboortetijd niet weet?",a:"Een geschatte tijd is vaak voldoende voor de meeste chart-elementen. Neem bij twijfel contact op — we adviseren je welke reading nog steeds waardevol is voor jouw situatie."},
     {q:"Wat maakt deze reading anders dan andere Human Design lezingen?",a:"Onze readings worden individueel samengesteld op basis van jouw chartdata en geschreven in een literaire, emotioneel resonante stijl. Geen generieke templates — elke reading is uniek voor jou."},
     {q:"Kan ik een reading retourneren of terugbetaling aanvragen?",a:"Omdat elke reading persoonlijk voor jou wordt samengesteld, is terugbetaling niet mogelijk na levering. Bij vragen of opmerkingen kun je ons altijd bereiken via info@facultyhd.com."},
-    {q:"Hoe lang blijft de download-link geldig?",a:"De link naar jouw reading blijft permanent beschikbaar. Je kunt het PDF-bestand altijd opslaan of opnieuw downloaden via de link die je per e-mail ontvangt."},
+    {q:"Hoe lang blijft de download-link geldig?",a:"De downloadlink is 30 dagen geldig na levering. Sla het PDF-bestand op zodra je het ontvangt — na 30 dagen vervalt de link en wordt de PDF verwijderd. Heb je de link verloren? Stuur ons een bericht via info@facultyhd.com."},
   ];
   const FAQ_EN=[
     {q:"What do I need to order a reading?",a:"Only your exact date of birth, time of birth and place of birth. The more accurate the birth time, the more personal the reading. Even a 15-minute difference can meaningfully affect certain chart elements."},
@@ -4453,7 +4453,7 @@ function ContactPage(){
     {q:"What if I don't know my exact birth time?",a:"An approximate time is often sufficient for most chart elements. If you're unsure, feel free to contact us — we can advise which reading still provides meaningful insight for your situation."},
     {q:"What makes this reading different from other Human Design readings?",a:"Our readings are individually compiled based on your chart data, written in a literary, emotionally resonant style. No generic templates — every reading is unique to you."},
     {q:"Can I return a reading or request a refund?",a:"Because each reading is personally compiled for you, refunds are not available after delivery. For any questions or concerns, you can always reach us at info@facultyhd.com."},
-    {q:"How long does the download link remain valid?",a:"The link to your reading remains permanently available. You can save the PDF or re-download it at any time using the link you receive by email."},
+    {q:"How long does the download link remain valid?",a:"The download link is valid for 30 days after delivery. Please save the PDF as soon as you receive it — after 30 days the link expires and the PDF is deleted. Lost the link? Send us a message at info@facultyhd.com."},
   ];
   const faqs=LANG==="en"?FAQ_EN:FAQ_NL;
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
