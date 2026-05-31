@@ -4166,6 +4166,28 @@ function InzichtenPage({go,articleId}){
           </div>
         </section>
 
+        {/* ── TYPE PAGE LINKS (s6 — De vijf Types) ── */}
+        {String(post.id)==="s6"&&(
+          <section style={{background:"white",padding:"72px 32px",borderTop:"1px solid var(--border)"}}>
+            <div style={{maxWidth:760,margin:"0 auto"}}>
+              <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>
+                {isEN?"Explore each type in depth":"Verdiep je per type"}
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(140px,1fr))",gap:"28px 20px"}}>
+                {TYPES.map(tp=>(
+                  <div key={tp.id}
+                    style={{cursor:"pointer",borderTop:"1px solid var(--border)",paddingTop:20}}
+                    onClick={()=>{go("type-"+tp.id);window.scrollTo(0,0);}}>
+                    <div style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:400,color:"var(--text)",marginBottom:6,lineHeight:1.2}}>{isEN?tp.title.en:tp.title.nl}</div>
+                    <div style={{fontSize:".72rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.55,marginBottom:12}}>{isEN?tp.tagline.en:tp.tagline.nl}</div>
+                    <span style={{fontSize:".58rem",fontWeight:500,letterSpacing:".1em",textTransform:"uppercase",color:"var(--gold)"}}>{isEN?"Read more →":"Lees meer →"}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ── MORE READING ── */}
         {articles.filter(a=>String(a.id)!==String(activePost)&&a.tag===post.tag).length>0&&(
           <section style={{background:"white",padding:"72px 32px",borderTop:"1px solid var(--border)"}}>
@@ -5256,6 +5278,31 @@ function TypePage({typeId,go}){
           </div>
         </section>
       )}
+
+      {/* ── LEES OOK — Journal s6 ── */}
+      <section style={{background:"white",padding:"72px 40px",borderTop:"1px solid var(--border)"}}>
+        <div style={{maxWidth:720,margin:"0 auto"}}>
+          <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:20}}>
+            {isEN?"Read also":"Lees ook"}
+          </div>
+          <div style={{display:"flex",gap:32,alignItems:"flex-start",flexWrap:"wrap"}}>
+            <div style={{flex:1,minWidth:220}}>
+              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.08rem",fontWeight:400,color:"var(--text)",lineHeight:1.28,marginBottom:10}}>
+                {isEN?"The Five Types in Human Design Explained":"De vijf Types in Human Design uitgelegd"}
+              </div>
+              <p style={{fontFamily:"var(--font-serif)",fontSize:".88rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.72,margin:"0 0 18px"}}>
+                {isEN
+                  ?"A complete overview of all five types — Generator, Manifesting Generator, Projector, Manifestor, Reflector. Their strategies, not-self themes and energetic nature explained side by side."
+                  :"Een compleet overzicht van alle vijf types — Generator, Manifesting Generator, Projector, Manifestor, Reflector. Hun strategieën, niet-zelf thema's en energetische aard naast elkaar uitgelegd."}
+              </p>
+              <span
+                style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:"var(--gold)",cursor:"pointer"}}
+                onClick={()=>go("inzichten-s6")}
+              >{isEN?"Read the article →":"Lees het artikel →"}</span>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ── CTA ── */}
       <section style={{background:"var(--dark)",padding:"112px 40px",textAlign:"center"}}>
