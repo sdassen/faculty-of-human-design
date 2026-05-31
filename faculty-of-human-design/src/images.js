@@ -67,7 +67,7 @@ export const IMGS = {
   r_volledig:         "/img-volledig-hero.jpg",
   r_relatie_liefde:   "/img-relatie-liefde.jpg",
   r_relatie_business: "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
-  r_relatie_familie:  "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=900&auto=format&fit=crop&q=80",
+  r_relatie_familie:  "/img-family-hero.jpg",
   r_jaar:             "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
   r_kind:             "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&auto=format&fit=crop&q=80",
   r_loopbaan:         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80",
