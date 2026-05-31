@@ -1204,15 +1204,27 @@ function buildRelatieContext(order, isEN) {
   const familyRelation = (order.birth_data || {}).familyRelation || null;
   const isFamilie = (order.report_id || "").toLowerCase() === "relatie_familie";
 
-  const relationLine = familyRelation
-    ? (isEN
+  const person1Role = (order.birth_data || {}).person1Role || null;
+  const person2Role = (order.birth_data || {}).person2Role || null;
+
+  let relationLine = "";
+  if (familyRelation) {
+    if (person1Role && person2Role && person1Role !== person2Role) {
+      // Hierarchical: we know exactly who is who (e.g. Ouder vs Kind)
+      relationLine = isEN
+        ? `\nRelationship type: ${familyRelation}. ${name1} is the ${person1Role} and ${name2} is the ${person2Role}. Frame every section from this specific role dynamic — use language and dynamics appropriate to a ${person1Role}/${person2Role} relationship, not generic "partner" language.`
+        : `\nSoort relatie: ${familyRelation}. ${name1} is de ${person1Role} en ${name2} is de ${person2Role}. Schrijf elke sectie vanuit deze specifieke roldynamiek — gebruik taal en dynamieken die passen bij een ${person1Role}/${person2Role}-relatie, geen generieke "partner"-taal.`;
+    } else {
+      // Symmetric (broer/zus) or roles unknown
+      relationLine = isEN
         ? `\nRelationship type: ${familyRelation}. Frame every section from this specific relationship — use language and dynamics appropriate to ${familyRelation}, not generic "partner" language.`
-        : `\nSoort relatie: ${familyRelation}. Schrijf elke sectie vanuit deze specifieke relatie — gebruik taal en dynamieken die passen bij ${familyRelation}, geen generieke "partner"-taal.`)
-    : (isFamilie
-        ? (isEN
-            ? `\nRelationship type: family (unspecified). Write in terms of a family bond — avoid romantic or business language.`
-            : `\nSoort relatie: familie (niet gespecificeerd). Schrijf in termen van een familieband — vermijd romantische of zakelijke taal.`)
-        : "");
+        : `\nSoort relatie: ${familyRelation}. Schrijf elke sectie vanuit deze specifieke relatie — gebruik taal en dynamieken die passen bij ${familyRelation}, geen generieke "partner"-taal.`;
+    }
+  } else if (isFamilie) {
+    relationLine = isEN
+      ? `\nRelationship type: family (unspecified). Write in terms of a family bond — avoid romantic or business language.`
+      : `\nSoort relatie: familie (niet gespecificeerd). Schrijf in termen van een familieband — vermijd romantische of zakelijke taal.`;
+  }
 
   if (isEN) {
     return `\n\nRELATIONSHIP READING — MANDATORY PRONOUN RULE:

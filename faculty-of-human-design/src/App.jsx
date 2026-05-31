@@ -1304,6 +1304,24 @@ const REPORT_FAQS = {
   },
 };
 
+// ─── FAMILY ROLE HELPER ───────────────────────────────────────────────────────
+// Returns [role1, role2] for the two people, or null if no meaningful roles.
+// swapped=true flips person1 and person2 (e.g. "Kind" becomes person 1).
+function getFamilyRoles(familyRelation, swapped) {
+  if (!familyRelation) return null;
+  let r1, r2;
+  if (familyRelation === "Ouder & kind" || familyRelation === "Parent & child") {
+    [r1, r2] = LANG === "en" ? ["Parent", "Child"] : ["Ouder", "Kind"];
+  } else if (familyRelation === "Grootouder & kleinkind" || familyRelation === "Grandparent & grandchild") {
+    [r1, r2] = LANG === "en" ? ["Grandparent", "Grandchild"] : ["Grootouder", "Kleinkind"];
+  } else if (familyRelation === "Broer & zus" || familyRelation === "Siblings") {
+    [r1, r2] = LANG === "en" ? ["Sibling", "Sibling"] : ["Broer of zus", "Broer of zus"];
+  } else {
+    return null;
+  }
+  return swapped ? [r2, r1] : [r1, r2];
+}
+
 // ─── STRIPE PAYMENT LINKS ─────────────────────────────────────────────────────
 // Vervang test_ links met live_ links voor productie
 // Voeg toe aan elke Stripe Payment Link:
@@ -1357,6 +1375,11 @@ async function goToStripe(rptId, chartData, formData) {
           // Embed calculated chart so Inngest can use it for AI generation
           chart: chartData,
           familyRelation: formData.familyRelation || null,
+          // Who is person 1 and who is person 2 in the family relationship
+          ...(formData.familyRelation ? (()=>{
+            const roles = getFamilyRoles(formData.familyRelation, formData.familyRolesSwapped);
+            return roles ? { person1Role: roles[0], person2Role: roles[1] } : {};
+          })() : {}),
         },
         partnerBirthData: formData.pname ? {
           name: formData.pname,
@@ -2431,7 +2454,7 @@ function SubscriptionManage(){
 
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone,postPayment}){
-  const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:""});
+  const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:"",familyRolesSwapped:false});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
@@ -2635,6 +2658,21 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div className="form-grid">
                 <div className="form-group full"><label className="form-label">{LANG==="en"?"Name":"Naam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={(LANG==="en"?"Name ":"Naam ")+(tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner"))}/></div>
                 {rpt.id==="relatie_familie"&&<div className="form-group full"><label className="form-label">{LANG==="en"?"Relationship":"Relatie"}</label><select className="form-select" name="familyRelation" value={form.familyRelation||""} onChange={ch}><option value="">{LANG==="en"?"Select relationship…":"Selecteer relatie…"}</option><option value={LANG==="en"?"Parent & child":"Ouder & kind"}>{LANG==="en"?"Parent & child":"Ouder & kind"}</option><option value={LANG==="en"?"Siblings":"Broer & zus"}>{LANG==="en"?"Siblings":"Broer & zus"}</option><option value={LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}>{LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}</option><option value={LANG==="en"?"Other family relationship":"Andere familierelatie"}>{LANG==="en"?"Other family relationship":"Andere familierelatie"}</option></select></div>}
+{rpt.id==="relatie_familie"&&form.familyRelation&&(()=>{
+  const roles=getFamilyRoles(form.familyRelation,form.familyRolesSwapped);
+  if(!roles)return null;
+  const isH=roles[0]!==roles[1];
+  const n1=form.name||(LANG==="en"?"Person 1":"Persoon 1");
+  const n2=form.pname||(LANG==="en"?"Person 2":"Persoon 2");
+  return<div className="form-group full" style={{display:"flex",alignItems:"center",gap:12,background:"rgba(138,115,85,.06)",padding:"10px 14px",border:"1px solid var(--border)"}}>
+    <div style={{flex:1,fontSize:".82rem",color:"var(--text-muted)",lineHeight:1.5}}>
+      <strong style={{color:"var(--text)",fontWeight:500}}>{n1}</strong>{" = "}{roles[0]}
+      <span style={{margin:"0 8px",color:"var(--border)"}}>·</span>
+      <strong style={{color:"var(--text)",fontWeight:500}}>{n2}</strong>{" = "}{roles[1]}
+    </div>
+    {isH&&<button type="button" onClick={()=>setForm(f=>({...f,familyRolesSwapped:!f.familyRolesSwapped}))} style={{fontSize:".68rem",fontWeight:400,letterSpacing:".1em",textTransform:"uppercase",background:"transparent",border:"1px solid rgba(26,23,20,.2)",padding:"6px 12px",cursor:"pointer",color:"var(--text-muted)",whiteSpace:"nowrap",flexShrink:0}}>⇄ {LANG==="en"?"Swap":"Omdraaien"}</button>}
+  </div>;
+})()}
                 <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
