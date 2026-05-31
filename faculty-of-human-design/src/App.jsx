@@ -1610,6 +1610,40 @@ function buildPrompt(chart,form,rpt){
     const pStr=Object.entries(h.planets).map(([p,d])=>p+": "+d.degree+"° "+d.sign+" H"+d.house).join(", ");
     return["HOROSCOOP voor "+_fn1,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",promptExtra].join("\n");
   }
+  // Kinderrapport — primair het kind, context de ouder/aanvrager
+  if(rpt.needsChild){
+    const childFn=(form.cFirstName||"").trim();
+    const childFull=(childFn+" "+(form.cLastName||"")).trim()||childFn;
+    const cY=parseInt(form.cyear),cM=parseInt(form.cmonth),cD=parseInt(form.cday);
+    const cH=parseInt(form.chour||"12"),cMin=parseInt(form.cminute||"0");
+    const cTz=form.ctimezone?getUTCOffsetHours(form.ctimezone,cY,cM,cD,cH,cMin)||0:parseFloat(form.ctz||"0")||0;
+    const childChart=calcHD(cY,cM,cD,cH,cMin,cTz);
+    const chartLine=(c,name)=>c?[
+      "Type: "+c.type,"Strategie: "+c.strat,"Autoriteit: "+c.auth,"Profiel: "+c.profile,
+      "Inkarnatie-Kruis: Poort "+c.cross,
+      "Gedefinieerd: "+(c.definedCenters.join(", ")||"geen"),
+      "Open: "+c.openCenters.join(", "),
+      "Kanalen: "+(c.channels.map(ch=>ch.g1+"-"+ch.g2).join(", ")||"geen"),
+      "Poorten: "+[...c.allGates].join(", "),
+      "Bewust: "+Object.entries(c.pers).map(e=>e[0]+": "+e[1].gate+"."+e[1].line).join(", "),
+      "Onbewust: "+Object.entries(c.des).map(e=>e[0]+": "+e[1].gate+"."+e[1].line).join(", "),
+    ].join("\n"):("Geen chartdata voor "+name);
+    return[
+      "KINDERRAPPORT voor "+childFull,
+      "",
+      "KIND: "+childFull,
+      "Geboortedatum: "+form.cday+"-"+form.cmonth+"-"+form.cyear+(form.chour?" "+form.chour+":"+(form.cminute||"00"):""),
+      "Geboorteplaats: "+(form.cplace||""),
+      chartLine(childChart,childFull),
+      "",
+      "OUDER/AANVRAGER: "+_full1,
+      "Geboortedatum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),
+      "Geboorteplaats: "+(form.place||""),
+      chartLine(chart,_full1),
+      "",
+      promptExtra,
+    ].join("\n");
+  }
   // Relatie rapporten — twee volledige HD charts berekenen en naast elkaar zetten
   if(rpt.id.startsWith("relatie_")){
     const lbl=tl(rpt.partnerLabel)||"Partner";
@@ -2652,14 +2686,16 @@ Reflectievragen:
 3. [Vraag]
 
 Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de tekst.`;
+    // For kind rapport, the primary subject is the child, not the requester
+    const reportSubjectName=rpt.needsChild?(form.cFirstName||"").trim()||form.firstName:form.firstName;
     let allText="";
     try{
       for(let i=0;i<sections.length;i++){
         const sec=sections[i];
         setLs(Math.min(i,LSTEPS.length-1));setPr(Math.round((i/sections.length)*95));
         const prompt=LANG==="en"
-          ?chartContext+"\n\nWrite section \""+sec+"\" for "+form.firstName+".\n\nUse exactly the prescribed format:\n1. Start with \"In your chart:\" followed by 3–5 concrete bullets with specific chart data.\n2. Write the core explanation (3–5 sub-paragraphs with subheadings, max ~800 words, each paragraph anchored in chart data).\n3. End with: \"Pitfalls:\", \"Practice:\", \"This week:\", \"Reflection questions:\" — each with exactly 3 items.\n\nNo section title in the text. Close the core explanation with a complete sentence."
-          :chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+form.firstName+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
+          ?chartContext+"\n\nWrite section \""+sec+"\" for "+reportSubjectName+".\n\nUse exactly the prescribed format:\n1. Start with \"In your chart:\" followed by 3–5 concrete bullets with specific chart data.\n2. Write the core explanation (3–5 sub-paragraphs with subheadings, max ~800 words, each paragraph anchored in chart data).\n3. End with: \"Pitfalls:\", \"Practice:\", \"This week:\", \"Reflection questions:\" — each with exactly 3 items.\n\nNo section title in the text. Close the core explanation with a complete sentence."
+          :chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+reportSubjectName+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
         const res=await fetch("/api/generate-report",{
           method:"POST",headers:{"Content-Type":"application/json"},
           body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2400,system:SYSTEM,
