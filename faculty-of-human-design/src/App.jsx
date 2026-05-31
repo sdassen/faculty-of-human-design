@@ -1353,6 +1353,8 @@ async function goToStripe(rptId, chartData, formData) {
       ? promptExtraForOrder.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").replace(/^\d+\.\s*/, "").trim())
       : [];
 
+    const fullName1 = (formData.firstName + " " + (formData.lastName || "")).trim();
+    const fullName2 = formData.pFirstName ? (formData.pFirstName + " " + (formData.pLastName || "")).trim() : null;
     const orderRes = await fetch("/api/create-order", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1361,10 +1363,12 @@ async function goToStripe(rptId, chartData, formData) {
         reportTitle: tl(rpt?.title) || rptId,
         language: LANG,
         price: rpt?.priceNum || 75,
-        customerName: formData.name,
+        customerName: fullName1,
         customerEmail: formData.email,
         birthData: {
-          name: formData.name,
+          name: fullName1,
+          firstName: formData.firstName,
+          lastName: formData.lastName || "",
           day: formData.day, month: formData.month, year: formData.year,
           hour: formData.hour, minute: formData.minute,
           place: formData.place,
@@ -1381,8 +1385,10 @@ async function goToStripe(rptId, chartData, formData) {
             return roles ? { person1Role: roles[0], person2Role: roles[1] } : {};
           })() : {}),
         },
-        partnerBirthData: formData.pname ? {
-          name: formData.pname,
+        partnerBirthData: fullName2 ? {
+          name: fullName2,
+          firstName: formData.pFirstName,
+          lastName: formData.pLastName || "",
           day: formData.pday, month: formData.pmonth, year: formData.pyear,
           hour: formData.phour, minute: formData.pminute,
           place: formData.pplace || "",
@@ -1540,14 +1546,17 @@ function buildPrompt(chart,form,rpt){
     ? (rpt.prompt_extra[LANG] ?? rpt.prompt_extra.nl ?? "")
     : (rpt.prompt_extra || "");
 
+  const _fn1=(form.firstName||"").trim();
+  const _fn2=(form.pFirstName||"").trim();
+  const _full1=(_fn1+" "+(form.lastName||"")).trim();
   if(rpt.id==="numerologie"){
-    const num=calcNumerology(form.name,parseInt(form.day),parseInt(form.month),parseInt(form.year));
-    return["NUMEROLOGIE voor "+form.name,"Naam: "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2026: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",promptExtra].join("\n");
+    const num=calcNumerology(_full1,parseInt(form.day),parseInt(form.month),parseInt(form.year));
+    return["NUMEROLOGIE voor "+_fn1,"Naam: "+_full1,"Datum: "+form.day+"-"+form.month+"-"+form.year,"","Levenspad: "+num.lp+" - "+num.lpName,"Uitdrukking: "+num.exp+" - "+num.expName,"Ziel: "+num.soul,"Persoonlijkheid: "+num.pers,"Verjaardag: "+num.bday,"Pers. Jaar 2026: "+num.py,"Rijping: "+num.mat,"Mastergetallen: "+(num.masters.length>0?num.masters.join(", "):"geen"),"",promptExtra].join("\n");
   }
   if(rpt.id==="horoscoop"){
     const h=calcHoroscoop(parseInt(form.year),parseInt(form.month),parseInt(form.day),parseInt(form.hour),parseInt(form.minute||"0"));
     const pStr=Object.entries(h.planets).map(([p,d])=>p+": "+d.degree+"° "+d.sign+" H"+d.house).join(", ");
-    return["HOROSCOOP voor "+form.name,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",promptExtra].join("\n");
+    return["HOROSCOOP voor "+_fn1,"Datum: "+form.day+"-"+form.month+"-"+form.year+" "+form.hour+":"+(form.minute||"00"),"Plaats: "+form.place,"","Ascendant: "+h.ascendant.degree+"° "+h.ascendant.sign,"MC: "+h.mc.degree+"° "+h.mc.sign,"Zon: "+h.sun_sign,"Dom. element: "+h.dom_element,"Planeten: "+pStr,"",promptExtra].join("\n");
   }
   // Relatie rapporten — twee volledige HD charts berekenen en naast elkaar zetten
   if(rpt.id.startsWith("relatie_")){
@@ -1568,15 +1577,15 @@ function buildPrompt(chart,form,rpt){
     return[
       "RELATIERAPPORT — "+tl(rpt.title),
       "",
-      "PERSOON 1: "+form.name,
+      "PERSOON 1: "+_fn1,
       "Geboortedatum: "+form.day+"-"+form.month+"-"+form.year+(form.hour?" "+form.hour+":"+(form.minute||"00"):""),
       "Geboorteplaats: "+form.place,
-      chartLine(c1,form.name),
+      chartLine(c1,_fn1),
       "",
-      lbl.toUpperCase()+": "+(form.pname||lbl),
+      lbl.toUpperCase()+": "+(_fn2||lbl),
       "Geboortedatum: "+form.pday+"-"+form.pmonth+"-"+form.pyear+(form.phour?" "+form.phour+":"+(form.pminute||"00"):""),
       "Geboorteplaats: "+(form.pplace||""),
-      chartLine(c2,form.pname||lbl),
+      chartLine(c2,_fn2||lbl),
       "",
       "ELEKTROMAGNETISCHE VERBINDINGEN:",
       "Gedeelde poorten: "+(gedeeld.length?gedeeld.join(", "):"geen"),
@@ -2454,7 +2463,7 @@ function SubscriptionManage(){
 
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
 function ReportForm({rpt,onDone,postPayment}){
-  const[form,setForm]=useState({name:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pname:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:"",familyRolesSwapped:false});
+  const[form,setForm]=useState({firstName:"",lastName:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pFirstName:"",pLastName:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cname:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:"",familyRolesSwapped:false});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
@@ -2472,15 +2481,16 @@ function ReportForm({rpt,onDone,postPayment}){
   const isHoro=rpt.id==="horoscoop";
   const needsTime=!isNum;
   const isRelatie=rpt.id.startsWith("relatie_");
-  const partnerOk=!isRelatie||(form.pname&&form.pday&&form.pmonth&&form.pyear);
-  const ok=form.name&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
+  const partnerOk=!isRelatie||(form.pFirstName&&form.pday&&form.pmonth&&form.pyear);
+  const ok=form.firstName&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk;
   const promptExtraStr=(typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)?(rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??""):(rpt.prompt_extra||"");
   const sections=promptExtraStr.split("\n").filter(l=>l.startsWith("###")).map(l=>l.replace(/^###\s*/,"").trim());
 
   const doChart=()=>{
     const y=parseInt(form.year),m=parseInt(form.month),d=parseInt(form.day);
-    if(!form.name||!d||!m||!y){alert(LANG==="en"?"Please fill in all required fields.":"Vul alle verplichte velden in.");return;}
-    if(isNum){const num=calcNumerology(form.name,d,m,y);setChart({...num,isNumerology:true});}
+    const fullName1=(form.firstName+" "+(form.lastName||"")).trim();
+    if(!form.firstName||!d||!m||!y){alert(LANG==="en"?"Please fill in all required fields.":"Vul alle verplichte velden in.");return;}
+    if(isNum){const num=calcNumerology(fullName1,d,m,y);setChart({...num,isNumerology:true});}
     else{
       const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
       // Compute tz offset for birth date (accounts for DST)
@@ -2587,8 +2597,8 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
         const sec=sections[i];
         setLs(Math.min(i,LSTEPS.length-1));setPr(Math.round((i/sections.length)*95));
         const prompt=LANG==="en"
-          ?chartContext+"\n\nWrite section \""+sec+"\" for "+form.name+".\n\nUse exactly the prescribed format:\n1. Start with \"In your chart:\" followed by 3–5 concrete bullets with specific chart data.\n2. Write the core explanation (3–5 sub-paragraphs with subheadings, max ~800 words, each paragraph anchored in chart data).\n3. End with: \"Pitfalls:\", \"Practice:\", \"This week:\", \"Reflection questions:\" — each with exactly 3 items.\n\nNo section title in the text. Close the core explanation with a complete sentence."
-          :chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+form.name+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
+          ?chartContext+"\n\nWrite section \""+sec+"\" for "+form.firstName+".\n\nUse exactly the prescribed format:\n1. Start with \"In your chart:\" followed by 3–5 concrete bullets with specific chart data.\n2. Write the core explanation (3–5 sub-paragraphs with subheadings, max ~800 words, each paragraph anchored in chart data).\n3. End with: \"Pitfalls:\", \"Practice:\", \"This week:\", \"Reflection questions:\" — each with exactly 3 items.\n\nNo section title in the text. Close the core explanation with a complete sentence."
+          :chartContext+"\n\nSchrijf sectie \""+sec+"\" voor "+form.firstName+".\n\nGebruik exact het voorgeschreven format:\n1. Begin met \"In jouw chart:\" gevolgd door 3–5 concrete bullets met specifieke chartdata.\n2. Schrijf de kernuitleg (3–5 subparagrafen met subkopjes, max ~800 woorden, elke paragraaf verankerd in chartdata).\n3. Eindig met: \"Valkuilen:\", \"Praktijk:\", \"Deze week:\", \"Reflectievragen:\" — elk met exact 3 items.\n\nGeen sectietitel in de tekst. Sluit de kernuitleg af met een volledige zin.";
         const res=await fetch("/api/generate-report",{
           method:"POST",headers:{"Content-Type":"application/json"},
           body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:2400,system:SYSTEM,
@@ -2637,7 +2647,8 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div style={{fontSize:".82rem",color:"var(--text-light)"}}>{isNum?(LANG==="en"?"No birth time needed.":"Geen geboortetijd nodig."):(LANG==="en"?"Fill in all fields as accurately as possible.":"Vul alle velden zo nauwkeurig mogelijk in.")}</div>
             </div>
             <div className="form-grid">
-              <div className="form-group full"><label className="form-label">{LANG==="en"?"Full name":"Volledige naam"}</label><input className="form-input" name="name" value={form.name} onChange={ch} placeholder={LANG==="en"?"First and last name":"Voor- en achternaam"}/></div>
+              <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"}</label><input className="form-input" name="firstName" value={form.firstName} onChange={ch} placeholder={LANG==="en"?"Anna":"Anna"}/></div>
+              <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"}</label><input className="form-input" name="lastName" value={form.lastName} onChange={ch} placeholder={LANG==="en"?"De Vries":"De Vries"}/></div>
               <div className="form-group full"><label className="form-label">{t("form.email")} <span style={{color:"var(--gold)",fontSize:".6rem"}}>{LANG==="en"?"— report will be sent here":"— rapport wordt hierheen verstuurd"}</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder={t("form.emailPlaceholder")} required/></div>
               <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="day" min="1" max={maxDay()} value={form.day} onChange={ch} onBlur={numBlur("day",1,maxDay())} placeholder="15"/></div>
               <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
@@ -2656,14 +2667,15 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div className="form-divider"/>
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{t("form.partnerSection",{label:tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")})}</div>
               <div className="form-grid">
-                <div className="form-group full"><label className="form-label">{LANG==="en"?"Name":"Naam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pname" value={form.pname} onChange={ch} placeholder={(LANG==="en"?"Name ":"Naam ")+(tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner"))}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pFirstName" value={form.pFirstName} onChange={ch} placeholder={LANG==="en"?"Thomas":"Thomas"}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pLastName" value={form.pLastName} onChange={ch} placeholder={LANG==="en"?"De Vries":"De Vries"}/></div>
                 {rpt.id==="relatie_familie"&&<div className="form-group full"><label className="form-label">{LANG==="en"?"Relationship":"Relatie"}</label><select className="form-select" name="familyRelation" value={form.familyRelation||""} onChange={ch}><option value="">{LANG==="en"?"Select relationship…":"Selecteer relatie…"}</option><option value={LANG==="en"?"Parent & child":"Ouder & kind"}>{LANG==="en"?"Parent & child":"Ouder & kind"}</option><option value={LANG==="en"?"Siblings":"Broer & zus"}>{LANG==="en"?"Siblings":"Broer & zus"}</option><option value={LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}>{LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}</option><option value={LANG==="en"?"Other family relationship":"Andere familierelatie"}>{LANG==="en"?"Other family relationship":"Andere familierelatie"}</option></select></div>}
 {rpt.id==="relatie_familie"&&form.familyRelation&&(()=>{
   const roles=getFamilyRoles(form.familyRelation,form.familyRolesSwapped);
   if(!roles)return null;
   const isH=roles[0]!==roles[1];
-  const n1=form.name||(LANG==="en"?"Person 1":"Persoon 1");
-  const n2=form.pname||(LANG==="en"?"Person 2":"Persoon 2");
+  const n1=form.firstName||(LANG==="en"?"Person 1":"Persoon 1");
+  const n2=form.pFirstName||(LANG==="en"?"Person 2":"Persoon 2");
   return<div className="form-group full" style={{display:"flex",alignItems:"center",gap:12,background:"rgba(138,115,85,.06)",padding:"10px 14px",border:"1px solid var(--border)"}}>
     <div style={{flex:1,fontSize:".82rem",color:"var(--text-muted)",lineHeight:1.5}}>
       <strong style={{color:"var(--text)",fontWeight:500}}>{n1}</strong>{" = "}{roles[0]}
@@ -2739,13 +2751,13 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               return(
                 <>
                   {c2
-                    ?<CompositeBodygraph chart1={chart} chart2={c2} name1={form.name} name2={form.pname||lbl}/>
+                    ?<CompositeBodygraph chart1={chart} chart2={c2} name1={form.firstName} name2={form.pFirstName||lbl}/>
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
                       <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details to see the combined chart`:`Vul de gegevens van de ${lbl.toLowerCase()} in om de gecombineerde chart te zien`}</p>
                     </div>}
                   <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
-                    <HDRow c={chart} name={form.name}/>
-                    {c2?<HDRow c={c2} name={form.pname||lbl}/>:
+                    <HDRow c={chart} name={form.firstName}/>
+                    {c2?<HDRow c={c2} name={form.pFirstName||lbl}/>:
                       <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
                         <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details`:`Vul de gegevens van de ${lbl.toLowerCase()} in`}</p>
                       </div>}
@@ -2780,12 +2792,12 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               return(
                 <>
                   {childChart
-                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.name} name2={form.cname||childLabel}/>
+                    ?<CompositeBodygraph chart1={chart} chart2={childChart} name1={form.firstName} name2={form.cname||childLabel}/>
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
                       <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details to see the combined chart":"Vul de gegevens van het kind in om de gecombineerde chart te zien"}</p>
                     </div>}
                   <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
-                    <HDRow c={chart} name={form.name}/>
+                    <HDRow c={chart} name={form.firstName}/>
                     {childChart?<HDRow c={childChart} name={form.cname||childLabel}/>:
                       <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
                         <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details":"Vul de gegevens van het kind in"}</p>
@@ -2798,7 +2810,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
             {!rpt.id.startsWith("relatie_")&&!rpt.needsChild&&!chart.isNumerology&&!chart.isHoroscoop&&(
               <ChartDashboard
                 chart={chart}
-                name={form.name}
+                name={form.firstName}
                 onOrder={()=>document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"})}
               />
             )}
@@ -2808,7 +2820,7 @@ Sluit de kernuitleg af met een volledige, afgeronde zin. Geen sectietitel in de 
               <div>
                 <div className="chart-result">
                   <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>{chart.isNumerology?(LANG==="en"?"Numerology":"Numerologie"):(LANG==="en"?"Horoscope":"Horoscoop")}</div>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{form.name}</div>
+                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{form.firstName}</div>
                   {chart.isNumerology?(
                     <table className="chart-table"><tbody>
                       {(LANG==="en"

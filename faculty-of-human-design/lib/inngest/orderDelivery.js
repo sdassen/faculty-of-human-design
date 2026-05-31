@@ -1037,10 +1037,12 @@ function buildChartContext(order) {
   const bd = birth_data || {};
   const chart = bd.chart || {};
   const isEN = order.language === "en";
+  // Use first name in AI context so the report addresses the reader by first name only
+  const displayName = bd.firstName || customer_name;
 
   const lines = [
     `${isEN ? "Report" : "Rapport"}: ${report_title}`,
-    `${isEN ? "Client" : "Klant"}: ${customer_name}`,
+    `${isEN ? "Client first name (use this name in the text)" : "Voornaam klant (gebruik deze naam in de tekst)"}: ${displayName}`,
   ];
   if (bd.day)           lines.push(`${isEN ? "Date of birth" : "Geboortedatum"}: ${bd.day}-${bd.month}-${bd.year}`);
   if (bd.hour != null)  lines.push(`${isEN ? "Time of birth" : "Geboortetijd"}: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
@@ -1070,7 +1072,8 @@ function buildChartContext(order) {
   if (order.partner_birth_data) {
     const p = order.partner_birth_data;
     const pc = p.chart || {};
-    lines.push(`\n${isEN ? "Partner/second person" : "Partner/tweede persoon"}: ${p.name || "Partner"}, ${isEN ? "born" : "geboren"} ${p.day}-${p.month}-${p.year}`);
+    const partnerDisplayName = p.firstName || p.name || "Partner";
+    lines.push(`\n${isEN ? "Partner/second person (first name only)" : "Partner/tweede persoon (voornaam)"}: ${partnerDisplayName}, ${isEN ? "born" : "geboren"} ${p.day}-${p.month}-${p.year}`);
     if (pc.type)    lines.push(`${isEN ? "Partner HD Type" : "Partner HD Type"}: ${pc.type}`);
     if (pc.auth)    lines.push(`${isEN ? "Partner Authority" : "Partner Autoriteit"}: ${pc.auth}`);
     if (pc.profile) lines.push(`${isEN ? "Partner Profile" : "Partner Profiel"}: ${pc.profile}`);
@@ -1199,8 +1202,11 @@ Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT →
 // Gender is not stored in the data. Claude must never use "hij/zij/hem/haar"
 // for either person — always refer by name or "jij / je partner".
 function buildRelatieContext(order, isEN) {
-  const name1 = order.customer_name || (isEN ? "person 1" : "persoon 1");
-  const name2 = (order.partner_birth_data || {}).name || (isEN ? "your family member" : "je familielid");
+  const bd1 = order.birth_data || {};
+  const bd2 = order.partner_birth_data || {};
+  // Always use first name in the report text — full name stored separately in order
+  const name1 = bd1.firstName || order.customer_name || (isEN ? "person 1" : "persoon 1");
+  const name2 = bd2.firstName || bd2.name || (isEN ? "your family member" : "je familielid");
   const familyRelation = (order.birth_data || {}).familyRelation || null;
   const isFamilie = (order.report_id || "").toLowerCase() === "relatie_familie";
 
@@ -1370,6 +1376,8 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const lang = language || "nl";
   const chart = (birth_data || {}).chart || {};
   const chartCtx = buildChartContext(order);
+  // Use first name in prompts — AI addresses reader by first name only
+  const displayName = (birth_data || {}).firstName || customer_name;
 
   // Determine report type: use report_id if available, else derive from report_title
   const derivedReportId = report_id || (() => {
@@ -1430,7 +1438,7 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const prompt = lang === "en"
     ? `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
-Write section "${sectionTitle}" for ${customer_name}.
+Write section "${sectionTitle}" for ${displayName}.
 
 RULES (strict):
 - Output only the JSON object — no prose before or after, no markdown code fences
@@ -1443,7 +1451,7 @@ RULES (strict):
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
     : `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
 
-Schrijf sectie "${sectionTitle}" voor ${customer_name}.
+Schrijf sectie "${sectionTitle}" voor ${displayName}.
 
 REGELS (strikt):
 - Schrijf uitsluitend het JSON-object — geen tekst ervoor of erna, geen markdown-blokken
