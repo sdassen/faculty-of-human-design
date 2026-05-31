@@ -63,6 +63,24 @@ export async function sendConfirmationEmail({ to, name, reportTitle, reportId, p
   return data;
 }
 
+export async function sendCancellationEmail({ to, name, language }) {
+  const lang = language === "en" ? "en" : "nl";
+  const isEN = lang === "en";
+
+  const subject = isEN
+    ? "Your subscription has been cancelled"
+    : "Jouw abonnement is opgezegd";
+
+  const { data, error } = await getResend().emails.send({
+    from: FROM,
+    to,
+    subject,
+    html: cancellationHtml({ name, lang }),
+  });
+  if (error) throw new Error(`Resend error (cancellation): ${error.message}`);
+  return data;
+}
+
 export async function sendDeliveryEmail({ to, name, reportTitle, reportId, partnerName, downloadUrl, language }) {
   const lang = language === "en" ? "en" : "nl";
   const cat  = reportCategory(reportId);
@@ -438,6 +456,46 @@ function adminReviewHtml({ order, pdfUrl, approveUrl, rejectUrl, orderId, violat
     <div style="height:1px;background:#EEEBE5;margin:0 0 20px;"></div>
     <p style="font-size:11.5px;color:#C0BAB4;line-height:1.6;margin:0;">
       Als je niet reageert wordt het rapport na <strong>72 uur</strong> automatisch goedgekeurd en bezorgd.
+    </p>
+  `);
+}
+
+// ─── CANCELLATION TEMPLATE ───────────────────────────────────────────────────
+function cancellationHtml({ name, lang }) {
+  const isEN = lang === "en";
+
+  const headline = isEN ? "Your subscription has been cancelled." : "Jouw abonnement is opgezegd.";
+  const intro = isEN
+    ? `Your monthly subscription to the <strong style="color:#1A1715;font-weight:500;">Faculty of Human Design Monthly Reading</strong> has been successfully cancelled. You will not be charged again.`
+    : `Jouw maandelijks abonnement op de <strong style="color:#1A1715;font-weight:500;">Faculty of Human Design Maandelijkse Reading</strong> is succesvol opgezegd. Je wordt niet meer automatisch afgeschreven.`;
+  const body2 = isEN
+    ? `Any reports you've already received remain yours to keep. You can always re-subscribe from our website.`
+    : `Rapporten die je al ontvangen hebt blijven van jou. Je kunt je altijd opnieuw aanmelden via onze website.`;
+  const closing = isEN
+    ? `Thank you for being part of our community. If you have any questions, write to us at <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.`
+    : `Bedankt dat je deel uitmaakte van onze community. Heb je vragen, schrijf ons dan via <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.`;
+
+  return base(`
+    <div style="height:0.75px;background:#C9A85C;opacity:.4;margin-bottom:32px;"></div>
+
+    <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:23px;font-weight:400;color:#1A1715;margin:0 0 20px;line-height:1.3;letter-spacing:-.3px;">
+      ${headline}
+    </h1>
+
+    <p style="font-size:14.5px;color:#3A3830;line-height:1.85;margin:0 0 14px;font-weight:300;">
+      ${isEN ? "Dear" : "Beste"} ${escHtml(name)},
+    </p>
+    <p style="font-size:14.5px;color:#4A4840;line-height:1.85;margin:0 0 20px;font-weight:300;">
+      ${intro}
+    </p>
+    <p style="font-size:14px;color:#5A5850;line-height:1.85;margin:0 0 28px;font-weight:300;">
+      ${body2}
+    </p>
+
+    <div style="height:1px;background:#EEEBE5;margin:0 0 22px;"></div>
+
+    <p style="font-size:12.5px;color:#888;line-height:1.75;margin:0;">
+      ${closing}
     </p>
   `);
 }

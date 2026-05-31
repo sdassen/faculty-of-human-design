@@ -18,6 +18,7 @@
 // NOTE: Vercel disables bodyParser for this file via the export below.
 
 import { inngest } from "../lib/inngest/client.js";
+import { sendCancellationEmail } from "../lib/email/index.js";
 
 // Tell Vercel to pass the raw body (required for Stripe signature verification)
 export const config = { api: { bodyParser: false } };
@@ -245,6 +246,15 @@ export default async function handler(req, res) {
       // Fired when a subscription is cancelled (immediately or at period end).
       case "customer.subscription.deleted": {
         const subscription = event.data.object;
+
+        // 1. Fetch subscription record to get customer email + first_order_id
+        const subRes = await supaFetch(
+          `/rest/v1/subscriptions?stripe_subscription_id=eq.${encodeURIComponent(subscription.id)}&select=*`
+        );
+        const subs = subRes.ok ? await subRes.json() : [];
+        const sub = subs[0];
+
+        // 2. Mark as cancelled in Supabase
         await supaFetch(
           `/rest/v1/subscriptions?stripe_subscription_id=eq.${encodeURIComponent(subscription.id)}`,
           {
@@ -256,6 +266,34 @@ export default async function handler(req, res) {
             headers: { Prefer: "return=minimal" },
           }
         );
+
+        // 3. Send cancellation confirmation email to customer
+        if (sub?.customer_email) {
+          try {
+            // Try to get customer name + language from original order
+            let customerName = sub.customer_email; // fallback
+            let language = "nl";
+            if (sub.first_order_id) {
+              const orderRes = await supaFetch(
+                `/rest/v1/orders?id=eq.${encodeURIComponent(sub.first_order_id)}&select=customer_name,language`
+              );
+              const orders = orderRes.ok ? await orderRes.json() : [];
+              if (orders[0]) {
+                customerName = orders[0].customer_name || customerName;
+                language = orders[0].language || language;
+              }
+            }
+            await sendCancellationEmail({
+              to: sub.customer_email,
+              name: customerName,
+              language,
+            });
+            console.log(`[stripe-webhook] cancellation email sent to ${sub.customer_email}`);
+          } catch (emailErr) {
+            console.error(`[stripe-webhook] cancellation email failed: ${emailErr.message}`);
+          }
+        }
+
         console.log(`[stripe-webhook] subscription cancelled: ${subscription.id}`);
         break;
       }
