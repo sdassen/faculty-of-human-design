@@ -3213,7 +3213,7 @@ function HomePage({go}){
               {lang==="en"?"Which type are you?":"Welk type ben jij?"}
             </h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(170px,1fr))",gap:2,background:"var(--border)"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:2,background:"var(--border)"}}>
             {[
               {id:"generator",          icon:"◎",nl:"Generator",           en:"Generator",           statNl:"~37%",statEn:"~37%",tagNl:"Reageren",               tagEn:"Respond"},
               {id:"manifesting-generator",icon:"◈",nl:"Manifesting Generator",en:"Manifesting Generator",statNl:"~33%",statEn:"~33%",tagNl:"Reageren & informeren",tagEn:"Respond & inform"},
@@ -3433,7 +3433,7 @@ function WatPage({go}){
               {isEN?"Every person is born with one of five energetic designs":"Elke persoon is geboren met één van vijf energetische designs"}
             </h2>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(152px,1fr))",gap:2,background:"var(--border)"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(152px,1fr))",gap:2,background:"var(--border)"}}>
             {[
               {id:"generator",   icon:"◎",nl:"Generator",         en:"Generator",          tagNl:"~37% · Reageren",              tagEn:"~37% · Respond"},
               {id:"manifesting-generator",icon:"◈",nl:"Manifesting Generator",en:"Manifesting Generator",tagNl:"~33% · Reageren & informeren",tagEn:"~33% · Respond & inform"},
@@ -4931,6 +4931,20 @@ function DownloadPage({token}){
   );
 }
 
+// ─── FAQ ITEM (shared) ───────────────────────────────────────────────────────
+function FaqItem({q,a}){
+  const[open,setOpen]=useState(false);
+  return(
+    <div style={{borderTop:"1px solid var(--border)",padding:"22px 0"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,cursor:"pointer",textAlign:"left"}} onClick={()=>setOpen(!open)}>
+        <span style={{fontFamily:"var(--font-serif)",fontSize:".98rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{q}</span>
+        <span style={{fontFamily:"var(--font-sans)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,opacity:.6,transition:"transform .2s",transform:open?"rotate(45deg)":"none"}}>{open?"×":"+"}</span>
+      </div>
+      {open&&<p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,marginTop:16,paddingRight:32}}>{a}</p>}
+    </div>
+  );
+}
+
 // ─── HUMAN DESIGN TYPE PAGES ──────────────────────────────────────────────────
 const TYPES = [
   {
@@ -5092,6 +5106,31 @@ function TypePage({typeId,go}){
   const c=isEN?CONTENT[typeId]?.en:CONTENT[typeId]?.nl;
   if(!c)return null;
 
+  // Pre-compute FAQs so they can go into both JSON-LD and the visible FAQ section
+  const TYPE_FAQS_DATA={
+    generator:{
+      nl:[["Wat is de strategie van de Generator?","De strategie van de Generator is reageren. Dat betekent wachten op een externe stimulus — een vraag, een aanbod, een mogelijkheid — die een instinctieve sacrale respons oproept. Die respons is lichamelijk en komt vóór het denken."],["Wat is het niet-zelf thema van de Generator?","Frustratie is het niet-zelf thema van de Generator. Het ontstaat wanneer de Generator initieert zonder sacrale respons, of wanneer hij werk doet dat hem niet werkelijk boeit. Frustratie is geen falen — het is een navigatiesignaal."],["Hoe weet ik of ik een Generator ben?","Generators hebben een gedefinieerd Sacraalcentrum in hun Human Design chart. Dit is herkenbaar aan het gekleurde vierkant midden-onderaan in de bodygraph. Ongeveer 37% van de bevolking is Generator."],["Wat is het verschil tussen Generator en Manifesting Generator?","De Manifesting Generator heeft naast sacrale energie ook een directe verbinding naar de keel, waardoor hij sneller kan handelen en meerdere dingen tegelijk kan verwerken. De 'pure' Generator gaat dieper en methodischer te werk."]],
+      en:[["What is the strategy of the Generator?","The strategy of the Generator is to respond. That means waiting for an external stimulus — a question, an offer, an opportunity — that evokes an instinctive sacral response. That response is physical and comes before thinking."],["What is the not-self theme of the Generator?","Frustration is the not-self theme of the Generator. It arises when the Generator initiates without sacral response, or does work that does not truly fascinate them. Frustration is not failure — it is a navigation signal."],["How do I know if I am a Generator?","Generators have a defined Sacral centre in their Human Design chart. This is recognisable as the coloured square in the lower middle of the bodygraph. Around 37% of the population is a Generator."],["What is the difference between Generator and Manifesting Generator?","The Manifesting Generator has sacral energy plus a direct connection to the throat, allowing them to act faster and process multiple things simultaneously. The 'pure' Generator works more deeply and methodically."]],
+    },
+    "manifesting-generator":{
+      nl:[["Wat is de strategie van de Manifesting Generator?","Reageren — dan informeren. De Manifesting Generator wacht eerst op een sacrale respons, en laat vervolgens de mensen om hem heen weten wat hij van plan is. Die informeerstap vermindert weerstand aanzienlijk."],["Waarom slaat de Manifesting Generator stappen over?","Dat is onderdeel van zijn design. De Manifesting Generator verwerkt informatie multidimensionaal en ziet kortere routes dan anderen. Terugkomen en bijsturen wanneer iets niet werkt hoort erbij — dat is geen gebrek maar een eigenschap."],["Wat is het niet-zelf thema van de Manifesting Generator?","Frustratie én boosheid. Frustratie wanneer hij zich gedwongen voelt één pad te volgen, boosheid wanneer hij het gevoel heeft geblokkeerd te worden in zijn natuurlijke snelheid of veelzijdigheid."],["Hoe verschilt de Manifesting Generator van de Manifestor?","De Manifesting Generator heeft sacrale energie en moet reageren voor hij initieert. De Manifestor hoeft niet te reageren — hij kan direct initiëren. De Manifesting Generator heeft meer aanhoudende energie maar ook meer behoefte aan sacrale bevestiging."]],
+      en:[["What is the strategy of the Manifesting Generator?","Respond — then inform. The Manifesting Generator first waits for a sacral response, then lets the people around them know what they are planning. That informing step significantly reduces resistance."],["Why does the Manifesting Generator skip steps?","That is part of their design. The Manifesting Generator processes information multidimensionally and sees shorter routes than others. Coming back and adjusting when something does not work is part of it — that is a feature, not a flaw."],["What is the not-self theme of the Manifesting Generator?","Frustration and anger. Frustration when forced to follow a single path, anger when feeling blocked in their natural speed or versatility."],["How does the Manifesting Generator differ from the Manifestor?","The Manifesting Generator has sacral energy and must respond before initiating. The Manifestor does not need to respond — they can initiate directly. The Manifesting Generator has more sustained energy but also more need for sacral confirmation."]],
+    },
+    projector:{
+      nl:[["Wat is de strategie van de Projector?","Wachten op de uitnodiging. Niet op elke vraag — maar op de grote uitnodigingen in het leven: voor werk, relaties en significante nieuwe richtingen. Een echte uitnodiging bevat herkenning van de Projectors kwaliteiten."],["Waarom raakt de Projector uitgeput?","Projectors hebben geen gedefinieerd Sacraalcentrum en bezitten niet de onbeperkte werkenenergie van Generators. Ze conditioneren sacrale energie van anderen en herkennen die soms als hun eigen. Wanneer ze dit als motor gebruiken, raken ze overbevraagd."],["Wat is het niet-zelf thema van de Projector?","Bitterheid. Het ontstaat wanneer de Projector zijn wijsheid aanbiedt zonder uitgenodigd te worden, of wanneer hij zijn energie investeert in omgevingen die zijn inzicht niet erkennen."],["Kan een Projector ook succesvol zijn in een leiderschapsrol?","Absoluut. Projectors zijn uitstekende leiders, coaches en strategen — juist omdat ze systemen en mensen helder zien. Het verschil is dat hun leiderschap het meest krachtig is wanneer het voortkomt uit herkenning en uitnodiging, niet uit afdwinging."]],
+      en:[["What is the strategy of the Projector?","Wait for the invitation. Not for every question — but for the big invitations in life: for work, relationships and significant new directions. A genuine invitation contains recognition of the Projector's qualities."],["Why does the Projector become exhausted?","Projectors have no defined Sacral centre and do not possess the unlimited work energy of Generators. They condition sacral energy from others and sometimes mistake it for their own. When they use this as their motor, they become overextended."],["What is the not-self theme of the Projector?","Bitterness. It arises when the Projector offers their wisdom without being invited, or invests their energy in environments that do not recognise their insight."],["Can a Projector be successful in a leadership role?","Absolutely. Projectors are excellent leaders, coaches and strategists — precisely because they see systems and people clearly. The difference is that their leadership is most powerful when it arises from recognition and invitation, not from assertion."]],
+    },
+    manifestor:{
+      nl:[["Wat is de strategie van de Manifestor?","Informeren. Niet om toestemming te vragen, maar om de mensen die door zijn acties geraakt worden vooraf op de hoogte te stellen van zijn intenties. Dit vermindert weerstand en creëert ruimte voor zijn creatieve impact."],["Waarom krijgt de Manifestor zoveel weerstand?","Omdat zijn energie krachtig en ondoorgrondelijk aanvoelt voor anderen wanneer hij handelt zonder te informeren. Mensen reageren met angst of controle op wat ze niet begrijpen. Informeren neemt de onzekerheid weg."],["Wat is het niet-zelf thema van de Manifestor?","Boosheid. Het ontstaat wanneer de Manifestor het gevoel heeft dat zijn vrijheid beperkt wordt, zijn acties geblokkeerd worden, of dat hij constant verantwoording moet afleggen voor zijn beslissingen."],["Moet de Manifestor ook op iets wachten?","Niet op een sacrale respons — dat centrum is bij de Manifestor open of niet-gedefinieerd. Wel heeft de Manifestor autoriteit nodig: afhankelijk van zijn design wacht hij op emotionele helderheid, een splenisch signaal of een ego-impuls."]],
+      en:[["What is the strategy of the Manifestor?","Inform. Not to ask permission, but to let the people affected by their actions know in advance what they intend to do. This reduces resistance and creates space for their creative impact."],["Why does the Manifestor encounter so much resistance?","Because their energy feels powerful and impenetrable to others when they act without informing. People respond with fear or control to what they do not understand. Informing removes the uncertainty."],["What is the not-self theme of the Manifestor?","Anger. It arises when the Manifestor feels their freedom is being restricted, their actions are being blocked, or they are constantly being asked to account for their decisions."],["Does the Manifestor also need to wait for something?","Not for a sacral response — that centre is open or undefined in the Manifestor. But the Manifestor does have authority: depending on their design they wait for emotional clarity, a splenic signal or an ego impulse."]],
+    },
+    reflector:{
+      nl:[["Waarom moet de Reflector 28 dagen wachten?","Omdat de Reflector volledig open is voor omgevingsenergieën, variëren zijn ervaringen sterk afhankelijk van wanneer hij iets bekijkt. Door een volledige maancyclus te doorlopen kan hij voelen hoe een beslissing aanvoelt vanuit alle energetische invalshoeken."],["Heeft de Reflector geen enkele gedefinieerde centra?","Correct. De Reflector is het enige type waarbij alle negen centra in de Human Design chart ongedefinieerd zijn. Dat maakt hem bijzonder ontvankelijk en gevoelig voor zijn omgeving."],["Wat is het niet-zelf thema van de Reflector?","Teleurstelling. Het ontstaat wanneer de Reflector leeft in omgevingen die niet bij hem passen — omgevingen die zijn sensitiviteit niet begrijpen of waarderen. De oplossing is bewuste keuze van context."],["Hoe zeldzaam is een Reflector?","Slechts ongeveer 1% van de wereldbevolking is Reflector. Dat maakt hen het meest zeldzame type in Human Design."]],
+      en:[["Why does the Reflector need to wait 28 days?","Because the Reflector is completely open to environmental energies, their experiences vary greatly depending on when they look at something. By moving through a full lunar cycle they can feel how a decision feels from all energetic angles."],["Does the Reflector have no defined centres at all?","Correct. The Reflector is the only type in which all nine centres in the Human Design chart are undefined. That makes them uniquely receptive and sensitive to their environment."],["What is the not-self theme of the Reflector?","Disappointment. It arises when the Reflector lives in environments that do not suit them — environments that do not understand or appreciate their sensitivity. The solution is conscious choice of context."],["How rare is a Reflector?","Only around 1% of the world's population is a Reflector. That makes them the rarest type in Human Design."]],
+    },
+  };
+  const typeFaqEntries=(TYPE_FAQS_DATA[typeId]?.[isEN?"en":"nl"])||[];
+
   useSEO({
     title: isEN
       ? `${tl2(tp.title)} Human Design — ${tl2(tp.strategy)} & ${tl2(tp.signature)} | Faculty of Human Design`
@@ -5101,12 +5140,11 @@ function TypePage({typeId,go}){
       : `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategie: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. ${tl2(tp.population)} van de wereldbevolking. Ontdek je volledige Human Design reading.`,
     canonical: SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`),
     jsonLd:{
-      "@context":"https://schema.org","@type":"Article",
-      "headline": isEN?`${tl2(tp.title)} in Human Design`:`${tl2(tp.title)} in Human Design`,
-      "description": tl2(tp.tagline),
-      "author":{"@type":"Organization","name":"Faculty of Human Design"},
-      "publisher":{"@type":"Organization","name":"Faculty of Human Design"},
-      "mainEntityOfPage":{"@type":"WebPage","@id":SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`)},
+      "@context":"https://schema.org",
+      "@graph":[
+        {"@type":"Article","headline":`${tl2(tp.title)} in Human Design`,"description":tl2(tp.tagline),"author":{"@type":"Organization","name":"Faculty of Human Design"},"publisher":{"@type":"Organization","name":"Faculty of Human Design"},"mainEntityOfPage":{"@type":"WebPage","@id":SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`)}},
+        ...(typeFaqEntries.length?[{"@type":"FAQPage","mainEntity":typeFaqEntries.map(([q,a])=>({"@type":"Question","name":q,"acceptedAnswer":{"@type":"Answer","text":a}}))}]:[]),
+      ],
     }
   });
 
@@ -5205,6 +5243,19 @@ function TypePage({typeId,go}){
           {para(c.challenges)}
         </div>
       </section>
+
+      {/* ── FAQ ── */}
+      {typeFaqEntries.length>0&&(
+        <section style={{background:"var(--bg)",padding:"96px 40px"}}>
+          <div style={{maxWidth:720,margin:"0 auto"}}>
+            <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>FAQ</div>
+            {typeFaqEntries.map(([q,a],i)=>(
+              <FaqItem key={i} q={q} a={a}/>
+            ))}
+            <div style={{borderTop:"1px solid var(--border)"}}/>
+          </div>
+        </section>
+      )}
 
       {/* ── CTA ── */}
       <section style={{background:"var(--dark)",padding:"112px 40px",textAlign:"center"}}>

@@ -521,8 +521,27 @@ function escAttr(str) {
 }
 
 /**
+ * Derive the alternate (NL↔EN) URL for a given canonical URL.
+ * NL paths have no prefix; EN paths start with /en/.
+ */
+function hreflangUrls(canonical) {
+  const url = new URL(canonical);
+  const isEn = url.pathname.startsWith('/en/') || url.pathname === '/en';
+  if (isEn) {
+    // EN → strip /en prefix to get NL
+    const nlPath = url.pathname.replace(/^\/en/, '') || '/';
+    return { nl: `${SITE}${nlPath}`, en: canonical };
+  } else {
+    // NL → prepend /en to get EN
+    const enPath = url.pathname === '/' ? '/en/' : `/en${url.pathname}`;
+    return { nl: canonical, en: `${SITE}${enPath}` };
+  }
+}
+
+/**
  * Inject per-route meta into the HTML template.
- * Replaces title, meta description, canonical and all og:* tags.
+ * Replaces title, meta description, canonical, og:* tags.
+ * Adds hreflang link elements for NL/EN language variants.
  */
 function buildHtml(template, { title, description, canonical, ogImage }) {
   const img = ogImage || OG_IMG;
@@ -542,6 +561,16 @@ function buildHtml(template, { title, description, canonical, ogImage }) {
     /(<link\s+rel="canonical"\s+href=")[^"]*(")/,
     `$1${escAttr(canonical)}$2`
   );
+
+  // hreflang — inject after canonical (remove any existing hreflang tags first)
+  html = html.replace(/<link\s+rel="alternate"\s+hreflang="[^"]*"\s+href="[^"]*"\s*\/?>/g, '');
+  const { nl: nlUrl, en: enUrl } = hreflangUrls(canonical);
+  const hreflangTags = [
+    `<link rel="alternate" hreflang="nl" href="${escAttr(nlUrl)}" />`,
+    `<link rel="alternate" hreflang="en" href="${escAttr(enUrl)}" />`,
+    `<link rel="alternate" hreflang="x-default" href="${escAttr(nlUrl)}" />`,
+  ].join('\n    ');
+  html = html.replace(/(<link\s+rel="canonical"[^>]*>)/, `$1\n    ${hreflangTags}`);
 
   // og:title
   html = html.replace(
