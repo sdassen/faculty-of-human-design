@@ -267,7 +267,7 @@ function deliveryHtml({ name, reportTitle, reportId, partnerName, downloadUrl, l
   } else {
     if (cat === "kind") {
       headline = `De reading van ${partnerName ? escHtml(partnerName) : "je kind"} is klaar.`;
-      intro    = `Het unieke design van ${escHtml(child)} is geanalyseerd. De datapunten uit ${partnerName ? "hun" : "het"} chart zijn vertaald naar een persoonlijke reading — de <strong style="color:#1A1715;font-weight:500;">${escHtml(reportTitle)}</strong> staat voor je klaar.`;
+      intro    = `Het unieke design van ${escHtml(child)} is geanalyseerd. De datapunten uit ${partnerName ? escHtml(partnerName) + "s" : "het"} chart zijn vertaald naar een persoonlijke reading — het <strong style="color:#1A1715;font-weight:500;">${escHtml(reportTitle)}</strong> staat voor je klaar.`;
     } else if (cat === "relatie") {
       headline = "De reading van jullie verbinding is klaar.";
       intro    = `De analyse van jullie twee designs is voltooid. De verbindingspunten uit beide charts zijn vertaald naar een persoonlijke reading — jouw <strong style="color:#1A1715;font-weight:500;">${escHtml(reportTitle)}</strong> staat klaar.`;
