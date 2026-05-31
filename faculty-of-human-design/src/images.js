@@ -20,7 +20,7 @@ export const IMGS = {
   hero:         "/img-meditation.jpg",
 
   // 'Wat is Human Design' sectie — achtergrondafbeelding
-  ibiza:        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  ibiza:        "/img-volledig-hero.jpg",
 
   // 'Inzichten' sectie — achtergrondafbeelding
   cosmos:       "/img-inzichten.jpg",
