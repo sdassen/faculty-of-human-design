@@ -1135,7 +1135,7 @@ function buildGateAppendixPage(order) {
   const cols = gates.length <= 18 ? 3 : 4;
 
   return `
-<div style="background:#FFFFFF;position:relative;break-before:page;padding:0 0 34mm;">
+<div style="background:#FFFFFF;position:relative;break-before:page;padding:0 0 34mm;min-height:297mm;">
   <div style="height:4px;background:#1A1715;"></div>
   <div style="padding:10mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:6px;">${esc(headerLabel)}</div>
