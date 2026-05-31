@@ -463,12 +463,19 @@ function buildHowToReadPage(order) {
 // ─── PAGE: COVER ──────────────────────────────────────────────────────────────
 function buildCoverPage(order) {
   const bd    = order.birth_data || {};
+  const pbd   = order.partner_birth_data || {};
   const chart = bd.chart || {};
   const lang  = order.language || "nl";
+  const isEN  = lang === "en";
   const ta    = typeAccent(chart.type);
+  const childReport = isChildReport(order);
+  const isRelatie   = (order.report_id || "").startsWith("relatie_");
+  const hasPartner  = (childReport || isRelatie) && pbd.name;
   const coverMonthsNL = ["","jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
   const coverMonthsEN = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
-  const dateStr = bd.day ? `${bd.day} ${(lang === "en" ? coverMonthsEN : coverMonthsNL)[parseInt(bd.month)] || bd.month} ${bd.year}` : "";
+  const months = isEN ? coverMonthsEN : coverMonthsNL;
+  const dateStr        = bd.day  ? `${bd.day} ${months[parseInt(bd.month)] || bd.month} ${bd.year}`   : "";
+  const partnerDateStr = pbd.day ? `${pbd.day} ${months[parseInt(pbd.month)] || pbd.month} ${pbd.year}` : "";
 
   return `
 <div style="width:210mm;height:297mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-inside:avoid;display:flex;flex-direction:column;align-items:center;">
@@ -482,7 +489,10 @@ function buildCoverPage(order) {
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:34pt;color:#FFFFFF;line-height:1.25;letter-spacing:-0.01em;">${esc(order.report_title || "Volledig Human Design Rapport")}</div>
     <div style="width:72px;height:1px;background:#C9A85C;margin:20px auto;opacity:0.6;"></div>
     ${order.customer_name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">${esc(order.customer_name)}</div>` : ""}
-    ${dateStr ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:8px;letter-spacing:0.04em;">${esc(dateStr)}${bd.place ? "  ·  " + esc(bd.place) : ""}</div>` : ""}
+    ${dateStr ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">${esc(dateStr)}${bd.place ? "  ·  " + esc(bd.place) : ""}</div>` : ""}
+    ${hasPartner ? `<div style="width:36px;height:0.5px;background:#C9A85C;margin:14px auto;opacity:0.3;"></div>` : ""}
+    ${hasPartner && pbd.name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;">${esc(pbd.name)}</div>` : ""}
+    ${hasPartner && partnerDateStr ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">${esc(partnerDateStr)}${pbd.place ? "  ·  " + esc(pbd.place) : ""}</div>` : ""}
   </div>
   ${chart.type ? `
   <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;">
@@ -992,17 +1002,38 @@ function buildExecutiveSummaryPage(order) {
 // ─── PAGE: METHODOLOGY ────────────────────────────────────────────────────────
 function buildMethodologyPage(order) {
   const bd   = order.birth_data || {};
+  const pbd  = order.partner_birth_data || {};
   const lang = order.language || "nl";
   const isEN = lang === "en";
+  const childReport = isChildReport(order);
+  const isRelatie   = (order.report_id || "").startsWith("relatie_");
+  const hasPartner  = (childReport || isRelatie) && pbd.name;
 
   const MAANDEN = ["","januari","februari","maart","april","mei","juni","juli","augustus","september","oktober","november","december"];
   const MONTHS  = ["","January","February","March","April","May","June","July","August","September","October","November","December"];
-  const dateStr = bd.day
-    ? `${bd.day} ${(isEN ? MONTHS : MAANDEN)[parseInt(bd.month)] || bd.month} ${bd.year}`
-    : "";
-  const timeStr = bd.hour != null
-    ? `${String(bd.hour).padStart(2,"0")}:${String(bd.minute || 0).padStart(2,"0")}`
-    : "";
+  const ML = isEN ? MONTHS : MAANDEN;
+
+  const dateStr        = bd.day  ? `${bd.day} ${ML[parseInt(bd.month)] || bd.month} ${bd.year}`  : "";
+  const timeStr        = bd.hour != null ? `${String(bd.hour).padStart(2,"0")}:${String(bd.minute || 0).padStart(2,"0")}` : "";
+  const partnerDateStr = pbd.day ? `${pbd.day} ${ML[parseInt(pbd.month)] || pbd.month} ${pbd.year}` : "";
+  const partnerTimeStr = pbd.hour != null ? `${String(pbd.hour).padStart(2,"0")}:${String(pbd.minute || 0).padStart(2,"0")}` : "";
+
+  const dataBlock = (bdata, dateS, timeS, label) => `
+    ${label ? `<div style="font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:6px;">${esc(label)}</div>` : ""}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin-bottom:${hasPartner ? "14px" : "20px"};">
+      ${dateS ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTEDATUM", "DATE OF BIRTH")}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(dateS)}</div>
+      </div>` : ""}
+      ${timeS ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTETIJD", "TIME OF BIRTH")}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(timeS)}</div>
+      </div>` : ""}
+      ${bdata.place ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTEPLAATS", "PLACE OF BIRTH")}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(bdata.place)}</div>
+      </div>` : ""}
+    </div>`;
 
   return `
 <div style="width:210mm;height:297mm;margin-top:0;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
@@ -1012,33 +1043,24 @@ function buildMethodologyPage(order) {
     <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:22pt;color:#1A1715;line-height:1.1;margin-bottom:10px;">${ui(lang, "Zo is dit rapport berekend", "How this report was calculated")}</div>
     <div style="height:0.75px;background:#C9A85C;margin-bottom:16px;"></div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;margin-bottom:20px;">
-      ${dateStr ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTEDATUM", "DATE OF BIRTH")}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(dateStr)}</div>
-      </div>` : ""}
-      ${timeStr ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTETIJD", "TIME OF BIRTH")}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(timeStr)}</div>
-      </div>` : ""}
-      ${bd.place ? `<div style="padding:8px 0;border-bottom:0.4px solid #E5E0D8;">
-        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:3px;">${ui(lang, "GEBOORTEPLAATS", "PLACE OF BIRTH")}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;color:#1A1715;">${esc(bd.place)}</div>
-      </div>` : ""}
-    </div>
+    ${hasPartner
+      ? dataBlock(bd,  dateStr,        timeStr,        order.customer_name || "") +
+        dataBlock(pbd, partnerDateStr, partnerTimeStr, pbd.name || "")
+      : dataBlock(bd,  dateStr,        timeStr,        "")
+    }
 
     <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#A8A29E;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:10px;">${ui(lang, "BEREKENINGSWIJZE", "CALCULATION METHOD")}</div>
     <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:10px;">${ui(lang,
-      "Dit rapport is berekend met behulp van de Swiss Ephemeris — de meest nauwkeurige astronomische database ter wereld, ook gebruikt door professionele astrologen en sterrenwachten. Op basis van jouw exacte geboortetijdstip worden de planetaire posities op de minuut nauwkeurig bepaald.",
-      "This report was calculated using the Swiss Ephemeris — the most accurate astronomical database in the world, also used by professional astrologers and observatories. Based on your exact birth time, planetary positions are determined to the minute."
+      "Dit rapport is berekend met behulp van de Swiss Ephemeris — de meest nauwkeurige astronomische database ter wereld, ook gebruikt door professionele astrologen en sterrenwachten. Op basis van de exacte geboortetijdstippen worden de planetaire posities op de minuut nauwkeurig bepaald.",
+      "This report was calculated using the Swiss Ephemeris — the most accurate astronomical database in the world, also used by professional astrologers and observatories. Based on the exact birth times, planetary positions are determined to the minute."
     )}</p>
     <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:10px;">${ui(lang,
-      "Vanuit die posities worden jouw 64 poorten, gedefinieerde centra en actieve kanalen afgeleid via de Human Design systematiek zoals beschreven door Ra Uru Hu. De berekening combineert de bewuste (persoonlijkheid) en onbewuste (ontwerp) component op basis van twee afzonderlijke planetaire momentopnames.",
-      "From those positions, your 64 gates, defined centers and active channels are derived through the Human Design system as described by Ra Uru Hu. The calculation combines the conscious (personality) and unconscious (design) component based on two separate planetary snapshots."
+      "Vanuit die posities worden de 64 poorten, gedefinieerde centra en actieve kanalen afgeleid via de Human Design systematiek zoals beschreven door Ra Uru Hu. De berekening combineert de bewuste (persoonlijkheid) en onbewuste (ontwerp) component op basis van twee afzonderlijke planetaire momentopnames.",
+      "From those positions, the 64 gates, defined centers and active channels are derived through the Human Design system as described by Ra Uru Hu. The calculation combines the conscious (personality) and unconscious (design) component based on two separate planetary snapshots."
     )}</p>
     <p style="font-family:'Inter',sans-serif;font-size:9.5pt;line-height:1.72;color:#2A2820;margin-bottom:20px;">${ui(lang,
-      "Elke berekening is uniek voor jouw geboortegegevens en kan niet worden veralgemeend naar anderen.",
-      "Every calculation is unique to your birth data and cannot be generalised to others."
+      "Elke berekening is uniek voor de opgegeven geboortegegevens en kan niet worden veralgemeend naar anderen.",
+      "Every calculation is unique to the provided birth data and cannot be generalised to others."
     )}</p>
 
     <div style="background:#FFFFFF;border-left:3px solid #E5E0D8;padding:10px 14px;">
