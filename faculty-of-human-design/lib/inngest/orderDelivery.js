@@ -1054,6 +1054,32 @@ function buildChartContext(order) {
   if (bd.hour != null)  lines.push(`${isEN ? "Time of birth" : "Geboortetijd"}: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
   if (bd.place)         lines.push(`${isEN ? "Place of birth" : "Geboorteplaats"}: ${bd.place}`);
 
+  // For kinderrapport: inject child age + phase-specific writing guidance
+  if (isKindReport && pbd.year) {
+    const now = new Date();
+    const birthDate = new Date(pbd.year, (pbd.month || 1) - 1, pbd.day || 1);
+    let childAge = now.getFullYear() - birthDate.getFullYear();
+    const monthDiff = now.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && now.getDate() < birthDate.getDate())) childAge--;
+    const ageCategory = childAge <= 4
+      ? (isEN
+          ? "toddler (0–4 years): write for parents of a toddler. Focus on sleep, sensory needs, energy rhythms, tantrums, physical play, co-regulation. Avoid all school, homework or friendship group language."
+          : "peuter (0–4 jaar): schrijf voor ouders van een peuter. Focus op slaap, zintuiglijke behoeften, energieritme, driften, lichamelijk spelen, co-regulatie. Gebruik geen school-, huiswerk- of vriendengroeptaal.")
+      : childAge <= 9
+      ? (isEN
+          ? "primary school age (5–9 years): write for parents of a primary school child. Focus on learning style, classroom dynamics, friendships, play, structure at home, dealing with rules."
+          : "basisschoolleeftijd (5–9 jaar): schrijf voor ouders van een basisschoolkind. Focus op leerstijl, klassendynamiek, vriendschappen, spelen, thuisstructuur, omgang met regels.")
+      : childAge <= 13
+      ? (isEN
+          ? "pre-teen (10–13 years): write for parents of a pre-teen. Focus on identity formation, peer pressure, self-image, growing autonomy, boundary-setting, puberty as backdrop."
+          : "pre-tiener (10–13 jaar): schrijf voor ouders van een pre-tiener. Focus op identiteitsvorming, groepsdruk, zelfbeeld, groeiende autonomie, grenzen stellen, puberteit als achtergrond.")
+      : (isEN
+          ? "teenager (14–18 years): write for parents of a teenager. Focus on direction-finding, self-knowledge, romantic relationships, independence, friction with authority, finding their own path."
+          : "tiener (14–18 jaar): schrijf voor ouders van een tiener. Focus op richtingzoeken, zelfkennis, romantische relaties, zelfstandigheid, wrijving met autoriteit, eigen weg vinden.");
+    lines.push(`${isEN ? "Child's age" : "Leeftijd kind"}: ${childAge} ${isEN ? "years" : "jaar"}`);
+    lines.push(`${isEN ? "Age phase — IMPORTANT: adapt all language, examples and situations to this phase" : "Leeftijdsfase — BELANGRIJK: pas alle taal, voorbeelden en situaties aan op deze fase"}: ${ageCategory}`);
+  }
+
   if (chart.type)    lines.push(`HD Type: ${chart.type}`);
   if (chart.strat)   lines.push(`${isEN ? "Strategy" : "Strategie"}: ${chart.strat}`);
   if (chart.auth)    lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
@@ -1435,6 +1461,23 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const isRelatieReport = (report_id || "").toLowerCase().startsWith("relatie_");
   const relatieBlock = isRelatieReport ? buildRelatieContext(order, lang === "en") : "";
 
+  // ── Kind rapport: age-specific writing instruction ───────────────────────
+  const kindAgeBlock = (() => {
+    if (!isKind || !_pbd.year) return "";
+    const now = new Date();
+    const birthDate = new Date(_pbd.year, (_pbd.month || 1) - 1, _pbd.day || 1);
+    let childAge = now.getFullYear() - birthDate.getFullYear();
+    const md = now.getMonth() - birthDate.getMonth();
+    if (md < 0 || (md === 0 && now.getDate() < birthDate.getDate())) childAge--;
+    const phase = childAge <= 4 ? (lang === "en" ? "toddler" : "peuter")
+      : childAge <= 9  ? (lang === "en" ? "primary school child" : "basisschoolkind")
+      : childAge <= 13 ? (lang === "en" ? "pre-teen" : "pre-tiener")
+      : (lang === "en" ? "teenager" : "tiener");
+    return lang === "en"
+      ? `\n\n⚠️ AGE RULE: ${displayName} is ${childAge} years old (${phase}). Every example, situation and word choice MUST fit this specific age. Do NOT use language or situations from a different life phase.`
+      : `\n\n⚠️ LEEFTIJDSREGEL: ${displayName} is ${childAge} jaar (${phase}). Elk voorbeeld, elke situatie en woordkeuze MOET passen bij deze specifieke leeftijd. Gebruik GEEN taal of situaties uit een andere levensfase.`;
+  })();
+
   // ── Structural lessons from past revisions ────────────────────────────────
   const lessons = lessonsForSection(order.promptLessons || [], sectionTitle);
   const lessonsBlock = lessons.length
@@ -1446,7 +1489,7 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const criticalAlert = buildCriticalAlert(chart, lang === "en");
 
   const prompt = lang === "en"
-    ? `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
+    ? `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
 
 Write section "${sectionTitle}" for ${displayName}.
 
@@ -1459,7 +1502,7 @@ RULES (strict):
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
 - kern 480–560 words total — fill the page with substance; two rich pages are better than one thin one
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
-    : `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}
+    : `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${displayName}.
 
