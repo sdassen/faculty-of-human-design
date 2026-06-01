@@ -1037,12 +1037,18 @@ function buildChartContext(order) {
   const bd = birth_data || {};
   const chart = bd.chart || {};
   const isEN = order.language === "en";
-  // Use first name in AI context so the report addresses the reader by first name only
-  const displayName = bd.firstName || customer_name;
+  // For kinderrapport the report is ABOUT the child, not the ordering parent
+  const isKindReport = order.report_id === "kind";
+  const pbd = order.partner_birth_data || {};
+  const displayName = isKindReport
+    ? (pbd.firstName || pbd.name || bd.firstName || customer_name)
+    : (bd.firstName || customer_name);
 
   const lines = [
     `${isEN ? "Report" : "Rapport"}: ${report_title}`,
-    `${isEN ? "Client first name (use this name in the text)" : "Voornaam klant (gebruik deze naam in de tekst)"}: ${displayName}`,
+    isKindReport
+      ? `${isEN ? "Child first name (the report is about this child — use this name in the text)" : "Voornaam kind (het rapport gaat over dit kind — gebruik deze naam in de tekst)"}: ${displayName}`
+      : `${isEN ? "Client first name (use this name in the text)" : "Voornaam klant (gebruik deze naam in de tekst)"}: ${displayName}`,
   ];
   if (bd.day)           lines.push(`${isEN ? "Date of birth" : "Geboortedatum"}: ${bd.day}-${bd.month}-${bd.year}`);
   if (bd.hour != null)  lines.push(`${isEN ? "Time of birth" : "Geboortetijd"}: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
@@ -1376,8 +1382,12 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const lang = language || "nl";
   const chart = (birth_data || {}).chart || {};
   const chartCtx = buildChartContext(order);
-  // Use first name in prompts — AI addresses reader by first name only
-  const displayName = (birth_data || {}).firstName || customer_name;
+  // For kinderrapport the report is ABOUT the child — use child's name, not the ordering parent
+  const isKind = report_id === "kind";
+  const _pbd = order.partner_birth_data || {};
+  const displayName = isKind
+    ? (_pbd.firstName || _pbd.name || (birth_data || {}).firstName || customer_name)
+    : ((birth_data || {}).firstName || customer_name);
 
   // Determine report type: use report_id if available, else derive from report_title
   const derivedReportId = report_id || (() => {
