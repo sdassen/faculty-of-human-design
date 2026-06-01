@@ -2525,6 +2525,7 @@ function ReportForm({rpt,onDone,postPayment}){
   const[ls,setLs]=useState(0);
   const[pr,setPr]=useState(0);
   const[loading,setLoading]=useState(false);
+  const[emailTouched,setEmailTouched]=useState(false);
   const[stripeLoading,setStripeLoading]=useState(false);const[autoTrigger,setAutoTrigger]=useState(false);useEffect(()=>{if(!postPayment)return;setChart(postPayment.chart);setForm(f=>({...f,...postPayment.form}));setAutoTrigger(true);},[postPayment]);useEffect(()=>{if(autoTrigger&&chart){setAutoTrigger(false);doReport();}},[autoTrigger,chart]);
   const ch=e=>setForm(f=>({...f,[e.target.name]:e.target.value}));
   // Clamp numeric fields on blur to prevent invalid values (e.g. minute=66, day=44)
@@ -2881,7 +2882,7 @@ Geen sectietitel in de tekst.`);
             <div className="form-grid">
               <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"}</label><input className="form-input" name="firstName" value={form.firstName} onChange={ch} placeholder={LANG==="en"?"Anna":"Anna"}/></div>
               <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"}</label><input className="form-input" name="lastName" value={form.lastName} onChange={ch} placeholder={LANG==="en"?"De Vries":"De Vries"}/></div>
-              <div className="form-group full"><label className="form-label">{t("form.email")} <span style={{color:"var(--gold)",fontSize:".6rem"}}>{LANG==="en"?"— report will be sent here":"— rapport wordt hierheen verstuurd"}</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} placeholder={t("form.emailPlaceholder")} required/></div>
+              <div className="form-group full"><label className="form-label">{t("form.email")} <span style={{color:"var(--gold)",fontSize:".6rem"}}>{LANG==="en"?"— report will be sent here":"— rapport wordt hierheen verstuurd"}</span></label><input className="form-input" type="email" name="email" value={form.email} onChange={ch} onBlur={()=>setEmailTouched(true)} placeholder={t("form.emailPlaceholder")} required/>{emailTouched&&form.email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&<p style={{marginTop:4,fontSize:".75rem",color:"#C0392B"}}>{LANG==="en"?"Please enter a valid email address.":"Vul een geldig e-mailadres in."}</p>}</div>
               <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="day" min="1" max={maxDay()} value={form.day} onChange={ch} onBlur={numBlur("day",1,maxDay())} placeholder="15"/></div>
               <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="month" value={form.month} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
               <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="year" min="1900" max={new Date().getFullYear()} value={form.year} onChange={ch} onBlur={numBlur("year",1900,new Date().getFullYear())} placeholder="1990"/></div>
