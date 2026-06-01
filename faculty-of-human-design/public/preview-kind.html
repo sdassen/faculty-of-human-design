@@ -4,345 +4,296 @@
 <meta charset="UTF-8">
 <title>Kinderrapport Preview — Faculty of Human Design</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 @page{size:A4;margin:0;}
 html{background:#888;}
-body{font-family:'Jost',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;width:210mm;margin:0 auto;}
+body{font-family:'Inter',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;width:210mm;margin:0 auto;}
 @media print{html{background:none;}}
 
 .page{
-  width:210mm;height:297mm;overflow:hidden;
+  width:210mm;min-height:297mm;height:297mm;overflow:hidden;
   page-break-after:always;break-after:page;
   display:flex;flex-direction:column;position:relative;
 }
 @media screen{.page{margin-bottom:8px;box-shadow:0 4px 24px rgba(0,0,0,.35);}}
-
-.dark{background:#1A1714;color:#fff;}
-.light{background:#F4F1EB;color:#1A1714;}
-.g-bar{height:3px;background:linear-gradient(90deg,#A8832C,#C9A85C,#A8832C);flex-shrink:0;}
-
-/* ── COVER ── */
-.fac-label{font-size:8px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,92,.6);text-align:center;padding:16px 48px 0;flex-shrink:0;}
-.cover-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 56px 36px;text-align:center;}
-.c-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:50px;font-weight:300;font-style:italic;color:#fff;line-height:1.02;margin-bottom:18px;}
-.c-div{width:40px;height:1px;background:#C9A85C;margin:0 auto 16px;}
-.c-name{font-size:12px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:#C9A85C;margin-bottom:5px;}
-.c-meta{font-size:10px;font-weight:300;color:rgba(255,255,255,.42);letter-spacing:.04em;}
-.c-diagram{margin:22px 0;}
-.type-badge{display:inline-block;border:1px solid rgba(201,168,92,.4);padding:8px 28px;font-size:9.5px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,92,.75);margin-top:14px;}
-.c-sub{font-size:9px;font-weight:300;color:rgba(255,255,255,.28);letter-spacing:.1em;margin-top:8px;}
-.c-copy{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.18);padding-bottom:16px;text-align:center;flex-shrink:0;}
-
-/* ── INTRO ── */
-.intro-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 80px;text-align:center;}
-.i-div{width:32px;height:1px;background:#C9A85C;margin:0 auto;}
-.i-quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:29px;font-weight:300;font-style:italic;color:#fff;line-height:1.32;margin:18px 0 10px;}
-.i-body{font-size:11.5px;font-weight:300;line-height:1.85;color:rgba(255,255,255,.52);max-width:380px;margin:14px auto 0;}
-.prev-tag{display:inline-block;border:1px solid rgba(201,168,92,.35);padding:7px 22px;font-size:8.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,92,.6);margin-top:24px;}
-.i-copy{margin-top:auto;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.18);padding-bottom:14px;text-align:center;flex-shrink:0;}
-
-/* ── SECTION ── */
-.sec-hd{background:#1A1714;padding:26px 48px 22px;position:relative;flex-shrink:0;}
-.sec-label{font-size:7.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:#C9A85C;margin-bottom:7px;}
-.sec-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:29px;font-weight:400;color:#fff;line-height:1.1;}
-.sec-t-div{width:26px;height:1px;background:rgba(201,168,92,.5);margin-top:11px;}
-.sec-num{position:absolute;right:48px;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',Georgia,serif;font-size:66px;font-weight:300;color:rgba(255,255,255,.05);line-height:1;user-select:none;}
-
-.sec-body{flex:1;padding:26px 48px 28px;background:#F4F1EB;display:flex;flex-direction:column;}
-.s-quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-style:italic;font-weight:300;color:#1A1714;line-height:1.42;margin-bottom:9px;}
-.s-q-div{width:24px;height:1px;background:rgba(138,115,85,.55);margin-bottom:20px;}
-.s-sub{font-family:'Cormorant Garamond',Georgia,serif;font-size:14px;font-weight:400;color:#8A7355;line-height:1.3;margin-bottom:5px;margin-top:16px;}
-.s-sub:first-of-type{margin-top:0;}
-.s-s-div{width:16px;height:1px;background:rgba(138,115,85,.4);margin-bottom:8px;}
-.s-p{font-size:10.5px;font-weight:300;line-height:1.82;color:#3A3530;margin-bottom:11px;}
-.in-chart{margin-top:auto;padding-top:12px;border-top:1px solid #D8D2C8;}
-.ic-label{font-size:7.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#A09890;margin-bottom:7px;}
-.ic-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
-.ic-item{font-size:9.5px;font-weight:300;color:#6B6560;line-height:1.5;display:flex;gap:5px;}
-.ic-item::before{content:'·';color:#8A7355;flex-shrink:0;}
-
-/* ── CALLOUT ── */
-.co-hd{background:#1A1714;padding:13px 48px;flex-shrink:0;}
-.co-h-label{font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,92,.55);}
-.co-h-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:400;color:#fff;margin-top:2px;}
-.co-body{flex:1;padding:26px 48px;background:#F4F1EB;display:flex;flex-direction:column;gap:18px;}
-.co-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;}
-.co-bl{font-size:7.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#8A7355;margin-bottom:11px;display:flex;align-items:center;gap:8px;}
-.co-bl::before{content:'';width:16px;height:1px;background:#8A7355;flex-shrink:0;}
-.co-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
-.co-list li{font-size:10.5px;font-weight:300;color:#3A3530;line-height:1.6;display:flex;gap:8px;align-items:flex-start;}
-.co-list li::before{content:'—';color:#8A7355;flex-shrink:0;font-size:9px;margin-top:2px;}
-.co-div{height:1px;background:#D8D2C8;}
-.ref-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
-.ref-list li{font-family:'Cormorant Garamond',Georgia,serif;font-size:11.5px;font-style:italic;color:#3A3530;line-height:1.62;display:flex;gap:9px;}
-.ref-n{font-family:'Jost',sans-serif;font-style:normal;font-size:9px;font-weight:400;color:#8A7355;flex-shrink:0;min-width:12px;margin-top:1px;}
-
-/* ── FINAL ── */
-.fl-body{flex:1;padding:34px 48px 26px;background:#F4F1EB;display:flex;flex-direction:column;}
-.fl-label{font-size:7.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#8A7355;margin-bottom:7px;}
-.fl-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:37px;font-weight:300;font-style:italic;color:#1A1714;line-height:1.08;margin-bottom:13px;}
-.fl-div{width:100%;height:1px;background:#D8D2C8;margin-bottom:14px;}
-.fl-intro{font-size:11px;font-weight:300;color:#6B6560;line-height:1.72;margin-bottom:20px;}
-.chapters{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:auto;}
-.ch-item{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid #D8D2C8;font-size:10.5px;color:#3A3530;font-weight:300;align-items:flex-start;}
-.ch-n{font-size:8px;font-weight:600;color:#8A7355;flex-shrink:0;margin-top:1px;}
-.fl-cta{background:#1A1714;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-top:22px;}
-.fl-cta-l .fl-cta-sl{font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,92,.6);margin-bottom:3px;}
-.fl-cta-l .fl-cta-tx{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-style:italic;font-weight:300;color:#fff;}
-.fl-cta-btn{border:1px solid rgba(201,168,92,.45);padding:9px 20px;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,92,.75);}
 </style>
 </head>
 <body>
 
 <!-- ═══ PAGE 1 · COVER ═══ -->
-<div class="page dark">
-  <div class="g-bar"></div>
-  <p class="fac-label">Faculty of Human Design · Ibiza · Est. 2014</p>
-  <div class="cover-inner">
-    <h1 class="c-title">Kinderrapport</h1>
-    <div class="c-div"></div>
-    <p class="c-name">Emma Vermeer</p>
-    <p class="c-meta">12 jun 2019 · Amsterdam, Nederland</p>
-    <p class="c-meta" style="margin-top:4px;color:rgba(255,255,255,.3);">Samengesteld voor Sophie Vermeer</p>
-    <div class="c-diagram">
-      <svg width="220" height="220" viewBox="0 0 220 220" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- outer ring -->
-        <circle cx="110" cy="110" r="95" stroke="rgba(201,168,92,0.14)" stroke-width="0.6" fill="none"/>
-        <!-- mid ring -->
-        <circle cx="110" cy="110" r="58" stroke="rgba(201,168,92,0.2)" stroke-width="0.6" fill="none"/>
-        <!-- inner ring -->
-        <circle cx="110" cy="110" r="26" stroke="rgba(201,168,92,0.28)" stroke-width="0.6" fill="none"/>
-        <!-- center dot -->
-        <circle cx="110" cy="110" r="4" fill="rgba(201,168,92,0.55)"/>
-        <!-- compass dots -->
-        <circle cx="110" cy="15" r="2.5" fill="rgba(201,168,92,0.32)"/>
-        <circle cx="110" cy="205" r="2.5" fill="rgba(201,168,92,0.32)"/>
-        <circle cx="15" cy="110" r="2.5" fill="rgba(201,168,92,0.32)"/>
-        <circle cx="205" cy="110" r="2.5" fill="rgba(201,168,92,0.32)"/>
-        <!-- diagonal dots -->
-        <circle cx="43" cy="43" r="2" fill="rgba(201,168,92,0.2)"/>
-        <circle cx="177" cy="43" r="2" fill="rgba(201,168,92,0.2)"/>
-        <circle cx="43" cy="177" r="2" fill="rgba(201,168,92,0.2)"/>
-        <circle cx="177" cy="177" r="2" fill="rgba(201,168,92,0.2)"/>
-        <!-- cross lines -->
-        <line x1="15" y1="110" x2="205" y2="110" stroke="rgba(201,168,92,0.07)" stroke-width="0.5"/>
-        <line x1="110" y1="15" x2="110" y2="205" stroke="rgba(201,168,92,0.07)" stroke-width="0.5"/>
-        <!-- diamond -->
-        <line x1="110" y1="15" x2="205" y2="110" stroke="rgba(201,168,92,0.1)" stroke-width="0.5"/>
-        <line x1="205" y1="110" x2="110" y2="205" stroke="rgba(201,168,92,0.1)" stroke-width="0.5"/>
-        <line x1="110" y1="205" x2="15" y2="110" stroke="rgba(201,168,92,0.1)" stroke-width="0.5"/>
-        <line x1="15" y1="110" x2="110" y2="15" stroke="rgba(201,168,92,0.1)" stroke-width="0.5"/>
-      </svg>
-    </div>
-    <div class="type-badge">Manifesting Generator</div>
-    <p class="c-sub">Profiel 3/5 &nbsp;·&nbsp; Sacraal Autoriteit</p>
+<div class="page" style="background:#1A1715;color:#fff;align-items:center;">
+  <!-- Gold bars top/bottom -->
+  <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
+  <!-- Concentric rings -->
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 595 842" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="297" cy="310" r="205" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.04"/>
+    <circle cx="297" cy="310" r="162" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.06"/>
+    <circle cx="297" cy="310" r="118" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.08"/>
+    <circle cx="297" cy="310" r="76"  fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.12"/>
+    <circle cx="297" cy="310" r="40"  fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.18"/>
+    <circle cx="297" cy="310" r="4" fill="#C9A85C" opacity="0.28"/>
+    <line x1="92" y1="310" x2="502" y2="310" stroke="#C9A85C" stroke-width="0.3" opacity="0.04"/>
+    <line x1="297" y1="105" x2="297" y2="515" stroke="#C9A85C" stroke-width="0.3" opacity="0.04"/>
+  </svg>
+  <!-- Label top -->
+  <div style="position:absolute;top:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#5A5438;letter-spacing:0.3em;text-transform:uppercase;">Faculty of Human Design  ·  Ibiza  ·  Est. 2014</div>
+  <!-- Title block -->
+  <div style="margin-top:108px;padding:0 30mm;text-align:center;position:relative;z-index:1;">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:34pt;color:#FFFFFF;line-height:1.25;letter-spacing:-0.01em;">Kinderrapport</div>
+    <div style="width:72px;height:1px;background:#C9A85C;margin:20px auto;opacity:0.6;"></div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Emma Vermeer</div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">12 jun 2019  ·  Amsterdam, Nederland</div>
+    <div style="width:36px;height:0.5px;background:#C9A85C;margin:14px auto;opacity:0.3;"></div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;">Sophie Vermeer</div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">Ouder</div>
   </div>
-  <p class="c-copy">© 2026 Faculty of Human Design</p>
+  <!-- Type badge -->
+  <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;">
+    <div style="display:inline-block;background:#2A1F0A;border:1px solid #D4956A;padding:7px 22px;border-radius:2px;">
+      <span style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#E8B060;letter-spacing:0.18em;text-transform:uppercase;">Manifesting Generator</span>
+    </div>
+  </div>
+  <!-- Copyright -->
+  <div style="position:absolute;bottom:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.2em;">© 2026 FACULTY OF HUMAN DESIGN</div>
 </div>
 
 <!-- ═══ PAGE 2 · INTRO ═══ -->
-<div class="page dark">
-  <div class="g-bar"></div>
-  <div class="intro-inner">
-    <div class="i-div"></div>
-    <h2 class="i-quote">Dit rapport is samengesteld<br>voor Sophie over Emma.</h2>
-    <div class="i-div" style="margin-top:10px;"></div>
-    <p class="i-body">Dit rapport is samengesteld op basis van Emma's exacte geboortegegevens en geeft Sophie inzicht in hoe Emma van nature functioneert — haar energiesysteem, leerstijl, behoeften en hoe zij haar het best kan begeleiden.</p>
-    <p class="i-body" style="margin-top:12px;">Je bekijkt hier een selectie van fragmenten. De volledige reading bevat alle hoofdstukken, inclusief een gedetailleerde analyse van de dynamiek tussen jou en Emma.</p>
-    <div class="prev-tag">Preview</div>
-  </div>
-  <p class="i-copy">© 2026 Faculty of Human Design · Ibiza, Spanje</p>
-</div>
-
-<!-- ═══ PAGE 3 · SECTIE 01 MAIN ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="sec-hd">
-    <p class="sec-label">Onderdeel 01</p>
-    <h2 class="sec-title">Hoe Emma van nature beweegt</h2>
-    <div class="sec-t-div"></div>
-    <span class="sec-num">01</span>
-  </div>
-  <div class="sec-body">
-    <p class="s-quote">Jouw kind is geen project. Het is een ontwerp.</p>
-    <div class="s-q-div"></div>
-
-    <div class="s-sub">Energie die groter is dan de kamer</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">Emma is een Manifesting Generator. Dat is een van de meest energierijke en veelzijdige ontwerpen in Human Design. Ze is ontworpen om snel te bewegen, meerdere interesses tegelijk te volgen — en soms, tot frustratie van haar omgeving, van richting te veranderen zonder uitleg. Dat is geen grilligheid. Dat is haar systeem dat werkt.</p>
-    <p class="s-p">Het sacraal centrum van Emma is gedefinieerd. Dat betekent dat ze toegang heeft tot een consistente, krachtige levensenergie. Maar die energie is niet willekeurig — ze volgt reactie. Emma's lichaam weet vóór haar hoofd of iets klopt. Dat weten klinkt als een lichamelijk "uh-huh" of een terugdeinzen. Wanneer haar ogen oplichten en haar lijf naar voren leunt: ja. Wanneer ze samentrekt of stil wordt: nee.</p>
-
-    <div class="s-sub">Waarom richtingverandering geen falen is</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">De Manifesting Generator slaat stappen over. Dat is geen gebrek aan doorzettingsvermogen — het is efficiëntie. Emma ziet een kortere weg en neemt die. Wanneer iets haar sacraal niet meer activeert, stopt haar energie. Doorgaan kost haar dan bovenmatig veel. Het is niet dat ze iets niet afmaakt: ze is klaar op een manier die voor anderen onzichtbaar is. Haar lichaam geeft haar informatie die ze zelf nog niet in woorden heeft.</p>
-
-    <div class="in-chart">
-      <p class="ic-label">In Emma's chart</p>
-      <div class="ic-grid">
-        <p class="ic-item">Type: Manifesting Generator</p>
-        <p class="ic-item">Autoriteit: Sacraal</p>
-        <p class="ic-item">Strategie: Reageren, dan informeren</p>
-        <p class="ic-item">Niet-zelf: Frustratie &amp; Boosheid</p>
-      </div>
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:3px;background:#1A1715;"></div>
+  <div style="padding:18mm 24mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:18px;">VOOR JOU ALS OUDER</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:28pt;font-weight:400;color:#1A1715;margin-bottom:6px;line-height:1.1;">Een woord vooraf</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:28px;"></div>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16pt;font-weight:300;color:#1A1715;line-height:1.45;margin-bottom:20px;">Dit rapport is niet geschreven om te vertellen wie jouw kind zou moeten worden.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">Het is geschreven om je te helpen zien wie jouw kind al is — voor de wereld hem of haar vroeg zich aan te passen.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">Human Design is geen persoonlijkheidstest. Het is een kaart van de energie die door jouw kind stroomt. Van de manier waarop hij of zij beslissingen het best neemt. Van de patronen die zijn of haar leven kleuren.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">Dit rapport zal jouw kind niet veranderen. Maar het kan jou iets teruggeven: herkenning. De stille bevestiging dat wat jij al voelde over jouw kind — zijn eigenheid, zijn ritme, zijn gevoeligheid — niet toevallig is.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">Lees dit niet als een handleiding voor je kind. Lees het als een spiegel voor jou als ouder.</p>
+    <div style="margin-top:28px;padding-top:20px;border-top:0.4px solid #D8D4CC;">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10pt;color:#6B6560;margin-bottom:4px;">Met respect voor het ontwerp van je kind,</div>
+      <div style="font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:300;color:#A8A29E;letter-spacing:0.08em;">Faculty of Human Design · Ibiza</div>
     </div>
+  </div>
+  <!-- Footer name -->
+  <div style="position:absolute;bottom:0;left:0;right:0;padding:0 24mm 12mm;display:flex;justify-content:space-between;align-items:center;">
+    <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9pt;color:#C9A85C;padding:0 14px;">Emma Vermeer</div>
+    <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
   </div>
 </div>
 
-<!-- ═══ PAGE 4 · SECTIE 01 CALLOUT ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="co-hd">
-    <p class="co-h-label">Onderdeel 01</p>
-    <p class="co-h-title">Hoe Emma van nature beweegt</p>
+<!-- ═══ PAGE 3 · PREVIEW TAG ═══ -->
+<div class="page" style="background:#1A1715;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;padding:0 32mm;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.35em;text-transform:uppercase;margin-bottom:24px;opacity:0.6;">— Faculty of Human Design —</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:22pt;color:#FFFFFF;line-height:1.55;letter-spacing:0.01em;">Jouw kind is geen project.<br>Het is een ontwerp.</div>
+    <div style="width:40px;height:0.75px;background:#C9A85C;margin:24px auto;opacity:0.4;"></div>
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:300;color:rgba(201,168,92,0.5);letter-spacing:0.2em;text-transform:uppercase;">Preview — selectie uit het volledige rapport</div>
   </div>
-  <div class="co-body">
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">Valkuilen</p>
-        <ul class="co-list">
-          <li>Emma dwingen iets af te maken puur op basis van doorzettingsvermogen</li>
-          <li>Haar richtingverandering interpreteren als gebrek aan discipline of focus</li>
-          <li>Energie-uitbarstingen zien als ongehoorzaamheid in plaats van ongeleid sacraal</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Praktijk</p>
-        <ul class="co-list">
-          <li>Vraag haar voor een activiteit: "Voel je er zin in?" en luister naar haar lichaamsreactie</li>
-          <li>Gun haar de ruimte om stappen over te slaan — en observeer wat er dan gebeurt</li>
-          <li>Geef haar de kans om haar energie elke dag te ontladen voordat ze naar bed gaat</li>
-        </ul>
+</div>
+
+<!-- ═══ PAGE 4 · SECTIE 01 MAIN ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <!-- Dark section header 55mm -->
+  <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="position:absolute;right:16mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:72pt;font-weight:400;color:#C9A85C;opacity:0.05;line-height:1;padding-top:2mm;">01</div>
+    <div style="padding:10mm 16mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#9A8050;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:6px;">ONDERDEEL  01</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28pt;color:#FFFFFF;line-height:1.15;max-width:150mm;">Hoe Emma van nature beweegt</div>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <div style="width:40px;height:0.75px;background:#C9A85C;"></div>
+        <div style="width:20px;height:0.4px;background:#C9A85C;opacity:0.35;"></div>
       </div>
     </div>
-    <div class="co-div"></div>
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">Deze week</p>
-        <ul class="co-list">
-          <li>Wanneer zag je Emma's gezicht oplichten bij iets — wat was dat precies?</li>
-          <li>Op welk moment leek haar energie te "leeglopen" — wat was er aan de hand?</li>
-          <li>Wat verandert er als je haar lichaamssignalen als informatie behandelt?</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Reflectievragen</p>
-        <ol class="ref-list">
-          <li><span class="ref-n">1</span>Welke activiteit zag je Emma ooit spontaan en volhardend doen zonder dat jij haar ertoe aanzette?</li>
-          <li><span class="ref-n">2</span>Wanneer stopte Emma ergens mee en bleek dat achteraf de juiste keuze?</li>
-          <li><span class="ref-n">3</span>Hoe reageer jij zelf als Emma van richting verandert — en wat vertelt dat jou?</li>
-        </ol>
+  </div>
+  <!-- Pull quote strip — white band -->
+  <div style="background:#FFFFFF;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;flex-shrink:0;">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">Jouw kind is geen project. Het is een ontwerp.</div>
+    <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
+  </div>
+  <!-- Content body -->
+  <div style="padding:16mm 0 12mm;max-width:160mm;margin:0 auto;flex:1;">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:0 0 7px;break-after:avoid;line-height:1.3;">Energie die groter is dan de kamer<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <div style="break-inside:avoid;">
+      <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Emma is een Manifesting Generator — een van de meest energierijke en veelzijdige ontwerpen in Human Design. Ze is gebouwd om snel te bewegen, meerdere interesses tegelijk te volgen en soms, tot frustratie van haar omgeving, van richting te veranderen zonder uitleg. Dat is geen grilligheid. Dat is haar systeem dat werkt zoals het bedoeld is.</p>
+    </div>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Het sacraal centrum van Emma is gedefinieerd. Ze heeft toegang tot een consistente, krachtige levensenergie die reageert op wat haar aanspreekt. Haar lichaam weet vóór haar hoofd of iets klopt — dat weten klinkt als een lichamelijk "uh-huh" of een stille terugdeinzing. Wanneer haar ogen oplichten en haar lijf naar voren beweegt: ja. Wanneer ze samentrekt of stil wordt: nee.</p>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">Waarom richtingverandering geen falen is<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">De Manifesting Generator slaat stappen over. Dat is geen gebrek aan doorzettingsvermogen — het is efficiëntie. Wanneer iets haar sacraal niet meer activeert, stopt haar energie. Doorgaan kost haar dan bovenmatig veel. Het is niet dat ze iets niet afmaakt: ze is klaar op een manier die voor anderen onzichtbaar is.</p>
+    <!-- In Emma's chart -->
+    <div style="margin-top:22px;border-top:0.4px solid #E8E4DC;padding-top:14px;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">In Emma's chart</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Type: Manifesting Generator</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Autoriteit: Sacraal</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Strategie: Reageren, dan informeren</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Niet-zelf: Frustratie &amp; Boosheid</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE 5 · SECTIE 02 MAIN ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="sec-hd">
-    <p class="sec-label">Onderdeel 02</p>
-    <h2 class="sec-title">Begeleiden zonder conditioneren</h2>
-    <div class="sec-t-div"></div>
-    <span class="sec-num">02</span>
+<!-- ═══ PAGE 5 · SECTIE 01 CLOSING ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <!-- Closing header — compact dark band -->
+  <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="padding:8mm 20mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">ONDERDEEL  01</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;font-weight:600;color:#FFFFFF;line-height:1.2;">Hoe Emma van nature beweegt</div>
+    </div>
   </div>
-  <div class="sec-body">
-    <p class="s-quote">De meest liefdevolle vraag is niet "waarom?" maar "voelt dit goed voor je?"</p>
-    <div class="s-q-div"></div>
+  <!-- Top row: Valkuilen + Praktijk -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:10mm 20mm 0;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Valkuilen</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Emma dwingen iets af te maken puur op basis van doorzettingsvermogen</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Haar richtingverandering zien als gebrek aan discipline of focus</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Energie-uitbarstingen interpreteren als ongehoorzaamheid in plaats van ongeleid sacraal</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Praktijk</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Vraag haar voor een activiteit: "Voel je er zin in?" en luister naar haar lichaamsreactie</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Gun haar de ruimte om stappen over te slaan — observeer wat er dan gebeurt</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Geef haar de kans om haar energie elke dag te ontladen voordat ze naar bed gaat</span></div>
+    </div>
+  </div>
+  <!-- Divider -->
+  <div style="margin:8mm 20mm;height:0.4px;background:#EBEBE6;"></div>
+  <!-- Bottom row: Deze week + Reflectievragen -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:0 20mm;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Deze week</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Wanneer zag je Emma's gezicht oplichten bij iets — wat was dat precies?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Op welk moment leek haar energie te "leeglopen" — wat was er aan de hand?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Wat verandert er als je haar lichaamssignalen als informatie behandelt?</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Reflectievragen</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">1</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Welke activiteit zag je Emma ooit spontaan en volhardend doen zonder dat jij haar ertoe aanzette?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">2</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Wanneer stopte Emma ergens mee en bleek dat achteraf de juiste keuze?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">3</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Hoe reageer jij zelf als Emma van richting verandert — en wat vertelt dat jou?</span></div>
+    </div>
+  </div>
+</div>
 
-    <div class="s-sub">Twee verschillende autoriteiten in één huis</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">Sophie, jij bent ook een Generator — maar jouw autoriteit is emotioneel. Jij neemt je beste beslissingen over tijd, nadat een golf heeft bewogen. Emma's autoriteit is sacraal: ze weet het nu, in haar lijf. Haar "ja" en "nee" zitten niet in haar hoofd. Ze zitten in haar buik, haar keel, haar schouders.</p>
-    <p class="s-p">De conditionering die voor Emma het meest risicovol is, komt precies uit dit verschil. Wanneer een emotioneel gedefinieerde ouder vraagt "weet je het zeker?" nadat Emma al een lichamelijk antwoord heeft gegeven, leert Emma haar sacraalrespons te wantrouwen. Ze begint na te denken over wat ze zou moeten voelen. En verliest de draad naar haar eigen navigatiesysteem — het enige kompas dat ze echt heeft.</p>
-
-    <div class="s-sub">Hoe jij haar autoriteit kunt beschermen</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">Stel Emma ja/nee-vragen wanneer je haar wilt raadplegen. Niet: "Wat wil jij vanavond eten?" maar: "Wil je vanavond pasta?" Haar sacraal antwoordt op gesloten vragen — het raakt verward bij open ruimte. Vertrouw het antwoord dat uit haar lichaam komt, ook als dat inconvenient is. Dat vertrouwen is het fundament van haar zelfvertrouwen voor de rest van haar leven.</p>
-
-    <div class="in-chart">
-      <p class="ic-label">In jullie dynamiek</p>
-      <div class="ic-grid">
-        <p class="ic-item">Sophie: Emotionele autoriteit · beslissingen rijpen</p>
-        <p class="ic-item">Emma: Sacraal autoriteit · weet in het moment</p>
-        <p class="ic-item">Sophie: Plexus Solaris gedefinieerd</p>
-        <p class="ic-item">Emma: Sacraal gedefinieerd · Plexus open</p>
+<!-- ═══ PAGE 6 · SECTIE 02 MAIN ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="position:absolute;right:16mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:72pt;font-weight:400;color:#C9A85C;opacity:0.05;line-height:1;padding-top:2mm;">02</div>
+    <div style="padding:10mm 16mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#9A8050;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:6px;">ONDERDEEL  02</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28pt;color:#FFFFFF;line-height:1.15;max-width:150mm;">Begeleiden zonder conditioneren</div>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <div style="width:40px;height:0.75px;background:#C9A85C;"></div>
+        <div style="width:20px;height:0.4px;background:#C9A85C;opacity:0.35;"></div>
+      </div>
+    </div>
+  </div>
+  <!-- Pull quote -->
+  <div style="background:#FFFFFF;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;flex-shrink:0;">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">De meest liefdevolle vraag is niet "waarom?" maar "voelt dit goed voor je?"</div>
+    <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
+  </div>
+  <!-- Content body -->
+  <div style="padding:16mm 0 12mm;max-width:160mm;margin:0 auto;flex:1;">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:0 0 7px;break-after:avoid;line-height:1.3;">Twee verschillende autoriteiten in één huis<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <div style="break-inside:avoid;">
+      <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Sophie, jij bent ook een Generator — maar jouw autoriteit is emotioneel. Jij neemt je beste beslissingen over tijd, nadat een golf heeft bewogen. Emma's autoriteit is sacraal: zij weet het nu, in haar lijf. Haar "ja" en "nee" zitten niet in haar hoofd — ze zitten in haar buik, haar keel, haar schouders.</p>
+    </div>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">De conditionering die voor Emma het meest risicovol is, komt precies uit dit verschil. Wanneer jij als emotioneel gedefinieerde ouder vraagt "weet je het zeker?" nadat Emma al een lichamelijk antwoord heeft gegeven, leert ze haar sacraalrespons te wantrouwen. Ze begint na te denken over wat ze zou moeten voelen. En verliest de draad naar haar eigen navigatiesysteem — het enige kompas dat ze echt heeft.</p>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">Hoe jij haar autoriteit kunt beschermen<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Stel Emma ja/nee-vragen wanneer je haar wilt raadplegen. Niet: "Wat wil jij vanavond eten?" maar: "Wil je vanavond pasta?" Haar sacraal antwoordt op gesloten vragen — het raakt verward bij open ruimte. Vertrouw het antwoord dat uit haar lichaam komt, ook als dat inconvenient is. Dat vertrouwen is het fundament van haar zelfvertrouwen voor de rest van haar leven.</p>
+    <!-- In jullie dynamiek -->
+    <div style="margin-top:22px;border-top:0.4px solid #E8E4DC;padding-top:14px;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">In jullie dynamiek</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Sophie: Emotionele autoriteit · beslissingen rijpen</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Emma: Sacraal autoriteit · weet in het moment</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Sophie: Plexus Solaris gedefinieerd</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Emma: Sacraal gedefinieerd · Plexus open</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE 6 · SECTIE 02 CALLOUT ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="co-hd">
-    <p class="co-h-label">Onderdeel 02</p>
-    <p class="co-h-title">Begeleiden zonder conditioneren</p>
-  </div>
-  <div class="co-body">
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">Valkuilen</p>
-        <ul class="co-list">
-          <li>Emma vragen "waarom?" nadat ze al een lichamelijk antwoord heeft gegeven</li>
-          <li>Twijfel zaaien na een spontaan sacraal "ja" of "nee"</li>
-          <li>Open vragen stellen terwijl Emma nog niet weet wat haar sacraal wil — dat creëert mentale overbelasting</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Praktijk</p>
-        <ul class="co-list">
-          <li>Gebruik gesloten vragen: "Wil je dit?" in plaats van "Wat wil jij?"</li>
-          <li>Vertrouw haar lichamelijke reactie — ook als het antwoord je verrast</li>
-          <li>Geef haar toestemming om te veranderen van mening — dat beschermt haar sacraal</li>
-        </ul>
-      </div>
+<!-- ═══ PAGE 7 · SECTIE 02 CLOSING ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="padding:8mm 20mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">ONDERDEEL  02</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;font-weight:600;color:#FFFFFF;line-height:1.2;">Begeleiden zonder conditioneren</div>
     </div>
-    <div class="co-div"></div>
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">Deze week</p>
-        <ul class="co-list">
-          <li>Wanneer stelde jij Emma een open vraag terwijl een gesloten vraag beter had gepast?</li>
-          <li>Hoe reageerde Emma toen jij haar lichamelijke "nee" serieus nam?</li>
-          <li>Wat verandert er in jullie contact als jij haar sacraal als leider behandelt?</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Reflectievragen</p>
-        <ol class="ref-list">
-          <li><span class="ref-n">1</span>Wanneer vertrouwde jij Emma's lichaamsreactie — en wat was het gevolg?</li>
-          <li><span class="ref-n">2</span>Op welk moment voelde jij de neiging om haar beslissing te overrulen — en waarom?</li>
-          <li><span class="ref-n">3</span>Hoe helpt jouw eigen emotionele autoriteit je om Emma's sacraal te respecteren?</li>
-        </ol>
-      </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:10mm 20mm 0;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Valkuilen</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Emma vragen "waarom?" nadat ze al een lichamelijk antwoord heeft gegeven</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Twijfel zaaien na een spontaan sacraal "ja" of "nee"</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Open vragen stellen terwijl Emma nog niet weet wat haar sacraal wil — dat creëert mentale overbelasting</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Praktijk</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Gebruik gesloten vragen: "Wil je dit?" in plaats van "Wat wil jij?"</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Vertrouw haar lichamelijke reactie — ook als het antwoord je verrast</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Geef haar toestemming om van mening te veranderen — dat beschermt haar sacraal</span></div>
+    </div>
+  </div>
+  <div style="margin:8mm 20mm;height:0.4px;background:#EBEBE6;"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:0 20mm;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Deze week</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Wanneer stelde jij Emma een open vraag terwijl een gesloten beter had gepast?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Hoe reageerde Emma toen jij haar lichamelijke "nee" serieus nam?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Wat verandert er in jullie contact als jij haar sacraal als leider behandelt?</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Reflectievragen</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">1</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Wanneer vertrouwde jij Emma's lichaamsreactie — en wat was het gevolg?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">2</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Op welk moment voelde jij de neiging om haar beslissing te overrulen — en waarom?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">3</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Hoe helpt jouw eigen emotionele autoriteit je om Emma's sacraal te respecteren?</span></div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE 7 · FINAL ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="fl-body">
-    <p class="fl-label">De volledige reading</p>
-    <h2 class="fl-title">Wat je nog gaat ontdekken.</h2>
-    <div class="fl-div"></div>
-    <p class="fl-intro">Deze preview toonde twee fragmenten. Het volledige Kinderrapport bevat alle onderstaande hoofdstukken — elk verankerd in Emma's exacte geboortegegevens, geschreven voor jou als ouder.</p>
-    <div class="chapters">
-      <div class="ch-item"><span class="ch-n">01</span>Type en energiesysteem</div>
-      <div class="ch-item"><span class="ch-n">02</span>Strategie en autoriteit</div>
-      <div class="ch-item"><span class="ch-n">03</span>Profiel: de rol die Emma speelt</div>
-      <div class="ch-item"><span class="ch-n">04</span>Gedefinieerde centra</div>
-      <div class="ch-item"><span class="ch-n">05</span>Open centra en conditionering</div>
-      <div class="ch-item"><span class="ch-n">06</span>Leerstijl en school</div>
-      <div class="ch-item"><span class="ch-n">07</span>Opvoeding afgestemd op het design</div>
-      <div class="ch-item"><span class="ch-n">08</span>Jouw dynamiek met Emma</div>
-    </div>
-    <div class="fl-cta">
-      <div class="fl-cta-l">
-        <p class="fl-cta-sl">Jouw volledige reading</p>
-        <p class="fl-cta-tx">Alle hoofdstukken. Één document.</p>
+<!-- ═══ PAGE 8 · FINAL — wat je nog ontdekt ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:3px;background:#1A1715;"></div>
+  <div style="padding:14mm 24mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">DE VOLLEDIGE READING</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24pt;font-weight:400;color:#1A1715;line-height:1.1;margin-bottom:8px;">Wat je nog gaat ontdekken.</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:16px;"></div>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#6B6560;line-height:1.72;margin-bottom:20px;max-width:150mm;">Deze preview toonde twee fragmenten. Het volledige Kinderrapport bevat alle onderstaande hoofdstukken — elk verankerd in Emma's exacte geboortegegevens, geschreven voor jou als ouder.</p>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">01</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Type en energiesysteem</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">02</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Strategie en autoriteit</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">03</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Profiel: de rol die Emma speelt</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">04</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Gedefinieerde centra</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">05</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Open centra en conditionering</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">06</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Leerstijl en school</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">07</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Opvoeding afgestemd op het design</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">08</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Jouw dynamiek met Emma</span></div>
+  </div>
+  <!-- CTA -->
+  <div style="position:absolute;bottom:0;left:0;right:0;">
+    <div style="background:#1A1715;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:7.5pt;letter-spacing:0.18em;text-transform:uppercase;color:rgba(201,168,92,0.6);margin-bottom:3px;">Jouw volledige reading</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:19pt;font-style:italic;font-weight:300;color:#fff;">Alle hoofdstukken. Één document.</div>
       </div>
-      <div class="fl-cta-btn">FacultyHD.com</div>
+      <div style="border:1px solid rgba(201,168,92,0.45);padding:10px 22px;font-family:'Inter',sans-serif;font-size:8.5pt;letter-spacing:0.18em;text-transform:uppercase;color:rgba(201,168,92,0.75);">FacultyHD.com</div>
     </div>
   </div>
 </div>
