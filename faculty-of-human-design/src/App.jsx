@@ -3109,7 +3109,10 @@ Geen sectietitel in de tekst.`);
                   if(stripeLoading)return;
                   setStripeLoading(true);
                   track("checkout_started",{report:rpt.id,price:rpt.priceNum});
-                  try{ await goToStripe(rpt.id,chart,form); }
+                  try{
+                    sessionStorage.setItem("pending_purchase",JSON.stringify({report:rpt.id,price:rpt.priceNum}));
+                    await goToStripe(rpt.id,chart,form);
+                  }
                   finally{ setStripeLoading(false); }
                 }}
               >
@@ -5898,6 +5901,15 @@ export default function App(){
     }
     if(success){
       window.history.replaceState({page:"home"},"",window.location.pathname);
+      // Fire purchase conversion (GA4 + Google Ads)
+      try{
+        const pending=sessionStorage.getItem("pending_purchase");
+        if(pending){
+          const{report,price}=JSON.parse(pending);
+          track("checkout_completed",{report,price,order_id:orderId||""});
+          sessionStorage.removeItem("pending_purchase");
+        }
+      }catch(_){}
       // New async delivery flow: show confirmation page, report arrives by email
       setPage("bedankt");
       setResult({ orderId: orderId||null });

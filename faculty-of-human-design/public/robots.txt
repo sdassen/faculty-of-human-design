@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.facultyofhumandesign.com/sitemap.xml
+Sitemap: https://www.facultyhd.com/sitemap.xml

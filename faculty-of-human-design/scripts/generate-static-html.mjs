@@ -20,7 +20,7 @@ import { fileURLToPath } from 'url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const DIST   = join(__dirname, '..', 'dist');
 const SITE   = 'https://www.facultyhd.com';
-const OG_IMG = 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=1200&auto=format&fit=crop&q=82';
+const OG_IMG = 'https://www.facultyhd.com/img-meditation.jpg';
 
 // ─── ROUTE DEFINITIONS ────────────────────────────────────────────────────────
 // Each entry: { path, title, description, canonical, ogImage? }
@@ -34,6 +34,7 @@ const ROUTES = [
     title: 'Human Design Reading — Persoonlijk & Diepgaand | Faculty of Human Design',
     description: 'Ontvang een diepgaande, persoonlijke Human Design reading op basis van je exacte geboortedata. 40+ pagina\'s, Swiss Ephemeris precisie, bezorgd als PDF. Opgericht op Ibiza in 2014. Vanaf €45.',
     canonical: `${SITE}/`,
+    ogImage: `${SITE}/img-meditation.jpg`,
   },
 
   // ── HUMAN DESIGN PAGE ─────────────────────────────────────────────────────
@@ -50,6 +51,7 @@ const ROUTES = [
     title: 'Human Design Readings — Kies je persoonlijke reading | Faculty of Human Design',
     description: 'Kies uit 10 diepgaande readings: Human Design Reading, Relatie, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.',
     canonical: `${SITE}/readings`,
+    ogImage: `${SITE}/img-inzichten.jpg`,
   },
 
   // ── RAPPORT DETAIL PAGES ──────────────────────────────────────────────────
@@ -58,12 +60,14 @@ const ROUTES = [
     title: 'Human Design Reading — Begrijp eindelijk wie je werkelijk bent | Faculty of Human Design',
     description: 'Jouw complete persoonlijke blauwdruk. Volledige analyse van Type, Autoriteit, Profiel, centra, kanalen en Inkarnatie-Kruis. 40+ pagina\'s. Swiss Ephemeris. Bezorgd binnen 1 werkdag. €75.',
     canonical: `${SITE}/rapport/volledig`,
+    ogImage: `${SITE}/img-volledig-hero.jpg`,
   },
   {
     path: '/rapport/relatie_liefde',
     title: 'Relatie Reading — Meer rust en begrip in je romantische verbinding | Faculty of Human Design',
     description: 'Diepgaande analyse van jouw en je partners Human Design charts. Elektromagnetische kanalen, compatibiliteit, communicatie en intimiteit. 28+ pagina\'s. Bezorgd binnen 1 werkdag. €95.',
     canonical: `${SITE}/rapport/relatie_liefde`,
+    ogImage: `${SITE}/img-relatie-liefde.jpg`,
   },
   {
     path: '/rapport/relatie_business',
@@ -76,6 +80,7 @@ const ROUTES = [
     title: 'Familie Reading — Meer begrip en verbinding in het gezin | Faculty of Human Design',
     description: 'Energetische dynamieken tussen twee familieleden. Ouder-kind, broer-zus of andere gezinsrelaties. 24+ pagina\'s. Bezorgd binnen 1 werkdag. €75.',
     canonical: `${SITE}/rapport/relatie_familie`,
+    ogImage: `${SITE}/img-family-hero.jpg`,
   },
   {
     path: '/rapport/jaar',
@@ -112,6 +117,7 @@ const ROUTES = [
     title: 'Maandelijkse Guidance — Elke maand bewust leven vanuit je design | Faculty of Human Design',
     description: 'Elke maand een persoonlijk rapport over de energetische thema\'s afgestemd op je Human Design chart. Kansen, aandachtspunten en intentie. 12+ pagina\'s. €19 per maand.',
     canonical: `${SITE}/rapport/maandelijks`,
+    ogImage: `${SITE}/img-moon-sub-hero.jpg`,
   },
 
   // ── JOURNAL OVERVIEW ──────────────────────────────────────────────────────
@@ -120,6 +126,7 @@ const ROUTES = [
     title: 'Inzichten over Human Design, Numerologie & Astrologie | Faculty of Human Design',
     description: 'Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.',
     canonical: `${SITE}/journal`,
+    ogImage: `${SITE}/img-inzichten.jpg`,
   },
 
   // ── JOURNAL ARTICLES ──────────────────────────────────────────────────────
@@ -226,30 +233,35 @@ const ROUTES = [
     title: 'Generator Human Design — Strategie, Energie & Autoriteit | Faculty of Human Design',
     description: 'Alles over het Generator type in Human Design. Strategie: Reageren. Handtekening: Tevredenheid. Niet-zelf: Frustratie. Ontdek hoe je als Generator optimaal functioneert.',
     canonical: `${SITE}/type/generator`,
+    ogImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/type/manifesting-generator',
     title: 'Manifesting Generator Human Design — Snel, veelzijdig & onuitputtelijk | Faculty of Human Design',
     description: 'Alles over het Manifesting Generator type in Human Design. Strategie: Reageren en informeren. Handtekening: Tevredenheid & Vrede. Ontdek jouw unieke energie en levensstrategie.',
     canonical: `${SITE}/type/manifesting-generator`,
+    ogImage: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/type/projector',
     title: 'Projector Human Design — De gids die ziet wat anderen niet zien | Faculty of Human Design',
     description: 'Alles over het Projector type in Human Design. Strategie: Wachten op de uitnodiging. Handtekening: Succes. Niet-zelf: Bitterheid. Leer hoe je als Projector tot bloei komt.',
     canonical: `${SITE}/type/projector`,
+    ogImage: 'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/type/manifestor',
     title: 'Manifestor Human Design — Het enige type dat van nature kan initiëren | Faculty of Human Design',
     description: 'Alles over het Manifestor type in Human Design. Strategie: Informeren. Handtekening: Vrede. Niet-zelf: Boosheid. Ontdek de kracht en uitdagingen van de Manifestor.',
     canonical: `${SITE}/type/manifestor`,
+    ogImage: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/type/reflector',
     title: 'Reflector Human Design — De spiegel van de gemeenschap | Faculty of Human Design',
     description: 'Alles over het Reflector type in Human Design. Strategie: Wachten — een volledige maancyclus. Handtekening: Verrassing. Het zeldzaamste type: ~1% van de bevolking.',
     canonical: `${SITE}/type/reflector`,
+    ogImage: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80',
   },
 
   // ── PHILOSOPHY / OVER ─────────────────────────────────────────────────────
@@ -258,6 +270,7 @@ const ROUTES = [
     title: 'Over — Faculty of Human Design | Persoonlijke readings vanuit Ibiza',
     description: 'Faculty of Human Design. Persoonlijke readings op basis van Human Design, Numerologie en Astrologie. Opgericht op Ibiza in 2014.',
     canonical: `${SITE}/philosophy`,
+    ogImage: `${SITE}/img-ibiza-terrace.jpg`,
   },
 
   // ── CONTACT ───────────────────────────────────────────────────────────────
@@ -285,6 +298,7 @@ const ROUTES = [
     title: 'Human Design Reading — Personal & In-Depth | Faculty of Human Design',
     description: 'Receive an in-depth, personal Human Design reading based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.',
     canonical: `${SITE}/en/`,
+    ogImage: `${SITE}/img-meditation.jpg`,
   },
   {
     path: '/en/human-design',
@@ -297,18 +311,21 @@ const ROUTES = [
     title: 'Human Design Readings — Choose your personal reading | Faculty of Human Design',
     description: 'Choose from 10 in-depth readings: Human Design Reading, Relationship, Career, Year, Child, Numerology and Birth Horoscope. Personal and delivered within 1 business day. From €45.',
     canonical: `${SITE}/en/readings`,
+    ogImage: `${SITE}/img-inzichten.jpg`,
   },
   {
     path: '/en/rapport/volledig',
     title: 'Human Design Reading — Finally understand who you truly are | Faculty of Human Design',
     description: 'Your complete personal blueprint. Full analysis of Type, Authority, Profile, centres, channels and Incarnation Cross. 40+ pages. Swiss Ephemeris. Delivered within 1 business day. €75.',
     canonical: `${SITE}/en/rapport/volledig`,
+    ogImage: `${SITE}/img-volledig-hero.jpg`,
   },
   {
     path: '/en/rapport/relatie_liefde',
     title: 'Relationship Reading — More peace and understanding in your romantic connection | Faculty of Human Design',
     description: 'In-depth analysis of your and your partner\'s Human Design charts. Electromagnetic channels, compatibility, communication and intimacy. 28+ pages. Delivered within 1 business day. €95.',
     canonical: `${SITE}/en/rapport/relatie_liefde`,
+    ogImage: `${SITE}/img-relatie-liefde.jpg`,
   },
   {
     path: '/en/rapport/relatie_business',
@@ -321,6 +338,7 @@ const ROUTES = [
     title: 'Family Reading — More understanding and connection in the family | Faculty of Human Design',
     description: 'Energetic dynamics between two family members. Parent-child, siblings or other family relationships. 24+ pages. Delivered within 1 business day. €75.',
     canonical: `${SITE}/en/rapport/relatie_familie`,
+    ogImage: `${SITE}/img-family-hero.jpg`,
   },
   {
     path: '/en/rapport/jaar',
@@ -357,12 +375,14 @@ const ROUTES = [
     title: 'Monthly Guidance — Live each month consciously in alignment with your design | Faculty of Human Design',
     description: 'A personal report every month about the energetic themes aligned with your Human Design chart. Opportunities, points of attention and intention. 12+ pages. €19 per month.',
     canonical: `${SITE}/en/rapport/maandelijks`,
+    ogImage: `${SITE}/img-moon-sub-hero.jpg`,
   },
   {
     path: '/en/journal',
     title: 'Insights on Human Design, Numerology & Astrology | Faculty of Human Design',
     description: 'Articles on Human Design, Numerology and Astrology. Learn about Type, Strategy, Authority and the origin of Human Design on Ibiza.',
     canonical: `${SITE}/en/journal`,
+    ogImage: `${SITE}/img-inzichten.jpg`,
   },
   {
     path: '/en/journal/s1',
@@ -465,36 +485,42 @@ const ROUTES = [
     title: 'Generator Human Design — Strategy, Energy & Authority | Faculty of Human Design',
     description: 'Everything about the Generator type in Human Design. Strategy: Respond. Signature: Satisfaction. Not-self: Frustration. Discover how to thrive as a Generator.',
     canonical: `${SITE}/en/type/generator`,
+    ogImage: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/en/type/manifesting-generator',
     title: 'Manifesting Generator Human Design — Fast, Versatile & Inexhaustible | Faculty of Human Design',
     description: 'Everything about the Manifesting Generator type in Human Design. Strategy: Respond then inform. Signature: Satisfaction & Peace. Discover your unique energy and life strategy.',
     canonical: `${SITE}/en/type/manifesting-generator`,
+    ogImage: 'https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/en/type/projector',
     title: 'Projector Human Design — The Guide Who Sees What Others Cannot | Faculty of Human Design',
     description: 'Everything about the Projector type in Human Design. Strategy: Wait for the invitation. Signature: Success. Not-self: Bitterness. Learn how to flourish as a Projector.',
     canonical: `${SITE}/en/type/projector`,
+    ogImage: 'https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/en/type/manifestor',
     title: 'Manifestor Human Design — The Only Type Designed to Initiate | Faculty of Human Design',
     description: 'Everything about the Manifestor type in Human Design. Strategy: Inform. Signature: Peace. Not-self: Anger. Discover the power and challenges of the Manifestor.',
     canonical: `${SITE}/en/type/manifestor`,
+    ogImage: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/en/type/reflector',
     title: 'Reflector Human Design — The Mirror of the Community | Faculty of Human Design',
     description: 'Everything about the Reflector type in Human Design. Strategy: Wait — a full lunar cycle. Signature: Surprise. The rarest type: ~1% of the population.',
     canonical: `${SITE}/en/type/reflector`,
+    ogImage: 'https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80',
   },
   {
     path: '/en/philosophy',
     title: 'About — Faculty of Human Design | Personal readings from Ibiza',
     description: 'Faculty of Human Design. Personal readings based on Human Design, Numerology and Astrology. Founded on Ibiza in 2014.',
     canonical: `${SITE}/en/philosophy`,
+    ogImage: `${SITE}/img-ibiza-terrace.jpg`,
   },
   {
     path: '/en/contact',
@@ -545,6 +571,8 @@ function hreflangUrls(canonical) {
  */
 function buildHtml(template, { title, description, canonical, ogImage }) {
   const img = ogImage || OG_IMG;
+  const isEn = canonical.includes('/en/') || canonical.endsWith('/en');
+  const locale = isEn ? 'en_US' : 'nl_NL';
   let html = template;
 
   // <title>
@@ -588,6 +616,12 @@ function buildHtml(template, { title, description, canonical, ogImage }) {
   html = html.replace(
     /(<meta\s+property="og:url"\s+content=")[^"]*(")/,
     `$1${escAttr(canonical)}$2`
+  );
+
+  // og:locale
+  html = html.replace(
+    /(<meta\s+property="og:locale"\s+content=")[^"]*(")/,
+    `$1${locale}$2`
   );
 
   // og:image
