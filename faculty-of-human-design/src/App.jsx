@@ -3778,7 +3778,7 @@ function RapportenPage({go}){
                 <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
                 <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
                 <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
-                {r.id==="volledig"&&<div style={{marginTop:12}} onClick={e=>e.stopPropagation()}><a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontSize:".78rem",fontWeight:400,color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid currentColor",paddingBottom:1,opacity:.7}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
+                {(r.id==="volledig"||r.id==="kind")&&<div style={{marginTop:12}} onClick={e=>e.stopPropagation()}><a href={r.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):(LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")} target="_blank" rel="noopener" style={{fontSize:".78rem",fontWeight:400,color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid currentColor",paddingBottom:1,opacity:.7}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
               </div>
             ))}
           </div>
@@ -3816,6 +3816,7 @@ function RapportenPage({go}){
                 <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
                 <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
                 <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
+                {r.id==="relatie_liefde"&&<div style={{marginTop:12}} onClick={e=>e.stopPropagation()}><a href={LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"} target="_blank" rel="noopener" style={{fontSize:".78rem",fontWeight:400,color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid currentColor",paddingBottom:1,opacity:.7}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
               </div>
             ))}
           </div>
