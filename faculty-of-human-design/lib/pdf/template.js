@@ -490,9 +490,11 @@ function buildCoverPage(order) {
     <div style="width:72px;height:1px;background:#C9A85C;margin:20px auto;opacity:0.6;"></div>
     ${order.customer_name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">${esc(order.customer_name)}</div>` : ""}
     ${dateStr ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">${esc(dateStr)}${bd.place ? "  ·  " + esc(bd.place) : ""}</div>` : ""}
+    ${childReport && order.customer_name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:7pt;color:#5A5438;margin-top:5px;letter-spacing:0.18em;text-transform:uppercase;">${ui(lang, "Ouder", "Parent")}</div>` : ""}
     ${hasPartner ? `<div style="width:36px;height:0.5px;background:#C9A85C;margin:14px auto;opacity:0.3;"></div>` : ""}
     ${hasPartner && pbd.name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;">${esc(pbd.name)}</div>` : ""}
     ${hasPartner && partnerDateStr ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">${esc(partnerDateStr)}${pbd.place ? "  ·  " + esc(pbd.place) : ""}</div>` : ""}
+    ${childReport && pbd.name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:7pt;color:#5A5438;margin-top:5px;letter-spacing:0.18em;text-transform:uppercase;">${ui(lang, "Kind", "Child")}</div>` : ""}
   </div>
   ${chart.type ? `
   <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;">
