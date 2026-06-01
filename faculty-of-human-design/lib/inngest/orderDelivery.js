@@ -1387,18 +1387,48 @@ function buildRelatieContext(order, isEN) {
       : `\n⚠️ LEEFTIJDSREGEL: ${name2} is ${childAge} jaar (${ageCategory}) — pas ALLE taal, voorbeelden en situaties aan op deze specifieke leeftijd. Gebruik GEEN taal of situaties uit een andere levensfase.`;
   }
 
+  // For liefde + business: inject both ages and life phase context
+  const isLiefde   = (order.report_id || "").toLowerCase() === "relatie_liefde";
+  const isBusiness = (order.report_id || "").toLowerCase() === "relatie_business";
+  let ageLine = "";
+  if ((isLiefde || isBusiness) && bd1.year && bd2.year) {
+    const calcAge = (year, month, day) => {
+      const now = new Date();
+      let age = now.getFullYear() - year;
+      const md = now.getMonth() - ((month || 1) - 1);
+      if (md < 0 || (md === 0 && now.getDate() < (day || 1))) age--;
+      return age;
+    };
+    const lifePhase = (age, isEN) => {
+      if (age < 26) return isEN ? "young adult (18–25): identity formation, first big choices, finding direction" : "jongvolwassene (18–25): identiteitsvorming, eerste grote keuzes, richting zoeken";
+      if (age < 36) return isEN ? "building phase (26–35): establishing life, career and relationships, ambition" : "opbouwfase (26–35): leven opbouwen, carrière en relaties vestigen, ambitie";
+      if (age < 46) return isEN ? "depth phase (36–45): reassessment, deepening, growing responsibility" : "verdiepingsfase (36–45): herbezinning, verdieping, groeiende verantwoordelijkheid";
+      if (age < 56) return isEN ? "maturation phase (46–55): consolidation, identity beyond roles, legacy" : "rijpingsfase (46–55): consolidatie, identiteit voorbij rollen, erfenis";
+      return isEN ? "elder phase (56+): meaning, wisdom, transmission, freedom" : "eldersfase (56+): betekenis, wijsheid, doorgeven, vrijheid";
+    };
+    const age1 = calcAge(bd1.year, bd1.month, bd1.day);
+    const age2 = calcAge(bd2.year, bd2.month, bd2.day);
+    const ageDiff = Math.abs(age1 - age2);
+    const gapNote = ageDiff >= 10
+      ? (isEN ? ` Note: ${ageDiff}-year age gap — the two people are in meaningfully different life phases.` : ` Let op: ${ageDiff} jaar leeftijdsverschil — de twee mensen bevinden zich in wezenlijk verschillende levensfasen.`)
+      : "";
+    ageLine = isEN
+      ? `\n${name1}: ${age1} years old — ${lifePhase(age1, true)}\n${name2}: ${age2} years old — ${lifePhase(age2, true)}${gapNote}`
+      : `\n${name1}: ${age1} jaar — ${lifePhase(age1, false)}\n${name2}: ${age2} jaar — ${lifePhase(age2, false)}${gapNote}`;
+  }
+
   if (isEN) {
     return `\n\nRELATIONSHIP READING — MANDATORY PRONOUN RULE:
 Gender is NOT available in the data. NEVER use "he", "she", "him", "her", "his" or "hers" to refer to either person.
 Always refer to people by name: "${name1}" for the first person, "${name2}" for the second person.
-If a name is unavailable, use "you" (for the reader) and "your family member" (for the other person).
-This rule applies to every single sentence — no exceptions.${relationLine}`;
+If a name is unavailable, use "you" (for the reader) and "your partner" (for the other person).
+This rule applies to every single sentence — no exceptions.${relationLine}${ageLine}`;
   } else {
     return `\n\nRELATIE READING — VERPLICHTE VOORNAAMWOORDREGEL:
 Geslacht is NIET beschikbaar in de data. Gebruik NOOIT "hij", "zij", "ze" (als persoonsverwijs), "hem", of "haar" (als geslachtsverwijs) voor één van beide personen.
 Verwijs altijd bij naam: "${name1}" voor de aanvrager, "${name2}" voor de tweede persoon.
-Als een naam ontbreekt, gebruik dan "jij" (voor de lezer) en "je familielid" (voor de ander).
-Deze regel geldt voor elke zin in elke sectie — geen uitzonderingen.${relationLine}`;
+Als een naam ontbreekt, gebruik dan "jij" (voor de lezer) en "je partner" (voor de ander).
+Deze regel geldt voor elke zin in elke sectie — geen uitzonderingen.${relationLine}${ageLine}`;
   }
 }
 
