@@ -1264,6 +1264,34 @@ function buildRelatieContext(order, isEN) {
       : `\nSoort relatie: familie (niet gespecificeerd). Schrijf in termen van een familieband — vermijd romantische of zakelijke taal.`;
   }
 
+  // If person2 is a child role, inject age + phase guidance (same logic as kinderrapport)
+  const person2IsChild = /kind|child/i.test(person2Role || "");
+  if (isFamilie && person2IsChild && bd2.year) {
+    const now = new Date();
+    const birthDate = new Date(bd2.year, (bd2.month || 1) - 1, bd2.day || 1);
+    let childAge = now.getFullYear() - birthDate.getFullYear();
+    const md = now.getMonth() - birthDate.getMonth();
+    if (md < 0 || (md === 0 && now.getDate() < birthDate.getDate())) childAge--;
+    const ageCategory = childAge <= 4
+      ? (isEN
+          ? "toddler (0–4 years): focus on sleep, sensory needs, energy rhythms, tantrums, physical play, co-regulation. No school or homework language."
+          : "peuter (0–4 jaar): focus op slaap, zintuiglijke behoeften, energieritme, driften, lichamelijk spelen, co-regulatie. Geen school- of huiswerkgerelateerde taal.")
+      : childAge <= 9
+      ? (isEN
+          ? "primary school age (5–9 years): focus on learning style, classroom dynamics, friendships, play, home structure."
+          : "basisschoolleeftijd (5–9 jaar): focus op leerstijl, klassendynamiek, vriendschappen, spelen, thuisstructuur.")
+      : childAge <= 13
+      ? (isEN
+          ? "pre-teen (10–13 years): focus on identity formation, peer pressure, self-image, growing autonomy, boundary-setting."
+          : "pre-tiener (10–13 jaar): focus op identiteitsvorming, groepsdruk, zelfbeeld, groeiende autonomie, grenzen stellen.")
+      : (isEN
+          ? "teenager (14–18 years): focus on direction-finding, self-knowledge, relationships, independence, friction with authority."
+          : "tiener (14–18 jaar): focus op richtingzoeken, zelfkennis, relaties, zelfstandigheid, wrijving met autoriteit.");
+    relationLine += isEN
+      ? `\n⚠️ AGE RULE: ${name2} is ${childAge} years old (${ageCategory}) — adapt ALL language, examples and situations to this specific age. Do NOT use language or situations from a different life phase.`
+      : `\n⚠️ LEEFTIJDSREGEL: ${name2} is ${childAge} jaar (${ageCategory}) — pas ALLE taal, voorbeelden en situaties aan op deze specifieke leeftijd. Gebruik GEEN taal of situaties uit een andere levensfase.`;
+  }
+
   if (isEN) {
     return `\n\nRELATIONSHIP READING — MANDATORY PRONOUN RULE:
 Gender is NOT available in the data. NEVER use "he", "she", "him", "her", "his" or "hers" to refer to either person.
@@ -1461,9 +1489,13 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const isRelatieReport = (report_id || "").toLowerCase().startsWith("relatie_");
   const relatieBlock = isRelatieReport ? buildRelatieContext(order, lang === "en") : "";
 
-  // ── Kind rapport: age-specific writing instruction ───────────────────────
+  // ── Kind/familie rapport: age-specific writing instruction ───────────────
   const kindAgeBlock = (() => {
-    if (!isKind || !_pbd.year) return "";
+    const isFamilieKind = (report_id || "").toLowerCase() === "relatie_familie"
+      && /kind|child/i.test((_pbd.person2Role || (order.birth_data || {}).person2Role || ""));
+    const hasChild = isKind || isFamilieKind;
+    if (!hasChild || !_pbd.year) return "";
+    const childName = _pbd.firstName || _pbd.name || displayName;
     const now = new Date();
     const birthDate = new Date(_pbd.year, (_pbd.month || 1) - 1, _pbd.day || 1);
     let childAge = now.getFullYear() - birthDate.getFullYear();
@@ -1474,8 +1506,8 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
       : childAge <= 13 ? (lang === "en" ? "pre-teen" : "pre-tiener")
       : (lang === "en" ? "teenager" : "tiener");
     return lang === "en"
-      ? `\n\n⚠️ AGE RULE: ${displayName} is ${childAge} years old (${phase}). Every example, situation and word choice MUST fit this specific age. Do NOT use language or situations from a different life phase.`
-      : `\n\n⚠️ LEEFTIJDSREGEL: ${displayName} is ${childAge} jaar (${phase}). Elk voorbeeld, elke situatie en woordkeuze MOET passen bij deze specifieke leeftijd. Gebruik GEEN taal of situaties uit een andere levensfase.`;
+      ? `\n\n⚠️ AGE RULE: ${childName} is ${childAge} years old (${phase}). Every example, situation and word choice MUST fit this specific age. Do NOT use language or situations from a different life phase.`
+      : `\n\n⚠️ LEEFTIJDSREGEL: ${childName} is ${childAge} jaar (${phase}). Elk voorbeeld, elke situatie en woordkeuze MOET passen bij deze specifieke leeftijd. Gebruik GEEN taal of situaties uit een andere levensfase.`;
   })();
 
   // ── Structural lessons from past revisions ────────────────────────────────
