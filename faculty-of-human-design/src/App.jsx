@@ -705,9 +705,6 @@ button { cursor:pointer; font-family:var(--font-sans); }
 @media (max-width:580px){
   .types-grid-5>*:last-child:nth-child(odd){
     grid-column:1/-1;
-    justify-self:center;
-    max-width:50%;
-    width:100%;
   }
 }
 `;
