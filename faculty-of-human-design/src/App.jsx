@@ -1113,7 +1113,7 @@ const REPORTS = [
     title:{ nl:"Maandelijkse Guidance", en:"Monthly Guidance" },
     price:"€19/mnd", priceNum:19,
     sub:{ nl:"Maandelijks opzegbaar", en:"Cancel anytime" },
-    outcome:{ nl:"Elke maand bewust leven vanuit je design", en:"Live each month consciously in alignment with your design" },
+    outcome:{ nl:"Elke maand bewust leven in afstemming met je design", en:"Live each month consciously in alignment with your design" },
     tagline:{ nl:"Elke maand je persoonlijke energiegids", en:"Your personal energy guide every month" },
     intro:{ nl:"Elke maand een persoonlijk rapport over de energetische thema's van die maand, afgestemd op je Human Design chart.", en:"A personal report every month about the energetic themes of that month, aligned with your Human Design chart." },
     includes:["Energie & thema's van de maand","Planetaire invloeden","Kansen & aandachtspunten","Praktisch advies","Intentie voor de maand"],
