@@ -40,9 +40,6 @@ export const IMGS = {
   // 'Waarom anders' blok — rechter foto (Ibiza, Es Vedrà)
   w_ibiza:      "/img-ibiza-moon.jpg",
 
-  // Maandelijks abonnement sectie — achtergrondafbeelding
-  sub_moon:     "/img-moon-sub-hero.jpg",
-
   // Testimonials sectie — achtergrondafbeelding
   milkyway:     "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=2400&auto=format&fit=crop&q=80",
 
@@ -73,7 +70,7 @@ export const IMGS = {
   r_loopbaan:         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80",
   r_numerologie:      "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=900&auto=format&fit=crop&q=80",
   r_horoscoop:        "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=900&auto=format&fit=crop&q=80",
-  r_maandelijks:      "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=900&auto=format&fit=crop&q=80",
+  r_maandelijks:      "/img-moon-sub-hero.jpg",
 
 
   // ════════════════════════════════════════════════════════════════════════════
@@ -91,7 +88,7 @@ export const IMGS = {
   detail_loopbaan:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   detail_numerologie:      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   detail_horoscoop:        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  detail_maandelijks:      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  detail_maandelijks:      "/img-moon-sub-hero.jpg",
 
 
   // ════════════════════════════════════════════════════════════════════════════
