@@ -88,7 +88,7 @@ export const IMGS = {
   detail_loopbaan:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   detail_numerologie:      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
   detail_horoscoop:        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  detail_maandelijks:      "/img-moon-sub-hero.jpg",
+  detail_maandelijks:      "/img-fabric-3.jpg",
 
 
   // ════════════════════════════════════════════════════════════════════════════
