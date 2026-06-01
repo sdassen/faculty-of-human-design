@@ -3122,7 +3122,11 @@ Geen sectietitel in de tekst.`);
                   :(rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading"))}
               </button>
               <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
-              {rpt.id==="volledig"&&<div style={{marginTop:16}}><a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
+              {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<div style={{marginTop:16}}><a href={
+                  rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
+                  rpt.id==="relatie_liefde"?"/preview-relatie-liefde.pdf":
+                  "/preview-kind.pdf"
+                } target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
             </div>
           </div>
         </div>
