@@ -3105,6 +3105,7 @@ Geen sectietitel in de tekst.`);
                   :(rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading"))}
               </button>
               <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
+              {rpt.id==="volledig"&&<div style={{marginTop:16}}><a href="/preview-volledig.pdf" target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
             </div>
           </div>
         </div>
@@ -3926,6 +3927,9 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
             >{heroCta}</button>
             <span style={{fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"rgba(255,255,255,.38)",textTransform:"uppercase"}}>{rpt.price} · {LANG==="en"?"personal · delivered by email":"persoonlijk · bezorgd per e-mail"}</span>
+            {rpt.id==="volledig"&&<a href="/preview-volledig.pdf" target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.45)",textDecoration:"none",borderBottom:"1px solid rgba(255,255,255,.2)",paddingBottom:2,cursor:"pointer",transition:"color .2s,border-color .2s"}} onMouseEnter={e=>{e.currentTarget.style.color="rgba(255,255,255,.75)";e.currentTarget.style.borderColor="rgba(255,255,255,.5)";}} onMouseLeave={e=>{e.currentTarget.style.color="rgba(255,255,255,.45)";e.currentTarget.style.borderColor="rgba(255,255,255,.2)";}}>
+              {LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}
+            </a>}
           </div>
         </div>
       </section>

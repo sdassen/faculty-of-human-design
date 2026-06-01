@@ -1,0 +1,37 @@
+{
+  "id": "preview-sample",
+  "customer_name": "Sophie Vermeer",
+  "customer_email": "sophie@example.com",
+  "report_title": "Volledig Human Design Rapport",
+  "report_id": "volledig",
+  "language": "nl",
+  "birth_data": {
+    "firstName": "Sophie",
+    "day": 15,
+    "month": 3,
+    "year": 1990,
+    "hour": 14,
+    "minute": 30,
+    "place": "Amsterdam, Nederland",
+    "tz": 1,
+    "chart": {
+      "type": "Generator",
+      "strat": "Wacht op te reageren",
+      "auth": "Emotioneel",
+      "profile": "4/6",
+      "sig": "Tevredenheid",
+      "notSelf": "Frustratie",
+      "cross": "Rechts Kwartaal van Dualiteit (4/49 | 23/43)",
+      "definedCenters": ["Sacraal", "Plexus Solaris", "Keel"],
+      "openCenters": ["Hoofd", "Ajna", "Wil", "Milt", "G-Centrum", "Wortel"],
+      "channels": [
+        { "g1": "35", "g2": "36", "c1": "Keel", "c2": "Plexus Solaris" },
+        { "g1": "12", "g2": "22", "c1": "Keel", "c2": "Plexus Solaris" }
+      ],
+      "allGates": [4, 12, 15, 22, 35, 36, 46, 52, 56, 59],
+      "lp": 5,
+      "exp": 6,
+      "sun_sign": "Vissen"
+    }
+  }
+}

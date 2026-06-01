@@ -1236,6 +1236,104 @@ function buildGateAppendixPage(order) {
 </div>`;
 }
 
+// ─── PREVIEW: WELKOMSTPAGINA ──────────────────────────────────────────────────
+function buildPreviewWelcomePage(order) {
+  const lang = order.language || "nl";
+  const isEN = lang === "en";
+  const name = (order.birth_data || {}).firstName || order.customer_name || "";
+
+  return `
+<div style="width:210mm;height:297mm;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
+  ${coverDecoration(297, 380)}
+  <div style="position:absolute;top:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#5A5438;letter-spacing:0.25em;text-transform:uppercase;">${isEN ? "PREVIEW · FRAGMENTS FROM YOUR READING" : "PREVIEW · FRAGMENTEN UIT JE READING"}</div>
+  <div style="padding:0 28mm;text-align:center;position:relative;max-width:210mm;">
+    <div style="width:36px;height:0.5px;background:#C9A85C;margin:0 auto 28px;opacity:0.5;"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:26pt;color:#FFFFFF;line-height:1.35;margin-bottom:24px;">${isEN ? `This reading was compiled<br>for ${esc(name)}.` : `Deze reading is samengesteld<br>voor ${esc(name)}.`}</div>
+    <div style="width:36px;height:0.5px;background:#C9A85C;margin:0 auto 28px;opacity:0.5;"></div>
+    <p style="font-family:'Inter',sans-serif;font-size:9pt;font-weight:300;color:#9A8A6A;line-height:1.85;margin-bottom:16px;">${isEN
+      ? "This report is compiled on the basis of your exact birth data and combines Human Design, astrology and numerology into one personal working document."
+      : "Dit rapport is samengesteld op basis van jouw exacte geboortegegevens en combineert Human Design, astrologie en numerologie tot één persoonlijk werkdocument."
+    }</p>
+    <p style="font-family:'Inter',sans-serif;font-size:9pt;font-weight:300;color:#6B6560;line-height:1.85;">${isEN
+      ? "You are viewing a selection of fragments. The complete reading contains all chapters, your full bodygraph analysis, and your personal integration guide."
+      : "Je bekijkt hier een selectie van fragmenten. De volledige reading bevat alle hoofdstukken, jouw complete bodygraph-analyse en jouw persoonlijke integratiegids."
+    }</p>
+    <div style="margin-top:32px;display:inline-block;border:1px solid #C9A85C;padding:8px 24px;">
+      <span style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:400;color:#C9A85C;letter-spacing:0.2em;text-transform:uppercase;">${isEN ? "PREVIEW" : "PREVIEW"}</span>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.18em;">© 2026 FACULTY OF HUMAN DESIGN  ·  IBIZA, SPANJE</div>
+</div>`;
+}
+
+// ─── PREVIEW: TEASER PAGINA ───────────────────────────────────────────────────
+function buildPreviewTeaserPage(order) {
+  const lang = order.language || "nl";
+  const isEN = lang === "en";
+
+  const nlChapters = [
+    "Type, Strategie & Signatuur",
+    "Autoriteit en besluitvorming",
+    "Profiel: de rol die jij speelt",
+    "Gedefinieerde en open centra",
+    "Actieve kanalen en poorten",
+    "Inkarnatie-Kruis en levensdoel",
+    "Conditionering en de-conditionering",
+    "Relatie-dynamiek vanuit jouw design",
+    "Levenspadgetal en uitdrukkingsgetal",
+    "Reflectievragen en praktische integratie",
+  ];
+  const enChapters = [
+    "Type, Strategy & Signature",
+    "Authority and decision-making",
+    "Profile: the role you play",
+    "Defined and open centres",
+    "Active channels and gates",
+    "Incarnation Cross and life purpose",
+    "Conditioning and de-conditioning",
+    "Relationship dynamics from your design",
+    "Life path and expression number",
+    "Reflection questions and practical integration",
+  ];
+  const chapters = isEN ? enChapters : nlChapters;
+
+  return `
+<div style="width:210mm;height:297mm;background:#FFFFFF;position:relative;overflow:hidden;break-before:page;break-inside:avoid;">
+  <div style="height:4px;background:#1A1715;"></div>
+  <div style="padding:12mm 20mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:8px;">${isEN ? "THE COMPLETE READING" : "DE VOLLEDIGE READING"}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24pt;color:#1A1715;line-height:1.1;margin-bottom:10px;">${isEN ? "What you will discover." : "Wat je nog gaat ontdekken."}</div>
+    <div style="height:0.75px;background:#C9A85C;margin-bottom:20px;"></div>
+    <p style="font-family:'Inter',sans-serif;font-size:9pt;font-weight:300;color:#6B6560;line-height:1.8;margin-bottom:22px;">${isEN
+      ? "This preview showed you two fragments. The complete reading contains all the chapters below — each one grounded in your exact birth data, written for you alone."
+      : "Deze preview toonde je twee fragmenten. De volledige reading bevat alle onderstaande hoofdstukken — elk verankerd in jouw exacte geboortegegevens, geschreven voor jou alleen."
+    }</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;">
+      ${chapters.map((ch, i) => `
+      <div style="padding:10px 14px 10px 0;border-bottom:0.4px solid #E5E0D8;display:flex;align-items:baseline;gap:10px;">
+        <span style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:400;color:#C9A85C;min-width:16px;">${String(i + 1).padStart(2, "0")}</span>
+        <span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#1A1715;line-height:1.45;">${esc(ch)}</span>
+      </div>`).join("")}
+    </div>
+    <div style="margin-top:24px;background:#1A1715;padding:16px 20px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:4px;">${isEN ? "YOUR COMPLETE READING" : "JOUW VOLLEDIGE READING"}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13pt;color:#FFFFFF;">${isEN ? "All chapters. One document." : "Alle hoofdstukken. Één document."}</div>
+      </div>
+      <div style="border:1px solid #C9A85C;padding:8px 18px;">
+        <span style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.18em;text-transform:uppercase;">facultyhd.com</span>
+      </div>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:0;left:0;right:0;padding:0 20mm 10mm;display:flex;justify-content:space-between;align-items:center;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">${esc(order.report_title || "")}</div>
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:300;color:#A8A29E;">Faculty of Human Design</div>
+  </div>
+</div>`;
+}
+
 // ─── MAIN EXPORT ──────────────────────────────────────────────────────────────
 export function buildHTML({ order, sections, svgBodygraph, svgPartnerBodygraph }) {
   const lang = order.language || "nl";
@@ -1310,6 +1408,54 @@ ${hasProfileChart && profileSvg ? buildBodygraphPage(profileSvg, order) : ""}
 ${hasProfileChart ? buildGateAppendixPage(order) : ""}
 ${sectionPagesWithTransition}
 ${buildClosingPage(order)}
+</body>
+</html>`;
+}
+
+// ─── PREVIEW EXPORT ───────────────────────────────────────────────────────────
+// Produces a curated ~8-page preview PDF:
+// Cover → Welcome → Bodygraph → 2 recognition sections → Teaser
+export function buildPreviewHTML({ order, sections, svgBodygraph }) {
+  const lang = order.language || "nl";
+  const bd = order.birth_data || {};
+  const chart = bd.chart || {};
+  const hasChart = chart.type && Array.isArray(chart.definedCenters);
+
+  const bundledFonts = buildFontCSS();
+  const fontBlock = bundledFonts
+    ? `<style>${bundledFonts}</style>`
+    : `<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>`;
+
+  const previewSections = sections.slice(0, 2);
+  const sectionPages = previewSections
+    .map((s, i) => buildSectionPages(s, i, order))
+    .join("\n");
+
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+${fontBlock}
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  @page { size: A4 portrait; margin: 0; }
+  html, body { width: 210mm; background: #F7F5F0; color-scheme: light; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-family: 'Inter', sans-serif; }
+  @media print {
+    html, body { width: 210mm; }
+    .no-print { display: none !important; }
+  }
+</style>
+</head>
+<body>
+${buildCoverPage(order)}
+${buildPreviewWelcomePage(order)}
+${hasChart && svgBodygraph ? buildBodygraphPage(svgBodygraph, order) : ""}
+${sectionPages}
+${buildPreviewTeaserPage(order)}
 </body>
 </html>`;
 }
