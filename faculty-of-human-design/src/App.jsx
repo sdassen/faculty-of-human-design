@@ -748,31 +748,44 @@ const track = (event, props = {}) => {
 // ─── SEO HELPERS ──────────────────────────────────────────────────────────────
 const SITE = "https://www.facultyhd.com";
 
-function useSEO({ title, description, canonical, jsonLd }) {
+function useSEO({ title, description, canonical, jsonLd, image }) {
   useEffect(() => {
+    const fullTitle = title + " | Faculty of Human Design";
+    const canonicalUrl = canonical || SITE + "/";
+    const locale = LANG === "en" ? "en_US" : "nl_NL";
+    const absImage = image ? (image.startsWith("http") ? image : SITE + image) : null;
+
+    // Helper: get-or-create a <meta> tag and set its content
+    const setMeta = (selector, attr, attrVal, value) => {
+      let el = document.querySelector(selector);
+      if (!el) { el = document.createElement("meta"); el.setAttribute(attr, attrVal); document.head.appendChild(el); }
+      el.content = value;
+    };
+
     // Title
-    document.title = title + " | Faculty of Human Design";
+    document.title = fullTitle;
     // Description
-    let meta = document.querySelector('meta[name="description"]');
-    if (!meta) { meta = document.createElement("meta"); meta.name = "description"; document.head.appendChild(meta); }
-    meta.content = description;
-    // OG title
-    let ogT = document.querySelector('meta[property="og:title"]');
-    if (!ogT) { ogT = document.createElement("meta"); ogT.setAttribute("property","og:title"); document.head.appendChild(ogT); }
-    ogT.content = title + " | Faculty of Human Design";
-    // OG description
-    let ogD = document.querySelector('meta[property="og:description"]');
-    if (!ogD) { ogD = document.createElement("meta"); ogD.setAttribute("property","og:description"); document.head.appendChild(ogD); }
-    ogD.content = description;
+    setMeta('meta[name="description"]', "name", "description", description);
+    // OG tags
+    setMeta('meta[property="og:title"]',       "property", "og:title",       fullTitle);
+    setMeta('meta[property="og:description"]', "property", "og:description", description);
+    setMeta('meta[property="og:url"]',         "property", "og:url",         canonicalUrl);
+    setMeta('meta[property="og:locale"]',      "property", "og:locale",      locale);
+    if (absImage) setMeta('meta[property="og:image"]', "property", "og:image", absImage);
+    // Twitter card
+    setMeta('meta[name="twitter:card"]',        "name", "twitter:card",        "summary_large_image");
+    setMeta('meta[name="twitter:title"]',       "name", "twitter:title",       fullTitle);
+    setMeta('meta[name="twitter:description"]', "name", "twitter:description", description);
+    if (absImage) setMeta('meta[name="twitter:image"]', "name", "twitter:image", absImage);
     // Canonical
     let can = document.querySelector('link[rel="canonical"]');
     if (!can) { can = document.createElement("link"); can.rel = "canonical"; document.head.appendChild(can); }
-    can.href = canonical || SITE + "/";
+    can.href = canonicalUrl;
     // GA4 page_view (SPA navigation)
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "page_view", {
-        page_title: title + " | Faculty of Human Design",
-        page_location: canonical || window.location.href,
+        page_title: fullTitle,
+        page_location: canonicalUrl,
       });
     }
     // JSON-LD
@@ -790,7 +803,7 @@ function useSEO({ title, description, canonical, jsonLd }) {
       if (el) el.remove();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [title, description, canonical]);
+  }, [title, description, canonical, image]);
 }
 
 // JSON-LD builders
@@ -3122,6 +3135,7 @@ function HomePage({go}){
     title:lang==="en"?"Human Design Reading — Personal & In-Depth":"Human Design Reading — Persoonlijk & Diepgaand",
     description:lang==="en"?"Receive an in-depth, personal Human Design reading based on your exact birth data. 40+ pages, Swiss Ephemeris precision, delivered as PDF. Founded on Ibiza in 2014. From €45.":"Ontvang een diepgaande, persoonlijke Human Design reading op basis van je exacte geboortedata. 40+ pagina's, Swiss Ephemeris precisie, bezorgd als PDF. Opgericht op Ibiza in 2014. Vanaf €45.",
     canonical:SITE+"/",
+    image:IMGS.hero,
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
       "name":lang==="en"?"Human Design Readings — Faculty of Human Design":"Human Design Readings — Faculty of Human Design",
@@ -3477,6 +3491,7 @@ function WatPage({go}){
     title:isEN?"What is Human Design? — Numerology, Astrology & Self-Recognition":"Wat is Human Design? — Numerologie, Astrologie & Zelfherkenning",
     description:isEN?"Human Design, Numerology and Astrology as three lenses on the same person. Not to explain who you are, but to recognise it.":"Human Design, Numerologie en Astrologie als drie lenzen op dezelfde persoon. Niet om uit te leggen wie je bent, maar om het te herkennen.",
     canonical:SITE+(isEN?"/en/human-design":"/human-design"),
+    image:IMGS.hero,
     jsonLd:{"@context":"https://schema.org","@type":"WebPage","name":isEN?"What is Human Design?":"Wat is Human Design?","url":SITE+(isEN?"/en/human-design":"/human-design")}
   });
 
@@ -3698,6 +3713,7 @@ function RapportenPage({go}){
     title:LANG==="en"?"Human Design Readings — Choose your personal reading":"Human Design Readings — Kies je persoonlijke reading",
     description:LANG==="en"?"Choose from 10 in-depth readings: Human Design Reading, Relationship, Career, Year, Child, Numerology and Birth Horoscope. Personal and delivered within 1 business day. From €45.":"Kies uit 10 diepgaande readings: Human Design Reading, Relationship, Loopbaan, Jaar, Kind, Numerologie en Geboortehoroscoop. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
     canonical:SITE+"/readings",
+    image:IMGS.cosmos,
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
       "name":LANG==="en"?"Human Design Readings":"Human Design Readings",
@@ -3893,6 +3909,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
     title:rptTitle+" — "+rptOutcome,
     description:rptTitle+" — Faculty of Human Design. "+rptIntro.slice(0,160)+" "+rpt.pages+" "+t("report.pages")+". "+t("trust.delivery")+". "+rpt.price+".",
     canonical:SITE+(LANG==="en"?"/en":"")+"/rapport/"+rpt.id,
+    image:IMGS["r_"+rpt.id]||IMGS.hero,
     jsonLd:{
       "@graph":[
         productLD(rpt),
@@ -4277,6 +4294,7 @@ function InzichtenPage({go,articleId}){
     title: al(activeArticle,"title"),
     description: al(activeArticle,"excerpt") || al(activeArticle,"title") + (isEN?" — Read the full article at Faculty of Human Design.":" — Lees het volledige artikel op Faculty of Human Design."),
     canonical: SITE + "/journal/" + String(activeArticle.id),
+    image: (activeArticle.images||[])[0] || IMGS.cosmos,
     jsonLd: {
       "@context":"https://schema.org","@type":"Article",
       "headline": activeArticle.title,
@@ -4290,6 +4308,7 @@ function InzichtenPage({go,articleId}){
     title: isEN?"Insights on Human Design, Numerology & Astrology":"Inzichten over Human Design, Numerologie & Astrologie",
     description: isEN?"Articles on Human Design, Numerology and Astrology. Learn about Type, Strategy, Authority and the origin of Human Design on Ibiza.":"Artikelen over Human Design, Numerologie en Astrologie. Leer meer over Type, Strategie, Autoriteit, Numerologie en de oorsprong van Human Design op Ibiza.",
     canonical: SITE + "/journal",
+    image: IMGS.cosmos,
     jsonLd: {
       "@context":"https://schema.org","@type":"Blog",
       "name":isEN?"Faculty of Human Design — Insights":"Faculty of Human Design — Inzichten",
@@ -4547,6 +4566,7 @@ function OverPage({go}){
     title:isEN?"About — Faculty of Human Design":"Over — Faculty of Human Design",
     description:isEN?"Faculty of Human Design. Personal readings based on Human Design, Numerology and Astrology. Founded on Ibiza.":"Faculty of Human Design. Persoonlijke readings op basis van Human Design, Numerologie en Astrologie. Opgericht op Ibiza.",
     canonical:SITE+(isEN?"/en/philosophy":"/philosophy"),
+    image:IMGS.ibiza,
     jsonLd:{
       "@context":"https://schema.org","@type":"AboutPage",
       "name":isEN?"About Faculty of Human Design":"Over Faculty of Human Design",
@@ -4758,6 +4778,7 @@ function ContactPage(){
     title:"Contact — Faculty of Human Design",
     description:LANG==="en"?"Contact Faculty of Human Design. Questions about readings, orders or Human Design? We respond within 1 business day. Email: info@facultyhd.com":"Neem contact op met Faculty of Human Design. Vragen over readings, bestellingen of Human Design? Wij reageren binnen 1 werkdag. E-mail: info@facultyhd.com",
     canonical:SITE+"/#contact",
+    image:IMGS.hero,
     jsonLd:{
       "@context":"https://schema.org","@type":"ContactPage",
       "name":"Contact — Faculty of Human Design",
@@ -5136,16 +5157,37 @@ function DownloadPage({token}){
 }
 
 // ─── FAQ ITEM (shared) ───────────────────────────────────────────────────────
-function FaqItem({q,a}){
-  const[open,setOpen]=useState(false);
+// Accepts optional controlled props: open + onToggle (for accordion behaviour).
+// Falls back to local state when used standalone.
+function FaqItem({q,a,open:openProp,onToggle}){
+  const[openLocal,setOpenLocal]=useState(false);
+  const controlled=onToggle!==undefined;
+  const open=controlled?openProp:openLocal;
+  const toggle=controlled?onToggle:()=>setOpenLocal(v=>!v);
   return(
     <div style={{borderTop:"1px solid var(--border)",padding:"22px 0"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,cursor:"pointer",textAlign:"left"}} onClick={()=>setOpen(!open)}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:16,cursor:"pointer",textAlign:"left"}} onClick={toggle}>
         <span style={{fontFamily:"var(--font-serif)",fontSize:".98rem",fontWeight:300,color:"var(--text)",lineHeight:1.4}}>{q}</span>
         <span style={{fontFamily:"var(--font-sans)",fontSize:"1.1rem",color:"var(--gold)",flexShrink:0,opacity:.6,transition:"transform .2s",transform:open?"rotate(45deg)":"none"}}>{open?"×":"+"}</span>
       </div>
       {open&&<p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,marginTop:16,paddingRight:32,textAlign:"left"}}>{a}</p>}
     </div>
+  );
+}
+
+// ─── TYPE FAQ SECTION (accordion — only one open at a time) ──────────────────
+function TypeFaqSection({entries}){
+  const[openIdx,setOpenIdx]=useState(null);
+  return(
+    <section className="type-section" style={{background:"var(--bg)"}}>
+      <div style={{maxWidth:720,margin:"0 auto"}}>
+        <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>FAQ</div>
+        {entries.map(([q,a],i)=>(
+          <FaqItem key={i} q={q} a={a} open={openIdx===i} onToggle={()=>setOpenIdx(openIdx===i?null:i)}/>
+        ))}
+        <div style={{borderTop:"1px solid var(--border)"}}/>
+      </div>
+    </section>
   );
 }
 
@@ -5343,6 +5385,7 @@ function TypePage({typeId,go}){
       ? `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategy: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. Not-self: ${tl2(tp.notSelf)}. ${tl2(tp.population)} of the world's population.`
       : `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategie: ${tl2(tp.strategy)}. Signatuur: ${tl2(tp.signature)}. Niet-zelf: ${tl2(tp.notSelf)}. ${tl2(tp.population)} van de bevolking.`,
     canonical: SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`),
+    image: tp.img,
     jsonLd:{
       "@context":"https://schema.org",
       "@graph":[
@@ -5450,15 +5493,7 @@ function TypePage({typeId,go}){
 
       {/* ── FAQ ── */}
       {typeFaqEntries.length>0&&(
-        <section className="type-section" style={{background:"var(--bg)"}}>
-          <div style={{maxWidth:720,margin:"0 auto"}}>
-            <div style={{fontSize:".55rem",fontWeight:600,letterSpacing:".16em",textTransform:"uppercase",color:"var(--gold)",marginBottom:40}}>FAQ</div>
-            {typeFaqEntries.map(([q,a],i)=>(
-              <FaqItem key={i} q={q} a={a}/>
-            ))}
-            <div style={{borderTop:"1px solid var(--border)"}}/>
-          </div>
-        </section>
+        <TypeFaqSection entries={typeFaqEntries}/>
       )}
 
       {/* ── LEES OOK — Journal s6 ── */}
