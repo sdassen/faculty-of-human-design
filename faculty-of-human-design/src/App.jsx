@@ -5337,11 +5337,11 @@ function TypePage({typeId,go}){
 
   useSEO({
     title: isEN
-      ? `${tl2(tp.title)} Human Design — ${tl2(tp.strategy)} & ${tl2(tp.signature)} | Faculty of Human Design`
-      : `${tl2(tp.title)} Human Design — Strategie, Energie & Autoriteit | Faculty of Human Design`,
+      ? `${tl2(tp.title)} in Human Design — ${tl2(tp.tagline)} | Faculty of Human Design`
+      : `${tl2(tp.title)} in Human Design — ${tl2(tp.tagline)} | Faculty of Human Design`,
     description: isEN
-      ? `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategy: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. ${tl2(tp.population)} of the world's population. Discover your complete Human Design reading.`
-      : `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategie: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. ${tl2(tp.population)} van de wereldbevolking. Ontdek je volledige Human Design reading.`,
+      ? `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategy: ${tl2(tp.strategy)}. Signature: ${tl2(tp.signature)}. Not-self: ${tl2(tp.notSelf)}. ${tl2(tp.population)} of the world's population.`
+      : `${tl2(tp.title)}: ${tl2(tp.tagline)}. Strategie: ${tl2(tp.strategy)}. Signatuur: ${tl2(tp.signature)}. Niet-zelf: ${tl2(tp.notSelf)}. ${tl2(tp.population)} van de bevolking.`,
     canonical: SITE+(isEN?`/en/type/${tp.slug}`:`/type/${tp.slug}`),
     jsonLd:{
       "@context":"https://schema.org",
