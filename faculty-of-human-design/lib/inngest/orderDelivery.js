@@ -1461,6 +1461,33 @@ function buildYearReportContext(order, isEN) {
   const q4 = qLabel(9);
   const end = qLabel(12);
 
+  // ── Personal year number (numerology 1–9) ────────────────────────────────
+  const reduceNum = (n) => { while (n > 9) n = String(n).split("").reduce((s, d) => s + Number(d), 0); return n; };
+  const personalYearNum = reduceNum(day + month + q1.year);
+  const personalYearMeaning = isEN ? [
+    "", // 0 unused
+    "Personal year 1 — new beginning: planting seeds, taking initiative, independence, starting fresh",
+    "Personal year 2 — patience and cooperation: deepening relationships, subtle growth, listening, waiting",
+    "Personal year 3 — expression and creativity: social energy, communication, joy, outward expansion",
+    "Personal year 4 — building and structure: laying foundations, discipline, hard work, stability",
+    "Personal year 5 — change and freedom: unexpected turns, release of the old, movement, transition",
+    "Personal year 6 — responsibility and care: home, relationships, harmony, service to others",
+    "Personal year 7 — reflection and depth: inner growth, study, withdrawal, spiritual deepening",
+    "Personal year 8 — harvest and power: career, manifestation, finances, reaping what was sown",
+    "Personal year 9 — completion and release: closing cycles, forgiveness, letting go, making space for what comes next",
+  ][personalYearNum] : [
+    "",
+    "Persoonlijk jaar 1 — nieuw begin: zaad planten, initiatief nemen, onafhankelijkheid, opnieuw beginnen",
+    "Persoonlijk jaar 2 — geduld en samenwerking: relaties verdiepen, subtiele groei, luisteren, afwachten",
+    "Persoonlijk jaar 3 — expressie en creativiteit: sociale energie, communicatie, vreugde, naar buiten treden",
+    "Persoonlijk jaar 4 — bouwen en structuur: fundament leggen, discipline, hard werken, stabiliteit",
+    "Persoonlijk jaar 5 — verandering en vrijheid: onverwachte wendingen, het oude loslaten, beweging, transitie",
+    "Persoonlijk jaar 6 — verantwoordelijkheid en zorg: thuis, relaties, harmonie, voor anderen zorgen",
+    "Persoonlijk jaar 7 — reflectie en diepte: innerlijke groei, studie, terugtrekken, spirituele verdieping",
+    "Persoonlijk jaar 8 — oogsten en kracht: carrière, manifestatie, financiën, plukken wat gezaaid is",
+    "Persoonlijk jaar 9 — afsluiting en loslaten: cycli afronden, vergeven, ruimte maken voor wat komt",
+  ][personalYearNum];
+
   if (isEN) {
     return `\n\nANNUAL READING — YEAR START CONTEXT (MANDATORY):
 The personal year does NOT start on January 1st. It starts on the customer's birthday.
@@ -1469,6 +1496,7 @@ Personal year: ${day} ${q1.name} ${q1.year} → ${day} ${end.name} ${end.year}
 - Quarter 2 (Q2): ${q2.name} ${q2.year} – ${q3.name} ${q3.year}
 - Quarter 3 (Q3): ${q3.name} ${q3.year} – ${q4.name} ${q4.year}
 - Quarter 4 (Q4): ${q4.name} ${q4.year} – ${end.name} ${end.year}
+Numerology: ${personalYearMeaning}
 NEVER write "make a list in January", "start of the year in January", or anything implying the year begins in January. All quarter and year references must be anchored to these birthday-relative dates.`;
   } else {
     return `\n\nJAARRAPPORT — JAARSTART CONTEXT (VERPLICHT):
@@ -1478,6 +1506,7 @@ Persoonlijk jaar: ${day} ${q1.name} ${q1.year} → ${day} ${end.name} ${end.year
 - Kwartaal 2 (K2): ${q2.name} ${q2.year} – ${q3.name} ${q3.year}
 - Kwartaal 3 (K3): ${q3.name} ${q3.year} – ${q4.name} ${q4.year}
 - Kwartaal 4 (K4): ${q4.name} ${q4.year} – ${end.name} ${end.year}
+Numerologie: ${personalYearMeaning}
 Schrijf NOOIT "je maakt een lijstje voor januari", "begin van het jaar in januari" of iets dat impliceert dat het jaar in januari begint. Alle kwartaal- en jaarreferenties moeten verankerd zijn aan deze verjaardag-relatieve data.`;
   }
 }
