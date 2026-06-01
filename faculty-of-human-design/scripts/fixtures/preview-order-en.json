@@ -1,0 +1,37 @@
+{
+  "id": "preview-sample-en",
+  "customer_name": "Sophie Clarke",
+  "customer_email": "sophie@example.com",
+  "report_title": "Complete Human Design Reading",
+  "report_id": "volledig",
+  "language": "en",
+  "birth_data": {
+    "firstName": "Sophie",
+    "day": 15,
+    "month": 3,
+    "year": 1990,
+    "hour": 14,
+    "minute": 30,
+    "place": "London, United Kingdom",
+    "tz": 0,
+    "chart": {
+      "type": "Generator",
+      "strat": "Wait to respond",
+      "auth": "Emotional",
+      "profile": "4/6",
+      "sig": "Satisfaction",
+      "notSelf": "Frustration",
+      "cross": "Right Angle Cross of Duality (4/49 | 23/43)",
+      "definedCenters": ["Sacral", "Solar Plexus", "Throat"],
+      "openCenters": ["Head", "Ajna", "Heart", "Spleen", "G-Centre", "Root"],
+      "channels": [
+        { "g1": "35", "g2": "36", "c1": "Throat", "c2": "Solar Plexus" },
+        { "g1": "12", "g2": "22", "c1": "Throat", "c2": "Solar Plexus" }
+      ],
+      "allGates": [4, 12, 15, 22, 35, 36, 46, 52, 56, 59],
+      "lp": 5,
+      "exp": 6,
+      "sun_sign": "Pisces"
+    }
+  }
+}
