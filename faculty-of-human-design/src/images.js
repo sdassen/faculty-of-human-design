@@ -35,7 +35,7 @@ export const IMGS = {
   w_precision:  "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
 
   // 'Waarom anders' blok — middelste foto (diepte)
-  w_depth:      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&auto=format&fit=crop&q=80",
+  w_depth:      "/img-table-book.jpg",
 
   // 'Waarom anders' blok — rechter foto (Ibiza, Es Vedrà)
   w_ibiza:      "/img-ibiza-moon.jpg",
@@ -67,7 +67,7 @@ export const IMGS = {
   r_relatie_familie:  "/img-family-hero.jpg",
   r_jaar:             "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
   r_kind:             "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&auto=format&fit=crop&q=80",
-  r_loopbaan:         "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80",
+  r_loopbaan:         "/img_business-woman.jpg",
   r_numerologie:      "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=900&auto=format&fit=crop&q=80",
   r_horoscoop:        "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=900&auto=format&fit=crop&q=80",
   r_maandelijks:      "/img-moon-sub-hero.jpg",

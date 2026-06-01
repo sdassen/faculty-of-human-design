@@ -99,6 +99,7 @@ const ROUTES = [
     title: 'Loopbaan Reading — Verdien geld op een manier die bij je past | Faculty of Human Design',
     description: 'Werk en financiën vanuit je Human Design. Ideale werkomgeving, hoe je geld aantrekt, professionele kracht en financiële strategie. 24+ pagina\'s. Bezorgd binnen 1 werkdag. €65.',
     canonical: `${SITE}/rapport/loopbaan`,
+    ogImage: `${SITE}/img_business-woman.jpg`,
   },
   {
     path: '/rapport/numerologie',
@@ -357,6 +358,7 @@ const ROUTES = [
     title: 'Career & Money Reading — Earn money in a way that suits you | Faculty of Human Design',
     description: 'Work and finances through your Human Design. Ideal work environment, how you attract money, professional strengths and financial strategy. 24+ pages. Delivered within 1 business day. €65.',
     canonical: `${SITE}/en/rapport/loopbaan`,
+    ogImage: `${SITE}/img_business-woman.jpg`,
   },
   {
     path: '/en/rapport/numerologie',
