@@ -1789,6 +1789,53 @@ Deze regel geldt voor elke zin in elke sectie — geen uitzonderingen.${relation
   }
 }
 
+// ─── MAANDELIJKS REPORT CONTEXT ───────────────────────────────────────────────
+// Injects current month + lunar phase so the AI writes for NOW, not generically.
+function buildMaandelijksContext(order, isEN) {
+  const months = isEN ? MONTHS_EN : MONTHS_NL;
+  const now = new Date();
+  const currentMonth = months[now.getMonth()];
+  const currentYear  = now.getFullYear();
+
+  // Approximate lunar phase — reference: new moon Jan 29 2025
+  const refNewMoon  = new Date(2025, 0, 29);
+  const LUNAR_MONTH = 29.53059;
+  const daysSinceRef = (now - refNewMoon) / 864e5;
+  const cycleDay = ((daysSinceRef % LUNAR_MONTH) + LUNAR_MONTH) % LUNAR_MONTH;
+
+  // Next new moon and full moon
+  const daysToNewMoon  = LUNAR_MONTH - cycleDay;
+  const daysToFullMoon = ((LUNAR_MONTH / 2) - cycleDay + LUNAR_MONTH) % LUNAR_MONTH;
+  const fmtDate = (d) => `${d.getDate()} ${months[d.getMonth()]}`;
+  const newMoonDate  = new Date(now.getTime() + daysToNewMoon  * 864e5);
+  const fullMoonDate = new Date(now.getTime() + daysToFullMoon * 864e5);
+
+  const phase = cycleDay < 3.7  ? (isEN ? "new moon — new beginning, setting intentions"           : "nieuwe maan — nieuw begin, intenties zetten")
+    : cycleDay < 7.4  ? (isEN ? "waxing crescent — building energy, first steps"             : "wassende sikkel — opbouwende energie, eerste stappen")
+    : cycleDay < 11.1 ? (isEN ? "first quarter — action, momentum, decisions"                : "eerste kwartier — actie, momentum, beslissingen")
+    : cycleDay < 14.8 ? (isEN ? "waxing gibbous — refinement, preparation, anticipation"     : "wassende maan — verfijning, voorbereiding, anticiperen")
+    : cycleDay < 18.5 ? (isEN ? "full moon — culmination, clarity, release, high sensitivity" : "volle maan — hoogtepunt, helderheid, loslaten, hoge gevoeligheid")
+    : cycleDay < 22.2 ? (isEN ? "waning gibbous — integration, gratitude, processing"        : "afnemende maan — integratie, dankbaarheid, verwerking")
+    : cycleDay < 25.9 ? (isEN ? "last quarter — letting go, clearing, space-making"          : "laatste kwartier — loslaten, ruimte vrijmaken")
+    :                   (isEN ? "waning crescent — rest, reflection, preparing for new cycle" : "afnemende sikkel — rust, reflectie, voorbereiding nieuwe cyclus");
+
+  if (isEN) {
+    return `\n\nMONTHLY READING — CURRENT MONTH CONTEXT:
+Month: ${currentMonth} ${currentYear}
+Current moon phase: ${phase}
+Next new moon: approximately ${fmtDate(newMoonDate)}
+Next full moon: approximately ${fmtDate(fullMoonDate)}
+Write specifically for ${currentMonth} — not generically. Use the lunar rhythm as a structural backbone where relevant. Every section should feel anchored in this specific month and phase.`;
+  } else {
+    return `\n\nMAANDELIJKS READING — HUIDIGE MAAND CONTEXT:
+Maand: ${currentMonth} ${currentYear}
+Huidige maanfase: ${phase}
+Volgende nieuwe maan: circa ${fmtDate(newMoonDate)}
+Volgende volle maan: circa ${fmtDate(fullMoonDate)}
+Schrijf specifiek voor ${currentMonth} — niet generiek. Gebruik het maanritme als structurele ruggengraat waar relevant. Elke sectie moet verankerd voelen in deze specifieke maand en fase.`;
+  }
+}
+
 // ─── YEAR REPORT CONTEXT ──────────────────────────────────────────────────────
 // For Annual Reading reports the personal year starts on the customer's birthday,
 // NOT on January 1st. Without explicit context Claude defaults to calendar year,
@@ -2015,6 +2062,10 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const isRelatieReport = (report_id || "").toLowerCase().startsWith("relatie_");
   const relatieBlock = isRelatieReport ? buildRelatieContext(order, lang === "en") : "";
 
+  // ── Maandelijks report: current month + lunar phase context ──────────────
+  const isMaandelijks = report_id === "maandelijks";
+  const maandelijksBlock = isMaandelijks ? buildMaandelijksContext(order, lang === "en") : "";
+
   // ── Kind/familie rapport: age-specific writing instruction ───────────────
   const kindAgeBlock = (() => {
     const isFamilieKind = (report_id || "").toLowerCase() === "relatie_familie"
@@ -2048,7 +2099,7 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
   const criticalAlert = buildCriticalAlert(chart, lang === "en", partnerChart);
 
   const prompt = lang === "en"
-    ? `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
+    ? `${criticalAlert}${chartCtx}${yearBlock}${maandelijksBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
 
 Write section "${sectionTitle}" for ${displayName}.
 
@@ -2061,7 +2112,7 @@ RULES (strict):
 - Anchor EVERY kern paragraph in concrete chart data from the chart context
 - kern 480–560 words total — fill the page with substance; two rich pages are better than one thin one
 - Do NOT repeat any channel, center, or profile description already covered in a previous section — a brief reference is allowed`
-    : `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
+    : `${criticalAlert}${chartCtx}${yearBlock}${maandelijksBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
 
 Schrijf sectie "${sectionTitle}" voor ${displayName}.
 
