@@ -1325,12 +1325,15 @@ function getSystemPrompt(lang, reportId) {
 // ─── BUILD CHART CONTEXT ──────────────────────────────────────────────────────
 function buildChartContext(order) {
   const { birth_data, report_title, customer_name } = order;
-  const bd = birth_data || {};
-  const chart = bd.chart || {};
+  const bd  = birth_data || {};
   const isEN = order.language === "en";
-  // For kinderrapport the report is ABOUT the child, not the ordering parent
-  const isKindReport = order.report_id === "kind";
+  const isKindReport   = order.report_id === "kind";
+  const isRelatieReport = (order.report_id || "").startsWith("relatie_");
   const pbd = order.partner_birth_data || {};
+
+  // For kind reports the CHILD is the subject — use pbd as primary, bd as context
+  const primary = isKindReport ? pbd : bd;
+  const primaryChart = primary.chart || {};
   const displayName = isKindReport
     ? (pbd.firstName || pbd.name || bd.firstName || customer_name)
     : (bd.firstName || customer_name);
@@ -1341,9 +1344,11 @@ function buildChartContext(order) {
       ? `${isEN ? "Child first name (the report is about this child — use this name in the text)" : "Voornaam kind (het rapport gaat over dit kind — gebruik deze naam in de tekst)"}: ${displayName}`
       : `${isEN ? "Client first name (use this name in the text)" : "Voornaam klant (gebruik deze naam in de tekst)"}: ${displayName}`,
   ];
-  if (bd.day)           lines.push(`${isEN ? "Date of birth" : "Geboortedatum"}: ${bd.day}-${bd.month}-${bd.year}`);
-  if (bd.hour != null)  lines.push(`${isEN ? "Time of birth" : "Geboortetijd"}: ${bd.hour}:${String(bd.minute || 0).padStart(2, "0")}`);
-  if (bd.place)         lines.push(`${isEN ? "Place of birth" : "Geboorteplaats"}: ${bd.place}`);
+
+  // Birth data from the PRIMARY subject
+  if (primary.day)          lines.push(`${isEN ? "Date of birth" : "Geboortedatum"}: ${primary.day}-${primary.month}-${primary.year}`);
+  if (primary.hour != null) lines.push(`${isEN ? "Time of birth" : "Geboortetijd"}: ${primary.hour}:${String(primary.minute || 0).padStart(2, "0")}`);
+  if (primary.place)        lines.push(`${isEN ? "Place of birth" : "Geboorteplaats"}: ${primary.place}`);
 
   // For kinderrapport: inject child age + phase-specific writing guidance
   if (isKindReport && pbd.year) {
@@ -1371,37 +1376,53 @@ function buildChartContext(order) {
     lines.push(`${isEN ? "Age phase — IMPORTANT: adapt all language, examples and situations to this phase" : "Leeftijdsfase — BELANGRIJK: pas alle taal, voorbeelden en situaties aan op deze fase"}: ${ageCategory}`);
   }
 
-  if (chart.type)       lines.push(`HD Type: ${chart.type}`);
-  if (chart.definition) lines.push(`${isEN ? "Definition" : "Definitie"}: ${chart.definition}`);
-  if (chart.strat)      lines.push(`${isEN ? "Strategy" : "Strategie"}: ${chart.strat}`);
-  if (chart.auth)       lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
-  if (chart.profile) lines.push(`${isEN ? "Profile" : "Profiel"}: ${chart.profile}`);
-  if (chart.sig)     lines.push(`${isEN ? "Signature" : "Signatuur"}: ${chart.sig}`);
-  if (chart.notSelf) lines.push(`${isEN ? "Not-Self theme" : "Not-Self thema"}: ${chart.notSelf}`);
-  if (chart.cross)   lines.push(`${isEN ? "Incarnation Cross gates" : "Inkarnatie-Kruis poorten"}: ${chart.cross}`);
+  // Full chart from PRIMARY subject
+  if (primaryChart.type)       lines.push(`HD Type: ${primaryChart.type}`);
+  if (primaryChart.definition) lines.push(`${isEN ? "Definition" : "Definitie"}: ${primaryChart.definition}`);
+  if (primaryChart.strat)      lines.push(`${isEN ? "Strategy" : "Strategie"}: ${primaryChart.strat}`);
+  if (primaryChart.auth)       lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${primaryChart.auth}`);
+  if (primaryChart.profile)    lines.push(`${isEN ? "Profile" : "Profiel"}: ${primaryChart.profile}`);
+  if (primaryChart.sig)        lines.push(`${isEN ? "Signature" : "Signatuur"}: ${primaryChart.sig}`);
+  if (primaryChart.notSelf)    lines.push(`${isEN ? "Not-Self theme" : "Not-Self thema"}: ${primaryChart.notSelf}`);
+  if (primaryChart.cross)      lines.push(`${isEN ? "Incarnation Cross gates" : "Inkarnatie-Kruis poorten"}: ${primaryChart.cross}`);
+  if (primaryChart.definedCenters?.length)
+    lines.push(`${isEN ? "Defined centers" : "Gedefinieerde centra"}: ${primaryChart.definedCenters.join(", ")}`);
+  if (primaryChart.openCenters?.length)
+    lines.push(`${isEN ? "Open centers" : "Open centra"}: ${primaryChart.openCenters.join(", ")}`);
+  if (primaryChart.channels?.length)
+    lines.push(`${isEN ? "Active channels" : "Actieve kanalen"}: ${primaryChart.channels.map((c) => `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`).join(", ")}`);
+  if (primaryChart.allGates?.length)
+    lines.push(`${isEN ? "All active gates" : "Alle actieve poorten"}: ${primaryChart.allGates.join(", ")}`);
+  if (primaryChart.lp)       lines.push(`${isEN ? "Life Path number" : "Levenspadgetal"}: ${primaryChart.lp}`);
+  if (primaryChart.exp)      lines.push(`${isEN ? "Expression number" : "Uitdrukkingsgetal"}: ${primaryChart.exp}`);
+  if (primaryChart.sun_sign) lines.push(`${isEN ? "Sun sign" : "Zonneteken"}: ${primaryChart.sun_sign}`);
 
-  if (chart.definedCenters?.length)
-    lines.push(`${isEN ? "Defined centers" : "Gedefinieerde centra"}: ${chart.definedCenters.join(", ")}`);
-  if (chart.openCenters?.length)
-    lines.push(`${isEN ? "Open centers" : "Open centra"}: ${chart.openCenters.join(", ")}`);
-  if (chart.channels?.length)
-    lines.push(`${isEN ? "Active channels" : "Actieve kanalen"}: ${chart.channels.map((c) => `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`).join(", ")}`);
-  if (chart.allGates?.length)
-    lines.push(`${isEN ? "All active gates" : "Alle actieve poorten"}: ${chart.allGates.join(", ")}`);
-
-  if (chart.lp)       lines.push(`${isEN ? "Life Path number" : "Levenspadgetal"}: ${chart.lp}`);
-  if (chart.exp)      lines.push(`${isEN ? "Expression number" : "Uitdrukkingsgetal"}: ${chart.exp}`);
-  if (chart.sun_sign) lines.push(`${isEN ? "Sun sign" : "Zonneteken"}: ${chart.sun_sign}`);
-
-  if (order.partner_birth_data) {
-    const p = order.partner_birth_data;
-    const pc = p.chart || {};
-    const partnerDisplayName = p.firstName || p.name || "Partner";
-    lines.push(`\n${isEN ? "Partner/second person (first name only)" : "Partner/tweede persoon (voornaam)"}: ${partnerDisplayName}, ${isEN ? "born" : "geboren"} ${p.day}-${p.month}-${p.year}`);
-    if (pc.type)    lines.push(`${isEN ? "Partner HD Type" : "Partner HD Type"}: ${pc.type}`);
-    if (pc.auth)    lines.push(`${isEN ? "Partner Authority" : "Partner Autoriteit"}: ${pc.auth}`);
-    if (pc.profile) lines.push(`${isEN ? "Partner Profile" : "Partner Profiel"}: ${pc.profile}`);
-    if (pc.definedCenters?.length) lines.push(`${isEN ? "Partner defined centers" : "Partner gedefinieerde centra"}: ${pc.definedCenters.join(", ")}`);
+  // Secondary person block
+  if (isKindReport) {
+    // Parent is secondary — name + birthdate only (report is about the child)
+    const parentName = bd.firstName || customer_name;
+    lines.push(`\n${isEN ? "Parent/ordering person (context only — report is about the child above)" : "Ouder/aanvrager (alleen context — rapport gaat over het kind hierboven)"}: ${parentName}, ${isEN ? "born" : "geboren"} ${bd.day}-${bd.month}-${bd.year}`);
+  } else if (order.partner_birth_data) {
+    // Relatie reports: full partner chart for relationship dynamics
+    const p   = pbd;
+    const pc  = p.chart || {};
+    const name2 = p.firstName || p.name || (isEN ? "second person" : "tweede persoon");
+    lines.push(`\n${isEN ? "Second person" : "Tweede persoon"}: ${name2}, ${isEN ? "born" : "geboren"} ${p.day}-${p.month}-${p.year}`);
+    if (pc.type)       lines.push(`${isEN ? "HD Type" : "HD Type"}: ${pc.type}`);
+    if (pc.definition) lines.push(`${isEN ? "Definition" : "Definitie"}: ${pc.definition}`);
+    if (pc.strat)      lines.push(`${isEN ? "Strategy" : "Strategie"}: ${pc.strat}`);
+    if (pc.auth)       lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${pc.auth}`);
+    if (pc.profile)    lines.push(`${isEN ? "Profile" : "Profiel"}: ${pc.profile}`);
+    if (pc.sig)        lines.push(`${isEN ? "Signature" : "Signatuur"}: ${pc.sig}`);
+    if (pc.notSelf)    lines.push(`${isEN ? "Not-Self theme" : "Not-Self thema"}: ${pc.notSelf}`);
+    if (pc.definedCenters?.length)
+      lines.push(`${isEN ? "Defined centers" : "Gedefinieerde centra"}: ${pc.definedCenters.join(", ")}`);
+    if (pc.openCenters?.length)
+      lines.push(`${isEN ? "Open centers" : "Open centra"}: ${pc.openCenters.join(", ")}`);
+    if (pc.channels?.length)
+      lines.push(`${isEN ? "Active channels" : "Actieve kanalen"}: ${pc.channels.map((c) => `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`).join(", ")}`);
+    if (pc.allGates?.length)
+      lines.push(`${isEN ? "All active gates" : "Alle actieve poorten"}: ${pc.allGates.join(", ")}`);
   }
 
   return lines.join("\n");
@@ -1492,17 +1513,26 @@ function shouldUseDeepThinking(sectionTitle) {
 // Prepended to every user prompt so the AI cannot miss the key chart facts.
 // This is the primary defence against the model hallucinating wrong type /
 // authority / channels when handling multiple concurrent sections.
-function buildCriticalAlert(chart, isEN) {
-  const lines = [];
-  if (chart.type)    lines.push(`  ${isEN ? "Type" : "Type"}: ${chart.type}`);
-  if (chart.auth)    lines.push(`  ${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
-  if (chart.profile) lines.push(`  ${isEN ? "Profile" : "Profiel"}: ${chart.profile}`);
+function buildCriticalAlert(chart, isEN, partnerChart = null) {
+  const chartLines = (c, prefix = "") => {
+    const l = [];
+    if (c.type)       l.push(`  ${prefix}Type: ${c.type}`);
+    if (c.definition) l.push(`  ${prefix}${isEN ? "Definition" : "Definitie"}: ${c.definition}`);
+    if (c.auth)       l.push(`  ${prefix}${isEN ? "Authority" : "Autoriteit"}: ${c.auth}`);
+    if (c.profile)    l.push(`  ${prefix}${isEN ? "Profile" : "Profiel"}: ${c.profile}`);
+    if (c.channels && c.channels.length) {
+      const channelStr = c.channels.map(function(ch) { return `${ch.g1}-${ch.g2} (${ch.c1}↔${ch.c2})`; }).join(", ");
+      l.push(`  ${prefix}${isEN ? "Active channels (ONLY these exist)" : "Actieve kanalen (ALLEEN deze bestaan)"}: ${channelStr}`);
+    } else {
+      l.push(`  ${prefix}${isEN ? "Active channels: NONE" : "Actieve kanalen: GEEN"}`);
+    }
+    return l;
+  };
 
-  if (chart.channels && chart.channels.length) {
-    const channelStr = chart.channels.map(function(c) { return `${c.g1}-${c.g2} (${c.c1}↔${c.c2})`; }).join(", ");
-    lines.push(`  ${isEN ? "Active channels (ONLY these exist)" : "Actieve kanalen (ALLEEN deze bestaan)"}: ${channelStr}`);
-  } else {
-    lines.push(`  ${isEN ? "Active channels: NONE" : "Actieve kanalen: GEEN"}`);
+  const lines = chartLines(chart);
+  if (partnerChart) {
+    const p2label = isEN ? "Person 2 — " : "Persoon 2 — ";
+    lines.push(...chartLines(partnerChart, p2label));
   }
 
   if (!lines.length) return "";
@@ -1510,13 +1540,13 @@ function buildCriticalAlert(chart, isEN) {
   if (isEN) {
     return `⚠️ CRITICAL CHART CHECK — READ THIS FIRST, VERIFY BEFORE FINISHING:
 ${lines.join("\n")}
-If your output mentions any type, authority, or channel NOT listed above → it is FACTUALLY WRONG. Delete and rewrite those sentences.
+If your output mentions any type, authority, definition or channel NOT listed above → it is FACTUALLY WRONG. Delete and rewrite those sentences.
 
 `;
   } else {
     return `⚠️ KRITIEKE CHARTCONTROLE — LEES DIT EERST, CONTROLEER VOOR JE KLAAR BENT:
 ${lines.join("\n")}
-Als jouw tekst een type, autoriteit of kanaal noemt dat HIERBOVEN NIET STAAT → het is FEITELIJK ONJUIST. Verwijder die zinnen en herschrijf.
+Als jouw tekst een type, autoriteit, definitie of kanaal noemt dat HIERBOVEN NIET STAAT → het is FEITELIJK ONJUIST. Verwijder die zinnen en herschrijf.
 
 `;
   }
@@ -1642,7 +1672,17 @@ function buildYearReportContext(order, isEN) {
   const bd = order.birth_data || {};
   const day   = bd.day;
   const month = bd.month;   // 1-indexed
+  const year  = bd.year;
   if (!day || !month) return "";
+
+  // Calculate current age
+  let personAge = null;
+  if (year) {
+    const now = new Date();
+    personAge = now.getFullYear() - year;
+    const md = now.getMonth() - (month - 1);
+    if (md < 0 || (md === 0 && now.getDate() < day)) personAge--;
+  }
 
   const months = isEN ? MONTHS_EN : MONTHS_NL;
   const m0 = month - 1; // 0-indexed
@@ -1685,9 +1725,13 @@ function buildYearReportContext(order, isEN) {
     "Persoonlijk jaar 9 — afsluiting en loslaten: cycli afronden, vergeven, ruimte maken voor wat komt",
   ][personalYearNum];
 
+  const ageLine = personAge !== null
+    ? (isEN ? `Age: ${personAge} years old` : `Leeftijd: ${personAge} jaar`)
+    : "";
+
   if (isEN) {
     return `\n\nANNUAL READING — YEAR START CONTEXT (MANDATORY):
-The personal year does NOT start on January 1st. It starts on the customer's birthday.
+The personal year does NOT start on January 1st. It starts on the customer's birthday.${ageLine ? `\n${ageLine}` : ""}
 Personal year: ${day} ${q1.name} ${q1.year} → ${day} ${end.name} ${end.year}
 - Quarter 1 (Q1): ${q1.name} ${q1.year} – ${q2.name} ${q2.year}
 - Quarter 2 (Q2): ${q2.name} ${q2.year} – ${q3.name} ${q3.year}
@@ -1697,7 +1741,7 @@ Numerology: ${personalYearMeaning}
 NEVER write "make a list in January", "start of the year in January", or anything implying the year begins in January. All quarter and year references must be anchored to these birthday-relative dates.`;
   } else {
     return `\n\nJAARRAPPORT — JAARSTART CONTEXT (VERPLICHT):
-Het persoonlijk jaar begint NIET op 1 januari. Het begint op de verjaardag van de klant.
+Het persoonlijk jaar begint NIET op 1 januari. Het begint op de verjaardag van de klant.${ageLine ? `\n${ageLine}` : ""}
 Persoonlijk jaar: ${day} ${q1.name} ${q1.year} → ${day} ${end.name} ${end.year}
 - Kwartaal 1 (K1): ${q1.name} ${q1.year} – ${q2.name} ${q2.year}
 - Kwartaal 2 (K2): ${q2.name} ${q2.year} – ${q3.name} ${q3.year}
@@ -1869,7 +1913,8 @@ async function generateSectionText(sectionTitle, order, previousSections, attemp
         : `\n\n📚 STRUCTURELE LESSEN UIT EERDERE REVISIES — pas deze toe op elke sectie:\n${lessons.map((l, i) => `${i + 1}. ${l}`).join("\n")}`)
     : "";
 
-  const criticalAlert = buildCriticalAlert(chart, lang === "en");
+  const partnerChart = isRelatieReport ? ((order.partner_birth_data || {}).chart || null) : null;
+  const criticalAlert = buildCriticalAlert(chart, lang === "en", partnerChart);
 
   const prompt = lang === "en"
     ? `${criticalAlert}${chartCtx}${yearBlock}${relatieBlock}${canonBlock}${prevBlock}${retryBlock}${revisionBlock}${lessonsBlock}${kindAgeBlock}
