@@ -16,6 +16,7 @@
     "tz": 0,
     "chart": {
       "type": "Generator",
+      "definition": "Split Definition",
       "strat": "Wait to respond",
       "auth": "Emotional",
       "profile": "4/6",

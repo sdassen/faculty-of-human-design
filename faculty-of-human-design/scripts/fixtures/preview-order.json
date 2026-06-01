@@ -16,6 +16,7 @@
     "tz": 1,
     "chart": {
       "type": "Generator",
+      "definition": "Gesplitste Definitie",
       "strat": "Wacht op te reageren",
       "auth": "Emotioneel",
       "profile": "4/6",

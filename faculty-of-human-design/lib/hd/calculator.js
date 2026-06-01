@@ -383,6 +383,38 @@ export function calcHDServer({ day, month, year, hour = 12, minute = 0, tz = 1 }
   }
   const openCenters = ALL_CENTERS.filter((c) => !definedCenters.has(c));
 
+  // ── Definition type (connected components among defined centers) ─────────
+  const definition = (() => {
+    const arr = [...definedCenters];
+    if (arr.length === 0) return "No Definition";
+    const adj = {};
+    for (const c of arr) adj[c] = [];
+    for (const ch of channels) {
+      if (adj[ch.c1] !== undefined && adj[ch.c2] !== undefined) {
+        adj[ch.c1].push(ch.c2);
+        adj[ch.c2].push(ch.c1);
+      }
+    }
+    const visited = new Set();
+    let count = 0;
+    for (const c of arr) {
+      if (!visited.has(c)) {
+        count++;
+        const queue = [c];
+        while (queue.length) {
+          const node = queue.shift();
+          if (visited.has(node)) continue;
+          visited.add(node);
+          for (const nb of adj[node]) if (!visited.has(nb)) queue.push(nb);
+        }
+      }
+    }
+    if (count === 1) return "Single Definition";
+    if (count === 2) return "Split Definition";
+    if (count === 3) return "Triple Split Definition";
+    return "Quadruple Split Definition";
+  })();
+
   // ── Type / Strategy / Signature / Not-Self ───────────────────────────────
   const { type, strat, sig, notSelf } = determineType(definedCenters);
   const auth = determineAuthority(definedCenters, type);
@@ -395,6 +427,7 @@ export function calcHDServer({ day, month, year, hour = 12, minute = 0, tz = 1 }
 
   return {
     type, strat, auth, profile, sig, notSelf, cross,
+    definition,
     definedCenters: [...definedCenters],
     openCenters,
     channels,

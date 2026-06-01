@@ -1080,9 +1080,10 @@ function buildChartContext(order) {
     lines.push(`${isEN ? "Age phase — IMPORTANT: adapt all language, examples and situations to this phase" : "Leeftijdsfase — BELANGRIJK: pas alle taal, voorbeelden en situaties aan op deze fase"}: ${ageCategory}`);
   }
 
-  if (chart.type)    lines.push(`HD Type: ${chart.type}`);
-  if (chart.strat)   lines.push(`${isEN ? "Strategy" : "Strategie"}: ${chart.strat}`);
-  if (chart.auth)    lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
+  if (chart.type)       lines.push(`HD Type: ${chart.type}`);
+  if (chart.definition) lines.push(`${isEN ? "Definition" : "Definitie"}: ${chart.definition}`);
+  if (chart.strat)      lines.push(`${isEN ? "Strategy" : "Strategie"}: ${chart.strat}`);
+  if (chart.auth)       lines.push(`${isEN ? "Authority" : "Autoriteit"}: ${chart.auth}`);
   if (chart.profile) lines.push(`${isEN ? "Profile" : "Profiel"}: ${chart.profile}`);
   if (chart.sig)     lines.push(`${isEN ? "Signature" : "Signatuur"}: ${chart.sig}`);
   if (chart.notSelf) lines.push(`${isEN ? "Not-Self theme" : "Not-Self thema"}: ${chart.notSelf}`);

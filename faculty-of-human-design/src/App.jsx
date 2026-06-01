@@ -1494,7 +1494,8 @@ function calcHD(y,m,d,h,min,tz=0){
   const profKey=pers.Sun.line+"-"+des.Sun.line,profile=PROFS[profKey]||profKey;
   const pEl=(getPL(jdP,"Sun")+180)%360,dEl=(getPL(jdD,"Sun")+180)%360;
   const cross=pers.Sun.gate+" / "+lonToGL(pEl)[0]+" / "+des.Sun.gate+" / "+lonToGL(dEl)[0];
-  return{type,strat,sig,notSelf,auth,profile,cross,definedCenters:[...defC],openCenters:openC,allGates:[...allG].sort((a,b)=>a-b),channels,pers,des};
+  const defArr=[...defC];const adj2={};for(const c of defArr)adj2[c]=[];for(const ch of channels){if(adj2[ch.c1]!==undefined&&adj2[ch.c2]!==undefined){adj2[ch.c1].push(ch.c2);adj2[ch.c2].push(ch.c1);}}const vis2=new Set();let defCount=0;for(const c of defArr){if(!vis2.has(c)){defCount++;const q=[c];while(q.length){const n=q.shift();if(vis2.has(n))continue;vis2.add(n);for(const nb of adj2[n])if(!vis2.has(nb))q.push(nb);}}}const definition=defC.size===0?"Geen Definitie":defCount===1?"Enkelvoudige Definitie":defCount===2?"Gesplitste Definitie":defCount===3?"Drievoudige Split":"Viervoudige Split";
+  return{type,strat,sig,notSelf,auth,profile,cross,definition,definedCenters:[...defC],openCenters:openC,allGates:[...allG].sort((a,b)=>a-b),channels,pers,des};
 }
 
 // ─── NUMEROLOGY ───────────────────────────────────────────────────────────────
