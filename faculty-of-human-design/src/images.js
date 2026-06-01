@@ -41,7 +41,7 @@ export const IMGS = {
   w_ibiza:      "/img-ibiza-moon.jpg",
 
   // Maandelijks abonnement sectie — achtergrondafbeelding
-  sub_moon:     "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
+  sub_moon:     "/img-moon-sub-hero.jpg",
 
   // Testimonials sectie — achtergrondafbeelding
   milkyway:     "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=2400&auto=format&fit=crop&q=80",
