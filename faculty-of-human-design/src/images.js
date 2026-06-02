@@ -32,7 +32,7 @@ export const IMGS = {
   cta:          "/img-fabric.jpg",
 
   // 'Waarom anders' blok — linker foto (precisie)
-  w_precision:  "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
+  w_precision:  "/img-precision.jpg",
 
   // 'Waarom anders' blok — middelste foto (diepte)
   w_depth:      "/img-table-book.jpg",
@@ -54,6 +54,23 @@ export const IMGS = {
   // READINGS OVERZICHT (facultyhd.com/readings)
   // De hero bovenaan gebruikt IMGS.cosmos (zie hierboven)
   // ════════════════════════════════════════════════════════════════════════════
+
+
+  // ════════════════════════════════════════════════════════════════════════════
+  // HUMAN DESIGN PAGINA (/human-design)
+  // ════════════════════════════════════════════════════════════════════════════
+
+  // Hero bovenaan de pagina (full-bleed, 100vh)
+  wat_hero:        "/img-meditation.jpg",
+
+  // Visuele pauze na de intro-tekst
+  wat_cosmos:      "/img-inzichten.jpg",
+
+  // Tussendoor-afbeelding bij het Human Design blok
+  wat_hd:          "/img-volledig-hero.jpg",
+
+  // Visuele pauze bij het Astrologie blok
+  wat_astro:       "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=2000&auto=format&fit=crop&q=80",
 
 
   // ════════════════════════════════════════════════════════════════════════════

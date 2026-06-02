@@ -3507,7 +3507,7 @@ function WatPage({go}){
 
       {/* ── CINEMATIC HERO ──────────────────────────────────────────────── */}
       <section style={{position:"relative",height:"100vh",minHeight:600,maxHeight:960,overflow:"hidden"}}>
-        <img src={IMGS.hero} alt={isEN?"Starfield — Faculty of Human Design":"Sterrenhemel — Faculty of Human Design"} loading="eager"
+        <img src={IMGS.wat_hero} alt={isEN?"Starfield — Faculty of Human Design":"Sterrenhemel — Faculty of Human Design"} loading="eager"
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 30%"}}/>
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(12,10,8,.2) 0%,rgba(12,10,8,.48) 55%,rgba(12,10,8,.8) 100%)"}}/>
         <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"0 48px 72px",maxWidth:800}}>
@@ -3539,7 +3539,7 @@ function WatPage({go}){
 
       {/* ── VISUAL SILENCE ──────────────────────────────────────────────── */}
       <div style={{position:"relative",height:"62vh",minHeight:380,overflow:"hidden"}}>
-        <img src={IMGS.cosmos} alt={isEN?"Faculty of Human Design":"Faculty of Human Design"} loading="lazy"
+        <img src={IMGS.wat_cosmos} alt={isEN?"Faculty of Human Design":"Faculty of Human Design"} loading="lazy"
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
         <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.15)"}}/>
       </div>
@@ -3564,7 +3564,7 @@ function WatPage({go}){
 
       {/* ── IMAGE TRANSITION ────────────────────────────────────────────── */}
       <div style={{position:"relative",height:"52vh",minHeight:300,overflow:"hidden"}}>
-        <img src={IMGS.r_volledig} alt={isEN?"Human Design chart":"Human Design chart"} loading="lazy"
+        <img src={IMGS.wat_hd} alt={isEN?"Human Design chart":"Human Design chart"} loading="lazy"
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 35%"}}/>
         <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.3)"}}/>
       </div>
@@ -3607,7 +3607,7 @@ function WatPage({go}){
 
       {/* ── VISUAL PAUSE ────────────────────────────────────────────────── */}
       <div style={{position:"relative",height:"55vh",minHeight:340,overflow:"hidden"}}>
-        <img src={IMGS.r_horoscoop} alt={isEN?"Night sky — astrology":"Nachtelijke hemel — astrologie"} loading="lazy"
+        <img src={IMGS.wat_astro} alt={isEN?"Night sky — astrology":"Nachtelijke hemel — astrologie"} loading="lazy"
           style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
         <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.38)"}}/>
       </div>
