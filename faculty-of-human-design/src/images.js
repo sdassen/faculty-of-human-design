@@ -63,9 +63,9 @@ export const IMGS = {
 
   r_volledig:         "/img-volledig-hero.jpg",
   r_relatie_liefde:   "/img-relatie-liefde.jpg",
-  r_relatie_business: "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
+  r_relatie_business: "/img-business-reading.jpg",
   r_relatie_familie:  "/img-family-hero.jpg",
-  r_jaar:             "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
+  r_jaar:             "/img-year-reading.jpg",
   r_kind:             "/img-child-reading.jpg",
   r_loopbaan:         "/img_business-woman.jpg",
   r_numerologie:      "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=900&auto=format&fit=crop&q=80",
