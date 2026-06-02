@@ -515,12 +515,11 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
 
   // ── Approximate page number calculation ─────────────────────────────────
   // Fixed pages before the first section:
-  //   Cover(1) + Intro(1) + HowToRead(1) + ExecSummary(hasChart?1:0)
-  //   + Methodology(1) + TOC(1) + Profile(hasChart?2:0)
-  //   + Bodygraph(hasChart&&hasSvg?1:0) + GateAppendix(hasChart?1:0)
+  //   Cover(1) + Intro(1) + HowToRead(1) + Methodology(1) + TOC(1)
+  //   + Profile(hasChart?2:0) + Bodygraph(hasChart&&hasSvg?1:0) + GateAppendix(hasChart?1:0)
   // Profile can run long; we count it as 2 pages for a typical chart.
   // GateAppendix is now placed directly after Bodygraph, before sections.
-  const fixedPages = 1 + 1 + 1 + (hasChart ? 1 : 0) + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0) + (hasChart ? 1 : 0);
+  const fixedPages = 1 + 1 + 1 + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0) + (hasChart ? 1 : 0);
 
   const midIdx  = sections.length > 3 ? Math.floor(sections.length / 2) : -1;
   const lastIdx = sections.length > 1 ? sections.length - 1 : -1;
@@ -579,6 +578,40 @@ function buildProfilePage(order) {
   const lang  = order.language || "nl";
   const ta    = typeAccent(chart.type);
   const personName = childReport ? (bd.name || null) : null;
+  const isEN  = lang === "en";
+
+  // Type taglines — short emotional framing per type
+  const TYPE_TAGLINE = {
+    nl: {
+      "generator":                "Een onuitputtelijke bron van levensenergie — geboren om te doen wat werkelijk resoneert.",
+      "manifesting generator":    "Snelheid en veelzijdigheid in één — een ontwerp dat meerdere wegen tegelijk bewandelt.",
+      "manifesteerend generator": "Snelheid en veelzijdigheid in één — een ontwerp dat meerdere wegen tegelijk bewandelt.",
+      "projector":                "Diepgaand inzicht in anderen — geboren om te leiden zonder energie te forceren.",
+      "manifestor":               "Onafhankelijk en initiërend — een kracht die in beweging komt op eigen gezag.",
+      "manifesteerder":           "Onafhankelijk en initiërend — een kracht die in beweging komt op eigen gezag.",
+      "reflector":                "Een unieke spiegel — geboren om de gezondheid van haar omgeving te weerspiegelen.",
+    },
+    en: {
+      "generator":                "An inexhaustible source of life force — born to do what truly resonates.",
+      "manifesting generator":    "Speed and versatility in one — a design that walks multiple paths at once.",
+      "projector":                "Deep insight into others — born to guide without forcing energy.",
+      "manifestor":               "Independent and initiating — a force that moves on its own authority.",
+      "reflector":                "A unique mirror — born to reflect the health of the world around them.",
+    },
+  };
+  const typeKey    = (chart.type || "").toLowerCase();
+  const taglineMap = isEN ? TYPE_TAGLINE.en : TYPE_TAGLINE.nl;
+  const taglineKey = Object.keys(taglineMap).find(function(k) { return typeKey.includes(k); });
+  const typeTagline = taglineKey ? taglineMap[taglineKey] : "";
+
+  // Signature / not-self compass quote
+  const sigTvl     = tvl(chart.sig,     lang);
+  const notSelfTvl = tvl(chart.notSelf, lang);
+  const sigQuote = chart.sig && chart.notSelf
+    ? (isEN
+        ? `You know you are on the right path when you feel <em>${esc(sigTvl)}</em>. When <em>${esc(notSelfTvl)}</em> arises, it is not failure — it is navigation.`
+        : `Je weet dat je op het goede pad bent als je <em>${esc(chart.sig)}</em> voelt. Wanneer <em>${esc(chart.notSelf)}</em> opkomt, is dat geen falen — het is navigatie.`)
+    : null;
 
   const keyData = [
     chart.type    ? { label: ui(lang, "Type",        "Type"),        value: tvl(chart.type,    lang) } : null,
@@ -611,6 +644,7 @@ function buildProfilePage(order) {
       <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.22em;opacity:0.7;text-transform:uppercase;margin-bottom:8px;">${personName ? esc((lang === "en" ? "HUMAN DESIGN OF " : "HUMAN DESIGN VAN ") + personName.toUpperCase()) : ui(lang, "JOUW HUMAN DESIGN", "YOUR HUMAN DESIGN")}</div>
       <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:32pt;font-weight:400;color:#FFFFFF;line-height:1.1;">${esc(tvl(chart.type, lang) || "")}</div>
       ${chart.profile ? `<div style="font-family:'Inter',sans-serif;font-size:9pt;font-weight:300;color:${ta.fg};opacity:0.75;margin-top:8px;">${ui(lang, "Profiel", "Profile")} ${esc(chart.profile)}</div>` : ""}
+      ${typeTagline ? `<div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10pt;font-weight:300;color:#FFFFFF;opacity:0.45;margin-top:10px;max-width:140mm;line-height:1.5;">${esc(typeTagline)}</div>` : ""}
     </div>
   </div>
   <div style="padding:8mm 20mm 0;display:grid;grid-template-columns:1fr 1fr;gap:0 24px;">
@@ -623,6 +657,11 @@ function buildProfilePage(order) {
   ${definedCenters ? `<div style="padding:5mm 20mm 0;">
     <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px;">${ui(lang, "GEDEFINIEERDE CENTRA", "DEFINED CENTERS")}</div>
     <div style="font-family:'Inter',sans-serif;font-size:8pt;color:#6B6560;">${esc(definedCenters)}</div>
+  </div>` : ""}
+  ${sigQuote ? `
+  <div style="margin:8mm 20mm 0;padding:14px 18px;background:#FFFFFF;border-left:3px solid #C9A85C;">
+    <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#C9A85C;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:7px;">${ui(lang, "JOUW KOMPAS", "YOUR COMPASS")}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11pt;color:#2A2820;line-height:1.6;">${sigQuote}</div>
   </div>` : ""}
 </div>`;
 }
@@ -1408,7 +1447,6 @@ ${fontBlock}
 ${buildCoverPage(order)}
 ${buildIntroPage(order)}
 ${buildHowToReadPage(order)}
-${hasProfileChart ? buildExecutiveSummaryPage(order) : ""}
 ${buildMethodologyPage(order)}
 ${buildTOCPage(sections, order, hasProfileChart, !!profileSvg)}
 ${hasProfileChart ? buildProfilePage(order) : ""}
