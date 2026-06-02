@@ -85,8 +85,8 @@ export const IMGS = {
   r_jaar:             "/img-year-reading.jpg",
   r_kind:             "/img-child-reading.jpg",
   r_loopbaan:         "/img_business-woman.jpg",
-  r_numerologie:      "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=900&auto=format&fit=crop&q=80",
-  r_horoscoop:        "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=900&auto=format&fit=crop&q=80",
+  r_numerologie:      "/img-numerology.jpg",
+  r_horoscoop:        "/img-birth-reading.jpg",
   r_maandelijks:      "/img-moon-sub-hero.jpg",
 
 
