@@ -2952,12 +2952,12 @@ Geen sectietitel in de tekst.`);
                 <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch} onBlur={numBlur("cday",1,31)}/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="cyear" min="1900" max={new Date().getFullYear()} value={form.cyear} onChange={ch} onBlur={numBlur("cyear",1900,new Date().getFullYear())}/></div>
-                <div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} onBlur={numBlur("chour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} onBlur={numBlur("cminute",0,59)} placeholder={t("form.minute")}/></div></div>
+                <div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="chour" min="0" max="23" value={form.chour} onChange={ch} onBlur={numBlur("chour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="cminute" min="0" max="59" value={form.cminute} onChange={ch} onBlur={numBlur("cminute",0,59)} placeholder={t("form.minute")}/></div><div style={{fontSize:".72rem",color:"var(--text-light)",marginTop:5}}>{t("form.timeNote")}</div></div>
                 <div className="form-group full">
                   <label className="form-label">{LANG==="en"?"Child's place of birth":"Geboorteplaats kind"}</label>
                   <PlaceAutocomplete
                     value={form.cplace}
-                    placeholder={t("form.placePlaceholder")}
+                    placeholder={LANG==="en"?"Amsterdam, Netherlands":"Amsterdam, Nederland"}
                     onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,cplace:place,clat:lat||"",clon:lon||"",ctimezone:timezone||"",ctz:""}))}
                   />
                 </div>
