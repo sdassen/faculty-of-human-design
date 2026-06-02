@@ -4,323 +4,274 @@
 <meta charset="UTF-8">
 <title>Relationship Reading Preview — Faculty of Human Design</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap');
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 @page{size:A4;margin:0;}
 html{background:#888;}
-body{font-family:'Jost',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;width:210mm;margin:0 auto;}
+body{font-family:'Inter',sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact;width:210mm;margin:0 auto;}
 @media print{html{background:none;}}
-
-.page{width:210mm;height:297mm;overflow:hidden;page-break-after:always;break-after:page;display:flex;flex-direction:column;position:relative;}
+.page{width:210mm;min-height:297mm;height:297mm;overflow:hidden;page-break-after:always;break-after:page;display:flex;flex-direction:column;position:relative;}
 @media screen{.page{margin-bottom:8px;box-shadow:0 4px 24px rgba(0,0,0,.35);}}
-
-.dark{background:#1A1714;color:#fff;}
-.light{background:#F4F1EB;color:#1A1714;}
-.g-bar{height:3px;background:linear-gradient(90deg,#A8832C,#C9A85C,#A8832C);flex-shrink:0;}
-
-.fac-label{font-size:8px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,92,.6);text-align:center;padding:16px 48px 0;flex-shrink:0;}
-.cover-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 56px 36px;text-align:center;}
-.c-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:50px;font-weight:300;font-style:italic;color:#fff;line-height:1.02;margin-bottom:18px;}
-.c-div{width:40px;height:1px;background:#C9A85C;margin:0 auto 16px;}
-.c-name{font-size:12px;font-weight:500;letter-spacing:.25em;text-transform:uppercase;color:#C9A85C;margin-bottom:5px;}
-.c-meta{font-size:10px;font-weight:300;color:rgba(255,255,255,.42);letter-spacing:.04em;}
-.c-diagram{margin:22px 0;}
-.type-badge{display:inline-block;border:1px solid rgba(201,168,92,.4);padding:8px 28px;font-size:9.5px;font-weight:400;letter-spacing:.22em;text-transform:uppercase;color:rgba(201,168,92,.75);margin-top:14px;}
-.c-sub{font-size:9px;font-weight:300;color:rgba(255,255,255,.28);letter-spacing:.1em;margin-top:8px;}
-.c-copy{font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.18);padding-bottom:16px;text-align:center;flex-shrink:0;}
-
-.intro-inner{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:44px 80px;text-align:center;}
-.i-div{width:32px;height:1px;background:#C9A85C;margin:0 auto;}
-.i-quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:29px;font-weight:300;font-style:italic;color:#fff;line-height:1.32;margin:18px 0 10px;}
-.i-body{font-size:11.5px;font-weight:300;line-height:1.85;color:rgba(255,255,255,.52);max-width:380px;margin:14px auto 0;}
-.prev-tag{display:inline-block;border:1px solid rgba(201,168,92,.35);padding:7px 22px;font-size:8.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:rgba(201,168,92,.6);margin-top:24px;}
-.i-copy{margin-top:auto;font-size:8.5px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.18);padding-bottom:14px;text-align:center;flex-shrink:0;}
-
-.sec-hd{background:#1A1714;padding:26px 48px 22px;position:relative;flex-shrink:0;}
-.sec-label{font-size:7.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:#C9A85C;margin-bottom:7px;}
-.sec-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:29px;font-weight:400;color:#fff;line-height:1.1;}
-.sec-t-div{width:26px;height:1px;background:rgba(201,168,92,.5);margin-top:11px;}
-.sec-num{position:absolute;right:48px;top:50%;transform:translateY(-50%);font-family:'Cormorant Garamond',Georgia,serif;font-size:66px;font-weight:300;color:rgba(255,255,255,.05);line-height:1;user-select:none;}
-
-.sec-body{flex:1;padding:26px 48px 28px;background:#F4F1EB;display:flex;flex-direction:column;}
-.s-quote{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-style:italic;font-weight:300;color:#1A1714;line-height:1.42;margin-bottom:9px;}
-.s-q-div{width:24px;height:1px;background:rgba(138,115,85,.55);margin-bottom:20px;}
-.s-sub{font-family:'Cormorant Garamond',Georgia,serif;font-size:14px;font-weight:400;color:#8A7355;line-height:1.3;margin-bottom:5px;margin-top:16px;}
-.s-sub:first-of-type{margin-top:0;}
-.s-s-div{width:16px;height:1px;background:rgba(138,115,85,.4);margin-bottom:8px;}
-.s-p{font-size:10.5px;font-weight:300;line-height:1.82;color:#3A3530;margin-bottom:11px;}
-.in-chart{margin-top:auto;padding-top:12px;border-top:1px solid #D8D2C8;}
-.ic-label{font-size:7.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#A09890;margin-bottom:7px;}
-.ic-grid{display:grid;grid-template-columns:1fr 1fr;gap:3px 24px;}
-.ic-item{font-size:9.5px;font-weight:300;color:#6B6560;line-height:1.5;display:flex;gap:5px;}
-.ic-item::before{content:'·';color:#8A7355;flex-shrink:0;}
-
-.co-hd{background:#1A1714;padding:13px 48px;flex-shrink:0;}
-.co-h-label{font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,92,.55);}
-.co-h-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:16px;font-weight:400;color:#fff;margin-top:2px;}
-.co-body{flex:1;padding:26px 48px;background:#F4F1EB;display:flex;flex-direction:column;gap:18px;}
-.co-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;}
-.co-bl{font-size:7.5px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#8A7355;margin-bottom:11px;display:flex;align-items:center;gap:8px;}
-.co-bl::before{content:'';width:16px;height:1px;background:#8A7355;flex-shrink:0;}
-.co-list{list-style:none;display:flex;flex-direction:column;gap:8px;}
-.co-list li{font-size:10.5px;font-weight:300;color:#3A3530;line-height:1.6;display:flex;gap:8px;align-items:flex-start;}
-.co-list li::before{content:'—';color:#8A7355;flex-shrink:0;font-size:9px;margin-top:2px;}
-.co-div{height:1px;background:#D8D2C8;}
-.ref-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
-.ref-list li{font-family:'Cormorant Garamond',Georgia,serif;font-size:11.5px;font-style:italic;color:#3A3530;line-height:1.62;display:flex;gap:9px;}
-.ref-n{font-family:'Jost',sans-serif;font-style:normal;font-size:9px;font-weight:400;color:#8A7355;flex-shrink:0;min-width:12px;margin-top:1px;}
-
-.fl-body{flex:1;padding:34px 48px 26px;background:#F4F1EB;display:flex;flex-direction:column;}
-.fl-label{font-size:7.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#8A7355;margin-bottom:7px;}
-.fl-title{font-family:'Cormorant Garamond',Georgia,serif;font-size:37px;font-weight:300;font-style:italic;color:#1A1714;line-height:1.08;margin-bottom:13px;}
-.fl-div{width:100%;height:1px;background:#D8D2C8;margin-bottom:14px;}
-.fl-intro{font-size:11px;font-weight:300;color:#6B6560;line-height:1.72;margin-bottom:20px;}
-.chapters{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:auto;}
-.ch-item{display:flex;gap:11px;padding:10px 0;border-bottom:1px solid #D8D2C8;font-size:10.5px;color:#3A3530;font-weight:300;align-items:flex-start;}
-.ch-n{font-size:8px;font-weight:600;color:#8A7355;flex-shrink:0;margin-top:1px;}
-.fl-cta{background:#1A1714;padding:20px 28px;display:flex;align-items:center;justify-content:space-between;margin-top:22px;}
-.fl-cta-l .fl-cta-sl{font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,92,.6);margin-bottom:3px;}
-.fl-cta-l .fl-cta-tx{font-family:'Cormorant Garamond',Georgia,serif;font-size:18px;font-style:italic;font-weight:300;color:#fff;}
-.fl-cta-btn{border:1px solid rgba(201,168,92,.45);padding:9px 20px;font-size:8.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(201,168,92,.75);}
 </style>
 </head>
 <body>
 
 <!-- ═══ PAGE 1 · COVER ═══ -->
-<div class="page dark">
-  <div class="g-bar"></div>
-  <p class="fac-label">Faculty of Human Design · Ibiza · Est. 2014</p>
-  <div class="cover-inner">
-    <h1 class="c-title">Relationship Reading</h1>
-    <div class="c-div"></div>
-    <p class="c-name">Sophie Clarke &amp; Lucas Clarke</p>
-    <p class="c-meta">15 Mar 1990 · London &nbsp;×&nbsp; 3 Sep 1987 · Manchester</p>
-    <div class="c-diagram">
-      <svg width="240" height="200" viewBox="0 0 240 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="88" cy="100" r="78" stroke="rgba(201,168,92,0.14)" stroke-width="0.6" fill="none"/>
-        <circle cx="88" cy="100" r="42" stroke="rgba(201,168,92,0.2)" stroke-width="0.6" fill="none"/>
-        <circle cx="152" cy="100" r="78" stroke="rgba(201,168,92,0.14)" stroke-width="0.6" fill="none"/>
-        <circle cx="152" cy="100" r="42" stroke="rgba(201,168,92,0.2)" stroke-width="0.6" fill="none"/>
-        <line x1="88" y1="100" x2="152" y2="100" stroke="rgba(201,168,92,0.22)" stroke-width="0.5"/>
-        <circle cx="88" cy="100" r="4" fill="rgba(201,168,92,0.5)"/>
-        <circle cx="152" cy="100" r="4" fill="rgba(201,168,92,0.5)"/>
-        <circle cx="88" cy="22" r="2.5" fill="rgba(201,168,92,0.3)"/>
-        <circle cx="88" cy="178" r="2.5" fill="rgba(201,168,92,0.3)"/>
-        <circle cx="152" cy="22" r="2.5" fill="rgba(201,168,92,0.3)"/>
-        <circle cx="152" cy="178" r="2.5" fill="rgba(201,168,92,0.3)"/>
-        <circle cx="10" cy="100" r="2" fill="rgba(201,168,92,0.22)"/>
-        <circle cx="230" cy="100" r="2" fill="rgba(201,168,92,0.22)"/>
-        <line x1="10" y1="100" x2="230" y2="100" stroke="rgba(201,168,92,0.07)" stroke-width="0.5"/>
-      </svg>
-    </div>
-    <div class="type-badge">Generator × Projector</div>
-    <p class="c-sub">Profile 4/6 × Profile 2/4 &nbsp;·&nbsp; Emotional × Splenic</p>
+<div class="page" style="background:#1A1715;color:#fff;align-items:center;">
+  <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:4px;background:#C9A85C;"></div>
+  <svg style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;" viewBox="0 0 595 842" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="220" cy="310" r="162" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.05"/>
+    <circle cx="220" cy="310" r="100" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.08"/>
+    <circle cx="220" cy="310" r="48"  fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.13"/>
+    <circle cx="375" cy="310" r="162" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.05"/>
+    <circle cx="375" cy="310" r="100" fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.08"/>
+    <circle cx="375" cy="310" r="48"  fill="none" stroke="#C9A85C" stroke-width="0.4" opacity="0.13"/>
+    <circle cx="220" cy="310" r="4" fill="#C9A85C" opacity="0.28"/>
+    <circle cx="375" cy="310" r="4" fill="#C9A85C" opacity="0.28"/>
+    <line x1="220" y1="310" x2="375" y2="310" stroke="#C9A85C" stroke-width="0.4" opacity="0.2"/>
+  </svg>
+  <div style="position:absolute;top:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#5A5438;letter-spacing:0.3em;text-transform:uppercase;">Faculty of Human Design  ·  Ibiza  ·  Est. 2014</div>
+  <div style="margin-top:108px;padding:0 30mm;text-align:center;position:relative;z-index:1;">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:400;font-size:34pt;color:#FFFFFF;line-height:1.25;letter-spacing:-0.01em;">Relationship Reading</div>
+    <div style="width:72px;height:1px;background:#C9A85C;margin:20px auto;opacity:0.6;"></div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;margin-top:4px;">Sophie Clarke</div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">15 Mar 1990  ·  London</div>
+    <div style="width:36px;height:0.5px;background:#C9A85C;margin:14px auto;opacity:0.3;"></div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:11pt;color:#C9A85C;letter-spacing:0.12em;text-transform:uppercase;">Lucas Clarke</div>
+    <div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8.5pt;color:#9A8050;margin-top:6px;letter-spacing:0.04em;">3 Sep 1987  ·  Manchester</div>
   </div>
-  <p class="c-copy">© 2026 Faculty of Human Design</p>
+  <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;">
+    <div style="display:inline-block;background:#1E1A08;border:1px solid #C9A85C;padding:7px 22px;border-radius:2px;">
+      <span style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:#C9A85C;letter-spacing:0.18em;text-transform:uppercase;">Generator × Projector</span>
+    </div>
+    <div style="margin-top:8px;font-family:'Inter',sans-serif;font-size:7pt;font-weight:300;color:#5A5438;letter-spacing:0.12em;">Profile 4/6 × Profile 2/4  ·  Emotional · Splenic</div>
+  </div>
+  <div style="position:absolute;bottom:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.2em;">© 2026 FACULTY OF HUMAN DESIGN</div>
 </div>
 
 <!-- ═══ PAGE 2 · INTRO ═══ -->
-<div class="page dark">
-  <div class="g-bar"></div>
-  <div class="intro-inner">
-    <div class="i-div"></div>
-    <h2 class="i-quote">This reading was assembled<br>for Sophie and Lucas.</h2>
-    <div class="i-div" style="margin-top:10px;"></div>
-    <p class="i-body">This report has been assembled based on the exact birth data of both of you and analyses the energetic dynamic between your two Human Design charts.</p>
-    <p class="i-body" style="margin-top:12px;">You are viewing a selection of fragments here. The complete reading contains all chapters, including the full composite analysis and your personal integration guide.</p>
-    <div class="prev-tag">Preview</div>
-  </div>
-  <p class="i-copy">© 2026 Faculty of Human Design · Ibiza, Spain</p>
-</div>
-
-<!-- ═══ PAGE 3 · SECTION 01 MAIN ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="sec-hd">
-    <p class="sec-label">Section 01</p>
-    <h2 class="sec-title">The connection that needs no explanation</h2>
-    <div class="sec-t-div"></div>
-    <span class="sec-num">01</span>
-  </div>
-  <div class="sec-body">
-    <p class="s-quote">There are connections you recognise before you understand them.</p>
-    <div class="s-q-div"></div>
-
-    <div class="s-sub">What draws you toward each other</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">Sophie is a Generator. Lucas is a Projector. This is one of the most natural connections in Human Design — not because it is always easy, but because the designs complement each other in a way that runs deep. Sophie generates; her sacral centre produces life force energy that is consistently available. Lucas is designed to see — to recognise what is present in others long before they can see it themselves. He sees Sophie.</p>
-    <p class="s-p">That recognition is not flattering feedback from the outside. It is a deeper form of attention — the capacity to perceive the core of someone without projecting. When Lucas recognises you, Sophie, it touches something real. It is not a compliment you give yourself. It is confirmation of who you already are.</p>
-
-    <div class="s-sub">Why it sometimes creates friction</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">As a Projector, Lucas does not have access to the same consistent energy reserve as Sophie. When you are together, her sacral force can carry him beyond his own threshold. That feels good at first — until the cost becomes clear. Lucas pays that price. Not as weakness, but as design. Your energy systems ask for different rhythms, and honouring that rhythm is one of the most loving things you can do for each other.</p>
-
-    <div class="in-chart">
-      <p class="ic-label">In your charts</p>
-      <div class="ic-grid">
-        <p class="ic-item">Sophie: Generator · Sacral defined</p>
-        <p class="ic-item">Lucas: Projector · Sacral open</p>
-        <p class="ic-item">Sophie's strategy: Respond to life</p>
-        <p class="ic-item">Lucas's strategy: Wait for the invitation</p>
-      </div>
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:3px;background:#1A1715;"></div>
+  <div style="padding:18mm 24mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:18px;">FOR THE TWO OF YOU</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:28pt;font-weight:400;color:#1A1715;margin-bottom:6px;line-height:1.1;">A note before we begin</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:28px;"></div>
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16pt;font-weight:300;color:#1A1715;line-height:1.45;margin-bottom:20px;">This report was not written to tell you how your relationship should be.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">It was written to show you who each of you is — and how those two designs come into contact with each other.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">Human Design is not a relationship test. It is a map of the energy that flows through each of you. Of the way each of you makes decisions best. Of the patterns that colour your connection.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">This report will not change your relationship. But it can give something back to you: understanding. The quiet recognition that your differences are not obstacles — they are the texture of your connection.</p>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#3A3830;line-height:1.8;margin-bottom:14px;max-width:125mm;">Don't read this as a manual for your relationship. Read it as a mirror for the two of you together.</p>
+    <div style="margin-top:28px;padding-top:20px;border-top:0.4px solid #D8D4CC;">
+      <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:10pt;color:#6B6560;margin-bottom:4px;">With respect for your design,</div>
+      <div style="font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:300;color:#A8A29E;letter-spacing:0.08em;">Faculty of Human Design · Ibiza</div>
     </div>
+  </div>
+  <div style="position:absolute;bottom:0;left:0;right:0;padding:0 24mm 12mm;display:flex;justify-content:space-between;align-items:center;">
+    <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:9pt;color:#C9A85C;padding:0 14px;">Sophie &amp; Lucas</div>
+    <div style="height:0.4px;flex:1;background:#E5E0D8;"></div>
   </div>
 </div>
 
-<!-- ═══ PAGE 4 · SECTION 01 CALLOUT ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="co-hd">
-    <p class="co-h-label">Section 01</p>
-    <p class="co-h-title">The connection that needs no explanation</p>
+<!-- ═══ PAGE 3 · TRANSITION ═══ -->
+<div class="page" style="background:#1A1715;display:flex;align-items:center;justify-content:center;">
+  <div style="text-align:center;padding:0 32mm;">
+    <div style="font-family:'Cormorant Garamond',serif;font-size:6pt;font-weight:300;color:#C9A85C;letter-spacing:0.35em;text-transform:uppercase;margin-bottom:24px;opacity:0.6;">— Faculty of Human Design —</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:22pt;color:#FFFFFF;line-height:1.55;letter-spacing:0.01em;">There are connections you recognise<br>before you understand them.</div>
+    <div style="width:40px;height:0.75px;background:#C9A85C;margin:24px auto;opacity:0.4;"></div>
+    <div style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:300;color:rgba(201,168,92,0.5);letter-spacing:0.2em;text-transform:uppercase;">Preview — excerpt from the full reading</div>
   </div>
-  <div class="co-body">
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">Pitfalls</p>
-        <ul class="co-list">
-          <li>Bringing Lucas into Sophie's energy level without checking if he is ready for it</li>
-          <li>Expecting Sophie's sacral capacity from Lucas — he operates on a different system</li>
-          <li>Mistaking the pull toward each other for fully understanding each other</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Practice</p>
-        <ul class="co-list">
-          <li>Lucas: recognise Sophie when she does something well — not evaluation, but recognition</li>
-          <li>Sophie: regularly ask whether Lucas has had enough rest before spending time together</li>
-          <li>Consciously build in quiet time — Lucas needs recovery, even in the middle of connection</li>
-        </ul>
+</div>
+
+<!-- ═══ PAGE 4 · SECTION 01 MAIN ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="position:absolute;right:16mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:72pt;font-weight:400;color:#C9A85C;opacity:0.05;line-height:1;padding-top:2mm;">01</div>
+    <div style="padding:10mm 16mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#9A8050;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:6px;">SECTION  01</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28pt;color:#FFFFFF;line-height:1.15;max-width:150mm;">The connection that needs no explanation</div>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <div style="width:40px;height:0.75px;background:#C9A85C;"></div>
+        <div style="width:20px;height:0.4px;background:#C9A85C;opacity:0.35;"></div>
       </div>
     </div>
-    <div class="co-div"></div>
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">This week</p>
-        <ul class="co-list">
-          <li>When did Lucas recognise you in a way that felt truly real?</li>
-          <li>How do you handle the energy difference on busy days?</li>
-          <li>What changes when Lucas has had enough rest before a deep conversation?</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Reflection questions</p>
-        <ol class="ref-list">
-          <li><span class="ref-n">1</span>In what moment did you feel most seen by the other — and what was different about that moment?</li>
-          <li><span class="ref-n">2</span>How do you communicate about energy differences without it sounding like a complaint?</li>
-          <li><span class="ref-n">3</span>What does Lucas bring to the relationship that Sophie cannot give herself?</li>
-        </ol>
+  </div>
+  <div style="background:#FFFFFF;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;flex-shrink:0;">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">There are connections you recognise before you understand them.</div>
+    <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
+  </div>
+  <div style="padding:16mm 0 12mm;max-width:160mm;margin:0 auto;flex:1;">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:0 0 7px;break-after:avoid;line-height:1.3;">What draws you toward each other<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <div style="break-inside:avoid;">
+      <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Sophie is a Generator. Lucas is a Projector. This is one of the most natural connections in Human Design — not because it is always easy, but because the designs complement each other in a way that runs deep. Sophie generates; her sacral centre produces life force energy that is constantly available. Lucas is designed to see — to recognise what is present in others long before they see it themselves. He sees Sophie.</p>
+    </div>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">That recognition is not flattering judgment from the outside. It is a deeper form of attention — the capacity to perceive someone's core without projecting. When Lucas recognises you, Sophie, it touches something real. It is not a compliment you give yourself. It is confirmation of who you already are.</p>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">Why it sometimes chafes<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">As a Projector, Lucas does not have constant access to the same energy reserves as Sophie. When you are together, her sacral force can carry him beyond his own edge. Lucas pays that price — not as weakness, but as design. Your energy systems call for different rhythms, and honouring that rhythm is one of the most loving things you can do for each other.</p>
+    <div style="margin-top:22px;border-top:0.4px solid #E8E4DC;padding-top:14px;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">In your chart</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Sophie: Generator · Sacral defined</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Lucas: Projector · Sacral open</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Strategy Sophie: Respond to life</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Strategy Lucas: Wait for the invitation</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE 5 · SECTION 02 MAIN ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="sec-hd">
-    <p class="sec-label">Section 02</p>
-    <h2 class="sec-title">Deciding as a couple — two rhythms, one choice</h2>
-    <div class="sec-t-div"></div>
-    <span class="sec-num">02</span>
+<!-- ═══ PAGE 5 · SECTION 01 CLOSING ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="padding:8mm 20mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">SECTION  01</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;font-weight:600;color:#FFFFFF;line-height:1.2;">The connection that needs no explanation</div>
+    </div>
   </div>
-  <div class="sec-body">
-    <p class="s-quote">You both know. Just not at the same time. And that is exactly right.</p>
-    <div class="s-q-div"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:10mm 20mm 0;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Pitfalls</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Taking Lucas along in Sophie's energy level without checking whether he is ready</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Expecting Sophie's sacral force from Lucas — he has a different system</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Confusing the attraction with a complete understanding of each other</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">In practice</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Lucas: recognise Sophie when she does something well — not evaluate, but witness</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Sophie: regularly check whether Lucas has had enough rest before time together</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Consciously plan quiet time — Lucas needs recovery, even in the middle of connection</span></div>
+    </div>
+  </div>
+  <div style="margin:8mm 20mm;height:0.4px;background:#EBEBE6;"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:0 20mm;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">This week</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">When did Lucas recognise you in a way that felt truly real?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">How do you navigate the energy difference on busy days?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">What changes when Lucas has had enough rest for a deep conversation?</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Reflection questions</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">1</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">In which moment did you feel most truly seen by the other — and what was different about that moment?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">2</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">How do you communicate about energy differences without it sounding like blame?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">3</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">What does Lucas give to the relationship that Sophie cannot give herself?</span></div>
+    </div>
+  </div>
+</div>
 
-    <div class="s-sub">Two fundamentally different authorities</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">Sophie's inner authority is emotional. Her decisions become clear over time — not in the moment, but after a wave that carries her informatively through highs and lows. Lucas's authority is splenic: a quiet, instantaneous inner knowing. He knows now. He cannot return to it, because the next moment brings a new splenic signal.</p>
-    <p class="s-p">This creates a recognisable pattern: Lucas has his answer. Sophie does not yet. And Lucas — who is naturally clear in the moment — waits. That waiting can feel to him like doubt on Sophie's part. It is not. It is her system working exactly as it should.</p>
-
-    <div class="s-sub">How to turn this dynamic around</div>
-    <div class="s-s-div"></div>
-    <p class="s-p">Lucas can share his splenic sense as information, not as pressure. "I feel this is right" is different from "we need to decide this now." Sophie can say: I am taking your feeling with me, and I will give you an answer when the clarity arrives. That is not postponing — that is respect for her design. Lucas, trust that Sophie's yes is more deeply anchored when she is given the time she needs.</p>
-
-    <div class="in-chart">
-      <p class="ic-label">In your charts</p>
-      <div class="ic-grid">
-        <p class="ic-item">Sophie: Emotional authority · decisions ripen</p>
-        <p class="ic-item">Lucas: Splenic authority · knows in the moment</p>
-        <p class="ic-item">Sophie: Solar Plexus defined</p>
-        <p class="ic-item">Lucas: Spleen centre defined</p>
+<!-- ═══ PAGE 6 · SECTION 02 MAIN ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:55mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="position:absolute;right:16mm;top:0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:72pt;font-weight:400;color:#C9A85C;opacity:0.05;line-height:1;padding-top:2mm;">02</div>
+    <div style="padding:10mm 16mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#9A8050;letter-spacing:0.25em;text-transform:uppercase;margin-bottom:6px;">SECTION  02</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:28pt;color:#FFFFFF;line-height:1.15;max-width:150mm;">Deciding as a couple — two rhythms, one choice</div>
+      <div style="display:flex;align-items:center;margin-top:8px;">
+        <div style="width:40px;height:0.75px;background:#C9A85C;"></div>
+        <div style="width:20px;height:0.4px;background:#C9A85C;opacity:0.35;"></div>
+      </div>
+    </div>
+  </div>
+  <div style="background:#FFFFFF;border-bottom:0.5px solid #E8E4DC;padding:9mm 25mm 7mm;flex-shrink:0;">
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:18pt;color:#1A1715;line-height:1.5;max-width:130mm;">You both know. Just not at the same time. And that is precisely right.</div>
+    <div style="width:36px;height:0.75px;background:#C9A85C;margin-top:10px;"></div>
+  </div>
+  <div style="padding:16mm 0 12mm;max-width:160mm;margin:0 auto;flex:1;">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:0 0 7px;break-after:avoid;line-height:1.3;">Two fundamentally different authorities<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <div style="break-inside:avoid;">
+      <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Sophie's inner authority is emotional. Her decisions become clear over time — not in the moment, but after a wave that takes her informatively through high and low. Lucas's authority is the spleen: a quiet, instantaneous inner knowing. He knows now. He cannot return to it, because the next moment brings a new splenic perception.</p>
+    </div>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">This creates a recognisable pattern: Lucas has his answer. Sophie doesn't yet. And Lucas — who is naturally clear in the moment — waits. That waiting sometimes feels to him like doubt on Sophie's part. It is not. It is her system working.</p>
+    <h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">How you can reframe this<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>
+    <p style="font-family:'Inter',sans-serif;font-size:10.5pt;line-height:1.78;color:#2A2820;margin-bottom:14px;max-width:138mm;">Lucas can share his splenic feeling — as information, not as pressure. "I feel this is right" is different from "we need to decide now." Sophie can say: I'm taking your feeling with me, and I'll give you an answer when the clarity arrives. That is not postponing — it is respect for her design.</p>
+    <div style="margin-top:22px;border-top:0.4px solid #E8E4DC;padding-top:14px;">
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#A8A29E;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">In your chart</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Sophie: Emotional authority · decisions ripen</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Lucas: Splenic authority · knowing in the moment</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Sophie: Solar Plexus defined</span></div>
+        <div style="display:flex;gap:8px;line-height:1.5;padding:5px 0;border-bottom:0.3px solid #F0EDE8;"><span style="font-family:'Cormorant Garamond',serif;font-size:11pt;color:#C9A85C;font-weight:400;line-height:1.3;flex-shrink:0;">·</span><span style="font-family:'Inter',sans-serif;font-size:8.5pt;font-weight:300;color:#5A5650;">Lucas: Spleen centre defined</span></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE 6 · SECTION 02 CALLOUT ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="co-hd">
-    <p class="co-h-label">Section 02</p>
-    <p class="co-h-title">Deciding as a couple — two rhythms, one choice</p>
-  </div>
-  <div class="co-body">
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">Pitfalls</p>
-        <ul class="co-list">
-          <li>Lucas withdrawing his splenic sense when Sophie does not yet have an answer</li>
-          <li>Sophie forcing herself into a decision to accommodate Lucas's timing</li>
-          <li>Interpreting the difference in timing as a lack of commitment or trust</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Practice</p>
-        <ul class="co-list">
-          <li>Agree on a shared phrase: "I'm giving you space — let me know when it's clear"</li>
-          <li>Lucas: share your splenic sense as information, not as expectation or pressure</li>
-          <li>Sophie: give yourself a conscious time window — not as pressure, but as structure</li>
-        </ul>
-      </div>
+<!-- ═══ PAGE 7 · SECTION 02 CLOSING ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:26mm;background:#1A1715;position:relative;overflow:hidden;flex-shrink:0;">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:3px;background:#C9A85C;"></div>
+    <div style="padding:8mm 20mm 0 24mm;">
+      <div style="font-family:'Inter',sans-serif;font-size:6pt;font-weight:500;color:#9A8050;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:5px;">SECTION  02</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:13pt;font-weight:600;color:#FFFFFF;line-height:1.2;">Deciding as a couple — two rhythms, one choice</div>
     </div>
-    <div class="co-div"></div>
-    <div class="co-grid">
-      <div>
-        <p class="co-bl">This week</p>
-        <ul class="co-list">
-          <li>Which decision recently challenged you most as a couple?</li>
-          <li>Who felt most misunderstood — and why exactly?</li>
-          <li>What changes when you accept each other's timeline as a given?</li>
-        </ul>
-      </div>
-      <div>
-        <p class="co-bl">Reflection questions</p>
-        <ol class="ref-list">
-          <li><span class="ref-n">1</span>Which decision did Sophie make that turned out better because she waited for clarity?</li>
-          <li><span class="ref-n">2</span>When did Lucas feel that his splenic sense was being taken seriously by Sophie?</li>
-          <li><span class="ref-n">3</span>How can you redefine the word "waiting" in your relationship?</li>
-        </ol>
-      </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:10mm 20mm 0;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Pitfalls</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Lucas withdrawing his splenic perception when Sophie doesn't yet have an answer</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Sophie forcing herself into a decision to accommodate Lucas</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Interpreting the difference in timing as a lack of commitment or trust</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">In practice</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Agree on a shared phrase: "I'm giving you space — let me know when it's clear"</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Lucas: share your splenic feeling as information, not as expectation or pressure</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Sophie: consciously give yourself a time window — not as pressure, but as structure</span></div>
+    </div>
+  </div>
+  <div style="margin:8mm 20mm;height:0.4px;background:#EBEBE6;"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;padding:0 20mm;gap:0;">
+    <div style="padding-right:22px;border-right:0.4px solid #EBEBE6;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">This week</div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Which decision recently challenged you most as a couple?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">Which of you felt most misunderstood — and precisely why?</span></div>
+      <div style="display:flex;gap:10px;margin-bottom:11px;line-height:1.62;"><span style="font-family:'Cormorant Garamond',serif;font-size:12pt;color:#C9A85C;font-weight:400;line-height:1.2;min-width:12px;">—</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;">What changes when you accept each other's timeline as a given?</span></div>
+    </div>
+    <div style="padding-left:22px;">
+      <div style="width:24px;height:1.5px;background:#C9A85C;margin-bottom:10px;"></div>
+      <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#1A1715;letter-spacing:0.18em;text-transform:uppercase;margin-bottom:14px;">Reflection questions</div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">1</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">Which decision did Sophie make that turned out better because she waited for clarity?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">2</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">When did Lucas feel that his splenic perception was truly taken seriously by Sophie?</span></div>
+      <div style="display:flex;gap:12px;margin-bottom:16px;line-height:1.65;"><span style="font-family:'Cormorant Garamond',serif;font-size:14pt;color:#C9A85C;font-weight:400;min-width:16px;line-height:1.1;">3</span><span style="font-family:'Inter',sans-serif;font-size:9.5pt;font-weight:300;color:#2A2820;font-style:italic;">How can you give the word "waiting" new meaning in your relationship?</span></div>
     </div>
   </div>
 </div>
 
-<!-- ═══ PAGE 7 · FINAL ═══ -->
-<div class="page light">
-  <div class="g-bar"></div>
-  <div class="fl-body">
-    <p class="fl-label">The complete reading</p>
-    <h2 class="fl-title">What you are yet to discover.</h2>
-    <div class="fl-div"></div>
-    <p class="fl-intro">This preview showed two fragments. The complete Relationship Reading contains all chapters below — each anchored in your exact birth data, written for the two of you together.</p>
-    <div class="chapters">
-      <div class="ch-item"><span class="ch-n">01</span>The energetic connection</div>
-      <div class="ch-item"><span class="ch-n">02</span>Decision-making as a couple</div>
-      <div class="ch-item"><span class="ch-n">03</span>Electromagnetic channels</div>
-      <div class="ch-item"><span class="ch-n">04</span>Communication and language</div>
-      <div class="ch-item"><span class="ch-n">05</span>Intimacy and touch</div>
-      <div class="ch-item"><span class="ch-n">06</span>Conflict patterns and repair</div>
-      <div class="ch-item"><span class="ch-n">07</span>Open centres: conditioning in relationship</div>
-      <div class="ch-item"><span class="ch-n">08</span>Growth and the third entity</div>
-    </div>
-    <div class="fl-cta">
-      <div class="fl-cta-l">
-        <p class="fl-cta-sl">Your complete reading</p>
-        <p class="fl-cta-tx">All chapters. One document.</p>
+<!-- ═══ PAGE 8 · FINAL ═══ -->
+<div class="page" style="background:#F7F5F0;">
+  <div style="height:3px;background:#1A1715;"></div>
+  <div style="padding:14mm 24mm 0;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.28em;text-transform:uppercase;margin-bottom:10px;">THE FULL READING</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:24pt;font-weight:400;color:#1A1715;line-height:1.1;margin-bottom:8px;">What you are yet to discover.</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin-bottom:16px;"></div>
+    <p style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:300;color:#6B6560;line-height:1.72;margin-bottom:20px;max-width:150mm;">This preview showed two fragments. The full Relationship Reading contains all the chapters below — each grounded in your exact birth data, written for the two of you together.</p>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">01</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">The energetic connection</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">02</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Decision-making as a couple</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">03</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Electromagnetic channels</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">04</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Communication and language</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">05</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Intimacy and touch</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">06</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Conflict patterns and repair</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">07</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Open centres: conditioning in relationship</span></div>
+    <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:0.4px solid #E5E0D8;"><span style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:11pt;color:#C9A85C;min-width:28px;">08</span><span style="font-family:'Inter',sans-serif;font-size:10pt;font-weight:400;color:#2A2820;flex:1;">Growth and the third entity</span></div>
+  </div>
+  <div style="position:absolute;bottom:0;left:0;right:0;">
+    <div style="background:#1A1715;padding:22px 30px;display:flex;align-items:center;justify-content:space-between;">
+      <div>
+        <div style="font-family:'Inter',sans-serif;font-size:7.5pt;letter-spacing:0.18em;text-transform:uppercase;color:rgba(201,168,92,0.6);margin-bottom:3px;">Your complete reading</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:19pt;font-style:italic;font-weight:300;color:#fff;">All chapters. One document.</div>
       </div>
-      <div class="fl-cta-btn">FacultyHD.com</div>
+      <div style="border:1px solid rgba(201,168,92,0.45);padding:10px 22px;font-family:'Inter',sans-serif;font-size:8.5pt;letter-spacing:0.18em;text-transform:uppercase;color:rgba(201,168,92,0.75);">FacultyHD.com</div>
     </div>
   </div>
 </div>
