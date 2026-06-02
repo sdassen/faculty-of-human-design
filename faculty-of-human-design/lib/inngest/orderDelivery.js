@@ -2275,6 +2275,9 @@ export const orderDelivery = inngest.createFunction(
       const isHDReport = !/horoscoop|numerologie/i.test(order.report_title || "");
       if (!isHDReport || !bd.day) return order;
 
+      const isChildReport = order.report_id === "kind" ||
+        /kinderrapport|child\s*report/i.test(order.report_title || "");
+
       try {
         const serverChart = calcHDServer({
           day:    parseInt(bd.day),
@@ -2292,9 +2295,10 @@ export const orderDelivery = inngest.createFunction(
           _browser_chart: bd.chart,
         };
 
+        const db = getSupabase();
+
         // ← CRITICAL: persist authoritative chart so all future renders use
         // the same chartFacts that will drive LLM generation below.
-        const db = getSupabase();
         const { error: updateErr } = await db
           .from("orders")
           .update({ birth_data: newBirthData })
@@ -2303,7 +2307,49 @@ export const orderDelivery = inngest.createFunction(
           console.warn(`[recompute-chart] Could not persist chart to DB: ${updateErr.message}`);
         }
 
-        return { ...order, birth_data: newBirthData };
+        // ── Child report: also recompute the child's chart ─────────────────
+        // partner_birth_data holds the child's birth data for kind reports.
+        // The browser never calculates the child's chart, so without this step
+        // hasPartnerChart stays false → profile page, bodygraph and gate
+        // appendix are all skipped in the PDF.
+        let newPartnerBirthData = order.partner_birth_data || null;
+        if (isChildReport) {
+          const pbd = order.partner_birth_data || {};
+          if (pbd.day) {
+            try {
+              const childServerChart = calcHDServer({
+                day:    parseInt(pbd.day),
+                month:  parseInt(pbd.month),
+                year:   parseInt(pbd.year),
+                hour:   pbd.hour != null ? parseInt(pbd.hour) : 12,
+                minute: pbd.minute != null ? parseInt(pbd.minute) : 0,
+                tz:     pbd.tz != null ? parseFloat(pbd.tz) : 1,
+              });
+              newPartnerBirthData = {
+                ...pbd,
+                chart: childServerChart,
+                _browser_chart: pbd.chart,
+              };
+              const { error: childUpdateErr } = await db
+                .from("orders")
+                .update({ partner_birth_data: newPartnerBirthData })
+                .eq("id", orderId);
+              if (childUpdateErr) {
+                console.warn(`[recompute-chart] Could not persist child chart to DB: ${childUpdateErr.message}`);
+              }
+            } catch (childErr) {
+              console.warn(`[recompute-chart] Child chart failed for ${orderId}: ${childErr.message}`);
+            }
+          } else {
+            console.warn(`[recompute-chart] Kind rapport ${orderId} has no partner_birth_data.day — child chart skipped`);
+          }
+        }
+
+        return {
+          ...order,
+          birth_data: newBirthData,
+          ...(newPartnerBirthData !== null ? { partner_birth_data: newPartnerBirthData } : {}),
+        };
       } catch (e) {
         console.warn(`[recompute-chart] Failed for ${orderId}, using browser chart: ${e.message}`);
         return order;
