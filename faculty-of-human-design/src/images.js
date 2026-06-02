@@ -66,7 +66,7 @@ export const IMGS = {
   r_relatie_business: "https://images.unsplash.com/photo-1491555103944-7c647fd857e6?w=900&auto=format&fit=crop&q=80",
   r_relatie_familie:  "/img-family-hero.jpg",
   r_jaar:             "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&auto=format&fit=crop&q=80",
-  r_kind:             "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&auto=format&fit=crop&q=80",
+  r_kind:             "/img-child-reading.jpg",
   r_loopbaan:         "/img_business-woman.jpg",
   r_numerologie:      "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=900&auto=format&fit=crop&q=80",
   r_horoscoop:        "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=900&auto=format&fit=crop&q=80",
