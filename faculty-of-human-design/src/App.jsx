@@ -3954,7 +3954,11 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
             >{heroCta}</button>
             <span style={{fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"rgba(255,255,255,.38)",textTransform:"uppercase"}}>{rpt.price} · {LANG==="en"?"personal · delivered by email":"persoonlijk · bezorgd per e-mail"}</span>
-            {rpt.id==="volledig"&&<a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.45)",textDecoration:"none",borderBottom:"1px solid rgba(255,255,255,.2)",paddingBottom:2,cursor:"pointer",transition:"color .2s,border-color .2s"}} onMouseEnter={e=>{e.currentTarget.style.color="rgba(255,255,255,.75)";e.currentTarget.style.borderColor="rgba(255,255,255,.5)";}} onMouseLeave={e=>{e.currentTarget.style.color="rgba(255,255,255,.45)";e.currentTarget.style.borderColor="rgba(255,255,255,.2)";}}>
+            {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<a href={
+                rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
+                rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
+                (LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")
+              } target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"rgba(255,255,255,.45)",textDecoration:"none",borderBottom:"1px solid rgba(255,255,255,.2)",paddingBottom:2,cursor:"pointer",transition:"color .2s,border-color .2s"}} onMouseEnter={e=>{e.currentTarget.style.color="rgba(255,255,255,.75)";e.currentTarget.style.borderColor="rgba(255,255,255,.5)";}} onMouseLeave={e=>{e.currentTarget.style.color="rgba(255,255,255,.45)";e.currentTarget.style.borderColor="rgba(255,255,255,.2)";}}>
               {LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}
             </a>}
           </div>
