@@ -70,7 +70,7 @@ export const IMGS = {
   wat_hd:          "/img-volledig-hero.jpg",
 
   // Visuele pauze bij het Astrologie blok
-  wat_astro:       "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=2000&auto=format&fit=crop&q=80",
+  wat_astro:       "/img-elements-landscape.jpg",
 
 
   // ════════════════════════════════════════════════════════════════════════════
