@@ -5831,8 +5831,14 @@ export default function App(){
   const[result,setResult]=useState(null);
   const[menuOpen,setMenuOpen]=useState(false);
   const[generating,setGenerating]=useState(false);
+  const[pendingScroll,setPendingScroll]=useState(null);
 
   const go=p=>{
+    // Save current scroll position into the current history entry before leaving
+    window.history.replaceState(
+      {...(window.history.state||{}), scrollY: window.scrollY},
+      ""
+    );
     setPage(p);
     setMenuOpen(false);
     window.scrollTo({top:0,left:0,behavior:"instant"});
@@ -5847,15 +5853,24 @@ export default function App(){
 
   // Tag the initial history entry + listen for back/forward
   useEffect(()=>{
+    history.scrollRestoration="manual";
     window.history.replaceState({page:pathToPage(window.location.pathname)},"",window.location.href);
     const onPop=e=>{
       const p=e.state?.page||pathToPage(window.location.pathname);
       setPage(p);
-      window.scrollTo({top:0,left:0,behavior:"instant"});
+      // Restore saved scroll position after React re-renders (not immediate scrollTo(0))
+      setPendingScroll(e.state?.scrollY??0);
     };
     window.addEventListener("popstate",onPop);
     return()=>window.removeEventListener("popstate",onPop);
   },[]);
+
+  // Restore scroll after back/forward navigation — runs after React renders the page
+  useEffect(()=>{
+    if(pendingScroll===null) return;
+    window.scrollTo({top:pendingScroll,left:0,behavior:"instant"});
+    setPendingScroll(null);
+  },[pendingScroll]);
 
   // Handle return from Stripe payment
   useEffect(()=>{
