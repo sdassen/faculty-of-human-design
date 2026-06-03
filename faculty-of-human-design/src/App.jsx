@@ -3921,7 +3921,6 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor="rgba(255,255,255,.45)";}}
               onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
             >{heroCta}</button>
-            <span style={{fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"rgba(255,255,255,.38)",textTransform:"uppercase"}}>{rpt.price} · {LANG==="en"?"personal · delivered by email":"persoonlijk · bezorgd per e-mail"}</span>
             {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<a href={
                 rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
                 rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
