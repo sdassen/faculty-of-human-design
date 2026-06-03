@@ -3381,13 +3381,13 @@ function HomePage({go}){
           </div>
           <div className="testimonials-grid">
             {(lang==="en"?[
-              ["I felt emotionally recognised for the first time, not analysed. Something in me landed in the right place.","S. Muller, Utrecht","Human Design Reading"],
-              ["We had struggled to understand each other for years. The reading named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","T. and E. Dubois, Antwerp","Relationship Reading"],
-              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","M. van den Berg, Amsterdam","Human Design Reading"],
+              ["I felt emotionally recognised for the first time, not analysed. Something in me landed in the right place.","Sophie M., Utrecht","Human Design Reading"],
+              ["We had struggled to understand each other for years. The reading named exactly the patterns we couldn't see ourselves. One evening of reading changed how we speak to each other.","Thomas & Elena D., Antwerp","Relationship Reading"],
+              ["Three months later I still read it. Every chapter reveals something I had long felt but never been able to name.","Merel V., Amsterdam","Human Design Reading"],
             ]:[
-              ["Ik voelde me voor het eerst emotioneel erkend, niet geanalyseerd. Iets in mij raakte op zijn plek.","S. Muller, Utrecht","Human Design Reading"],
-              ["Wij hadden al jaren moeite om elkaar te begrijpen. De reading noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","T. en E. Dubois, Antwerpen","Relationship Reading"],
-              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","M. van den Berg, Amsterdam","Human Design Reading"],
+              ["Ik voelde me voor het eerst emotioneel erkend, niet geanalyseerd. Iets in mij raakte op zijn plek.","Sophie M., Utrecht","Human Design Reading"],
+              ["Wij hadden al jaren moeite om elkaar te begrijpen. De reading noemde precies de patronen die wij zelf niet konden zien. Eén avond lezen veranderde hoe wij met elkaar praten.","Thomas & Elena D., Antwerpen","Relationship Reading"],
+              ["Drie maanden later lees ik het nog steeds. Elk hoofdstuk legt iets bloot dat ik al lang voelde maar nooit had kunnen benoemen.","Merel V., Amsterdam","Human Design Reading"],
             ]).map(([q,n,r])=>(
               <div key={n} style={{display:"flex",flexDirection:"column",paddingTop:28,borderTop:"1px solid var(--border)"}}>
                 <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.82,margin:"0 0 28px",letterSpacing:"-.005em",textAlign:"left"}}>
