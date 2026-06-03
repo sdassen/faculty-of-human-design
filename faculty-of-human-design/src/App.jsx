@@ -438,8 +438,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .origin-stat { grid-template-columns:repeat(3,1fr); }
   /* HD grid: 4→2 columns at medium breakpoint */
   .rapporten-hd-grid { grid-template-columns:repeat(2,1fr); gap:48px 32px; }
-  /* Credibility: 4→2 columns early to prevent overflow */
-  .credibility-grid { grid-template-columns:1fr 1fr; gap:40px 48px; }
+  /* Credibility: 3 items, stays 3 columns */
 }
 @media (max-width:1024px) {
   .detail-hero-inner { grid-template-columns:1fr; }
@@ -3349,18 +3348,12 @@ function HomePage({go}){
           <div className="credibility-grid">
             {(lang==="en"?[
               ["Since 2014","Founded on Ibiza, the island where Human Design was received in 1987. That origin is not background. It is the reason."],
-              ["2,400+\npersonal\nreadings","Not generated from templates. Every reading drawn from its own chart, composed by hand, specific to the person."],
               ["Swiss\nEphemeris","Every calculation uses the professional astronomical standard — exact planetary positions to the degree, not approximations."],
               ["Three\ndisciplines","Human Design, Numerology and Astrology — used together as a single, unified language for who you are."],
-              ["40+\npages","No bullet points, no generic texts. Extensive prose tailored to your unique combination of Type, Authority and Profile."],
-              ["Recognition\nover labels","A reading does not tell you who to become. It shows you what was always already true."],
             ]:[
               ["Sinds 2014","Opgericht op Ibiza, het eiland waar Human Design in 1987 werd ontvangen. Die oorsprong is geen achtergrond. Het is de reden."],
-              ["2.400+\npersoonlijke\nreadings","Niet gegenereerd uit templates. Elke reading getrokken uit de eigen chart, met de hand samengesteld, specifiek voor de persoon."],
               ["Swiss\nEphemeris","Elke berekening gebruikt de professionele astronomische standaard — exacte planeetposities tot op de graad, geen benaderingen."],
               ["Drie\ndisciplines","Human Design, Numerologie en Astrologie — samen gebruikt als één, verenigde taal voor wie je bent."],
-              ["40+\npagina's","Geen bulletpoints, geen generieke teksten. Uitgebreide proza afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
-              ["Herkenning\nboven labels","Een reading vertelt je niet wie je moet worden. Het laat zien wat altijd al waar was."],
             ]).map(([n,desc])=>(
               <div key={n} style={{borderTop:"1px solid rgba(255,255,255,.08)",paddingTop:28}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.55rem",fontWeight:300,color:"white",lineHeight:1.15,marginBottom:16,whiteSpace:"pre-line"}}>{n}</div>
