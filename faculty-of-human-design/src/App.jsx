@@ -3906,7 +3906,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
         <div style={{position:"relative",zIndex:1,width:"100%",padding:"0 0 72px",display:"flex",flexDirection:"column",alignItems:"center",textAlign:"center"}}>
           <div style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",marginBottom:24}}>{LANG==="en"?"Faculty of Human Design — Ibiza":"Faculty of Human Design — Ibiza"}</div>
           <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.4rem,5vw,4rem)",fontWeight:300,color:"white",lineHeight:1.08,letterSpacing:"-.02em",marginBottom:20,maxWidth:680,padding:"0 32px"}}>{rptOutcome||rptTitle}</h1>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.6vw,1.15rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.55)",marginBottom:40,maxWidth:480,lineHeight:1.7,padding:"0 32px"}}>{rptTagline}</p>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.6vw,1.15rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.82)",marginBottom:40,maxWidth:480,lineHeight:1.7,padding:"0 32px",textShadow:"0 1px 12px rgba(0,0,0,.55)"}}>{rptTagline}</p>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
             <button
               style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"white",background:"transparent",border:"1px solid rgba(255,255,255,.45)",padding:"14px 40px",cursor:"pointer",transition:"all .3s ease"}}
@@ -3973,8 +3973,8 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
           </div>
           <div style={{display:"flex",flexDirection:"column"}}>
             {sections.map((item,i)=>(
-              <div key={i} style={{display:"flex",alignItems:"baseline",gap:32,padding:"24px 0",borderBottom:"1px solid var(--border)"}}>
-                <span style={{fontFamily:"var(--font-sans)",fontSize:".56rem",fontWeight:400,color:"var(--gold)",letterSpacing:".12em",opacity:.5,flexShrink:0,minWidth:24}}>{String(i+1).padStart(2,"0")}</span>
+              <div key={i} style={{display:"flex",alignItems:"flex-start",gap:32,padding:"24px 0",borderBottom:"1px solid var(--border)"}}>
+                <span style={{fontFamily:"var(--font-sans)",fontSize:".56rem",fontWeight:400,color:"var(--gold)",letterSpacing:".12em",opacity:.5,flexShrink:0,minWidth:24,paddingTop:"0.3em"}}>{String(i+1).padStart(2,"0")}</span>
                 <span style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:300,color:"var(--text)",lineHeight:1.45}}>{item}</span>
               </div>
             ))}
