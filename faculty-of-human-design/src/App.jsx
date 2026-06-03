@@ -427,7 +427,7 @@ button { cursor:pointer; font-family:var(--font-sans); }
 .experience-connector { position:absolute; left:13px; top:44px; bottom:-48px; width:1px; background:var(--border); }
 
 /* ── BRAND CREDIBILITY SECTION ───────────────────────────────────────────── */
-.credibility-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0 48px; }
+.credibility-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:40px 48px; }
 
 /* RESPONSIVE */
 @media (max-width:1100px) {
@@ -3232,40 +3232,6 @@ function HomePage({go}){
         </div>
       </section>
 
-      {/* ── WAAROM ANDERS — open editorial pillars ───────────────────────── */}
-      <section style={{padding:"112px 0",background:"#fff"}}>
-        <div className="container">
-          <div className="editorial-header">
-            <div>
-              <div className="label" style={{marginBottom:14}}>{t("home.waaromLabel")}</div>
-              <h2 className="h2" style={{marginBottom:0,maxWidth:480}}>{t("home.waaromTitle")}</h2>
-            </div>
-            <div style={{width:48,height:1,background:"var(--gold)",opacity:.4,marginBottom:6}}/>
-          </div>
-          <div className="waarom-grid">
-            {(LANG==="en"?[
-              [IMGS.w_precision,"Astronomical precision","Swiss Ephemeris","Every calculation uses Swiss Ephemeris, the professional standard for exact planetary positions to the degree."],
-              [IMGS.w_depth,    "In-depth analysis",     "40+ pages",      "No bullet points, no generic texts. Extensive prose tailored to your unique combination of Type, Authority and Profile."],
-              [IMGS.w_ibiza,    "Ibiza as origin",       "Est. 2014",      "Founded on the island where Ra Uru Hu received the Human Design system in 1987. Every report carries that clarity."],
-            ]:[
-              [IMGS.w_precision,"Astronomische precisie","Swiss Ephemeris","Elke berekening gebruikt Swiss Ephemeris, de professionele standaard voor exacte planeetposities tot op de graad."],
-              [IMGS.w_depth,    "Diepgaande analyse",    "40+ pagina's",   "Geen bulletpoints, geen generieke teksten. Uitgebreide proza afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
-              [IMGS.w_ibiza,    "Ibiza als oorsprong",   "Est. 2014",      "Opgericht op het eiland waar Ra Uru Hu in 1987 het Human Design systeem ontving. Elk rapport draagt die helderheid."],
-            ]).map(([img,title,badge,desc])=>(
-              <div key={title} style={{display:"flex",flexDirection:"column"}}>
-                <div style={{position:"relative",aspectRatio:"3/4",overflow:"hidden",marginBottom:28}}>
-                  <img src={img} alt={`Faculty of Human Design — ${title}`} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
-                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 55%,rgba(8,7,16,.45) 100%)"}}/>
-                  <div style={{position:"absolute",bottom:18,left:20,fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.7)",textTransform:"uppercase",letterSpacing:".14em"}}>{badge}</div>
-                </div>
-                <div style={{width:28,height:1,background:"var(--gold)",marginBottom:20,opacity:.6}}/>
-                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.25rem",fontWeight:400,color:"var(--text)",marginBottom:12,lineHeight:1.2}}>{title}</h4>
-                <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8}}>{desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* ── EDITORIAL QUOTE PAUSE ────────────────────────────────────────── */}
       <div style={{background:"var(--bg)",padding:"96px 40px",textAlign:"center"}}>
@@ -3386,12 +3352,16 @@ function HomePage({go}){
             {(lang==="en"?[
               ["Since 2014","Founded on Ibiza, the island where Human Design was received in 1987. That origin is not background. It is the reason."],
               ["2,400+\npersonal\nreadings","Not generated from templates. Every reading drawn from its own chart, composed by hand, specific to the person."],
+              ["Swiss\nEphemeris","Every calculation uses the professional astronomical standard — exact planetary positions to the degree, not approximations."],
               ["Three\ndisciplines","Human Design, Numerology and Astrology — used together as a single, unified language for who you are."],
+              ["40+\npages","No bullet points, no generic texts. Extensive prose tailored to your unique combination of Type, Authority and Profile."],
               ["Recognition\nover labels","A reading does not tell you who to become. It shows you what was always already true."],
             ]:[
               ["Sinds 2014","Opgericht op Ibiza, het eiland waar Human Design in 1987 werd ontvangen. Die oorsprong is geen achtergrond. Het is de reden."],
-              ["2.400+\npersoonlijke\nreadings","Niet gegenereerd uit templates. Elke reading getrokken uit zijn eigen chart, met de hand samengesteld, specifiek voor de persoon."],
+              ["2.400+\npersoonlijke\nreadings","Niet gegenereerd uit templates. Elke reading getrokken uit de eigen chart, met de hand samengesteld, specifiek voor de persoon."],
+              ["Swiss\nEphemeris","Elke berekening gebruikt de professionele astronomische standaard — exacte planeetposities tot op de graad, geen benaderingen."],
               ["Drie\ndisciplines","Human Design, Numerologie en Astrologie — samen gebruikt als één, verenigde taal voor wie je bent."],
+              ["40+\npagina's","Geen bulletpoints, geen generieke teksten. Uitgebreide proza afgestemd op jouw unieke combinatie van Type, Autoriteit en Profiel."],
               ["Herkenning\nboven labels","Een reading vertelt je niet wie je moet worden. Het laat zien wat altijd al waar was."],
             ]).map(([n,desc])=>(
               <div key={n} style={{borderTop:"1px solid rgba(255,255,255,.08)",paddingTop:28}}>
