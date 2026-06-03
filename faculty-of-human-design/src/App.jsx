@@ -5869,8 +5869,8 @@ function CookieBanner({ lang, onGo }) {
         color:"rgba(255,255,255,.6)", lineHeight:1.6, margin:0, flex:"1 1 300px",
       }}>
         {isEN
-          ? <>We use analytics cookies (Google Analytics) to understand how visitors use our site. <span style={{textDecoration:"underline",cursor:"pointer",color:"rgba(255,255,255,.45)"}} onClick={()=>onGo("voorwaarden")}>Privacy policy</span>.</>
-          : <>We gebruiken analytische cookies (Google Analytics) om te begrijpen hoe bezoekers onze site gebruiken. <span style={{textDecoration:"underline",cursor:"pointer",color:"rgba(255,255,255,.45)"}} onClick={()=>onGo("voorwaarden")}>Privacybeleid</span>.</>}
+          ? <>We use cookies to improve your experience. <span style={{textDecoration:"underline",cursor:"pointer",color:"rgba(255,255,255,.45)"}} onClick={()=>onGo("voorwaarden")}>Privacy policy</span>.</>
+          : <>We gebruiken cookies om je ervaring te verbeteren. <span style={{textDecoration:"underline",cursor:"pointer",color:"rgba(255,255,255,.45)"}} onClick={()=>onGo("voorwaarden")}>Privacybeleid</span>.</>}
       </p>
       <div style={{display:"flex", gap:10, flexShrink:0}}>
         <button onClick={decline} style={{
