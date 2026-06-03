@@ -314,8 +314,6 @@ export default {
     email: "info@facultyhd.com",
     explore: "Explore",
     terms: "Terms & Privacy",
-    ssl: "SSL secured",
-    ideal: "iDEAL available",
     copy: "© 2026 Faculty of Human Design. All rights reserved.",
   },
 };

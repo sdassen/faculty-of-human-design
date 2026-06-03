@@ -1302,7 +1302,7 @@ const REPORT_FAQS = {
   maandelijks:{
     nl:[
       ["Wanneer ontvang ik mijn eerste maandrapport?","Binnen 1 werkdag na je eerste betaling. Daarna ontvang je elke maand een nieuw rapport — afgestemd op de energetische thema's van die specifieke maand en jouw chart."],
-      ["Hoe opzeg ik mijn abonnement?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Scroll naar het onderdeel 'Beheer je abonnement' onderaan deze pagina, vul je e-mailadres in en je wordt doorgestuurd naar de beveiligde portal. Daar kun je opzeggen, facturen inzien of je betaalgegevens aanpassen. Je ontvangt daarna een bevestigingsmail."],
+      ["Hoe zeg ik mijn abonnement op?","Maandelijks opzegbaar, zonder opzegtermijn of verborgen kosten. Scroll naar het onderdeel 'Beheer je abonnement' onderaan deze pagina, vul je e-mailadres in en je wordt doorgestuurd naar de beveiligde portal. Daar kun je opzeggen, facturen inzien of je betaalgegevens aanpassen. Je ontvangt daarna een bevestigingsmail."],
       ["Is elk maandrapport anders?","Ja. Elk rapport is gebaseerd op de planetaire invloeden van die specifieke maand in relatie tot jouw persoonlijke chart. Thema's, kansen en aandachtspunten wisselen elke maand."],
       ["Heb ik ook een Volledig Rapport nodig?","Het maandabonnement is op zichzelf staand. Als je ook een Volledig Rapport hebt, is de maandelijkse guidance nog rijker — omdat je de context van je eigen chart al kent."],
       ["Hoeveel pagina's is een maandrapport?","Gemiddeld 12 pagina's — compact en gericht op de thema's van die maand."],
@@ -2294,8 +2294,6 @@ function Footer({go}){
           <div className="footer-copy">{t("footer.copy")}</div>
           <div className="footer-trust">
             <span className="footer-trust-item" style={{cursor:"pointer"}} onClick={()=>go("voorwaarden")}>{t("footer.terms")}</span>
-            <div className="footer-trust-item">{t("footer.ssl")}</div>
-            <div className="footer-trust-item">{t("footer.ideal")}</div>
             <div style={{display:"flex",gap:4,marginLeft:8}}>
               {[["nl","NL"],["en","EN"]].map(([lng,lbl])=>(
                 <button key={lng} onClick={()=>switchLang(lng)} style={{
