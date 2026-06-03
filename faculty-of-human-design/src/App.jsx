@@ -3231,19 +3231,6 @@ function HomePage({go}){
       </section>
 
 
-      {/* ── EDITORIAL QUOTE PAUSE ────────────────────────────────────────── */}
-      <div style={{background:"var(--bg)",padding:"96px 40px",textAlign:"center"}}>
-        <div style={{maxWidth:620,margin:"0 auto"}}>
-          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 40px",opacity:.45}}/>
-          <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.35rem,2.2vw,1.75rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.55,letterSpacing:"-.01em",margin:0}}>
-            {lang==="en"
-              ? "\"Not a personality test. A precise map of your energetic architecture, drawn from the exact moment you arrived.\""
-              : "\"Geen persoonlijkheidstest. Een nauwkeurige kaart van jouw energetische architectuur, getekend uit het exacte moment waarop jij arriveerde.\""}
-          </blockquote>
-          <div style={{width:1,height:48,background:"var(--gold)",margin:"40px auto 0",opacity:.45}}/>
-        </div>
-      </div>
-
       {/* ── MEEST GEKOZEN — editorial feature split ──────────────────────── */}
       <div className="feature-split">
         <div className="feature-content">
@@ -3260,6 +3247,19 @@ function HomePage({go}){
         <div className="feature-image-wrap ph">
           <img src={IMGS.ibiza} alt="Ibiza golden hour" loading="lazy"/>
           <div className="ov" style={{background:"linear-gradient(to bottom,rgba(12,10,23,.05) 0%,rgba(12,10,23,.4) 100%)"}}/>
+        </div>
+      </div>
+
+      {/* ── EDITORIAL QUOTE PAUSE ────────────────────────────────────────── */}
+      <div style={{background:"var(--bg)",padding:"96px 40px",textAlign:"center"}}>
+        <div style={{maxWidth:620,margin:"0 auto"}}>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"0 auto 40px",opacity:.45}}/>
+          <blockquote style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.35rem,2.2vw,1.75rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.55,letterSpacing:"-.01em",margin:0}}>
+            {lang==="en"
+              ? "\"Not a personality test. A precise map of your energetic architecture, drawn from the exact moment you arrived.\""
+              : "\"Geen persoonlijkheidstest. Een nauwkeurige kaart van jouw energetische architectuur, getekend uit het exacte moment waarop jij arriveerde.\""}
+          </blockquote>
+          <div style={{width:1,height:48,background:"var(--gold)",margin:"40px auto 0",opacity:.45}}/>
         </div>
       </div>
 
