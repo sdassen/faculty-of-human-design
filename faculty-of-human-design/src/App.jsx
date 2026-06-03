@@ -2911,8 +2911,8 @@ Geen sectietitel in de tekst.`);
               <div className="form-divider"/>
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{t("form.partnerSection",{label:tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")})}</div>
               <div className="form-grid">
-                <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pFirstName" value={form.pFirstName} onChange={ch} placeholder={LANG==="en"?"Thomas":"Thomas"}/></div>
-                <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pLastName" value={form.pLastName} onChange={ch} placeholder={LANG==="en"?"Vermeer":"Vermeer"}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pFirstName" value={form.pFirstName} onChange={ch} placeholder={LANG==="en"?"Laura":"Laura"}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label><input className="form-input" name="pLastName" value={form.pLastName} onChange={ch} placeholder={LANG==="en"?"Janssen":"Janssen"}/></div>
                 {rpt.id==="relatie_familie"&&<div className="form-group full"><label className="form-label">{LANG==="en"?"Relationship":"Relatie"}</label><select className="form-select" name="familyRelation" value={form.familyRelation||""} onChange={ch}><option value="">{LANG==="en"?"Select relationship…":"Selecteer relatie…"}</option><option value={LANG==="en"?"Parent & child":"Ouder & kind"}>{LANG==="en"?"Parent & child":"Ouder & kind"}</option><option value={LANG==="en"?"Siblings":"Broer & zus"}>{LANG==="en"?"Siblings":"Broer & zus"}</option><option value={LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}>{LANG==="en"?"Grandparent & grandchild":"Grootouder & kleinkind"}</option><option value={LANG==="en"?"Other family relationship":"Andere familierelatie"}>{LANG==="en"?"Other family relationship":"Andere familierelatie"}</option></select></div>}
 {rpt.id==="relatie_familie"&&form.familyRelation&&(()=>{
   const roles=getFamilyRoles(form.familyRelation,form.familyRolesSwapped);
@@ -2929,15 +2929,15 @@ Geen sectietitel in de tekst.`);
     {isH&&<button type="button" onClick={()=>setForm(f=>({...f,familyRolesSwapped:!f.familyRolesSwapped}))} style={{fontSize:".68rem",fontWeight:400,letterSpacing:".1em",textTransform:"uppercase",background:"transparent",border:"1px solid rgba(26,23,20,.2)",padding:"6px 12px",cursor:"pointer",color:"var(--text-muted)",whiteSpace:"nowrap",flexShrink:0}}>⇄ {LANG==="en"?"Swap":"Omdraaien"}</button>}
   </div>;
 })()}
-                <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)}/></div>
+                <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="pday" min="1" max="31" value={form.pday} onChange={ch} onBlur={numBlur("pday",1,31)} placeholder="8"/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="pmonth" value={form.pmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
-                <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())}/></div>
+                <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="pyear" min="1900" max={new Date().getFullYear()} value={form.pyear} onChange={ch} onBlur={numBlur("pyear",1900,new Date().getFullYear())} placeholder="1985"/></div>
                 <div className="form-group"><label className="form-label">{t("form.birthTime")}</label><div className="form-row"><input className="form-input" type="number" name="phour" min="0" max="23" value={form.phour} onChange={ch} onBlur={numBlur("phour",0,23)} placeholder={t("form.hour")}/><input className="form-input" type="number" name="pminute" min="0" max="59" value={form.pminute} onChange={ch} onBlur={numBlur("pminute",0,59)} placeholder={t("form.minute")}/></div></div>
                 <div className="form-group full">
                   <label className="form-label">{t("form.birthPlace")} {tl(rpt.partnerLabel)||(LANG==="en"?"partner":"partner")}</label>
                   <PlaceAutocomplete
                     value={form.pplace}
-                    placeholder={t("form.placePlaceholder")}
+                    placeholder={LANG==="en"?"Rotterdam, Netherlands":"Rotterdam, Nederland"}
                     onSelect={({place,lat,lon,timezone})=>setForm(f=>({...f,pplace:place,plat:lat||"",plon:lon||"",ptimezone:timezone||"",ptz:""}))}
                   />
                 </div>
@@ -2948,7 +2948,7 @@ Geen sectietitel in de tekst.`);
               <div style={{fontSize:".85rem",color:"var(--text-muted)",marginBottom:14}}>{LANG==="en"?"Child's details":"Gegevens kind"}</div>
               <div className="form-grid">
                 <div className="form-group"><label className="form-label">{LANG==="en"?"First name":"Voornaam"} {LANG==="en"?"child":"kind"}</label><input className="form-input" name="cFirstName" value={form.cFirstName} onChange={ch} placeholder={LANG==="en"?"Emma":"Emma"}/></div>
-                <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"} {LANG==="en"?"child":"kind"}</label><input className="form-input" name="cLastName" value={form.cLastName} onChange={ch} placeholder={LANG==="en"?"Vermeer":"Vermeer"}/></div>
+                <div className="form-group"><label className="form-label">{LANG==="en"?"Last name":"Achternaam"} {LANG==="en"?"child":"kind"}</label><input className="form-input" name="cLastName" value={form.cLastName} onChange={ch} placeholder={LANG==="en"?"Janssen":"Janssen"}/></div>
                 <div className="form-group"><label className="form-label">{t("form.day")}</label><input className="form-input" type="number" name="cday" min="1" max="31" value={form.cday} onChange={ch} onBlur={numBlur("cday",1,31)} placeholder="15"/></div>
                 <div className="form-group"><label className="form-label">{t("form.month")}</label><select className="form-select" name="cmonth" value={form.cmonth} onChange={ch}><option value="">{LANG==="en"?"month":"maand"}</option>{MONTHS.map((m,i)=><option key={i} value={i+1}>{m}</option>)}</select></div>
                 <div className="form-group"><label className="form-label">{t("form.year")}</label><input className="form-input" type="number" name="cyear" min="1900" max={new Date().getFullYear()} value={form.cyear} onChange={ch} onBlur={numBlur("cyear",1900,new Date().getFullYear())} placeholder="2018"/></div>
