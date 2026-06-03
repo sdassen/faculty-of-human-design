@@ -96,6 +96,13 @@
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+      // Default: block analytics until user consents
+      gtag('consent', 'default', { analytics_storage: 'denied' });
+      // Restore consent if already given in a previous session
+      try {
+        var c = localStorage.getItem('fhd_cookie_consent');
+        if (c === 'accepted') gtag('consent', 'update', { analytics_storage: 'granted' });
+      } catch(e) {}
       gtag('js', new Date());
       gtag('config', 'G-KCJS2DMSK1', { send_page_view: false });
     </script>

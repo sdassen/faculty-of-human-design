@@ -3122,6 +3122,11 @@ Geen sectietitel in de tekst.`);
                   :(rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading"))}
               </button>
               <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
+              <p style={{marginTop:12,fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)",lineHeight:1.6,textAlign:"center"}}>
+                {LANG==="en"
+                  ?<>By ordering you agree to our <span style={{textDecoration:"underline",cursor:"pointer"}} onClick={()=>go("voorwaarden")}>Terms & Privacy</span>.</>
+                  :<>Door te bestellen ga je akkoord met onze <span style={{textDecoration:"underline",cursor:"pointer"}} onClick={()=>go("voorwaarden")}>Algemene Voorwaarden & Privacy</span>.</>}
+              </p>
               {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<div style={{marginTop:16}}><a href={
                   rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
                   rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
@@ -5827,6 +5832,72 @@ function TermsPage({go}){
   );
 }
 
+// ─── COOKIE CONSENT BANNER ───────────────────────────────────────────────────
+function CookieBanner({ lang, onGo }) {
+  const STORAGE_KEY = "fhd_cookie_consent";
+  const [visible, setVisible] = useState(() => {
+    try { return !localStorage.getItem(STORAGE_KEY); } catch { return false; }
+  });
+
+  if (!visible) return null;
+
+  const accept = () => {
+    try { localStorage.setItem(STORAGE_KEY, "accepted"); } catch {}
+    // Enable GA4 now that consent is given
+    if (typeof window.gtag === "function") {
+      window.gtag("consent", "update", { analytics_storage: "granted" });
+    }
+    setVisible(false);
+  };
+
+  const decline = () => {
+    try { localStorage.setItem(STORAGE_KEY, "declined"); } catch {}
+    setVisible(false);
+  };
+
+  const isEN = lang === "en";
+
+  return (
+    <div style={{
+      position:"fixed", bottom:0, left:0, right:0, zIndex:9999,
+      background:"var(--dark)", borderTop:"1px solid rgba(255,255,255,.1)",
+      padding:"18px 24px", display:"flex", alignItems:"center",
+      justifyContent:"space-between", gap:16, flexWrap:"wrap",
+    }}>
+      <p style={{
+        fontFamily:"var(--font-sans)", fontSize:".78rem", fontWeight:300,
+        color:"rgba(255,255,255,.6)", lineHeight:1.6, margin:0, flex:"1 1 300px",
+      }}>
+        {isEN
+          ? <>We use analytics cookies (Google Analytics) to understand how visitors use our site. <span style={{textDecoration:"underline",cursor:"pointer",color:"rgba(255,255,255,.45)"}} onClick={()=>onGo("voorwaarden")}>Privacy policy</span>.</>
+          : <>We gebruiken analytische cookies (Google Analytics) om te begrijpen hoe bezoekers onze site gebruiken. <span style={{textDecoration:"underline",cursor:"pointer",color:"rgba(255,255,255,.45)"}} onClick={()=>onGo("voorwaarden")}>Privacybeleid</span>.</>}
+      </p>
+      <div style={{display:"flex", gap:10, flexShrink:0}}>
+        <button onClick={decline} style={{
+          fontFamily:"var(--font-sans)", fontSize:".65rem", fontWeight:400,
+          letterSpacing:".12em", textTransform:"uppercase",
+          background:"transparent", border:"1px solid rgba(255,255,255,.2)",
+          color:"rgba(255,255,255,.45)", padding:"9px 20px", cursor:"pointer",
+          transition:"all .2s",
+        }}
+          onMouseEnter={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,.4)";e.currentTarget.style.color="rgba(255,255,255,.7)";}}
+          onMouseLeave={e=>{e.currentTarget.style.borderColor="rgba(255,255,255,.2)";e.currentTarget.style.color="rgba(255,255,255,.45)";}}
+        >{isEN ? "Decline" : "Weigeren"}</button>
+        <button onClick={accept} style={{
+          fontFamily:"var(--font-sans)", fontSize:".65rem", fontWeight:500,
+          letterSpacing:".12em", textTransform:"uppercase",
+          background:"var(--gold)", border:"1px solid var(--gold)",
+          color:"white", padding:"9px 20px", cursor:"pointer",
+          transition:"all .2s",
+        }}
+          onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
+          onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
+        >{isEN ? "Accept" : "Accepteren"}</button>
+      </div>
+    </div>
+  );
+}
+
 // ─── ROUTER ───────────────────────────────────────────────────────────────────
 export default function App(){
   const dynamicLang = useLang();  // Get reactive language from hook
@@ -5966,6 +6037,7 @@ export default function App(){
             {page!=="result"&&page!=="bedankt"&&<Footer go={go}/>}
           </>
         }
+        <CookieBanner lang={dynamicLang} onGo={go}/>
       </div>
     </LangContext.Provider>
   );
