@@ -873,7 +873,7 @@ const REPORTS = [
     outcome:{ nl:"Begrijp eindelijk wie je werkelijk bent", en:"Finally understand who you truly are" },
     tagline:{ nl:"Je complete persoonlijke blauwdruk", en:"Your complete personal blueprint" },
     intro:{ nl:"Het meest uitgebreide rapport dat wij aanbieden. Een volledige analyse van je Human Design chart: van Type en Autoriteit tot Inkarnatie-Kruis en praktische levensguidance.", en:"The most comprehensive report we offer. A complete analysis of your Human Design chart: from Type and Authority to Incarnation Cross and practical life guidance." },
-    includes:["Type, Strategie & Signature","Autoriteit: hoe je beslissingen neemt","Profiel: het verhaal van je leven","Alle 9 centra geanalyseerd","Actieve kanalen & krachten","Poorten: je natuurlijke kwaliteiten","Inkarnatie-Kruis: je levensdoel","Relaties & werk vanuit je design","Praktische guidance 2026–2028"],
+    includes:["Type, Strategie & Signature","Autoriteit: hoe je beslissingen neemt","Profiel: het verhaal van je leven","Gedefinieerde & open centra","Actieve kanalen & krachten","Poorten: je natuurlijke kwaliteiten","Inkarnatie-Kruis: je levensdoel","Relaties & verbinding","Praktische guidance 2026–2028"],
     for:{ nl:"Voor iedereen die een diepgaand en volledig inzicht wil in hun Human Design.", en:"For everyone seeking deep and complete insight into their Human Design." },
     sections:12, pages:"40+",
     prompt_extra:{
@@ -959,7 +959,7 @@ const REPORTS = [
     outcome:{ nl:"Meer begrip en verbinding in het gezin", en:"More understanding and connection in the family" },
     tagline:{ nl:"Twee designs in familieverband", en:"Two designs in family connection" },
     intro:{ nl:"Een analyse van twee familieleden — ouder en kind, broer en zus, of een andere gezinsrelatie. Hoe opereren jullie designs samen en hoe creëer je meer begrip, verbinding en ruimte?", en:"An analysis of two family members — parent and child, siblings, or another family relationship. How do your designs operate together and how do you create more understanding, connection and space?" },
-    includes:["Beider charts geanalyseerd","Energetische dynamieken in het gezin","Communicatiestijlen per type","Groeimogelijkheden voor beiden","Patronen van conflict en verbinding","Rolverdeling binnen de familie","Opvoedings- en begeleidingstips","Praktische guidance voor meer begrip","Slotanalyse"],
+    includes:["Beider charts geanalyseerd","Familiedynamieken & patronen","Communicatiestijlen & begrip","Groeimogelijkheden voor beiden","Spanningsvelden & oplossingen","Gezamenlijke energie van de binding","Guidance voor meer verbinding","Slotanalyse"],
     for:{ nl:"Voor ouders met kinderen, broers en zussen of andere gezinsleden die meer inzicht willen in hun dynamiek.", en:"For parents with children, siblings or other family members seeking more insight into their dynamic." },
     sections:9, pages:"24+", needsPartner:true,
     partnerLabel:{ nl:"Familielid", en:"Family Member" },
@@ -1016,7 +1016,7 @@ const REPORTS = [
     outcome:{ nl:"Begeleid je kind vanuit wie het werkelijk is", en:"Guide your child from who they truly are" },
     tagline:{ nl:"Je kind begrijpen vanuit zijn of haar design", en:"Understanding your child through their design" },
     intro:{ nl:"Een rapport voor ouders. Hoe gebruik je kind energie en hoe leert het het beste?", en:"A report for parents. How does your child use energy and how do they learn best?" },
-    includes:["Type & energiegebruik","Hoe je kind beslissingen neemt","Leerstijl & communicatie","Behoeften & grenzen","Opvoedtips op maat","Gaven & talenten"],
+    includes:["Type & energiegebruik","Hoe je kind beslissingen neemt","Leerstijl & hoe je kind communiceert","Behoeften & grenzen","Centra analyse","Opvoedtips op maat","Relatie ouder-kind","Gaven & talenten"],
     for:{ nl:"Voor ouders die hun kind willen begeleiden op basis van wie het werkelijk is.", en:"For parents who want to guide their child based on who they truly are." },
     sections:10, pages:"24+", needsChild:true,
     prompt_extra:{
@@ -1100,7 +1100,7 @@ const REPORTS = [
     outcome:{ nl:"Je planeetstanden als persoonlijk kompas", en:"Your planetary positions as a personal compass" },
     tagline:{ nl:"Je complete astrologische chart", en:"Your complete astrological chart" },
     intro:{ nl:"Een volledige geboortehoroscoop op basis van de exacte posities van alle planeten op het moment van je geboorte.", en:"A complete birth horoscope based on the exact positions of all planets at the moment of your birth." },
-    includes:["Zonneteken","Ascendant","Maan: je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel: je roeping","Dominant element & modaliteit"],
+    includes:["Zonneteken","Ascendant","Maan: je emotionele wereld","Alle 10 planeten in teken & huis","12 huizen geanalyseerd","Belangrijkste aspecten","Midhemel: je roeping","Guidance 2026–2028"],
     for:{ nl:"Voor wie wil begrijpen hoe de sterren stonden op hun geboortemoment.", en:"For those who want to understand how the stars were positioned at their birth moment." },
     sections:12, pages:"32+",
     prompt_extra:{
