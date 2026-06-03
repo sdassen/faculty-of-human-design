@@ -507,6 +507,9 @@ button { cursor:pointer; font-family:var(--font-sans); }
   .inzichten-cat-header .cat-desc { max-width:100%; text-wrap:balance; }
   /* Signal strip: equal-width 2-column grid on mobile */
   .signal-strip-inner { display:grid; grid-template-columns:1fr 1fr; gap:32px 0; padding:0 24px; }
+  /* Disciplines table (Over page): stack on mobile */
+  .disc-row { flex-direction:column; gap:10px; }
+  .disc-row-title { min-width:auto !important; }
   /* Brand philosophy: single column on mobile, left-aligned */
   .philosophy-grid { grid-template-columns:1fr; gap:24px 0; text-align:left; }
   .philosophy-grid p, .philosophy-grid div { text-align:left; }
@@ -4640,8 +4643,8 @@ function OverPage({go}){
             ["Geboorteastrologie","De planetaire kwaliteiten aanwezig op het moment dat jij arriveerde: Zon, Maan, Ascendant en de negen planeten. De hemel als getuige."],
           ]).map(([title,desc],i)=>(
             <div key={title} style={{borderTop:"1px solid var(--border)",padding:"40px 0"}}>
-              <div style={{display:"flex",gap:"40px",alignItems:"baseline"}}>
-                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",lineHeight:1.3,flexShrink:0,minWidth:160}}>
+              <div className="disc-row" style={{display:"flex",gap:"40px",alignItems:"baseline"}}>
+                <div className="disc-row-title" style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",lineHeight:1.3,flexShrink:0,minWidth:160}}>
                   {title}
                 </div>
                 <p style={{fontFamily:"var(--font-serif)",fontSize:".92rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.86,margin:0}}>
