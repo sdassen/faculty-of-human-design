@@ -3155,7 +3155,7 @@ function HomePage({go}){
           <div className="hero-text">
             <div className="hero-eyebrow">{lang==="en"?"Faculty of Human Design — Ibiza, Spain":"Faculty of Human Design — Ibiza, Spanje"}</div>
             <h1 className="h1-hero">{lang==="en"?<>Your reading.<br/><em>Your truth.</em></>:<>Jouw reading.<br/><em>Jouw waarheid.</em></>}</h1>
-            <p className="hero-subtitle">{lang==="en"?"An intimate, in-depth portrait of who you are, drawn from your birth data and delivered as PDF within 1 business day.":"Een intiem, diepgaand portret van wie jij bent, getekend uit je geboortedata en bezorgd als PDF binnen 1 werkdag."}</p>
+            <p className="hero-subtitle">{lang==="en"?"An intimate and in-depth portrait of who you are, carefully composed from your unique birth data.":"Een intiem en diepgaand portret van wie jij bent, zorgvuldig samengesteld vanuit je unieke geboortegegevens."}</p>
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginTop:36}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 {t("home.heroCta")}
