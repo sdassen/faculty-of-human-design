@@ -98,13 +98,13 @@ export const IMGS = {
 
   detail_volledig:         "/img-family-middle.jpg",
   detail_relatie_liefde:   "/img-relatie-liefde-new.jpg",
-  detail_relatie_business: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  detail_relatie_business: "/img-family-middle.jpg",
   detail_relatie_familie:  "/img-family-middle.jpg",
-  detail_jaar:             "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  detail_jaar:             "/img-fabric-4.jpg",
   detail_kind:             "/img-elements-landscape.jpg",
-  detail_loopbaan:         "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  detail_numerologie:      "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
-  detail_horoscoop:        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=2000&auto=format&fit=crop&q=82",
+  detail_loopbaan:         "/img-fabric-4.jpg",
+  detail_numerologie:      "/img-elements-landscape.jpg",
+  detail_horoscoop:        "/img-elements-landscape.jpg",
   detail_maandelijks:      "/img-fabric-3.jpg",
 
 
