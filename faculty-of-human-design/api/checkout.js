@@ -68,7 +68,7 @@ export default async function handler(req, res) {
     }
   }
 
-  const { orderId, rptId, language, email } = req.body;
+  const { orderId, rptId, language, email, name } = req.body;
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(500).json({ error: "STRIPE_SECRET_KEY niet geconfigureerd in Vercel" });
   }
@@ -113,7 +113,61 @@ export default async function handler(req, res) {
   body.append("metadata[rptId]", rptId);
   // client_reference_id lets the webhook look up the pre-created order
   if (orderId) body.append("client_reference_id", orderId);
-  if (email) body.append("customer_email", email);
+
+  // ── Pre-fill customer name for iDEAL (required by Stripe for bank transfers) ──
+  // Look up an existing Stripe customer by email; create one if not found.
+  // Passing a Customer object pre-fills the name field in Stripe Checkout so
+  // the buyer doesn't have to type it manually.
+  if (email) {
+    try {
+      const stripeHeaders = {
+        Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      };
+
+      // Search for existing customer
+      const searchRes = await fetch(
+        `https://api.stripe.com/v1/customers/search?query=${encodeURIComponent(`email:"${email}"`)}`,
+        { headers: stripeHeaders }
+      );
+      const searchData = await searchRes.json();
+      const existing = (searchData.data || [])[0];
+
+      if (existing) {
+        // Update name if it has changed or was missing
+        if (name && existing.name !== name) {
+          const updateBody = new URLSearchParams();
+          updateBody.append("name", name);
+          await fetch(`https://api.stripe.com/v1/customers/${existing.id}`, {
+            method: "POST",
+            headers: stripeHeaders,
+            body: updateBody.toString(),
+          });
+        }
+        body.append("customer", existing.id);
+      } else {
+        // Create a new customer with name + email
+        const createBody = new URLSearchParams();
+        createBody.append("email", email);
+        if (name) createBody.append("name", name);
+        const createRes = await fetch("https://api.stripe.com/v1/customers", {
+          method: "POST",
+          headers: stripeHeaders,
+          body: createBody.toString(),
+        });
+        const customer = await createRes.json();
+        if (customer.id) {
+          body.append("customer", customer.id);
+        } else {
+          // Fallback: at least pre-fill the email
+          body.append("customer_email", email);
+        }
+      }
+    } catch (_) {
+      // Never let customer lookup block checkout — fall back to email only
+      body.append("customer_email", email);
+    }
+  }
 
   try {
     const r = await fetch("https://api.stripe.com/v1/checkout/sessions", {

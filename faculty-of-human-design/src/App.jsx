@@ -1456,6 +1456,7 @@ async function goToStripe(rptId, chartData, formData) {
         isSubscription: rptId === "maandelijks",
         language: LANG,
         email: formData.email,
+        name: fullName1,
       }),
     });
 
