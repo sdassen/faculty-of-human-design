@@ -137,7 +137,7 @@ export default {
     testimonialsTitle: "Wat anderen zeggen",
     ctaLabel: "Begin hier",
     ctaTitle: "Er zijn delen van jou die al lang wachten om herkend te worden.",
-    ctaSub: "Een persoonlijke reading over wie jij werkelijk bent. Diepgaand, precies en bezorgd als PDF binnen 1 werkdag.",
+    ctaSub: "Een persoonlijke reading die inzicht geeft in wie je werkelijk bent. Met zorg samengesteld en binnen 1 werkdag geleverd.",
     ctaBtn: "Begin mijn lezing",
     ctaBtnSecondary: "Alle readings",
     featuredBadge: "Meest gekozen",

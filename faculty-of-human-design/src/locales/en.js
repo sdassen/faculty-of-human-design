@@ -137,7 +137,7 @@ export default {
     testimonialsTitle: "What others say",
     ctaLabel: "Begin here",
     ctaTitle: "There are parts of you that have long been waiting to be recognised.",
-    ctaSub: "A personal reading on who you truly are. In-depth, precise and delivered as a PDF report within 1 business day.",
+    ctaSub: "A personal reading that gives insight into who you truly are. Carefully composed and delivered within 1 business day.",
     ctaBtn: "Begin my reading",
     ctaBtnSecondary: "All readings",
     featuredBadge: "Most popular",
