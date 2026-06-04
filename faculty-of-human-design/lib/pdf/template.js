@@ -1157,6 +1157,37 @@ function buildClosingPage(order) {
   const bd = order.birth_data || {};
   const chart = bd.chart || {};
   const ta = typeAccent(chart.type);
+  const isRelatie = (order.report_id || "").startsWith("relatie_");
+  const pbd = order.partner_birth_data || {};
+  const partnerChart = pbd.chart || {};
+  const partnerTa = typeAccent(partnerChart.type);
+
+  // For relatie: show both names and partner type badge
+  const nameBlock = isRelatie
+    ? `${order.customer_name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:10pt;color:#C9A85C;letter-spacing:0.12em;">${esc(order.customer_name)}</div>` : ""}
+    ${pbd.name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:8pt;color:#6B6560;letter-spacing:0.08em;margin-top:4px;">&amp; ${esc(pbd.name)}</div>` : ""}`
+    : `${order.customer_name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:10pt;color:#C9A85C;letter-spacing:0.12em;">${esc(order.customer_name)}</div>` : ""}`;
+
+  const typeBadgeBlock = isRelatie
+    ? `<div style="margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;">
+        ${chart.type ? `<span style="display:inline-block;background:${ta.bg};border:1px solid ${ta.bar};padding:5px 14px;font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.16em;text-transform:uppercase;">${esc(chart.type)}</span>` : ""}
+        ${partnerChart.type ? `<span style="display:inline-block;background:${partnerTa.bg};border:1px solid ${partnerTa.bar};padding:5px 14px;font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${partnerTa.fg};letter-spacing:0.16em;text-transform:uppercase;">${esc(partnerChart.type)}</span>` : ""}
+      </div>`
+    : `${chart.type ? `<div style="margin-top:8px;"><span style="display:inline-block;background:${ta.bg};border:1px solid ${ta.bar};padding:5px 18px;font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.16em;text-transform:uppercase;">${esc(chart.type)}</span></div>` : ""}`;
+
+  const headingText = isRelatie
+    ? ui(lang, "Met dank voor jullie vertrouwen.", "Thank you both for your trust.")
+    : ui(lang, "Met dank voor je vertrouwen.", "Thank you for your trust.");
+
+  const bodyText = isRelatie
+    ? ui(lang,
+        "Dit rapport is persoonlijk samengesteld op basis van jullie geboortegegevens en is uitsluitend voor eigen gebruik.",
+        "This report has been personally compiled based on your birth data and is for personal use only."
+      )
+    : ui(lang,
+        "Dit rapport is persoonlijk samengesteld op basis van jouw geboortegegevens en is uitsluitend voor eigen gebruik.",
+        "This report has been personally compiled based on your birth data and is for personal use only."
+      );
 
   return `
 <div style="width:210mm;height:297mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
@@ -1165,14 +1196,11 @@ function buildClosingPage(order) {
   ${coverDecoration(297, 380)}
   <div style="position:absolute;top:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#5A5438;letter-spacing:0.25em;text-transform:uppercase;">Faculty of Human Design  ·  Ibiza</div>
   <div style="padding:0 30mm;text-align:center;position:relative;">
-    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:30pt;color:#FFFFFF;line-height:1.3;">${ui(lang, "Met dank voor je vertrouwen.", "Thank you for your trust.")}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:30pt;color:#FFFFFF;line-height:1.3;">${headingText}</div>
     <div style="width:96px;height:0.75px;background:#C9A85C;margin:18px auto;"></div>
-    ${order.customer_name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:10pt;color:#C9A85C;letter-spacing:0.12em;">${esc(order.customer_name)}</div>` : ""}
-    ${chart.type ? `<div style="margin-top:8px;"><span style="display:inline-block;background:${ta.bg};border:1px solid ${ta.bar};padding:5px 18px;font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.16em;text-transform:uppercase;">${esc(chart.type)}</span></div>` : ""}
-    <div style="margin-top:24px;font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:300;color:#6B6560;line-height:1.8;max-width:120mm;">${ui(lang,
-      "Dit rapport is persoonlijk samengesteld op basis van jouw geboortegegevens en is uitsluitend voor eigen gebruik.",
-      "This report has been personally compiled based on your birth data and is for personal use only."
-    )}</div>
+    ${nameBlock}
+    ${typeBadgeBlock}
+    <div style="margin-top:24px;font-family:'Inter',sans-serif;font-size:7.5pt;font-weight:300;color:#6B6560;line-height:1.8;max-width:120mm;">${bodyText}</div>
   </div>
   <div style="position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.18em;">© 2026 FACULTY OF HUMAN DESIGN  ·  IBIZA, SPANJE</div>
 </div>`;
