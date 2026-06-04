@@ -5356,7 +5356,7 @@ function TypePage({typeId,go}){
       <section style={{position:"relative",height:"80vh",minHeight:520,maxHeight:860,overflow:"hidden",display:"flex",alignItems:"flex-end"}}>
         <div style={{position:"absolute",inset:0}}>
           <img src={tp.img} alt={tl2(tp.title)+" Human Design"} loading="eager"
-            style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center 35%"}}/>
+            style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center top"}}/>
           <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,rgba(8,7,14,.15) 0%,rgba(8,7,14,.2) 35%,rgba(8,7,14,.85) 100%)"}}/>
         </div>
         <div className="type-hero-inner">
