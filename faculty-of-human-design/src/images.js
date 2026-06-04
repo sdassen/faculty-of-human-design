@@ -113,11 +113,11 @@ export const IMGS = {
   // Aanbevolen: 1920×1080px of groter, landscape
   // ════════════════════════════════════════════════════════════════════════════
 
-  type_generator:          "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&auto=format&fit=crop&q=80",
-  type_mg:                 "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=1200&auto=format&fit=crop&q=80",
-  type_projector:          "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=1200&auto=format&fit=crop&q=80",
-  type_manifestor:         "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&auto=format&fit=crop&q=80",
-  type_reflector:          "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=1200&auto=format&fit=crop&q=80",
+  type_generator:          "/img-generator.jpg",
+  type_mg:                 "/img-mg.jpg",
+  type_projector:          "/img-year-reading.jpg",
+  type_manifestor:         "/img-volledig-hero.jpg",
+  type_reflector:          "/img-reflector.jpg",
 
 
   // ════════════════════════════════════════════════════════════════════════════
