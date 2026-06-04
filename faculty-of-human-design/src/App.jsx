@@ -3081,11 +3081,11 @@ Geen sectietitel in de tekst.`);
             </div>
             )}
             <div style={{marginTop:40,padding:"48px 0 0",borderTop:"1px solid var(--border)",textAlign:"center"}}>
-              <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.8,marginBottom:32,maxWidth:480,margin:"0 auto 32px"}}>
-                {LANG==="en"
-                  ?"Personally assembled and written with care. Delivered as PDF within one business day."
-                  :"Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
-              </p>
+              {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<div style={{marginBottom:24}}><a href={
+                  rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
+                  rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
+                  (LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")
+                } target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
               <button
                 disabled={stripeLoading}
                 style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",display:"inline-flex",alignItems:"center",justifyContent:"center",opacity:stripeLoading?.7:1}}
@@ -3113,11 +3113,6 @@ Geen sectietitel in de tekst.`);
                   ?<>By ordering you agree to our <span style={{textDecoration:"underline",cursor:"pointer"}} onClick={()=>go("voorwaarden")}>Terms & Privacy</span>.</>
                   :<>Door te bestellen ga je akkoord met onze <span style={{textDecoration:"underline",cursor:"pointer"}} onClick={()=>go("voorwaarden")}>Algemene Voorwaarden & Privacy</span>.</>}
               </p>
-              {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<div style={{marginTop:16}}><a href={
-                  rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
-                  rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
-                  (LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")
-                } target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
             </div>
           </div>
         </div>
