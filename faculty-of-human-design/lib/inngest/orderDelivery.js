@@ -203,7 +203,8 @@ function calculateDeliveryDate(paidAtIso) {
 // tone/style and reference this shared schema via getSystemPrompt().
 const JSON_OUTPUT_FORMAT_NL = `
 
-OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen tekst buiten het JSON-object. Gebruik exact dit schema:
+OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen tekst buiten het JSON-object. Gebruik exact dit schema.
+⚠️ SLEUTELNAMEN ZIJN VAST — verander ze NOOIT, ook niet voor partner-secties. "inJouwChart" blijft altijd "inJouwChart".
 
 {
   "teaser": "Cinematische pull-quote — max 18 woorden, maakt de lezer stil, wil je screenshotten",
@@ -239,7 +240,8 @@ VELDREGELS:
 
 const JSON_OUTPUT_FORMAT_EN = `
 
-OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outside the JSON object. Use exactly this schema:
+OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outside the JSON object. Use exactly this schema.
+⚠️ KEY NAMES ARE FIXED — never rename them, even for partner sections. "inJouwChart" always stays "inJouwChart".
 
 {
   "teaser": "Cinematic pull-quote — max 18 words, makes the reader pause, worth screenshotting",
@@ -2262,6 +2264,15 @@ export async function generateScoredSection(sectionTitle, order, previousSection
   let bestScore   = -1;
   let lastIssues  = [];
 
+  // For relatie reports, the type contamination check in quickCheck/contentScore
+  // must be disabled: sections legitimately discuss BOTH people's HD types, so
+  // the partner's type will always appear in every section. Passing null skips
+  // the type pattern matching and prevents false-positive retry instructions like
+  // "remove Projector — chart is Generator" which cause Claude to generate prose
+  // instead of JSON on subsequent attempts → all retries throw → blank section.
+  const isRelatieId = (order.report_id || "").toLowerCase().startsWith("relatie_");
+  const chartForScoring = isRelatieId ? null : chart;
+
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     let section;
     try {
@@ -2271,7 +2282,7 @@ export async function generateScoredSection(sectionTitle, order, previousSection
       continue;
     }
 
-    const result = await scoreSection(section, sectionTitle, chart, lang);
+    const result = await scoreSection(section, sectionTitle, chartForScoring, lang);
     console.log(`[QA] "${sectionTitle}" attempt ${attempt}: score ${result.total}/40 (${result.passed ? "PASS" : "FAIL"})`);
 
     if (result.total > bestScore) {
