@@ -2565,7 +2565,7 @@ function ReportForm({rpt,onDone,postPayment}){
   const isHoro=rpt.id==="horoscoop";
   const needsTime=!isNum;
   const isRelatie=rpt.id.startsWith("relatie_");
-  const partnerOk=!isRelatie||(form.pFirstName&&form.pday&&form.pmonth&&form.pyear);
+  const partnerOk=!isRelatie||(form.pFirstName&&form.pday&&form.pmonth&&form.pyear&&form.pplace);
   const childOk=!rpt.needsChild||(form.cFirstName&&form.cday&&form.cmonth&&form.cyear&&form.cplace);
   const ok=form.firstName&&form.email&&/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)&&form.day&&form.month&&form.year&&form.place&&(!needsTime||form.hour)&&partnerOk&&childOk;
   const promptExtraStr=(typeof rpt.prompt_extra==="object"&&rpt.prompt_extra!==null)?(rpt.prompt_extra[LANG]??rpt.prompt_extra.nl??""):(rpt.prompt_extra||"");
@@ -5521,10 +5521,10 @@ function TypePage({typeId,go}){
 }
 
 // ─── ROUTING HELPERS ─────────────────────────────────────────────────────────
-const ROUTABLE = new Set(["home","human-design","readings","journal","philosophy","contact","voorwaarden","wat","rapporten","inzichten","over","type"]);
+const ROUTABLE = new Set(["home","human-design","readings","journal","philosophy","contact","voorwaarden","terms","wat","rapporten","inzichten","over","type"]);
 
 // Map URL slug → internal page ID
-const SLUG_TO_PAGE = {"human-design":"wat","readings":"rapporten","journal":"inzichten","philosophy":"over","wat":"wat","rapporten":"rapporten","inzichten":"inzichten","over":"over"};
+const SLUG_TO_PAGE = {"human-design":"wat","readings":"rapporten","journal":"inzichten","philosophy":"over","terms":"voorwaarden","wat":"wat","rapporten":"rapporten","inzichten":"inzichten","over":"over"};
 
 function pathToPage(pathname) {
   // Strip language prefix first (/en/... → /...)
