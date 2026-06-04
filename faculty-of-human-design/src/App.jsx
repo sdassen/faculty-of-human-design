@@ -4841,7 +4841,7 @@ function ContactPage(){
               </button>
               {faqOpen===i&&(
                 <div style={{paddingBottom:28,paddingRight:40}}>
-                  <p style={{fontFamily:"var(--font-serif)",fontSize:".92rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,margin:0}}>{item.a}</p>
+                  <p style={{fontFamily:"var(--font-serif)",fontSize:".92rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.85,margin:0,textAlign:"left"}}>{item.a}</p>
                 </div>
               )}
             </div>
