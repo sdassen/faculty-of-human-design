@@ -235,10 +235,10 @@ export function quickCheck(text, lang = "nl", chart = null) {
  * Use Claude Haiku to score chart anchoring + specificity.
  * Returns { score: 0-30, breakdown, issues }
  */
-export async function contentScore(text, sectionTitle, chart) {
+export async function contentScore(text, sectionTitle, chart, lang = "nl") {
   const summary = chartSummary(chart);
 
-  const prompt = `Je bent een kritische redacteur van Human Design rapporten. Beoordeel onderstaande sectie op 3 criteria (1-10 per criterium).
+  const promptNL = `Je bent een kritische redacteur van Human Design rapporten. Beoordeel onderstaande sectie op 3 criteria (1-10 per criterium).
 
 CHARTDATA (ground truth):
 ${summary}
@@ -259,6 +259,30 @@ CRITERIA:
 
 Antwoord ALLEEN met JSON, geen prose. Format:
 {"chart_anchor": N, "specificity": N, "consistency": N, "total": N, "issues": ["korte issue 1", "korte issue 2"]}`;
+
+  const promptEN = `You are a critical editor of Human Design reports. Score the section below on 3 criteria (1-10 each).
+
+CHART DATA (ground truth):
+${summary}
+
+SECTION: "${sectionTitle}"
+
+TEXT:
+"""
+${text}
+"""
+
+CRITERIA:
+1. CHART ANCHORING (1-10): Is the text concretely grounded in THIS chart? Are specific gates, channels, centers, profile numbers mentioned that match the chart data above? (10 = every paragraph anchored, 1 = generic HD text)
+   AUTOMATIC 1 if the text mentions a wrong TYPE, AUTHORITY or CHANNEL not present in the chart data.
+2. SPECIFICITY (1-10): Does the text avoid vague psychology and clichés? Does it provide concrete, actionable insights? (10 = sharp and useful, 1 = generic)
+3. CONSISTENCY (1-10): Is everything internally consistent? No contradictions, no factual errors about this chart? (10 = fully consistent, 1 = contains errors)
+   AUTOMATIC 1 if the type (e.g. "Projector") or authority does not match the chart data.
+
+Reply ONLY with JSON, no prose. Format:
+{"chart_anchor": N, "specificity": N, "consistency": N, "total": N, "issues": ["brief issue 1", "brief issue 2"]}`;
+
+  const prompt = lang === "en" ? promptEN : promptNL;
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -316,7 +340,7 @@ export async function scoreSection(textOrSection, sectionTitle, chart, lang = "n
     ? sectionToText(textOrSection, lang)
     : textOrSection;
   const q = quickCheck(text, lang, chart);  // pass chart for type/locale contamination checks
-  const c = await contentScore(text, sectionTitle, chart);
+  const c = await contentScore(text, sectionTitle, chart, lang);
 
   const total = q.score + c.score;
   return {

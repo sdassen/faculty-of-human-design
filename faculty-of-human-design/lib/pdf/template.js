@@ -408,6 +408,7 @@ function buildIntroPage(order) {
 // ─── PAGE: HOW TO READ ────────────────────────────────────────────────────────
 function buildHowToReadPage(order) {
   const lang = order.language || "nl";
+  const isRelatie = (order.report_id || "").startsWith("relatie_");
 
   const contentNL = {
     label:    "LEESWIJZER",
@@ -435,7 +436,35 @@ function buildHowToReadPage(order) {
     ],
   };
 
-  const c = lang === "en" ? contentEN : contentNL;
+  const relatieNL = {
+    label:    "LEESWIJZER",
+    headline: "Hoe dit rapport het best tot jullie spreekt",
+    intro:    "Dit is geen rapport dat jullie snel doorlezen. Het is een ervaring die vraagt om aanwezigheid — het liefst samen. Neem de tijd — elke sectie is geschreven om iets in jullie wakker te maken.",
+    items: [
+      { num: "01", title: "Lees samen",               body: "Plan een moment waarop jullie beiden aanwezig en ongehaast zijn. Dit rapport vraagt om gedeelde aandacht." },
+      { num: "02", title: "Pauzeer bij herkenning",   body: "Als een zin iets raakt — stop. Deel het met elkaar, of laat het even gewoon landen." },
+      { num: "03", title: "Gebruik de reflectievragen", body: "Aan het einde van elke sectie staan vragen. Ze zijn uitnodigingen voor een gesprek, geen opdrachten." },
+      { num: "04", title: "Lees zonder oordeel",      body: "Jullie ontwerpen zijn niet beter of slechter dan elkaar — ze zijn anders. Lees met nieuwsgierigheid." },
+      { num: "05", title: "Laat het rijpen",           body: "Niet alles hoeft direct te kloppen. Sommige inzichten krijgen pas na een paar dagen hun betekenis." },
+    ],
+  };
+
+  const relatieEN = {
+    label:    "READING GUIDE",
+    headline: "How this report speaks best to you both",
+    intro:    "This is not a report you read in a hurry. It is an experience that asks for presence — ideally together. Take your time — each section is written to awaken something in both of you.",
+    items: [
+      { num: "01", title: "Read together",             body: "Plan a moment when you are both present and unhurried. This report asks for shared attention." },
+      { num: "02", title: "Pause at recognition",      body: "If a sentence lands on something — stop. Share it with each other, or simply let it sit." },
+      { num: "03", title: "Use the reflection questions", body: "At the end of each section there are questions. They are invitations for conversation, not assignments." },
+      { num: "04", title: "Read without judgment",     body: "Your designs are not better or worse than each other — they are different. Read with curiosity." },
+      { num: "05", title: "Let it settle",             body: "Not everything needs to make sense immediately. Some insights take a few days to find their meaning." },
+    ],
+  };
+
+  const c = isRelatie
+    ? (lang === "en" ? relatieEN : relatieNL)
+    : (lang === "en" ? contentEN : contentNL);
 
   const itemsHTML = c.items.map(function(item) {
     return `<div style="display:flex;gap:18px;padding:14px 0;border-bottom:0.4px solid #E5E0D8;break-inside:avoid;">
@@ -471,6 +500,8 @@ function buildCoverPage(order) {
   const childReport = isChildReport(order);
   const isRelatie   = (order.report_id || "").startsWith("relatie_");
   const hasPartner  = (childReport || isRelatie) && pbd.name;
+  const partnerChart = pbd.chart || {};
+  const partnerTa    = typeAccent(partnerChart.type);
   const coverMonthsNL = ["","jan","feb","mrt","apr","mei","jun","jul","aug","sep","okt","nov","dec"];
   const coverMonthsEN = ["","jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"];
   const months = isEN ? coverMonthsEN : coverMonthsNL;
@@ -497,10 +528,11 @@ function buildCoverPage(order) {
     ${childReport && pbd.name ? `<div style="font-family:'Inter',sans-serif;font-weight:300;font-size:7pt;color:#5A5438;margin-top:5px;letter-spacing:0.18em;text-transform:uppercase;">${ui(lang, "Kind", "Child")}</div>` : ""}
   </div>
   ${chart.type ? `
-  <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;">
+  <div style="position:absolute;bottom:60px;left:0;right:0;text-align:center;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;padding:0 20mm;">
     <div style="display:inline-block;background:${ta.bg};border:1px solid ${ta.bar};padding:7px 22px;border-radius:2px;">
       <span style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${ta.fg};letter-spacing:0.18em;text-transform:uppercase;">${esc(chart.type)}</span>
     </div>
+    ${isRelatie && partnerChart.type ? `<div style="display:inline-block;background:${partnerTa.bg};border:1px solid ${partnerTa.bar};padding:7px 22px;border-radius:2px;"><span style="font-family:'Inter',sans-serif;font-size:7pt;font-weight:500;color:${partnerTa.fg};letter-spacing:0.18em;text-transform:uppercase;">${esc(partnerChart.type)}</span></div>` : ""}
   </div>` : ""}
   <div style="position:absolute;bottom:28px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.2em;">
     © 2026 FACULTY OF HUMAN DESIGN
@@ -1485,16 +1517,29 @@ export function buildHTML({ order, sections, svgBodygraph, svgPartnerBodygraph }
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>`;
 
   // Transition pages — one halfway, one before the final section
-  const midTransition = buildTransitionPage(
-    "Afstemming is niet iemand anders worden.\nHet is onthouden wat jouw lichaam al weet.",
-    "Alignment is not becoming someone else.\nIt is remembering what your body already knows.",
-    order
-  );
-  const finalTransition = buildTransitionPage(
-    "Jij bent niet hier om jezelf te worden.\nJij bent hier om te onthouden wie je al bent.",
-    "You are not here to become yourself.\nYou are here to remember who you already are.",
-    order
-  );
+  // Relatie reports get duo-specific quotes; solo reports get the personal variants.
+  const midTransition = isRelatie
+    ? buildTransitionPage(
+        "Twee ontwerpen. Geen conflict.\nAlleen energie die vraagt om begrip.",
+        "Two designs. No conflict.\nOnly energy asking to be understood.",
+        order
+      )
+    : buildTransitionPage(
+        "Afstemming is niet iemand anders worden.\nHet is onthouden wat jouw lichaam al weet.",
+        "Alignment is not becoming someone else.\nIt is remembering what your body already knows.",
+        order
+      );
+  const finalTransition = isRelatie
+    ? buildTransitionPage(
+        "Jullie zijn niet hier om één te worden.\nJullie zijn hier om te ontdekken hoe jullie samen meer zijn.",
+        "You are not here to become one.\nYou are here to discover how you are more together.",
+        order
+      )
+    : buildTransitionPage(
+        "Jij bent niet hier om jezelf te worden.\nJij bent hier om te onthouden wie je al bent.",
+        "You are not here to become yourself.\nYou are here to remember who you already are.",
+        order
+      );
   const midIdx  = Math.floor(sections.length / 2);
   const lastIdx = sections.length - 1;
   const sectionPagesWithTransition = sections.map(function(s, i) {
