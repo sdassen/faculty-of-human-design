@@ -63,6 +63,42 @@ export async function sendConfirmationEmail({ to, name, reportTitle, reportId, p
   return data;
 }
 
+export async function sendPortalEmail({ to, portalUrl }) {
+  const { data, error } = await getResend().emails.send({
+    from: FROM,
+    to,
+    subject: "Jouw abonnement beheren — Faculty of Human Design",
+    html: base(`
+      <div style="height:0.75px;background:#C9A85C;opacity:.4;margin-bottom:32px;"></div>
+      <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:22px;font-weight:400;color:#1A1715;margin:0 0 20px;line-height:1.3;">
+        Beheer je abonnement
+      </h1>
+      <p style="font-size:14.5px;color:#3A3830;line-height:1.85;margin:0 0 28px;font-weight:300;">
+        Klik op de knop hieronder om je abonnement te beheren. Je kunt facturen bekijken, je betaalgegevens bijwerken of je abonnement opzeggen.
+      </p>
+      <div style="text-align:center;margin:0 0 16px;">
+        <a href="${escHtml(portalUrl)}"
+           style="display:inline-block;background:#1A1715;color:#C9A85C;text-decoration:none;
+                  padding:16px 52px;font-size:13.5px;font-weight:500;
+                  letter-spacing:1.5px;text-transform:uppercase;line-height:1;">
+          Beheer abonnement →
+        </a>
+      </div>
+      <p style="font-size:11px;color:#B0AAA4;text-align:center;margin:0 0 28px;line-height:1.6;">
+        Knop werkt niet? Kopieer deze link in je browser:<br>
+        <a href="${escHtml(portalUrl)}" style="color:#9A8050;text-decoration:none;word-break:break-all;">${escHtml(portalUrl)}</a>
+      </p>
+      <div style="height:1px;background:#EEEBE5;margin:0 0 20px;"></div>
+      <p style="font-size:11.5px;color:#B0AAA4;line-height:1.75;margin:0;">
+        Deze link is 24 uur geldig. Heb je vragen? Schrijf ons via
+        <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.
+      </p>
+    `),
+  });
+  if (error) throw new Error(`Resend error (portal): ${error.message}`);
+  return data;
+}
+
 export async function sendCancellationEmail({ to, name, language }) {
   const lang = language === "en" ? "en" : "nl";
   const isEN = lang === "en";

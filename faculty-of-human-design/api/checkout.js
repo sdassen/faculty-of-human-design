@@ -18,6 +18,9 @@ export default async function handler(req, res) {
 
   // ── Customer Portal branch ────────────────────────────────────────────────
   // Called by SubscriptionManage component with { portal: true, email }
+  // SECURITY: we never return the portal URL to the browser.
+  // Instead we email it to the address on file — only the real account owner
+  // can follow the link, even if someone else knows their email address.
   if (req.body?.portal) {
     const { email } = req.body;
     if (!email) return res.status(400).json({ error: "email required" });
@@ -41,7 +44,11 @@ export default async function handler(req, res) {
       });
       const portalData = await portalRes.json();
       if (portalData.error) return res.status(400).json({ error: portalData.error.message });
-      return res.json({ url: portalData.url });
+
+      // Email the portal URL — never expose it in the API response
+      const { sendPortalEmail } = await import("../lib/email/index.js");
+      await sendPortalEmail({ to: email, portalUrl: portalData.url });
+      return res.json({ sent: true });
     } catch (e) {
       return res.status(500).json({ error: e.message });
     }

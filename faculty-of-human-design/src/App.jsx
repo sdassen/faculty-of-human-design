@@ -2472,6 +2472,7 @@ function SubscriptionManage(){
   const[email,setEmail]=useState("");
   const[loading,setLoading]=useState(false);
   const[err,setErr]=useState(null);
+  const[sent,setSent]=useState(false);
 
   const openPortal=async(e)=>{
     e.preventDefault();
@@ -2485,7 +2486,9 @@ function SubscriptionManage(){
       });
       const data=await res.json();
       if(!res.ok){setErr(data.error||"Error");setLoading(false);return;}
-      window.location.href=data.url;
+      // API sends the portal link by email — never exposes it in the response
+      setSent(true);
+      setLoading(false);
     }catch(ex){
       setErr(ex.message);
       setLoading(false);
@@ -2501,29 +2504,39 @@ function SubscriptionManage(){
         <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.4rem,2.5vw,1.75rem)",fontWeight:300,color:"var(--text)",marginBottom:12,lineHeight:1.2}}>
           {isEN?"Manage your subscription":"Beheer je abonnement"}
         </h2>
-        <p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:36}}>
-          {isEN
-            ?"Enter the e-mail address you used to subscribe. We'll redirect you to the secure portal where you can view invoices, update payment details or cancel."
-            :"Vul het e-mailadres in waarmee je je hebt aangemeld. We sturen je door naar de beveiligde portal waar je facturen kunt bekijken, betaalgegevens bijwerken of opzeggen."}
-        </p>
-        <form onSubmit={openPortal} style={{display:"flex",gap:12,flexWrap:"wrap",alignItems:"flex-start"}}>
-          <input
-            type="email"
-            value={email}
-            onChange={e=>setEmail(e.target.value)}
-            placeholder={isEN?"your@email.com":"jouw@email.com"}
-            required
-            style={{flex:"1 1 220px",padding:"12px 16px",fontFamily:"var(--font-sans)",fontSize:".85rem",border:"1px solid var(--border)",background:"#fff",color:"var(--text)",outline:"none",minWidth:0}}
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            style={{padding:"12px 28px",background:"var(--text)",color:"#fff",fontFamily:"var(--font-sans)",fontSize:".75rem",fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",border:"none",cursor:loading?"wait":"pointer",opacity:loading?.6:1,whiteSpace:"nowrap"}}
-          >
-            {loading?(isEN?"Redirecting…":"Doorsturen…"):(isEN?"Manage subscription":"Beheer abonnement")}
-          </button>
-        </form>
-        {err&&<p style={{fontFamily:"var(--font-sans)",fontSize:".8rem",color:"#c0392b",marginTop:14}}>{err}</p>}
+        {sent?(
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text)",lineHeight:1.8,background:"rgba(138,115,85,.07)",border:"1px solid var(--border)",padding:"20px 24px"}}>
+            {isEN
+              ?"We've sent a secure management link to your inbox. Check your email (and spam folder) — the link is valid for 24 hours."
+              :"We hebben een beveiligde beheerlink naar je inbox gestuurd. Controleer je e-mail (ook de spammap) — de link is 24 uur geldig."}
+          </p>
+        ):(
+          <>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:36}}>
+              {isEN
+                ?"Enter the e-mail address you used to subscribe. We'll send a secure link to your inbox to manage your subscription."
+                :"Vul het e-mailadres in waarmee je je hebt aangemeld. We sturen een beveiligde link naar je inbox waarmee je je abonnement kunt beheren."}
+            </p>
+            <form onSubmit={openPortal} style={{display:"flex",gap:12,flexWrap:"wrap",alignItems:"flex-start"}}>
+              <input
+                type="email"
+                value={email}
+                onChange={e=>setEmail(e.target.value)}
+                placeholder={isEN?"your@email.com":"jouw@email.com"}
+                required
+                style={{flex:"1 1 220px",padding:"12px 16px",fontFamily:"var(--font-sans)",fontSize:".85rem",border:"1px solid var(--border)",background:"#fff",color:"var(--text)",outline:"none",minWidth:0}}
+              />
+              <button
+                type="submit"
+                disabled={loading}
+                style={{padding:"12px 28px",background:"var(--text)",color:"#fff",fontFamily:"var(--font-sans)",fontSize:".75rem",fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",border:"none",cursor:loading?"wait":"pointer",opacity:loading?.6:1,whiteSpace:"nowrap"}}
+              >
+                {loading?(isEN?"Sending…":"Verzenden…"):(isEN?"Send link":"Stuur link")}
+              </button>
+            </form>
+            {err&&<p style={{fontFamily:"var(--font-sans)",fontSize:".8rem",color:"#c0392b",marginTop:14}}>{err}</p>}
+          </>
+        )}
       </div>
     </section>
   );
