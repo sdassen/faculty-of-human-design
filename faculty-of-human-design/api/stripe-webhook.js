@@ -35,6 +35,10 @@ function getRawBody(req) {
 
 // ─── STRIPE SIGNATURE VERIFICATION ───────────────────────────────────────────
 // Minimal implementation — avoids pulling in the full Stripe SDK.
+// Verifies HMAC-SHA256 signature AND enforces a 5-minute timestamp window
+// to prevent replay attacks.
+const STRIPE_TIMESTAMP_TOLERANCE_S = 300; // 5 minutes
+
 async function verifyStripeSignature(rawBody, signature, secret) {
   if (!signature || !secret) return false;
   const parts = {};
@@ -45,6 +49,13 @@ async function verifyStripeSignature(rawBody, signature, secret) {
   const timestamp = parts["t"];
   const v1 = parts["v1"];
   if (!timestamp || !v1) return false;
+
+  // Reject events older than tolerance window (replay protection)
+  const eventAge = Math.floor(Date.now() / 1000) - parseInt(timestamp, 10);
+  if (eventAge > STRIPE_TIMESTAMP_TOLERANCE_S) {
+    console.warn(`[stripe-webhook] Rejected: event timestamp too old (${eventAge}s)`);
+    return false;
+  }
 
   const payload = `${timestamp}.${rawBody.toString("utf8")}`;
   const encoder = new TextEncoder();
@@ -88,13 +99,11 @@ export default async function handler(req, res) {
   const signature = req.headers["stripe-signature"];
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
 
-  // Verify signature in production; allow bypass in test mode
-  if (process.env.STRIPE_WEBHOOK_BYPASS !== "1") {
-    const valid = await verifyStripeSignature(rawBody, signature, secret);
-    if (!valid) {
-      console.warn("[stripe-webhook] Invalid signature");
-      return res.status(400).json({ error: "Invalid signature" });
-    }
+  // Always verify Stripe signature — no bypass allowed
+  const valid = await verifyStripeSignature(rawBody, signature, secret);
+  if (!valid) {
+    console.warn("[stripe-webhook] Invalid or expired signature");
+    return res.status(400).json({ error: "Invalid signature" });
   }
 
   let event;
@@ -130,14 +139,22 @@ export default async function handler(req, res) {
           patchBody.stripe_subscription_id = session.subscription;
         }
 
-        await supaFetch(
+        // Idempotency: filter on status=eq.pending so retries are no-ops.
+        // Use return=representation to detect whether a row was actually updated.
+        const patchRes = await supaFetch(
           `/rest/v1/orders?id=eq.${encodeURIComponent(orderId)}&status=eq.pending`,
           {
             method: "PATCH",
             body: JSON.stringify(patchBody),
-            headers: { Prefer: "return=minimal" },
+            headers: { Prefer: "return=representation" },
           }
         );
+        const updatedRows = patchRes.ok ? await patchRes.json() : [];
+        if (!Array.isArray(updatedRows) || updatedRows.length === 0) {
+          // Row was already processed (status no longer 'pending') — skip Inngest to avoid double delivery
+          console.warn(`[stripe-webhook] checkout.session.completed: order ${orderId} already processed, skipping`);
+          break;
+        }
 
         // If this is a subscription: store it in the subscriptions table too
         if (session.subscription) {
