@@ -1358,6 +1358,10 @@ const STRIPE = {
 async function goToStripe(rptId, chartData, formData) {
   const rpt = REPORTS.find(r => r.id === rptId);
 
+  // Compute names up-front so they are accessible in both step 1 and step 2
+  const fullName1 = (formData.firstName + " " + (formData.lastName || "")).trim();
+  const fullName2 = formData.pFirstName ? (formData.pFirstName + " " + (formData.pLastName || "")).trim() : null;
+
   // ── Step 1: Pre-create order in Supabase (persists birth data + email) ──
   let orderId = null;
   try {
@@ -1367,9 +1371,6 @@ async function goToStripe(rptId, chartData, formData) {
     const sections = promptExtraForOrder
       ? promptExtraForOrder.split("\n").filter(l => l.startsWith("###")).map(l => l.replace(/^###\s*/, "").replace(/^\d+\.\s*/, "").trim())
       : [];
-
-    const fullName1 = (formData.firstName + " " + (formData.lastName || "")).trim();
-    const fullName2 = formData.pFirstName ? (formData.pFirstName + " " + (formData.pLastName || "")).trim() : null;
     const fullNameChild = (rpt?.needsChild && formData.cFirstName) ? (formData.cFirstName + " " + (formData.cLastName || "")).trim() : null;
     const orderRes = await fetch("/api/create-order", {
       method: "POST",
