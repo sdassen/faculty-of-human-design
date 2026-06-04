@@ -854,7 +854,7 @@ function buildSectionPagesJSON(section, idx, order) {
     const subkop = (block.subkop || "").trim();
     const paras  = (block.paragraphs || []).filter(Boolean);
     const subkopHTML = subkop
-      ? `<h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">${esc(subkop)}<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>`
+      ? `<h3 style="font-family:'Cormorant Garamond',serif;font-weight:600;font-size:14pt;color:#1C2E4A;margin:20px 0 7px;break-after:avoid;line-height:1.3;">${esc(subkop.charAt(0).toUpperCase() + subkop.slice(1))}<span style="display:block;width:24px;height:0.75px;background:#C9A85C;margin-top:5px;"></span></h3>`
       : "";
     const parasHTML = paras.map(function(p, i) {
       // Wrap subkop + first paragraph together so the heading never strands at page bottom
