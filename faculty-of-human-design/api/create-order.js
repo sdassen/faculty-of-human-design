@@ -1,6 +1,8 @@
 // Calls the Supabase REST API directly via fetch so we avoid the
 // @supabase/supabase-js WebSocket check that throws in Node.js 20.
 
+import { rateLimit, getClientIp } from "../lib/rateLimit.js";
+
 // ── Server-side section catalog ───────────────────────────────────────────────
 // NEVER trust promptSections from the client. Always look up here by reportId + language.
 const REPORT_SECTIONS = {
@@ -101,6 +103,13 @@ export default async function handler(req, res) {
   if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     console.error("[create-order] Missing Supabase env vars");
     return res.status(500).json({ error: "Server configuratiefout." });
+  }
+
+  // ── Rate limiting: 5 orders per IP per 60 seconds ────────────────────────
+  const ip = getClientIp(req);
+  const { allowed } = await rateLimit(`create-order:${ip}`, { max: 5, window: 60 });
+  if (!allowed) {
+    return res.status(429).json({ error: "Te veel verzoeken. Wacht even en probeer opnieuw." });
   }
 
   const {

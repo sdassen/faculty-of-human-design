@@ -1,3 +1,5 @@
+import { rateLimit, getClientIp } from "../lib/rateLimit.js";
+
 // ── Server-side product catalog ──────────────────────────────────────────────
 // NEVER trust price or isSubscription from the client. Always look up here.
 const REPORT_CATALOG = {
@@ -15,6 +17,18 @@ const REPORT_CATALOG = {
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
+
+  // ── Rate limiting ─────────────────────────────────────────────────────────
+  // Portal requests: 3 per IP per 60 s (it sends an email; abuse = spam)
+  // Checkout requests: 10 per IP per 60 s (creating a Stripe session is cheap)
+  const ip = getClientIp(req);
+  const isPortal = !!req.body?.portal;
+  const rlKey = isPortal ? `checkout-portal:${ip}` : `checkout:${ip}`;
+  const rlMax = isPortal ? 3 : 10;
+  const { allowed } = await rateLimit(rlKey, { max: rlMax, window: 60 });
+  if (!allowed) {
+    return res.status(429).json({ error: "Te veel verzoeken. Wacht even en probeer opnieuw." });
+  }
 
   // ── Customer Portal branch ────────────────────────────────────────────────
   // Called by SubscriptionManage component with { portal: true, email }
