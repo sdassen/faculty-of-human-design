@@ -2988,25 +2988,12 @@ Geen sectietitel in de tekst.`);
           <div className="container-sm">
             <div className="label" style={{marginBottom:8}}>{LANG==="en"?"Step 2 — Your chart":"Stap 2 — Je chart"}</div>
             <h2 className="h2" style={{marginBottom:32}}>{chart.isNumerology?(LANG==="en"?"Your core numbers":"Je kerngetallen"):chart.isHoroscoop?(LANG==="en"?"Your planet positions":"Je planeetstanden"):(rpt.id.startsWith("relatie_")||rpt.needsChild)?(LANG==="en"?"Combined Human Design chart":"Gecombineerde Human Design chart"):(LANG==="en"?"Your Human Design chart":"Je Human Design chart")}</h2>
-            {/* ── Relatie: gecombineerde bodygraph + twee compacte tabellen ── */}
+            {/* ── Relatie: gecombineerde bodygraph + ChartDashboard per persoon ── */}
             {rpt.id.startsWith("relatie_")&&(()=>{
               const lbl=tl(rpt.partnerLabel)||"Partner";
               const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
               const gedeeld=c2?chart.allGates.filter(g=>c2.allGates.includes(g)):[];
-              const HDRow=({c,name})=>(
-                <div className="chart-result">
-                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>Human Design</div>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{name}</div>
-                  <table className="chart-table"><tbody>
-                    <tr><td>Type</td><td><strong>{c.type}</strong></td></tr>
-                    <tr><td>{LANG==="en"?"Strategy":"Strategie"}</td><td>{xlateStrat(c.strat)}</td></tr>
-                    <tr><td>{LANG==="en"?"Authority":"Autoriteit"}</td><td>{xlateAuth(c.auth)}</td></tr>
-                    <tr><td>{LANG==="en"?"Profile":"Profiel"}</td><td>{c.profile}</td></tr>
-                    <tr><td>{LANG==="en"?"Defined":"Gedefinieerd"}</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"none":"geen"}</span>}</div></td></tr>
-                    <tr><td>{LANG==="en"?"Gates":"Poorten"}</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
-                  </tbody></table>
-                </div>
-              );
+              const onOrder=()=>document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});
               return(
                 <>
                   {c2
@@ -3014,15 +3001,14 @@ Geen sectietitel in de tekst.`);
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
                       <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details to see the combined chart`:`Vul de gegevens van de ${lbl.toLowerCase()} in om de gecombineerde chart te zien`}</p>
                     </div>}
-                  <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
-                    <HDRow c={chart} name={form.firstName}/>
-                    {c2?<HDRow c={c2} name={form.pFirstName||lbl}/>:
-                      <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
-                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details`:`Vul de gegevens van de ${lbl.toLowerCase()} in`}</p>
-                      </div>}
-                  </div>
+                  <ChartDashboard chart={chart} name={form.firstName} onOrder={onOrder}/>
+                  {c2
+                    ?<div style={{marginTop:16}}><ChartDashboard chart={c2} name={form.pFirstName||lbl} onOrder={onOrder}/></div>
+                    :<div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160,marginTop:16}}>
+                      <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?`Enter the ${lbl.toLowerCase()}'s details`:`Vul de gegevens van de ${lbl.toLowerCase()} in`}</p>
+                    </div>}
                   {c2&&gedeeld.length>0&&(
-                    <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"14px 18px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginBottom:16}}>
+                    <div style={{background:"rgba(61,44,94,.06)",borderLeft:"3px solid var(--brand)",padding:"14px 18px",borderRadius:"0 var(--radius-sm) var(--radius-sm) 0",marginTop:16,marginBottom:16}}>
                       <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--brand)",marginBottom:6}}>{LANG==="en"?"Shared gates — electromagnetic connections":"Gedeelde poorten — elektromagnetische verbindingen"}</div>
                       <div className="tags">{gedeeld.map(g=><span key={g} className="tag-def">{g}</span>)}</div>
                     </div>
@@ -3033,21 +3019,8 @@ Geen sectietitel in de tekst.`);
             {/* ── Kinderrapport: gecombineerde bodygraph ouder + kind ── */}
             {rpt.needsChild&&(()=>{
               const childChart=(form.cday&&form.cmonth&&form.cyear)?calcHD(parseInt(form.cyear),parseInt(form.cmonth),parseInt(form.cday),parseInt(form.chour||"12"),parseInt(form.cminute||"0")):null;
-              const HDRow=({c,name})=>(
-                <div className="chart-result">
-                  <div style={{fontSize:".6rem",fontWeight:600,letterSpacing:".1em",textTransform:"uppercase",color:"var(--text-light)",marginBottom:4}}>Human Design</div>
-                  <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",marginBottom:16}}>{name}</div>
-                  <table className="chart-table"><tbody>
-                    <tr><td>Type</td><td><strong>{c.type}</strong></td></tr>
-                    <tr><td>{LANG==="en"?"Strategy":"Strategie"}</td><td>{xlateStrat(c.strat)}</td></tr>
-                    <tr><td>{LANG==="en"?"Authority":"Autoriteit"}</td><td>{xlateAuth(c.auth)}</td></tr>
-                    <tr><td>{LANG==="en"?"Profile":"Profiel"}</td><td>{c.profile}</td></tr>
-                    <tr><td>{LANG==="en"?"Defined":"Gedefinieerd"}</td><td><div className="tags">{c.definedCenters?.length>0?c.definedCenters.map(cn=><span key={cn} className="tag-def">{cn}</span>):<span style={{fontSize:".8rem",color:"var(--text-light)"}}>{LANG==="en"?"none":"geen"}</span>}</div></td></tr>
-                    <tr><td>{LANG==="en"?"Gates":"Poorten"}</td><td><div className="tags">{c.allGates?.slice(0,10).map(g=><span key={g} className="tag-gate">{g}</span>)}{c.allGates?.length>10&&<span className="tag-gate">+{c.allGates.length-10}</span>}</div></td></tr>
-                  </tbody></table>
-                </div>
-              );
               const childLabel=LANG==="en"?"Child":"Kind";
+              const onOrder=()=>document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});
               return(
                 <>
                   {childChart
@@ -3055,13 +3028,12 @@ Geen sectietitel in de tekst.`);
                     :<div style={{background:"var(--muted)",borderRadius:"var(--radius-lg)",padding:32,textAlign:"center",marginBottom:20}}>
                       <p className="body-sm" style={{color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details to see the combined chart":"Vul de gegevens van het kind in om de gecombineerde chart te zien"}</p>
                     </div>}
-                  <div className="grid-2" style={{gap:20,marginTop:20,marginBottom:16}}>
-                    <HDRow c={chart} name={form.firstName}/>
-                    {childChart?<HDRow c={childChart} name={form.cFirstName||childLabel}/>:
-                      <div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160}}>
-                        <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details":"Vul de gegevens van het kind in"}</p>
-                      </div>}
-                  </div>
+                  <ChartDashboard chart={chart} name={form.firstName} onOrder={onOrder}/>
+                  {childChart
+                    ?<div style={{marginTop:16}}><ChartDashboard chart={childChart} name={form.cFirstName||childLabel} onOrder={onOrder}/></div>
+                    :<div className="chart-result" style={{display:"flex",alignItems:"center",justifyContent:"center",minHeight:160,marginTop:16}}>
+                      <p className="body-sm" style={{textAlign:"center",color:"var(--text-light)"}}>{LANG==="en"?"Enter the child's details":"Vul de gegevens van het kind in"}</p>
+                    </div>}
                 </>
               );
             })()}
