@@ -1,3 +1,18 @@
+// ── Server-side product catalog ──────────────────────────────────────────────
+// NEVER trust price or isSubscription from the client. Always look up here.
+const REPORT_CATALOG = {
+  volledig:         { priceNum: 75,  isSubscription: false, title: "Human Design Reading" },
+  relatie_liefde:   { priceNum: 95,  isSubscription: false, title: "Relatie Reading" },
+  relatie_business: { priceNum: 85,  isSubscription: false, title: "Zakelijke Reading" },
+  relatie_familie:  { priceNum: 75,  isSubscription: false, title: "Familie Reading" },
+  jaar:             { priceNum: 55,  isSubscription: false, title: "Jaarrapport 2026" },
+  kind:             { priceNum: 75,  isSubscription: false, title: "Kinderrapport" },
+  loopbaan:         { priceNum: 65,  isSubscription: false, title: "Loopbaan Reading" },
+  numerologie:      { priceNum: 65,  isSubscription: false, title: "Numerologie Reading" },
+  horoscoop:        { priceNum: 75,  isSubscription: false, title: "Geboortehoroscoop Reading" },
+  maandelijks:      { priceNum: 19,  isSubscription: true,  title: "Maandelijkse Guidance" },
+};
+
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
@@ -32,10 +47,17 @@ export default async function handler(req, res) {
     }
   }
 
-  const { orderId, rptId, title, price, isSubscription, language, email } = req.body;
+  const { orderId, rptId, language, email } = req.body;
   if (!process.env.STRIPE_SECRET_KEY) {
     return res.status(500).json({ error: "STRIPE_SECRET_KEY niet geconfigureerd in Vercel" });
   }
+
+  // ── Server-side price lookup — reject unknown report IDs ─────────────────
+  const catalogEntry = REPORT_CATALOG[rptId];
+  if (!catalogEntry) {
+    return res.status(400).json({ error: `Onbekend rapport: ${rptId}` });
+  }
+  const { priceNum, isSubscription, title } = catalogEntry;
 
   const BASE = "https://www.facultyhd.com";
   const body = new URLSearchParams();
@@ -47,7 +69,7 @@ export default async function handler(req, res) {
     body.append("line_items[0][price_data][product_data][name]", title);
     body.append("line_items[0][price_data][product_data][description]", "Faculty of Human Design — Maandelijks rapport");
     body.append("line_items[0][price_data][recurring][interval]", "month");
-    body.append("line_items[0][price_data][unit_amount]", String(Math.round(price * 100)));
+    body.append("line_items[0][price_data][unit_amount]", String(priceNum * 100));
   } else {
     body.append("mode", "payment");
     body.append("payment_method_types[]", "card");
@@ -56,7 +78,7 @@ export default async function handler(req, res) {
     body.append("line_items[0][price_data][currency]", "eur");
     body.append("line_items[0][price_data][product_data][name]", title);
     body.append("line_items[0][price_data][product_data][description]", "Faculty of Human Design — Persoonlijk rapport");
-    body.append("line_items[0][price_data][unit_amount]", String(Math.round(price * 100)));
+    body.append("line_items[0][price_data][unit_amount]", String(priceNum * 100));
   }
 
   // success_url includes orderId so the confirmation page can display it
