@@ -3169,20 +3169,6 @@ function HomePage({go}){
         </div>
       </section>
 
-      {/* ── EDITORIAL SIGNAL STRIP ───────────────────────────────────────── */}
-      <div style={{background:"var(--bg)",borderBottom:"1px solid var(--border)",padding:"20px 0"}}>
-        <div className="signal-strip-inner">
-          {(LANG==="en"
-            ?[["2,400+","readings delivered"],["4.9 / 5","average rating"],["Est. 2014","Ibiza, Spain"],["Swiss Ephemeris","astronomical precision"]]
-            :[["2.400+","readings bezorgd"],["4.9 / 5","gemiddelde beoordeling"],["Est. 2014","Ibiza, Spanje"],["Swiss Ephemeris","astronomische precisie"]]
-          ).map(([n,l])=>(
-            <div key={l} style={{textAlign:"center",flexShrink:0}}>
-              <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",letterSpacing:".02em"}}>{n}</div>
-              <div style={{fontSize:".65rem",fontWeight:400,color:"var(--text-light)",textTransform:"uppercase",letterSpacing:".1em",marginTop:3}}>{l}</div>
-            </div>
-          ))}
-        </div>
-      </div>
 
       {/* ── WHY FACULTYHD EXISTS — brand philosophy ──────────────────────── */}
       <section className="brand-section-pad" style={{padding:"128px 40px",background:"var(--bg)"}}>
