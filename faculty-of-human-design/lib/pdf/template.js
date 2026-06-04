@@ -508,8 +508,32 @@ function buildCoverPage(order) {
 </div>`;
 }
 
+// ─── PAGE: PARTNER DESIGN DIVIDER ────────────────────────────────────────────
+// Dark transition page introducing the second person's chart in relatie reports
+function buildPartnerDividerPage(order) {
+  const lang = order.language || "nl";
+  const partnerName = (order.partner_birth_data || {}).name || ui(lang, "Partner", "Partner");
+  const quote = ui(lang,
+    "Om een ander te begrijpen,\nbegint men met het begrijpen van diens ontwerp.",
+    "To understand another,\none begins with understanding their design."
+  );
+  return `
+<div style="width:210mm;height:297mm;margin-top:0;background:#1A1715;position:relative;overflow:hidden;break-before:page;break-inside:avoid;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+  <div style="position:absolute;top:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
+  <div style="position:absolute;bottom:0;left:0;right:0;height:1px;background:#C9A85C;opacity:0.18;"></div>
+  <div style="padding:0 32mm;text-align:center;position:relative;">
+    <div style="font-family:'Inter',sans-serif;font-size:6.5pt;font-weight:500;color:#C9A85C;letter-spacing:0.3em;text-transform:uppercase;margin-bottom:20px;opacity:0.6;">${ui(lang, "HET DESIGN VAN", "THE DESIGN OF")}</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-weight:400;font-size:36pt;color:#FFFFFF;line-height:1.15;letter-spacing:-0.01em;margin-bottom:20px;">${esc(partnerName)}</div>
+    <div style="width:56px;height:0.75px;background:#C9A85C;margin:0 auto 28px;opacity:0.4;"></div>
+    <div style="font-family:'Cormorant Garamond',serif;font-style:italic;font-weight:300;font-size:13pt;color:#FFFFFF;line-height:1.65;opacity:0.45;white-space:pre-line;">${esc(quote)}</div>
+  </div>
+  <div style="position:absolute;bottom:22px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:6pt;font-weight:300;color:#3A3830;letter-spacing:0.18em;">FACULTY OF HUMAN DESIGN</div>
+</div>`;
+}
+
 // ─── PAGE: TABLE OF CONTENTS ──────────────────────────────────────────────────
-function buildTOCPage(sections, order, hasChart, hasSvg) {
+function buildTOCPage(sections, order, hasChart, hasSvg, extraFixedPages) {
+  extraFixedPages = extraFixedPages || 0;
   const lang = order.language || "nl";
   const tocLabel = ui(lang, "INHOUD", "CONTENTS");
 
@@ -517,9 +541,10 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
   // Fixed pages before the first section:
   //   Cover(1) + Intro(1) + HowToRead(1) + Methodology(1) + TOC(1)
   //   + Profile(hasChart?2:0) + Bodygraph(hasChart&&hasSvg?1:0) + GateAppendix(hasChart?1:0)
+  //   + extraFixedPages (e.g. partner chart pages for relatie)
   // Profile can run long; we count it as 2 pages for a typical chart.
   // GateAppendix is now placed directly after Bodygraph, before sections.
-  const fixedPages = 1 + 1 + 1 + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0) + (hasChart ? 1 : 0);
+  const fixedPages = 1 + 1 + 1 + 1 + 1 + (hasChart ? 2 : 0) + (hasChart && hasSvg ? 1 : 0) + (hasChart ? 1 : 0) + extraFixedPages;
 
   const midIdx  = sections.length > 3 ? Math.floor(sections.length / 2) : -1;
   const lastIdx = sections.length > 1 ? sections.length - 1 : -1;
@@ -570,14 +595,16 @@ function buildTOCPage(sections, order, hasChart, hasSvg) {
 }
 
 // ─── PAGE: PROFILE SUMMARY ────────────────────────────────────────────────────
-function buildProfilePage(order) {
-  // For child reports, show the child's chart from partner_birth_data
+function buildProfilePage(order, forPartner) {
+  // For child reports or relatie partner, show partner's chart from partner_birth_data
   const childReport = isChildReport(order);
-  const bd    = childReport ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
+  const usePartnerData = childReport || forPartner;
+  const bd    = usePartnerData ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
   const chart = bd.chart || {};
   const lang  = order.language || "nl";
   const ta    = typeAccent(chart.type);
-  const personName = childReport ? (bd.name || null) : null;
+  // Show person name label for child reports or relatie partner pages
+  const personName = usePartnerData ? (bd.name || null) : null;
   const isEN  = lang === "en";
 
   // Type taglines — short emotional framing per type
@@ -667,10 +694,14 @@ function buildProfilePage(order) {
 }
 
 // ─── PAGE: BODYGRAPH ──────────────────────────────────────────────────────────
-function buildBodygraphPage(svgBodygraph, order) {
+function buildBodygraphPage(svgBodygraph, order, forPartner) {
   const lang = order.language || "nl";
   const childReport = isChildReport(order);
-  const personName = childReport ? ((order.partner_birth_data || {}).name || null) : null;
+  const partnerName = (order.partner_birth_data || {}).name || null;
+  // forPartner: show partner's bodygraph in a relatie report
+  const personName = forPartner
+    ? partnerName
+    : (childReport ? partnerName : null);
 
   const bgLabel = personName
     ? (lang === "en" ? `BODYGRAPH OF ${personName.toUpperCase()}` : `BODYGRAPH VAN ${personName.toUpperCase()}`)
@@ -1229,31 +1260,42 @@ function isChildReport(order) {
 }
 
 // ─── PAGE: GATE APPENDIX ──────────────────────────────────────────────────────
-function buildGateAppendixPage(order) {
+function buildGateAppendixPage(order, forPartner) {
   const lang  = order.language || "nl";
-  // For child reports, the gate appendix shows the CHILD's gates (from partner_birth_data)
+  // For child reports or relatie partner, the gate appendix shows the partner's gates
   const childReport = isChildReport(order);
-  const chartSource = childReport ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
+  const usePartnerData = childReport || forPartner;
+  const chartSource = usePartnerData ? (order.partner_birth_data || order.birth_data || {}) : (order.birth_data || {});
   const chart = chartSource.chart || {};
   const gates = (chart.allGates || []).slice().sort(function(a, b) { return a - b; });
 
   if (!gates.length) return "";
 
   const childOverrides = CHILD_GATE_OVERRIDE[lang === "en" ? "en" : "nl"] || {};
+  const partnerName = forPartner ? ((order.partner_birth_data || {}).name || null) : null;
 
-  const headerLabel = ui(lang, "JOUW CHART", "YOUR CHART");
-  const pageTitle   = ui(lang,
-    childReport ? "Actieve poorten van je kind" : "Jouw actieve poorten",
-    childReport ? "Your child's active gates" : "Your active gates"
-  );
-  const introText   = ui(lang,
-    childReport
-      ? "Onderstaande poorten zijn actief in het chart van je kind — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van het ontwerp van je kind."
-      : "Onderstaande poorten zijn actief in jouw chart — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van jouw ontwerp.",
-    childReport
-      ? "The gates below are active in your child's chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your child's design."
-      : "The gates below are active in your chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your design."
-  );
+  const headerLabel = partnerName
+    ? (lang === "en" ? `CHART OF ${partnerName.toUpperCase()}` : `CHART VAN ${partnerName.toUpperCase()}`)
+    : ui(lang, "JOUW CHART", "YOUR CHART");
+  const pageTitle   = partnerName
+    ? (lang === "en" ? `Active gates of ${partnerName}` : `Actieve poorten van ${partnerName}`)
+    : ui(lang,
+      childReport ? "Actieve poorten van je kind" : "Jouw actieve poorten",
+      childReport ? "Your child's active gates" : "Your active gates"
+    );
+  const introText   = partnerName
+    ? ui(lang,
+        `Onderstaande poorten zijn actief in het chart van ${partnerName} — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema.`,
+        `The gates below are active in ${partnerName}'s chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme.`
+      )
+    : ui(lang,
+      childReport
+        ? "Onderstaande poorten zijn actief in het chart van je kind — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van het ontwerp van je kind."
+        : "Onderstaande poorten zijn actief in jouw chart — zowel vanuit de bewuste (persoonlijkheid) als de onbewuste (ontwerp) component. Elke poort draagt een specifiek energetisch thema dat deel uitmaakt van jouw ontwerp.",
+      childReport
+        ? "The gates below are active in your child's chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your child's design."
+        : "The gates below are active in your chart — from both the conscious (personality) and unconscious (design) component. Each gate carries a specific energetic theme that is part of your design."
+    );
 
   const gateCards = gates.map(function(g) {
     const ref  = GATE_REF[g] || { nl: "—", en: "—" };
@@ -1387,6 +1429,7 @@ export function buildHTML({ order, sections, svgBodygraph, svgPartnerBodygraph }
   const bd = order.birth_data || {};
   const chart = bd.chart || {};
   const childReport = isChildReport(order);
+  const isRelatie = (order.report_id || "").startsWith("relatie_");
 
   const hasChart = chart.type && Array.isArray(chart.definedCenters);
 
@@ -1398,6 +1441,13 @@ export function buildHTML({ order, sections, svgBodygraph, svgPartnerBodygraph }
   const hasProfileChart = childReport ? hasPartnerChart : hasChart;
   // Which SVG to render on the bodygraph page
   const profileSvg = childReport ? (svgPartnerBodygraph || svgBodygraph) : svgBodygraph;
+
+  // For relatie reports: also show the partner's chart after the requester's
+  const showPartnerChartPages = isRelatie && hasPartnerChart;
+  // Extra fixed pages added by partner chart section (divider + profile + bodygraph + gates)
+  const partnerExtraPages = showPartnerChartPages
+    ? 1 + 2 + (svgPartnerBodygraph ? 1 : 0) + 1
+    : 0;
 
   const bundledFonts = buildFontCSS();
   const fontBlock = bundledFonts
@@ -1448,10 +1498,14 @@ ${buildCoverPage(order)}
 ${buildIntroPage(order)}
 ${buildHowToReadPage(order)}
 ${buildMethodologyPage(order)}
-${buildTOCPage(sections, order, hasProfileChart, !!profileSvg)}
+${buildTOCPage(sections, order, hasProfileChart, !!profileSvg, partnerExtraPages)}
 ${hasProfileChart ? buildProfilePage(order) : ""}
 ${hasProfileChart && profileSvg ? buildBodygraphPage(profileSvg, order) : ""}
 ${hasProfileChart ? buildGateAppendixPage(order) : ""}
+${showPartnerChartPages ? buildPartnerDividerPage(order) : ""}
+${showPartnerChartPages ? buildProfilePage(order, true) : ""}
+${showPartnerChartPages && svgPartnerBodygraph ? buildBodygraphPage(svgPartnerBodygraph, order, true) : ""}
+${showPartnerChartPages ? buildGateAppendixPage(order, true) : ""}
 ${sectionPagesWithTransition}
 ${buildClosingPage(order)}
 </body>
