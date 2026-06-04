@@ -300,7 +300,7 @@ export default {
   },
   footer: {
     logoSub: "Ibiza, Spain — Est. 2014",
-    desc: "Personal readings based on Human Design, Numerology and Astrology. Calculated on exact astronomical data.",
+    desc: "Personal readings based on Human Design, Numerology and Astrology. Carefully composed from your unique birth data and calculated with astronomical precision.",
     reportsCol: "Reports",
     infoCol: "Information",
     trustCol: "Trust",
