@@ -721,7 +721,7 @@ const track = (event, props = {}) => {
     // Fire Google Ads purchase conversion on checkout_completed
     if (event === "checkout_completed" && props.price) {
       window.gtag("event", "conversion", {
-        send_to: "AW-XXXXXXXXXX/XXXXXXXXXXXXXXXXXX", // replace with real label
+        send_to: "AW-18199038598/07RUCKqG9rYcEIaV_eVD",
         value: props.price,
         currency: "EUR",
         transaction_id: Date.now().toString()
