@@ -1,5 +1,50 @@
 // Calls the Supabase REST API directly via fetch so we avoid the
-// @supabase/realtime-js WebSocket check that throws in Node.js 20.
+// @supabase/supabase-js WebSocket check that throws in Node.js 20.
+
+// ── Server-side section catalog ───────────────────────────────────────────────
+// NEVER trust promptSections from the client. Always look up here by reportId + language.
+const REPORT_SECTIONS = {
+  volledig: {
+    nl: ["Je Energetische Blauwdruk","Type & Levensstrategie","Autoriteit","Profiel","Gedefinieerde Centra","Open Centra & Conditionering","Actieve Kanalen","Je Poorten","Inkarnatie-Kruis","Relaties & Verbinding","Praktische Guidance 2026-2028","Slotanalyse"],
+    en: ["Your Energetic Blueprint","Type & Life Strategy","Authority","Profile","Defined Centers","Open Centers & Conditioning","Active Channels","Your Gates","Incarnation Cross","Relationships & Connection","Practical Guidance 2026-2028","Closing Analysis"],
+  },
+  relatie_liefde: {
+    nl: ["De Energie van Jullie Verbinding","Chart Analyse — Jouw Design","Chart Analyse — Partners Design","Elektromagnetische Verbindingen","Compatibiliteit & Aantrekking","Communicatie & Intimiteit","Spanningsvelden & Doorbraken","Gezamenlijk Groeipad","Praktisch Advies voor Harmonie"],
+    en: ["The Energy of Your Connection","Chart Analysis — Your Design","Chart Analysis — Partner's Design","Electromagnetic Connections","Compatibility & Attraction","Communication & Intimacy","Tension Points & Breakthroughs","Shared Growth Path","Practical Advice for Harmony"],
+  },
+  relatie_business: {
+    nl: ["De Energie van Jullie Samenwerking","Chart Analyse — Jouw Design","Chart Analyse — Zakenpartner Design","Besluitvormingsdynamieken","Complementariteit & Sterktes","Leiderschapsstijl & Rolverdeling","Communicatie & Conflictpatronen","Gezamenlijke Visie & Richting","Praktisch Advies voor Samenwerking"],
+    en: ["The Energy of Your Partnership","Chart Analysis — Your Design","Chart Analysis — Business Partner's Design","Decision-Making Dynamics","Complementarity & Strengths","Leadership Style & Role Division","Communication & Conflict Patterns","Shared Vision & Direction","Practical Advice for Collaboration"],
+  },
+  relatie_familie: {
+    nl: ["De Energie van Jullie Familiebinding","Chart Analyse — Jouw Design","Chart Analyse — Familielid","Familiedynamieken & Patronen","Communicatiestijlen & Begrip","Groeimogelijkheden voor Beiden","Spanningsvelden & Oplossingen","Guidance voor Meer Verbinding","Slotanalyse"],
+    en: ["The Energy of Your Family Bond","Chart Analysis — Your Design","Chart Analysis — Family Member's Design","Family Dynamics & Patterns","Communication Styles & Understanding","Growth Opportunities for Both","Tension Points & Solutions","Guidance for More Connection","Closing Analysis"],
+  },
+  jaar: {
+    nl: ["Energie van Je Nieuw Levensjaar","Solar Return Analyse","Dominante Themas","Kwartaal 1","Kwartaal 2","Kwartaal 3","Kwartaal 4","Kansen & Uitdagingen","Intentie voor het Jaar"],
+    en: ["Energy of Your New Personal Year","Solar Return Analysis","Dominant Themes","Quarter 1","Quarter 2","Quarter 3","Quarter 4","Opportunities & Challenges","Intention for the Year"],
+  },
+  kind: {
+    nl: ["Het Unieke Design van Je Kind","Type & Energie","Beslissingen Nemen","Hoe Je Kind Leert","Behoeften & Grenzen","Centra Analyse","Opvoedtips Op Maat","Gaven & Talenten","Relatie Ouder-Kind","Slotanalyse"],
+    en: ["Your Child's Unique Design","Type & Energy","Making Decisions","How Your Child Learns","Needs & Boundaries","Centers Analysis","Parenting Tips Tailored to Your Child","Gifts & Talents","Parent-Child Relationship","Closing Analysis"],
+  },
+  loopbaan: {
+    nl: ["Professionele Blauwdruk","Ideale Werkomgeving","Hoe Je Geld Aantrekt","Je Professionele Kracht","Samenwerking & Leiderschap","Valkuilen","Ondernemen vs. Loondienst","Financiele Strategie","Volgende Stap"],
+    en: ["Professional Blueprint","Ideal Work Environment","How You Attract Money","Your Professional Strengths","Collaboration & Leadership","Pitfalls","Self-Employment vs. Employment","Financial Strategy","Your Next Step"],
+  },
+  numerologie: {
+    nl: ["Je Numerologische Blauwdruk","Levenspadgetal","Uitdrukkingsgetal","Zielsgetal","Persoonlijkheidsgetal","Verjaardagsgetal","Persoonlijk Jaar 2026","Rijpingsgetal","Mastergetallen","Hoe Je Getallen Samenwerken","Guidance 2026-2028","Slotanalyse"],
+    en: ["Your Numerological Blueprint","Life Path Number","Expression Number","Soul Urge Number","Personality Number","Birthday Number","Personal Year 2026","Maturity Number","Master Numbers","How Your Numbers Work Together","Guidance 2026-2028","Closing Analysis"],
+  },
+  horoscoop: {
+    nl: ["Je Astrologische Blauwdruk","Zonneteken","Ascendant","De Maan","Mercurius Venus Mars","Jupiter Saturnus","Buitenste Planeten","De Huizen","Aspecten","Midhemel","Guidance 2026-2028","Slotanalyse"],
+    en: ["Your Astrological Blueprint","Sun Sign","Ascendant","The Moon","Mercury, Venus & Mars","Jupiter & Saturn","Outer Planets","The Houses","Aspects","Midheaven","Guidance 2026-2028","Closing Analysis"],
+  },
+  maandelijks: {
+    nl: ["Energie van Deze Maand","Planetaire Invloeden","Wat Er van jou Gevraagd Wordt","Kansen","Aandachtspunten","Intentie voor de Maand"],
+    en: ["Energy of This Month","Planetary Influences","What Is Asked of You","Opportunities","Points of Attention","Intention for the Month"],
+  },
+};
 
 // ── Lazy import for PDF generation (only loaded on GET test requests) ──────────
 async function renderTestPdf(orderId, res) {
@@ -67,16 +112,25 @@ export default async function handler(req, res) {
     customerEmail,
     birthData,
     partnerBirthData,
-    promptSections,
+    // promptSections intentionally ignored — section titles are looked up
+    // server-side from REPORT_SECTIONS to prevent prompt injection.
   } = req.body;
 
-  if (!reportId || !customerEmail || !birthData || !promptSections) {
+  if (!reportId || !customerEmail || !birthData) {
     return res.status(400).json({ error: "Vereiste velden ontbreken" });
   }
 
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customerEmail)) {
     return res.status(400).json({ error: "Ongeldig e-mailadres" });
   }
+
+  // ── Server-side section lookup — reject unknown report IDs ───────────────
+  const lang = language === "en" ? "en" : "nl";
+  const sectionsEntry = REPORT_SECTIONS[reportId];
+  if (!sectionsEntry) {
+    return res.status(400).json({ error: `Onbekend rapport: ${reportId}` });
+  }
+  const promptSections = sectionsEntry[lang];
 
   const { randomUUID } = await import("crypto");
   const orderId = randomUUID();
@@ -85,7 +139,7 @@ export default async function handler(req, res) {
     id: orderId,
     report_id: reportId,
     report_title: reportTitle || reportId,
-    language: language || "nl",
+    language: lang,
     customer_name: customerName || null,
     customer_email: customerEmail.trim().toLowerCase(),
     birth_data: birthData,
