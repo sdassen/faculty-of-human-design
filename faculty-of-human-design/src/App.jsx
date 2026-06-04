@@ -3110,8 +3110,8 @@ Geen sectietitel in de tekst.`);
               <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
               <p style={{marginTop:12,fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)",lineHeight:1.6,textAlign:"center"}}>
                 {LANG==="en"
-                  ?<>By ordering you agree to our <a href="/en/terms" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
-                  :<>Door te bestellen ga je akkoord met onze <a href="/voorwaarden" style={{color:"inherit",textDecoration:"underline"}}>Algemene Voorwaarden & Privacy</a>.</>}
+                  ?<>By ordering you agree to our <a href="/en/terms" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
+                  :<>Door te bestellen ga je akkoord met onze <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Algemene Voorwaarden & Privacy</a>.</>}
               </p>
             </div>
           </div>
