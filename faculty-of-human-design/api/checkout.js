@@ -138,11 +138,15 @@ export default async function handler(req, res) {
         if (name && existing.name !== name) {
           const updateBody = new URLSearchParams();
           updateBody.append("name", name);
-          await fetch(`https://api.stripe.com/v1/customers/${existing.id}`, {
+          const updateRes = await fetch(`https://api.stripe.com/v1/customers/${existing.id}`, {
             method: "POST",
             headers: stripeHeaders,
             body: updateBody.toString(),
           });
+          const updateData = await updateRes.json();
+          if (updateData.error) {
+            console.warn("[checkout] customer name update failed:", updateData.error.message);
+          }
         }
         body.append("customer", existing.id);
       } else {
@@ -167,6 +171,13 @@ export default async function handler(req, res) {
       // Never let customer lookup block checkout — fall back to email only
       body.append("customer_email", email);
     }
+  }
+
+  // Save the name the customer types in the iDEAL form back to the Stripe Customer record.
+  // Without this, billing_details.name is never persisted and the name doesn't appear in the dashboard.
+  // "auto" = collect name in the form AND save it back to the customer object.
+  if (body.has("customer")) {
+    body.append("customer_update[name]", "auto");
   }
 
   try {
