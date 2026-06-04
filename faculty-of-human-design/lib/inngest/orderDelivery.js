@@ -197,6 +197,82 @@ function calculateDeliveryDate(paidAtIso) {
   return next;
 }
 
+// ─── SHARED JSON OUTPUT FORMAT ────────────────────────────────────────────────
+// The main SYSTEM_PROMPT_NL/EN includes the output schema inline.
+// Report-specific system prompts (relatie, jaar, loopbaan, etc.) focus on
+// tone/style and reference this shared schema via getSystemPrompt().
+const JSON_OUTPUT_FORMAT_NL = `
+
+OUTPUT FORMAT — schrijf uitsluitend geldig JSON. Geen markdown-blokken, geen tekst buiten het JSON-object. Gebruik exact dit schema:
+
+{
+  "teaser": "Cinematische pull-quote — max 18 woorden, maakt de lezer stil, wil je screenshotten",
+  "adem": "Optioneel: 2–4 zinnen wit en ruimte. Poëtisch, geen uitleg. Weglaten als het niet past.",
+  "inJouwChart": [
+    "Chartfeit 1 — poort/kanaal/centrum + betekenis, specifiek voor DEZE chart",
+    "Chartfeit 2 — gebruik echte getallen en namen uit de chartdata",
+    "Chartfeit 3 (3–5 items totaal)"
+  ],
+  "kern": [
+    {"subkop": "Editoriaal, atmosferisch — max 8 woorden, geen punt, geen coaching-taal", "paragraphs": ["Begin met een mini-scène of concrete observatie, geen theorie.", "Verdieping vanuit chartdata — concreet en voelbaar."]},
+    {"subkop": "Tweede subkop (optioneel)", "paragraphs": ["Menselijke waarheid, schaduw, of stille landing."]}
+  ],
+  "valkuilen": ["Herkenbaar schaduwpatroon — concreet, zonder oordeel", "Patroon 2"],
+  "praktijk": ["Uitnodiging als volledige zin — geen opdracht, maar een ervaring om op te letten", "Uitnodiging 2"],
+  "dezeWeek": ["Uitnodiging als volledige zin — extreem concreet, tijdgebonden", "Uitnodiging 2"],
+  "reflectievragen": ["Integratieprompt die echte reflectie uitnodigt?", "Vraag 2?"],
+  "microInzichten": [
+    {"label": "Jouw verborgen gave", "tekst": "Één tot twee zinnen — schrijf als stille observatie, niet als statement."}
+  ]
+}
+
+VELDREGELS:
+- adem: OPTIONEEL — gebruik voor 2–3 secties per rapport; weglaten als het niet past
+- inJouwChart: 3–5 items
+- kern: 1–4 objecten; geen vaste boog; 480–560 woorden totaal — vul de pagina inhoudelijk
+- valkuilen: 1–3 items; minimaal 1 altijd aanwezig
+- praktijk: 2–3 items; schrijf als uitnodiging; altijd aanwezig
+- dezeWeek: 1–2 items; weglaten als het de sectie zwaarder maakt
+- reflectievragen: 2–3 vragen; altijd aanwezig
+- microInzichten: OPTIONEEL — 0–3 items
+- Sluit de laatste kern-paragraaf af met een volledige, afgeronde zin`;
+
+const JSON_OUTPUT_FORMAT_EN = `
+
+OUTPUT FORMAT — write only valid JSON. No markdown code fences, no text outside the JSON object. Use exactly this schema:
+
+{
+  "teaser": "Cinematic pull-quote — max 18 words, makes the reader pause, worth screenshotting",
+  "adem": "Optional: 2–4 sentences of space and stillness. Poetic, no explanation. Omit if it doesn't fit.",
+  "inJouwChart": [
+    "Chart fact 1 — gate/channel/center + meaning, specific to THIS chart",
+    "Chart fact 2 — use real numbers and names from the chart data",
+    "Chart fact 3 (3–5 items total)"
+  ],
+  "kern": [
+    {"subkop": "Editorial, atmospheric — max 8 words, no period, no coaching language", "paragraphs": ["Begin with a mini-scene or concrete observation, not theory.", "Deepen from chart data — concrete and felt."]},
+    {"subkop": "Second sub-heading (optional)", "paragraphs": ["Human truth, shadow, or quiet landing."]}
+  ],
+  "valkuilen": ["Recognisable shadow pattern — concrete, without judgment", "Pattern 2"],
+  "praktijk": ["Invitation as a complete sentence — not an assignment, but an experience to notice", "Invitation 2"],
+  "dezeWeek": ["Invitation as a complete sentence — extremely concrete, time-bound", "Invitation 2"],
+  "reflectievragen": ["Integration prompt that invites genuine reflection?", "Question 2?"],
+  "microInzichten": [
+    {"label": "Your hidden gift", "tekst": "One to two sentences — write as quiet observation, not declaration."}
+  ]
+}
+
+FIELD RULES:
+- adem: OPTIONAL — use for 2–3 sections per report; omit if it doesn't fit
+- inJouwChart: 3–5 items
+- kern: 1–4 objects; no fixed arc; 480–560 words total — fill the page with substance
+- valkuilen: 1–3 items; minimum 1 always present
+- praktijk: 2–3 items; write as invitation; always present
+- dezeWeek: 1–2 items; omit if it would make the section heavier
+- reflectievragen: 2–3 questions; always present
+- microInzichten: OPTIONAL — 0–3 items
+- End the final kern paragraph with a complete, rounded sentence`;
+
 // ─── AI TEXT GENERATION ───────────────────────────────────────────────────────
 const SYSTEM_PROMPT_NL = `Je bent een senior schrijver bij de Faculty of Human Design op Ibiza. Je schrijft geen rapporten — je creëert een persoonlijk transformatieartefact. Iets dat de lezer bewaart, herleest, en aan anderen laat zien. Elk woord moet zijn plek verdienen.
 
@@ -1428,6 +1504,11 @@ FORBIDDEN PATTERNS (same as standard):
 `;
 
 function getSystemPrompt(lang, reportId) {
+  // kind/loopbaan/jaar/maandelijks prompts embed their own OUTPUT FORMAT block.
+  // Relatie prompts focus on tone/style only — append the shared JSON schema so
+  // Claude knows the exact output structure to produce.
+  const jsonSchema = lang === "en" ? JSON_OUTPUT_FORMAT_EN : JSON_OUTPUT_FORMAT_NL;
+
   if (reportId === "kind") {
     return lang === "en" ? SYSTEM_PROMPT_KINDERRAPPORT_EN : SYSTEM_PROMPT_KINDERRAPPORT_NL;
   }
@@ -1441,13 +1522,16 @@ function getSystemPrompt(lang, reportId) {
     return lang === "en" ? SYSTEM_PROMPT_MAANDELIJKS_EN : SYSTEM_PROMPT_MAANDELIJKS_NL;
   }
   if (reportId === "relatie_liefde") {
-    return lang === "en" ? SYSTEM_PROMPT_RELATIE_LIEFDE_EN : SYSTEM_PROMPT_RELATIE_LIEFDE_NL;
+    const base = lang === "en" ? SYSTEM_PROMPT_RELATIE_LIEFDE_EN : SYSTEM_PROMPT_RELATIE_LIEFDE_NL;
+    return base + jsonSchema;
   }
   if (reportId === "relatie_business") {
-    return lang === "en" ? SYSTEM_PROMPT_RELATIE_BUSINESS_EN : SYSTEM_PROMPT_RELATIE_BUSINESS_NL;
+    const base = lang === "en" ? SYSTEM_PROMPT_RELATIE_BUSINESS_EN : SYSTEM_PROMPT_RELATIE_BUSINESS_NL;
+    return base + jsonSchema;
   }
   if (reportId === "relatie_familie") {
-    return lang === "en" ? SYSTEM_PROMPT_RELATIE_FAMILIE_EN : SYSTEM_PROMPT_RELATIE_FAMILIE_NL;
+    const base = lang === "en" ? SYSTEM_PROMPT_RELATIE_FAMILIE_EN : SYSTEM_PROMPT_RELATIE_FAMILIE_NL;
+    return base + jsonSchema;
   }
   return lang === "en" ? SYSTEM_PROMPT_EN : SYSTEM_PROMPT_NL;
 }
@@ -2277,6 +2361,7 @@ export const orderDelivery = inngest.createFunction(
 
       const isChildReport = order.report_id === "kind" ||
         /kinderrapport|child\s*report/i.test(order.report_title || "");
+      const isRelatieReport = (order.report_id || "").toLowerCase().startsWith("relatie_");
 
       try {
         const serverChart = calcHDServer({
@@ -2307,17 +2392,19 @@ export const orderDelivery = inngest.createFunction(
           console.warn(`[recompute-chart] Could not persist chart to DB: ${updateErr.message}`);
         }
 
-        // ── Child report: also recompute the child's chart ─────────────────
-        // partner_birth_data holds the child's birth data for kind reports.
-        // The browser never calculates the child's chart, so without this step
+        // ── Child / relatie report: also recompute the partner's chart ────────
+        // For kind reports, partner_birth_data = child's birth data.
+        // For relatie reports, partner_birth_data = partner's birth data.
+        // The browser never calculates these charts, so without this step
         // hasPartnerChart stays false → profile page, bodygraph and gate
         // appendix are all skipped in the PDF.
         let newPartnerBirthData = order.partner_birth_data || null;
-        if (isChildReport) {
+        if (isChildReport || isRelatieReport) {
           const pbd = order.partner_birth_data || {};
+          const logLabel = isChildReport ? "child" : "partner";
           if (pbd.day) {
             try {
-              const childServerChart = calcHDServer({
+              const partnerServerChart = calcHDServer({
                 day:    parseInt(pbd.day),
                 month:  parseInt(pbd.month),
                 year:   parseInt(pbd.year),
@@ -2327,21 +2414,21 @@ export const orderDelivery = inngest.createFunction(
               });
               newPartnerBirthData = {
                 ...pbd,
-                chart: childServerChart,
+                chart: partnerServerChart,
                 _browser_chart: pbd.chart,
               };
-              const { error: childUpdateErr } = await db
+              const { error: partnerUpdateErr } = await db
                 .from("orders")
                 .update({ partner_birth_data: newPartnerBirthData })
                 .eq("id", orderId);
-              if (childUpdateErr) {
-                console.warn(`[recompute-chart] Could not persist child chart to DB: ${childUpdateErr.message}`);
+              if (partnerUpdateErr) {
+                console.warn(`[recompute-chart] Could not persist ${logLabel} chart to DB: ${partnerUpdateErr.message}`);
               }
-            } catch (childErr) {
-              console.warn(`[recompute-chart] Child chart failed for ${orderId}: ${childErr.message}`);
+            } catch (partnerErr) {
+              console.warn(`[recompute-chart] ${logLabel} chart failed for ${orderId}: ${partnerErr.message}`);
             }
           } else {
-            console.warn(`[recompute-chart] Kind rapport ${orderId} has no partner_birth_data.day — child chart skipped`);
+            console.warn(`[recompute-chart] ${isChildReport ? "Kind" : "Relatie"} rapport ${orderId} has no partner_birth_data.day — ${logLabel} chart skipped`);
           }
         }
 
