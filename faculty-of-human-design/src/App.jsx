@@ -3987,6 +3987,18 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
             onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"mid_cta"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
           >{heroCta}</button>
           <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
+          {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&(
+            <a href={
+                rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
+                rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
+                (LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")
+              } target="_blank" rel="noopener"
+              style={{display:"inline-block",marginTop:18,fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2,transition:"color .2s,border-color .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="var(--text-light)";}}
+              onMouseLeave={e=>{e.currentTarget.style.color="var(--text-muted)";e.currentTarget.style.borderColor="var(--border)";}}>
+              {LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}
+            </a>
+          )}
         </div>
       </div>
       )}
