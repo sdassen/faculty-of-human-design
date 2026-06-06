@@ -3958,19 +3958,6 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
         </div>
       </section>
 
-      {/* ── VISUAL SILENCE (relatie_liefde only) ─────────────────────────── */}
-      {rpt.id==="relatie_liefde"&&(
-        <div style={{background:"#fff",padding:"152px 40px",textAlign:"center"}}>
-          <div style={{maxWidth:380,margin:"0 auto"}}>
-            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1rem,1.5vw,1.15rem)",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:2.0,letterSpacing:".01em",margin:0,whiteSpace:"pre-line"}}>
-              {LANG==="en"
-                ? "Sometimes clarity arrives\nnot when you try harder,\nbut when you understand\nwhat you were each carrying."
-                : "Soms ontstaat helderheid\nniet door harder te proberen,\nmaar door te begrijpen\nwat jullie ieder meedragen."}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* ── SOFT MID CTA ─────────────────────────────────────────────────── */}
       {(
         <div style={{background:"#fff",padding:"100px 40px",textAlign:"center"}}>
