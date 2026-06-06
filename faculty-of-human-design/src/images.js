@@ -128,10 +128,10 @@ export const IMGS = {
   // ════════════════════════════════════════════════════════════════════════════
 
   // s1 — Het verschil tussen Type en Strategie
-  article_s1:              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&q=75",
+  article_s1:              "/img-landscape-1.jpg",
 
   // s2 — Innerlijke autoriteit
-  article_s2:              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&auto=format&q=75",
+  article_s2:              "/img-stones-2.jpg",
 
   // s3 — De oorsprong van Human Design op Ibiza
   article_s3:              "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&q=75",
