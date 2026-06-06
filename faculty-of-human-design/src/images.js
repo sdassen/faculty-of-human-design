@@ -139,7 +139,7 @@ export const IMGS = {
   article_s6:              "/img-table-book.jpg",
 
   // s7 — Gedefinieerde en open centra
-  article_s7:              "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=800&auto=format&q=75",
+  article_s7:              "/img-chair.jpg",
 
   // s8 — Het profiel
   article_s8:              "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&auto=format&q=75",
