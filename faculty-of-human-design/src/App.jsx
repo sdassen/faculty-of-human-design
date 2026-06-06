@@ -5635,8 +5635,8 @@ function TermsPage({go}){
             }</P>
             <P style={{marginTop:8}}>
               {isEn
-                ?<><strong>Faculty of Human Design</strong><br/>Hennepstraat 7, 3572 TR Utrecht, Nederland<br/>KvK: 42055841</>
-                :<><strong>Faculty of Human Design</strong><br/>Hennepstraat 7, 3572 TR Utrecht, Nederland<br/>KvK: 42055841</>
+                ?<><strong>Faculty of Human Design</strong><br/>Lomanstraat 101, 1075 PZ Amsterdam, Nederland<br/>KvK: 42055841</>
+                :<><strong>Faculty of Human Design</strong><br/>Lomanstraat 101, 1075 PZ Amsterdam, Nederland<br/>KvK: 42055841</>
               }
             </P>
           </Section>
