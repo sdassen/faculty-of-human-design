@@ -122,27 +122,20 @@ export const IMGS = {
 
   // ════════════════════════════════════════════════════════════════════════════
   // ARTIKEL AFBEELDINGEN (/journal)
-  // Eerste afbeelding (article_sX)   = hero bovenaan het artikel + kaartje
-  // Tweede afbeelding (article_sXb)  = foto halverwege de artikeltekst
+  // Hero bovenaan het artikel + kaartje op de overzichtspagina
   // Aanbevolen: 1600×900px of groter, landscape
+  //
+  // NB: s1, s2, s3 worden overschreven door Supabase-artikelen met dezelfde
+  // titel — hun afbeelding wordt beheerd via Supabase (tabel: articles).
   // ════════════════════════════════════════════════════════════════════════════
 
-  // s1 — Het verschil tussen Type en Strategie
-  article_s1:              "/img-landscape-1.jpg",
-
-  // s2 — Innerlijke autoriteit
-  article_s2:              "/img-stones-2.jpg",
-
-  // s3 — De oorsprong van Human Design op Ibiza
-  article_s3:              "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&q=75",
-
-  // s4 — Kanalen
+  // s4 — Kanalen: de energetische verbindingen in jouw chart
   article_s4:              "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&q=75",
 
-  // s5 — Levenspadgetal
+  // s5 — Wat je levenspadgetal over jou zegt
   article_s5:              "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=800&auto=format&q=75",
 
-  // s6 — De vijf Types uitgelegd
+  // s6 — De vijf Types in Human Design uitgelegd
   article_s6:              "/img-table-book.jpg",
 
   // s7 — Gedefinieerde en open centra
@@ -172,7 +165,7 @@ export const IMGS = {
   // s15 — Waarom Human Design geen persoonlijkheidstest is
   article_s15:             "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&q=75",
 
-  // s16 — Planeten in Human Design
-  article_s16:             "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&auto=format&q=75",
+  // s16 — Planeten in Human Design (uniek — verschilt van s13)
+  article_s16:             "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&q=75",
 
 };
