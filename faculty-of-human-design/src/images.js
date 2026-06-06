@@ -129,15 +129,12 @@ export const IMGS = {
 
   // s1 — Het verschil tussen Type en Strategie
   article_s1:              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&auto=format&q=75",
-  article_s1b:             "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&auto=format&q=75",
 
   // s2 — Innerlijke autoriteit
   article_s2:              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&auto=format&q=75",
-  article_s2b:             "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=800&auto=format&q=75",
 
   // s3 — De oorsprong van Human Design op Ibiza
   article_s3:              "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=800&auto=format&q=75",
-  article_s3b:             "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=800&auto=format&q=75",
 
   // s4 — Kanalen
   article_s4:              "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&q=75",
@@ -146,15 +143,13 @@ export const IMGS = {
   article_s5:              "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=800&auto=format&q=75",
 
   // s6 — De vijf Types uitgelegd
-  article_s6:              "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&auto=format&q=75",
-  article_s6b:             "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=800&auto=format&q=75",
+  article_s6:              "/img-table-book.jpg",
 
   // s7 — Gedefinieerde en open centra
   article_s7:              "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bb99?w=800&auto=format&q=75",
 
   // s8 — Het profiel
   article_s8:              "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&auto=format&q=75",
-  article_s8b:             "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&q=75",
 
   // s9 — Het Inkarnatie Kruis
   article_s9:              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&auto=format&q=75",
@@ -170,7 +165,6 @@ export const IMGS = {
 
   // s13 — De ascendant
   article_s13:             "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&auto=format&q=75",
-  article_s13b:            "https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?w=800&auto=format&q=75",
 
   // s14 — Mastergetallen 11, 22 en 33
   article_s14:             "https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&auto=format&q=75",
