@@ -3971,14 +3971,14 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
         </div>
       )}
 
-      {/* ── SOFT MID CTA (non-relatie only) ──────────────────────────────── */}
-      {rpt.id!=="relatie_liefde"&&(
+      {/* ── SOFT MID CTA ─────────────────────────────────────────────────── */}
+      {(
         <div style={{background:"#fff",padding:"100px 40px",textAlign:"center"}}>
           <div style={{maxWidth:480,margin:"0 auto"}}>
             <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.8,marginBottom:40,fontStyle:"italic"}}>
               {LANG==="en"
-                ? "Personally assembled and written with care. Delivered as PDF within one business day."
-                : "Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag."}
+                ? (isRelatie ? "Two charts analysed, written with care. Delivered as PDF within one business day." : "Personally assembled and written with care. Delivered as PDF within one business day.")
+                : (isRelatie ? "Twee charts geanalyseerd, met aandacht geschreven. Bezorgd als PDF binnen één werkdag." : "Persoonlijk samengesteld en met aandacht geschreven. Bezorgd als PDF binnen één werkdag.")}
             </p>
           <button
             style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 36px",cursor:"pointer",transition:"all .3s ease"}}
