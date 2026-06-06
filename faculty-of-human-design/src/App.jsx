@@ -4320,7 +4320,15 @@ function InzichtenPage({go,articleId}){
                   {i!==pullIdx&&(
                     <p style={{fontFamily:"var(--font-serif)",fontSize:"1.02rem",fontWeight:300,color:"var(--text)",lineHeight:2,marginBottom:28}}>{p.trim()}</p>
                   )}
-                  {i===2&&imgs[1]&&<img src={imgs[1]} alt="" style={{width:"100%",display:"block",objectFit:"cover",maxHeight:420,margin:"12px 0 40px"}} loading="lazy"/>}
+                  {i===2&&paras.length>4&&(
+                    <div style={{margin:"52px 0",padding:"44px 0",borderTop:"1px solid var(--border)",borderBottom:"1px solid var(--border)",textAlign:"center"}}>
+                      <div style={{width:1,height:32,background:"var(--gold)",margin:"0 auto 28px",opacity:.4}}/>
+                      <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.05rem,1.7vw,1.25rem)",fontStyle:"italic",fontWeight:300,color:"var(--text)",lineHeight:1.75,maxWidth:520,margin:"0 auto",opacity:.85}}>
+                        {(paras[Math.floor(paras.length/2)]||paras[1]||"").split(".")[0]}.
+                      </p>
+                      <div style={{width:1,height:32,background:"var(--gold)",margin:"28px auto 0",opacity:.4}}/>
+                    </div>
+                  )}
                 </div>
               ));
             })()}
