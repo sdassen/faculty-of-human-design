@@ -163,7 +163,7 @@ export const IMGS = {
   article_s14:             "https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&auto=format&q=75",
 
   // s15 — Waarom Human Design geen persoonlijkheidstest is
-  article_s15:             "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=800&auto=format&q=75",
+  article_s15:             "/img-coffee.jpg",
 
   // s16 — Planeten in Human Design (uniek — verschilt van s13)
   article_s16:             "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&q=75",
