@@ -145,7 +145,7 @@ export const IMGS = {
   article_s8:              "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&auto=format&q=75",
 
   // s9 — Het Inkarnatie Kruis
-  article_s9:              "https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=800&auto=format&q=75",
+  article_s9:              "/img-birth-reading.jpg",
 
   // s10 — Conditionering
   article_s10:             "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&auto=format&q=75",
