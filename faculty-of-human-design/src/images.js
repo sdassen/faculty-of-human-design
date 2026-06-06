@@ -130,7 +130,7 @@ export const IMGS = {
   // ════════════════════════════════════════════════════════════════════════════
 
   // s4 — Kanalen: de energetische verbindingen in jouw chart
-  article_s4:              "https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=800&auto=format&q=75",
+  article_s4:              "/img-library.jpg",
 
   // s5 — Wat je levenspadgetal over jou zegt
   article_s5:              "https://images.unsplash.com/photo-1532693322450-2cb5c511067d?w=800&auto=format&q=75",
