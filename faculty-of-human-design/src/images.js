@@ -160,7 +160,7 @@ export const IMGS = {
   article_s13:             "https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=800&auto=format&q=75",
 
   // s14 — Mastergetallen 11, 22 en 33
-  article_s14:             "https://images.unsplash.com/photo-1503264116251-35a269479413?w=800&auto=format&q=75",
+  article_s14:             "/img-stones-3.jpg",
 
   // s15 — Waarom Human Design geen persoonlijkheidstest is
   article_s15:             "/img-coffee.jpg",
