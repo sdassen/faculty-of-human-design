@@ -142,7 +142,7 @@ export const IMGS = {
   article_s7:              "/img-chair.jpg",
 
   // s8 — Het profiel
-  article_s8:              "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=800&auto=format&q=75",
+  article_s8:              "/img-hall.jpg",
 
   // s9 — Het Inkarnatie Kruis
   article_s9:              "/img-birth-reading.jpg",
