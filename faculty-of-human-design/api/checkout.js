@@ -93,8 +93,8 @@ export default async function handler(req, res) {
     body.append("line_items[0][price_data][unit_amount]", String(priceNum * 100));
   } else {
     body.append("mode", "payment");
-    body.append("payment_method_types[]", "card");
-    body.append("payment_method_types[]", "ideal");
+    // payment_method_types intentionally omitted — Stripe uses dashboard settings
+    // (enables iDEAL, Klarna, PayPal, card automatically based on what's enabled there)
     body.append("line_items[0][quantity]", "1");
     body.append("line_items[0][price_data][currency]", "eur");
     body.append("line_items[0][price_data][product_data][name]", title);
