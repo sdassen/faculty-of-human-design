@@ -4368,19 +4368,32 @@ function InzichtenPage({go,articleId}){
           </section>
         )}
 
-        {/* ── EDITORIAL CTA ── */}
-        <section style={{background:"var(--bg)",padding:"96px 32px",textAlign:"center"}}>
-          <div style={{maxWidth:480,margin:"0 auto"}}>
-            <div style={{width:1,height:40,background:"var(--gold)",margin:"0 auto 36px",opacity:.4}}/>
-            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.1rem,2vw,1.3rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.7,marginBottom:36}}>
-              {isEN?"Understanding yourself is not a destination. It is a practice of returning.":"Jezelf begrijpen is geen bestemming. Het is een oefening in terugkeren."}
+        {/* ── CONVERSION CTA ── */}
+        <section style={{background:"var(--dark)",padding:"100px 32px",textAlign:"center"}}>
+          <div style={{maxWidth:560,margin:"0 auto"}}>
+            <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:32}}>
+              {isEN?"Your personal reading":"Jouw persoonlijke reading"}
+            </div>
+            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3.5vw,2.4rem)",fontWeight:300,color:"white",lineHeight:1.25,marginBottom:24}}>
+              {isEN?"See how this works in your chart":"Zie hoe dit werkt in jouw chart"}
+            </h2>
+            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.95rem,1.5vw,1.1rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.65)",lineHeight:1.8,marginBottom:48}}>
+              {isEN
+                ?"A Full Reading translates every layer of your chart — type, authority, profile, centers and gates — into a detailed personal report of over 60 pages."
+                :"Een Volledig Reading vertaalt elke laag van jouw chart — type, autoriteit, profiel, centra en poorten — naar een gedetailleerd persoonlijk rapport van meer dan 60 pagina's."}
             </p>
-            <button
-              style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 44px",cursor:"pointer",transition:"all .3s ease"}}
-              onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
-              onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
-              onClick={()=>go("rapporten")}
-            >{isEN?"Discover your reading":"Ontdek je reading"}</button>
+            <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:16}}>
+              <button
+                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:500,letterSpacing:".16em",textTransform:"uppercase",color:"var(--dark)",background:"var(--gold)",border:"none",padding:"17px 52px",cursor:"pointer",transition:"all .3s ease"}}
+                onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
+                onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
+                onClick={()=>{go("rapport-volledig");window.scrollTo(0,0);}}
+              >{isEN?"Order Full Reading":"Bestel Volledig Reading"}</button>
+              <button
+                style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",background:"transparent",border:"none",padding:"8px 0",cursor:"pointer",textDecoration:"underline",textUnderlineOffset:4}}
+                onClick={()=>{go("rapporten");window.scrollTo(0,0);}}
+              >{isEN?"View all readings →":"Bekijk alle readings →"}</button>
+            </div>
           </div>
         </section>
 
