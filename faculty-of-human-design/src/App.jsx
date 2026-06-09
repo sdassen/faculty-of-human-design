@@ -4072,9 +4072,11 @@ function InzichtenPage({go,articleId}){
   const isEN=LANG==="en";
 
   const CATS=[
-    {id:"basics",  tag:"Human Design Basics",    label:"Human Design Basics",                        desc:isEN?"Type, Strategy, Authority, Profile — the foundations of every Human Design chart.":"Type, Strategie, Autoriteit, Profiel — de basisconcepten van elke Human Design chart."},
-    {id:"depth",   tag:"Verdieping",              label:isEN?"In Depth":"Verdieping",                 desc:isEN?"Channels, Gates, Incarnation Cross, History — themes for deeper understanding.":"Kanalen, Poorten, Inkarnatie-Kruis, Geschiedenis — thema’s voor dieper begrip."},
-    {id:"numastr", tag:"Numerologie & Astrologie",label:isEN?"Numerology & Astrology":"Numerologie & Astrologie", desc:isEN?"Life Path, Expression, Sun sign — the numerical and astrological dimension.":"Levenspad, Uitdrukking, Zonneteken — de numerologische en astrologische dimensie."},
+    {id:"basics",  tag:"Human Design Basics",       label:"Human Design Basics",                        desc:isEN?"Type, Strategy, Authority, Profile — the foundations of every Human Design chart.":"Type, Strategie, Autoriteit, Profiel — de basisconcepten van elke Human Design chart."},
+    {id:"hd",      tag:"Human Design",               label:"Human Design",                               desc:isEN?"Types, centres, channels, conditioning — the deeper workings of the system.":"Types, centra, kanalen, conditionering — de diepere werking van het systeem."},
+    {id:"growth",  tag:"Persoonlijke Ontwikkeling",  label:isEN?"Personal Growth":"Persoonlijke Groei",  desc:isEN?"Self-knowledge, conditioning, authority — Human Design applied to daily life.":"Zelfkennis, conditionering, autoriteit — Human Design toegepast op het dagelijks leven."},
+    {id:"depth",   tag:"Verdieping",                 label:isEN?"In Depth":"Verdieping",                 desc:isEN?"Channels, Gates, Incarnation Cross, History — themes for deeper understanding.":"Kanalen, Poorten, Inkarnatie-Kruis, Geschiedenis — thema’s voor dieper begrip."},
+    {id:"numastr", tag:"Numerologie & Astrologie",   label:isEN?"Numerology & Astrology":"Numerologie & Astrologie", desc:isEN?"Life Path, Expression, Sun sign — the numerical and astrological dimension.":"Levenspad, Uitdrukking, Zonneteken — de numerologische en astrologische dimensie."},
   ];
 
   const STATIC=[
@@ -4215,7 +4217,7 @@ function InzichtenPage({go,articleId}){
         const url=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_URL:"";
         const key=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_ANON_KEY:"";
         if(!url||!key){setArticles(STATIC);setLoading(false);return;}
-        const res=await fetch(url+"/rest/v1/articles?select=*&order=published_at.desc&limit=20",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
+        const res=await fetch(url+"/rest/v1/articles?select=*&order=published_at.desc&limit=50",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
         const data=await res.json();
         // Merge Supabase articles with STATIC fallback so the page is never sparse.
         // STATIC IDs are strings ("s1"…"s5"), Supabase IDs are numeric — no conflicts.
