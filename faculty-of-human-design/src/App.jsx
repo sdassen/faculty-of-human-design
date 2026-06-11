@@ -4076,6 +4076,19 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
   );
 }
 
+// Maps article IDs to the most relevant reading — falls back to "volledig"
+const ARTICLE_RPT_MAP = {
+  // Supabase articles
+  "74e63f42-5e6d-4f58-8fed-a47253f2f766": "kind",           // Human Design voor ouders
+  "def91994-c121-42dd-bf63-f073d95fbb54": "loopbaan",       // Human Design in werk en loopbaan
+  "850c5290-5414-49fc-9181-6f8187b98dde": "relatie_liefde", // Human Design en relaties
+  // STATIC articles
+  "s5":  "numerologie",  // Levenspadgetal
+  "s12": "numerologie",  // Uitdrukkingsgetal
+  "s14": "numerologie",  // Mastergetallen 11, 22 en 33
+  "s13": "horoscoop",    // De ascendant
+};
+
 function InzichtenPage({go,articleId}){
   const[articles,setArticles]=useState([]);
   const[loading,setLoading]=useState(true);
@@ -4406,33 +4419,43 @@ function InzichtenPage({go,articleId}){
         )}
 
         {/* ── CONVERSION CTA ── */}
-        <section style={{background:"var(--dark)",padding:"100px 32px",textAlign:"center"}}>
-          <div style={{maxWidth:560,margin:"0 auto"}}>
-            <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:32}}>
-              {isEN?"Your personal reading":"Jouw persoonlijke reading"}
-            </div>
-            <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3.5vw,2.4rem)",fontWeight:300,color:"white",lineHeight:1.25,marginBottom:24}}>
-              {isEN?"See how this works in your chart":"Zie hoe dit werkt in jouw chart"}
-            </h2>
-            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.95rem,1.5vw,1.1rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.65)",lineHeight:1.8,marginBottom:48}}>
-              {isEN
-                ?"A Full Reading translates every layer of your chart — type, authority, profile, centers and gates — into a detailed personal report of over 60 pages."
-                :"Een Volledig Reading vertaalt elke laag van jouw chart — type, autoriteit, profiel, centra en poorten — naar een gedetailleerd persoonlijk rapport van meer dan 60 pagina's."}
-            </p>
-            <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:16}}>
-              <button
-                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:500,letterSpacing:".16em",textTransform:"uppercase",color:"var(--dark)",background:"var(--gold)",border:"none",padding:"17px 52px",cursor:"pointer",transition:"all .3s ease"}}
-                onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
-                onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
-                onClick={()=>{go("rapport-volledig");window.scrollTo(0,0);}}
-              >{isEN?"Order Full Reading":"Bestel Volledig Reading"}</button>
-              <button
-                style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",background:"transparent",border:"none",padding:"8px 0",cursor:"pointer",textDecoration:"underline",textUnderlineOffset:4}}
-                onClick={()=>{go("rapporten");window.scrollTo(0,0);}}
-              >{isEN?"View all readings →":"Bekijk alle readings →"}</button>
-            </div>
-          </div>
-        </section>
+        {(()=>{
+          const relRptId=ARTICLE_RPT_MAP[String(post.id)]||"volledig";
+          const relRpt=REPORTS.find(r=>r.id===relRptId)||REPORTS[0];
+          const rptTitle=tl(relRpt.title);
+          const rptTagline=tl(relRpt.tagline);
+          const rptIntro=tl(relRpt.intro);
+          return(
+            <section style={{background:"var(--dark)",padding:"100px 32px",textAlign:"center"}}>
+              <div style={{maxWidth:560,margin:"0 auto"}}>
+                <div style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:500,letterSpacing:".2em",textTransform:"uppercase",color:"var(--gold)",marginBottom:32}}>
+                  {isEN?"Your personal reading":"Jouw persoonlijke reading"}
+                </div>
+                <h2 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.6rem,3.5vw,2.4rem)",fontWeight:300,color:"white",lineHeight:1.25,marginBottom:12}}>
+                  {rptTitle}
+                </h2>
+                <div style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.95rem,1.4vw,1.05rem)",fontWeight:300,fontStyle:"italic",color:"rgba(255,255,255,.42)",marginBottom:24}}>
+                  {rptTagline}
+                </div>
+                <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(.9rem,1.4vw,1rem)",fontWeight:300,color:"rgba(255,255,255,.6)",lineHeight:1.8,marginBottom:48}}>
+                  {rptIntro}
+                </p>
+                <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:16}}>
+                  <button
+                    style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:500,letterSpacing:".16em",textTransform:"uppercase",color:"var(--dark)",background:"var(--gold)",border:"none",padding:"17px 52px",cursor:"pointer",transition:"all .3s ease"}}
+                    onMouseEnter={e=>{e.currentTarget.style.opacity=".85";}}
+                    onMouseLeave={e=>{e.currentTarget.style.opacity="1";}}
+                    onClick={()=>{go("rapport-"+relRptId);window.scrollTo(0,0);}}
+                  >{isEN?"Order reading":"Bestel reading"} · {relRpt.price}</button>
+                  <button
+                    style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",background:"transparent",border:"none",padding:"8px 0",cursor:"pointer",textDecoration:"underline",textUnderlineOffset:4}}
+                    onClick={()=>{go("rapporten");window.scrollTo(0,0);}}
+                  >{isEN?"View all readings →":"Bekijk alle readings →"}</button>
+                </div>
+              </div>
+            </section>
+          );
+        })()}
 
       </div>
     );
