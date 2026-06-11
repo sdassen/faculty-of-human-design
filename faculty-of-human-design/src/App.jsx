@@ -3216,7 +3216,12 @@ function HomePage({go}){
             <button className="btn btn-primary btn-lg" onClick={()=>{track("report_card_click",{report:"volledig",price:75,location:"featured"});go("rapport-volledig");}}>
               {t("report.orderBtn",{price:"€75"})}
             </button>
-            <span style={{fontSize:".8rem",color:"var(--text-light)",textAlign:"center"}}>{LANG==="en"?"40+ pages · Within 1 business day":"40+ pagina's · Binnen 1 werkdag"}</span>
+            <a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener"
+              style={{display:"inline-block",fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2,transition:"color .2s,border-color .2s"}}
+              onMouseEnter={e=>{e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="var(--text-light)";}}
+              onMouseLeave={e=>{e.currentTarget.style.color="var(--text-muted)";e.currentTarget.style.borderColor="var(--border)";}}>
+              {LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}
+            </a>
           </div>
         </div>
         <div className="feature-image-wrap ph">
@@ -3265,6 +3270,15 @@ function HomePage({go}){
                 <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
                 <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
                 <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75,marginBottom:0}}>{tl(r.tagline)}</p>
+                {r.id==="relatie_liefde"&&(
+                  <a href={LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"} target="_blank" rel="noopener"
+                    onClick={e=>e.stopPropagation()}
+                    style={{display:"inline-block",marginTop:14,fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2,transition:"color .2s,border-color .2s"}}
+                    onMouseEnter={e=>{e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="var(--text-light)";}}
+                    onMouseLeave={e=>{e.currentTarget.style.color="var(--text-muted)";e.currentTarget.style.borderColor="var(--border)";}}>
+                    {LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}
+                  </a>
+                )}
               </div>
             ))}
           </div>
