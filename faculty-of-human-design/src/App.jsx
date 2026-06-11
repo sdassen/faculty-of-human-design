@@ -4261,12 +4261,17 @@ function InzichtenPage({go,articleId}){
     load();
   },[]);
 
-  // Lazy-load body for Supabase articles (UUIDs) when detail view opens
+  // Lazy-load body for Supabase articles (UUIDs) when detail view opens.
+  // Runs whenever activePost changes OR after the list finishes loading (articles changes).
+  // Uses body===null as sentinel meaning "fetch in progress / failed" to prevent loops.
   useEffect(()=>{
-    if(!activePost)return;
+    if(!activePost||loading)return;
     const article=articles.find(a=>String(a.id)===String(activePost));
-    if(!article||article.body!==undefined)return; // STATIC already has body; skip if already loaded
+    // Skip STATIC articles (body already present) and already-fetched / in-flight ones (body===null)
+    if(!article||article.body!==undefined)return;
     const fetchBody=async()=>{
+      // Mark as in-flight immediately so a second effect invocation doesn't double-fetch
+      setArticles(prev=>prev.map(a=>String(a.id)===String(activePost)?{...a,body:null,body_en:null}:a));
       try{
         const url=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_URL:"";
         const key=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_ANON_KEY:"";
@@ -4274,12 +4279,12 @@ function InzichtenPage({go,articleId}){
         const res=await fetch(url+"/rest/v1/articles?select=id,body,body_en&id=eq."+encodeURIComponent(activePost),{headers:{"apikey":key,"Authorization":"Bearer "+key}});
         const data=await res.json();
         if(data&&data[0]){
-          setArticles(prev=>prev.map(a=>String(a.id)===String(activePost)?{...a,body:data[0].body,body_en:data[0].body_en}:a));
+          setArticles(prev=>prev.map(a=>String(a.id)===String(activePost)?{...a,body:data[0].body||"",body_en:data[0].body_en||""}:a));
         }
       }catch{}
     };
     fetchBody();
-  },[activePost,articles]);
+  },[activePost,loading]);
 
   const activeArticle = activePost ? articles.find(a=>String(a.id)===String(activePost)) : null;
 
