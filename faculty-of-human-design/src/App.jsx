@@ -4231,7 +4231,8 @@ function InzichtenPage({go,articleId}){
         const url=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_URL:"";
         const key=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_ANON_KEY:"";
         if(!url||!key){setArticles(STATIC);setLoading(false);return;}
-        const res=await fetch(url+"/rest/v1/articles?select=*&order=published_at.desc&limit=50",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
+        // Exclude body/body_en from list fetch — they're large and only needed on detail view
+        const res=await fetch(url+"/rest/v1/articles?select=id,tag,title,title_en,excerpt,excerpt_en,date,readtime,images&order=published_at.desc&limit=50",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
         const data=await res.json();
         // Merge Supabase articles with STATIC fallback so the page is never sparse.
         // STATIC IDs are strings ("s1"…"s5"), Supabase IDs are numeric — no conflicts.
@@ -4246,6 +4247,26 @@ function InzichtenPage({go,articleId}){
     };
     load();
   },[]);
+
+  // Lazy-load body for Supabase articles (UUIDs) when detail view opens
+  useEffect(()=>{
+    if(!activePost)return;
+    const article=articles.find(a=>String(a.id)===String(activePost));
+    if(!article||article.body!==undefined)return; // STATIC already has body; skip if already loaded
+    const fetchBody=async()=>{
+      try{
+        const url=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_URL:"";
+        const key=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_ANON_KEY:"";
+        if(!url||!key)return;
+        const res=await fetch(url+"/rest/v1/articles?select=id,body,body_en&id=eq."+encodeURIComponent(activePost),{headers:{"apikey":key,"Authorization":"Bearer "+key}});
+        const data=await res.json();
+        if(data&&data[0]){
+          setArticles(prev=>prev.map(a=>String(a.id)===String(activePost)?{...a,body:data[0].body,body_en:data[0].body_en}:a));
+        }
+      }catch{}
+    };
+    fetchBody();
+  },[activePost,articles]);
 
   const activeArticle = activePost ? articles.find(a=>String(a.id)===String(activePost)) : null;
 
