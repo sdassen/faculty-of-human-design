@@ -4547,7 +4547,7 @@ function InzichtenPage({go,articleId}){
                   <div key={a.id} style={{cursor:"pointer"}} onClick={()=>{setActivePost(String(a.id));window.scrollTo(0,0);}}>
                     {(a.images||[])[0]&&(
                       <div style={{aspectRatio:"4/3",overflow:"hidden",marginBottom:22}}>
-                        <img src={a.images[0]} alt={al(a,"title")} style={{width:"100%",height:"100%",objectFit:"cover",transition:"transform .6s ease"}} loading="lazy"
+                        <img src={a.images[0]} alt={al(a,"title")} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"top center",transition:"transform .6s ease"}} loading="lazy"
                           onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
                           onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
                         />
