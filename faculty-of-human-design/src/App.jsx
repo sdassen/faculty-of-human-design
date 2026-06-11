@@ -4239,24 +4239,25 @@ function InzichtenPage({go,articleId}){
     },
   ];
   useEffect(()=>{
+    // Show STATIC immediately so the page is never blank while Supabase wakes up
+    setArticles(STATIC);
+    setLoading(false);
     const load=async()=>{
       try{
         const url=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_URL:"";
         const key=(typeof import.meta!=="undefined"&&import.meta.env)?import.meta.env.VITE_SUPABASE_ANON_KEY:"";
-        if(!url||!key){setArticles(STATIC);setLoading(false);return;}
-        // Exclude body/body_en from list fetch — they're large and only needed on detail view
+        if(!url||!key)return;
+        // Exclude body/body_en from list fetch — only needed on detail view
         const res=await fetch(url+"/rest/v1/articles?select=id,tag,title,title_en,excerpt,excerpt_en,date,readtime,images&order=published_at.desc&limit=50",{headers:{"apikey":key,"Authorization":"Bearer "+key}});
         const data=await res.json();
-        // Merge Supabase articles with STATIC fallback so the page is never sparse.
-        // STATIC IDs are strings ("s1"…"s5"), Supabase IDs are numeric — no conflicts.
         const live=data&&Array.isArray(data)?data:[];
+        if(!live.length)return;
         const liveIds=new Set(live.map(a=>String(a.id)));
         const norm=t=>(t||"").trim().toLowerCase();
         const liveTitles=new Set(live.flatMap(a=>[norm(a.title),norm(a.title_en)]).filter(Boolean));
         const merged=[...live,...STATIC.filter(s=>!liveIds.has(String(s.id))&&!liveTitles.has(norm(s.title))&&!liveTitles.has(norm(s.title_en)))];
-        setArticles(merged.length>0?merged:STATIC);
-      }catch{setArticles(STATIC);}
-      setLoading(false);
+        setArticles(merged);
+      }catch{}
     };
     load();
   },[]);
