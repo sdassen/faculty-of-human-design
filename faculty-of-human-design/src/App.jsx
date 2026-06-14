@@ -3698,6 +3698,17 @@ function RapportenPage({go}){
         </div>
       </div>
 
+      {/* ── READING GUIDANCE ─────────────────────────────────────────────── */}
+      <div style={{background:"white",borderBottom:"1px solid var(--border)",padding:"28px 0"}}>
+        <div className="container" style={{textAlign:"center"}}>
+          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.75}}>
+            {LANG==="en"
+              ?<>Not sure which reading suits you?{" "}<span style={{color:"var(--text)",borderBottom:"1px solid currentColor",paddingBottom:1,cursor:"pointer"}} onClick={()=>go("rapport-volledig")}>Start with the full report →</span></>
+              :<>Weet je niet welke reading bij je past?{" "}<span style={{color:"var(--text)",borderBottom:"1px solid currentColor",paddingBottom:1,cursor:"pointer"}} onClick={()=>go("rapport-volledig")}>Begin met het volledig rapport →</span></>}
+          </p>
+        </div>
+      </div>
+
       {/* ── HUMAN DESIGN RAPPORTEN ───────────────────────────────────────── */}
       <section style={{padding:"112px 0",background:"var(--bg)"}}>
         <div className="container">
