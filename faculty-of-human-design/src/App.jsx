@@ -3187,7 +3187,7 @@ Geen sectietitel in de tekst.`);
                         {stripeLoading&&<span className="btn-spinner"/>}
                         {stripeLoading
                           ?(LANG==="en"?"Redirecting…":"Doorsturen…")
-                          :(LANG==="en"?"Receive your full blueprint — €75":"Ontvang je volledige blauwdruk — €75")}
+                          :(LANG==="en"?"Receive your full blueprint":"Ontvang je volledige blauwdruk")}
                       </button>
                     </div>
                   </div>
