@@ -3145,11 +3145,24 @@ Geen sectietitel in de tekst.`);
                       <div style={{fontSize:".68rem",color:"var(--text-light)",letterSpacing:".05em",marginBottom:16}}>{LANG==="en"?"€29 — 8-10 pages":"€29 — 8-10 pagina's"}</div>
                       <p style={{fontSize:".82rem",fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.6,marginBottom:24,flex:1}}>{LANG==="en"?"The core of who you are":"De kern van wie je bent"}</p>
                       <button
-                        onClick={()=>go("rapport-type-strategie")}
-                        style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 0",cursor:"pointer",transition:"all .3s ease",width:"100%"}}
-                        onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
-                        onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
-                      >{LANG==="en"?"Start here — €29":"Begin hier — €29"}</button>
+                        disabled={stripeLoading}
+                        style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 0",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",width:"100%",opacity:stripeLoading?.7:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8}}
+                        onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
+                        onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
+                        onClick={async()=>{
+                          if(stripeLoading)return;
+                          setStripeLoading(true);
+                          track("checkout_started",{report:"type-strategie",price:29});
+                          try{
+                            sessionStorage.setItem("pending_purchase",JSON.stringify({report:"type-strategie",price:29}));
+                            await goToStripe("type-strategie",chart,form);
+                          }
+                          finally{ setStripeLoading(false); }
+                        }}
+                      >
+                        {stripeLoading&&<span className="btn-spinner"/>}
+                        {stripeLoading?(LANG==="en"?"Redirecting…":"Doorsturen…"):(LANG==="en"?"Start here — €29":"Begin hier — €29")}
+                      </button>
                     </div>
                     {/* Primary — Volledige Blauwdruk */}
                     <div style={{border:"1px solid var(--text)",padding:"28px 24px",display:"flex",flexDirection:"column",position:"relative"}}>
