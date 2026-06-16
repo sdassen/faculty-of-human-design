@@ -3473,8 +3473,8 @@ function WatPage({go}){
   const isEN=LANG==="en";
 
   useSEO({
-    title:isEN?"What is Human Design? — Numerology, Astrology & Self-Recognition":"Wat is Human Design? — Numerologie, Astrologie & Zelfherkenning",
-    description:isEN?"Human Design, Numerology and Astrology as three lenses on the same person. Not to explain who you are, but to recognise it.":"Human Design, Numerologie en Astrologie als drie lenzen op dezelfde persoon. Niet om uit te leggen wie je bent, maar om het te herkennen.",
+    title:isEN?"What is Human Design? — Type, Strategy, Authority & Self-Recognition":"Wat is Human Design? — Type, Strategie, Autoriteit & Zelfherkenning",
+    description:isEN?"Human Design as a precise map of your energetic nature. Not to explain who you are, but to recognise it.":"Human Design als een nauwkeurige kaart van jouw energetische aard. Niet om uit te leggen wie je bent, maar om het te herkennen.",
     canonical:SITE+(isEN?"/en/human-design":"/human-design"),
     image:IMGS.hero,
     jsonLd:{"@context":"https://schema.org","@type":"WebPage","name":isEN?"What is Human Design?":"Wat is Human Design?","url":SITE+(isEN?"/en/human-design":"/human-design")}
@@ -3491,10 +3491,10 @@ function WatPage({go}){
         <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"0 48px 72px",maxWidth:800}}>
           <div style={{width:1,height:56,background:"var(--gold)",opacity:.65,marginBottom:32}}/>
           <h1 style={{fontFamily:"var(--font-serif)",fontSize:"clamp(2.4rem,5.5vw,4.2rem)",fontWeight:300,color:"white",lineHeight:1.12,letterSpacing:"-.01em",marginBottom:22,whiteSpace:"pre-line"}}>
-            {isEN?`Three systems.\nOne portrait.`:`Drie systemen.\nEén portret.`}
+            {isEN?`The architecture\nof who you are.`:`De architectuur\nvan wie je bent.`}
           </h1>
           <p style={{fontFamily:"var(--font-sans)",fontSize:".78rem",fontWeight:300,color:"rgba(255,255,255,.42)",letterSpacing:".14em",textTransform:"uppercase"}}>
-            {isEN?"Human Design · Numerology · Astrology":"Human Design · Numerologie · Astrologie"}
+            {isEN?"Type · Strategy · Authority · Profile":"Type · Strategie · Autoriteit · Profiel"}
           </p>
         </div>
       </section>
@@ -3509,8 +3509,8 @@ function WatPage({go}){
           </p>
           <p style={{fontFamily:"var(--font-serif)",fontSize:"1.02rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
             {isEN
-              ?"Human Design, Numerology and Astrology are not systems of explanation. They are systems of recognition. They don't tell you who to become — they describe who you already are."
-              :"Human Design, Numerologie en Astrologie zijn geen verklaringssystemen. Het zijn herkenningssystemen. Ze vertellen je niet wie je moet worden — ze beschrijven wie je al bent."}
+              ?"Human Design is not a system of explanation. It is a system of recognition. It doesn't tell you who to become — it describes who you already are."
+              :"Human Design is geen verklaringssysteem. Het is een herkenningssysteem. Het vertelt je niet wie je moet worden — het beschrijft wie je al bent."}
           </p>
         </div>
       </section>
@@ -3547,87 +3547,13 @@ function WatPage({go}){
         <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.3)"}}/>
       </div>
 
-      {/* ── NUMEROLOGIE ─────────────────────────────────────────────────── */}
-      <section style={{background:"var(--bg)",padding:"130px 40px"}}>
-        <div style={{maxWidth:740,margin:"0 auto"}}>
-          <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:22}}>{isEN?"Numerology":"Numerologie"}</div>
-          <div style={{width:24,height:1,background:"var(--gold)",marginBottom:52,opacity:.55}}/>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,2vw,1.4rem)",fontWeight:300,color:"var(--text)",lineHeight:1.84,marginBottom:34}}>
-            {isEN
-              ?"Numbers don't predict. They recognise. In Pythagorean Numerology, your name and date of birth contain a precise numerical pattern that describes the themes running through your life — the lessons, the gifts, the recurring tensions."
-              :"Getallen voorspellen niet. Ze herkennen. In de Pythagoreïsche Numerologie bevatten je naam en geboortedatum een precies numeriek patroon dat de thema's beschrijft die door je leven heen lopen — de lessen, de gaven, de terugkerende spanningen."}
-          </p>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
-            {isEN
-              ?"Your Life Path number is the thread. Your Expression number is the gift. Your Soul number is what you quietly long for. Together they draw a portrait of the life you were born into — not as destiny, but as orientation."
-              :"Je Levenspadgetal is de rode draad. Je Uitdrukkingsgetal is de gave. Je Zielsgetal is wat je stilletjes verlangt. Samen tekenen ze een portret van het leven dat je geboren bent in te leven — niet als lot, maar als oriëntatie."}
-          </p>
-        </div>
-      </section>
-
-      {/* ── ASTROLOGIE ──────────────────────────────────────────────────── */}
-      <section style={{background:"white",padding:"130px 40px"}}>
-        <div style={{maxWidth:740,margin:"0 auto"}}>
-          <div style={{fontSize:".62rem",fontWeight:600,letterSpacing:".18em",textTransform:"uppercase",color:"var(--gold)",marginBottom:22}}>{isEN?"Birth Astrology":"Geboorteastrologie"}</div>
-          <div style={{width:24,height:1,background:"var(--gold)",marginBottom:52,opacity:.55}}/>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.15rem,2vw,1.4rem)",fontWeight:300,color:"var(--text)",lineHeight:1.84,marginBottom:34}}>
-            {isEN
-              ?"The sky at the moment of your birth is a starting condition. Not a sentence — a fingerprint. The positions of the ten planets, the twelve houses and the rising sign on the eastern horizon form a constellation that is yours alone."
-              :"De hemel op het moment van je geboorte is een beginconditie. Geen vonnis — een vingerafdruk. De posities van de tien planeten, de twaalf huizen en het rijzende teken aan de oostelijke horizon vormen een constellatie die alleen van jou is."}
-          </p>
-          <p style={{fontFamily:"var(--font-serif)",fontSize:"1rem",fontWeight:300,fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.9}}>
-            {isEN
-              ?"Western astrology is not about prediction. It is about correspondence — the idea that the qualities of a moment are mirrored in what is born within it. Your Sun, Moon and Ascendant are not labels. They are layers of a portrait."
-              :"Westerse astrologie gaat niet over voorspellen. Het gaat over correspondentie — het idee dat de kwaliteiten van een moment weerspiegeld worden in wat er in geboren wordt. Je Zon, Maan en Ascendant zijn geen labels. Het zijn lagen van een portret."}
-          </p>
-        </div>
-      </section>
-
-      {/* ── VISUAL PAUSE ────────────────────────────────────────────────── */}
-      <div style={{position:"relative",height:"55vh",minHeight:340,overflow:"hidden"}}>
-        <img src={IMGS.wat_astro} alt={isEN?"Night sky — astrology":"Nachtelijke hemel — astrologie"} loading="lazy"
-          style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
-        <div style={{position:"absolute",inset:0,background:"rgba(12,10,8,.38)"}}/>
-      </div>
-
-      {/* ── THREE DISCIPLINES ───────────────────────────────────────────── */}
-      <section style={{background:"var(--bg)",padding:"140px 40px"}}>
-        <div style={{maxWidth:860,margin:"0 auto",display:"grid",gridTemplateColumns:"1fr 1fr",gap:"80px 64px",alignItems:"start"}}>
-          <div>
-            <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.35rem,2.4vw,1.7rem)",fontWeight:300,color:"var(--text)",lineHeight:1.72}}>
-              {isEN
-                ?"Three independent systems. Three different languages. One person."
-                :"Drie onafhankelijke systemen. Drie verschillende talen. Één persoon."}
-            </p>
-          </div>
-          <div>
-            <div style={{width:1,height:40,background:"var(--gold)",opacity:.5,marginBottom:40}}/>
-            {(isEN?[
-              ["Human Design","The mechanics of your energy — how you are designed to move, decide and live."],
-              ["Numerology","The patterns in your name and date of birth — your life lessons and gifts."],
-              ["Astrology","The qualities of your planetary placements — your inner landscape at the moment of birth."],
-            ]:[
-              ["Human Design","De mechanica van je energie — hoe jij ontworpen bent om te bewegen, te beslissen en te leven."],
-              ["Numerologie","De patronen in je naam en geboortedatum — je levenslessen en gaven."],
-              ["Astrologie","De kwaliteiten van je planetaire bezetting — je innerlijk landschap op het moment van geboorte."],
-            ]).map(([name,desc])=>(
-              <div key={name} style={{borderTop:"1px solid var(--border)",padding:"24px 0"}}>
-                <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:6}}>{name}</div>
-                <p style={{fontFamily:"var(--font-sans)",fontSize:".85rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{desc}</p>
-              </div>
-            ))}
-            <div style={{borderTop:"1px solid var(--border)"}}/>
-          </div>
-        </div>
-      </section>
-
       {/* ── EDITORIAL PAUSE ─────────────────────────────────────────────── */}
       <section style={{background:"white",padding:"160px 40px",textAlign:"center"}}>
         <div style={{maxWidth:520,margin:"0 auto"}}>
           <p style={{fontFamily:"var(--font-serif)",fontSize:"clamp(1.2rem,2.2vw,1.52rem)",fontWeight:300,fontStyle:"italic",color:"var(--text)",lineHeight:1.85,whiteSpace:"pre-line"}}>
             {isEN
-              ? `“Together they don’t add up.\n\nTogether they recognise.”`
-              : `“Samen tellen ze niet op.\n\nSamen herkennen ze.”`}
+              ? `“Not who you should become.\n\nWho you already are.”`
+              : `“Niet wie je zou moeten worden.\n\nWie je al bent.”`}
           </p>
           <div style={{width:1,height:52,background:"var(--gold)",opacity:.5,margin:"56px auto 0"}}/>
         </div>
