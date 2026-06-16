@@ -32,14 +32,14 @@ async function createUpgradePromoCode(orderId) {
   couponBody.append("amount_off", "2900");
   couponBody.append("currency", "eur");
   couponBody.append("duration", "once");
-  couponBody.append("name", "Type & Strategie upgrade");
+  couponBody.append("name", "Vervolg op Type & Strategie Reading");
   const couponRes = await fetch("https://api.stripe.com/v1/coupons", {
     method: "POST", headers, body: couponBody.toString(),
   });
   const coupon = await couponRes.json();
   if (coupon.error) throw new Error(`Stripe coupon error: ${coupon.error.message}`);
 
-  const code = "UPGRADE29" + orderId.replace(/-/g, "").slice(0, 6).toUpperCase();
+  const code = "BLAUWDRUK29" + orderId.replace(/-/g, "").slice(0, 6).toUpperCase();
   const expiresAt = Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // 7 days
 
   const promoBody = new URLSearchParams();

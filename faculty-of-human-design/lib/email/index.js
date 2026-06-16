@@ -439,13 +439,13 @@ function miniUpsellHtml({ name, lang, promoCode }) {
     ? `The <strong style="color:#1A1715;font-weight:500;">Full Blueprint</strong> adds your Profile, your defined and open centers, your active channels and gates, and your Incarnation Cross — the complete architecture of who you are, in 40+ pages.`
     : `De <strong style="color:#1A1715;font-weight:500;">Volledige Blauwdruk</strong> voegt je Profiel toe, je gedefinieerde en open centra, je actieve kanalen en poorten, en je Inkarnatie-Kruis — de complete architectuur van wie je bent, in 40+ pagina's.`;
   const offerLine = isEN
-    ? `Your €29 is credited — upgrade today and pay only <strong style="color:#1A1715;font-weight:500;">€46</strong>.`
-    : `Je €29 wordt verrekend — upgrade vandaag en betaal alleen <strong style="color:#1A1715;font-weight:500;">€46</strong> bij.`;
+    ? `Your €29 is credited — receive your full blueprint today for only <strong style="color:#1A1715;font-weight:500;">€46</strong> more.`
+    : `Je €29 wordt verrekend — ontvang vandaag je volledige blauwdruk voor nog maar <strong style="color:#1A1715;font-weight:500;">€46</strong> erbij.`;
   const codeLabel = isEN ? "Your code" : "Jouw code";
   const codeNote = isEN
     ? "Enter this code at checkout under \"Add promotion code\"."
     : "Vul deze code in bij checkout onder \"Add promotion code\".";
-  const ctaLabel = isEN ? "Upgrade to the Full Blueprint →" : "Upgrade naar de Volledige Blauwdruk →";
+  const ctaLabel = isEN ? "Receive your full blueprint →" : "Ontvang je volledige blauwdruk →";
   const expiryNote = isEN
     ? "This code is valid for 7 days."
     : "Deze code is 7 dagen geldig.";
