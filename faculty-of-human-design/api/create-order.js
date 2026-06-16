@@ -10,6 +10,10 @@ const REPORT_SECTIONS = {
     nl: ["Je Energetische Blauwdruk","Type & Levensstrategie","Autoriteit","Profiel","Gedefinieerde Centra","Open Centra & Conditionering","Actieve Kanalen","Je Poorten","Inkarnatie-Kruis","Relaties & Verbinding","Praktische Guidance 2026-2028","Slotanalyse"],
     en: ["Your Energetic Blueprint","Type & Life Strategy","Authority","Profile","Defined Centers","Open Centers & Conditioning","Active Channels","Your Gates","Incarnation Cross","Relationships & Connection","Practical Guidance 2026-2028","Closing Analysis"],
   },
+  "type-strategie": {
+    nl: ["Jouw Type","Jouw Strategie","Jouw Autoriteit"],
+    en: ["Your Type","Your Strategy","Your Authority"],
+  },
   relatie_liefde: {
     nl: ["De Energie van Jullie Verbinding","Chart Analyse — Jouw Design","Chart Analyse — Partners Design","Elektromagnetische Verbindingen","Compatibiliteit & Aantrekking","Communicatie & Intimiteit","Spanningsvelden & Doorbraken","Gezamenlijk Groeipad","Praktisch Advies voor Harmonie"],
     en: ["The Energy of Your Connection","Chart Analysis — Your Design","Chart Analysis — Partner's Design","Electromagnetic Connections","Compatibility & Attraction","Communication & Intimacy","Tension Points & Breakthroughs","Shared Growth Path","Practical Advice for Harmony"],
