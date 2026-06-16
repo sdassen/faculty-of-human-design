@@ -901,7 +901,7 @@ const REPORTS = [
     title:{ nl:"Type & Strategie Reading", en:"Type & Strategy Reading" },
     price:"€29", priceNum:29,
     sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
-    outcome:{ nl:"Ontdek de kern van wie je bent", en:"Discover the core of who you are" },
+    outcome:{ nl:"Begrijp hoe jij energetisch in elkaar zit", en:"Understand how you're energetically wired" },
     tagline:{ nl:"De kern van wie je bent", en:"The core of who you are" },
     intro:{ nl:"Een compacte, persoonlijke analyse van de drie fundamenten van je Human Design: je Type, je Strategie en je Autoriteit. De kortste weg naar zelfherkenning — en de eerste stap als je nieuw bent in Human Design.", en:"A compact, personal analysis of the three foundations of your Human Design: your Type, your Strategy and your Authority. The shortest path to self-recognition — and the first step if you're new to Human Design." },
     includes:["Je Type — wie je energetisch bent","Je Strategie — hoe je het leven navigeert","Je Autoriteit — hoe je beslissingen neemt"],
