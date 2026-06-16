@@ -3748,18 +3748,16 @@ function RapportenPage({go}){
       {/* ── HUMAN DESIGN RAPPORTEN ───────────────────────────────────────── */}
       <section style={{padding:"112px 0",background:"var(--bg)"}}>
         <div className="container">
-          <div className="editorial-header">
-            <div>
-              <div className="label" style={{marginBottom:14}}>{t("rapporten.hdTitle")}</div>
-              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>
-                {LANG==="en"?"Your personal Human Design reading":"Jouw persoonlijke Human Design reading"}
-              </h2>
-            </div>
-            <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
-              {LANG==="en"?"In-depth personal analyses: from full Human Design to career, year and child.":"Diepgaande persoonlijke analyses: van volledig Human Design tot loopbaan, jaar en kind."}
+          <div style={{textAlign:"center",maxWidth:560,margin:"0 auto 56px"}}>
+            <div className="label" style={{marginBottom:14}}>{t("rapporten.hdTitle")}</div>
+            <h2 className="h2" style={{marginBottom:16}}>
+              {LANG==="en"?"Your personal Human Design reading":"Jouw persoonlijke Human Design reading"}
+            </h2>
+            <p style={{fontSize:".9rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>
+              {LANG==="en"?"Start with the basics, or go all in from day one.":"Begin met de basis, of ga vanaf dag één all-in."}
             </p>
           </div>
-          <div className="rapporten-hd-grid" style={{maxWidth:680,margin:"0 auto"}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:36,maxWidth:600,margin:"0 auto"}}>
             {hdCore.map(r=>(
               <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
                 <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
