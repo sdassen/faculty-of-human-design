@@ -3698,7 +3698,8 @@ function WatPage({go}){
 }
 
 function RapportenPage({go}){
-  const hdPure=REPORTS.filter(r=>["type-strategie","volledig","jaar","kind","loopbaan"].includes(r.id));
+  const hdCore=REPORTS.filter(r=>["volledig","type-strategie"].includes(r.id));
+  const hdSpecific=REPORTS.filter(r=>["jaar","kind","loopbaan"].includes(r.id));
   const relatie=REPORTS.filter(r=>r.id.startsWith("relatie_"));
   const visibleReports=REPORTS.filter(r=>!["numerologie","horoscoop"].includes(r.id));
   const sub=REPORTS.find(r=>r.id==="maandelijks");
@@ -3758,8 +3759,8 @@ function RapportenPage({go}){
               {LANG==="en"?"In-depth personal analyses: from full Human Design to career, year and child.":"Diepgaande persoonlijke analyses: van volledig Human Design tot loopbaan, jaar en kind."}
             </p>
           </div>
-          <div className="rapporten-hd-grid">
-            {hdPure.map(r=>(
+          <div className="rapporten-hd-grid" style={{maxWidth:680,margin:"0 auto"}}>
+            {hdCore.map(r=>(
               <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
                 <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
                   <img src={IMGS["r_"+r.id]||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
@@ -3775,7 +3776,45 @@ function RapportenPage({go}){
                 <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
                 <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
                 <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
-                {(r.id==="volledig"||r.id==="kind")&&<div style={{marginTop:12}} onClick={e=>e.stopPropagation()}><a href={r.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):(LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")} target="_blank" rel="noopener" style={{fontSize:".78rem",fontWeight:400,color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid currentColor",paddingBottom:1,opacity:.7}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
+                {r.id==="volledig"&&<div style={{marginTop:12}} onClick={e=>e.stopPropagation()}><a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontSize:".78rem",fontWeight:400,color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid currentColor",paddingBottom:1,opacity:.7}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── SPECIFIEKE READINGS ──────────────────────────────────────────── */}
+      <section style={{padding:"112px 0",background:"white"}}>
+        <div className="container">
+          <div className="editorial-header">
+            <div>
+              <div className="label" style={{marginBottom:14}}>{LANG==="en"?"For specific moments":"Voor specifieke momenten"}</div>
+              <h2 className="h2" style={{marginBottom:0,maxWidth:520}}>
+                {LANG==="en"?"A focused reading for a specific area of life":"Een gerichte reading voor een specifiek levensgebied"}
+              </h2>
+            </div>
+            <p style={{fontSize:".88rem",fontWeight:300,color:"var(--text-muted)",maxWidth:300,textAlign:"right",lineHeight:1.7}}>
+              {LANG==="en"?"Career, the year ahead, or your child — applied to one specific context.":"Loopbaan, het jaar dat komt, of je kind — toegepast op één specifieke context."}
+            </p>
+          </div>
+          <div className="rapporten-hd-grid">
+            {hdSpecific.map(r=>(
+              <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
+                <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
+                  <img src={IMGS["r_"+r.id]||IMGS.hero} alt={tl(r.title)} loading="lazy" style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center",transition:"transform .6s ease"}}
+                    onMouseEnter={e=>e.currentTarget.style.transform="scale(1.04)"}
+                    onMouseLeave={e=>e.currentTarget.style.transform="scale(1)"}
+                  />
+                  <div style={{position:"absolute",inset:0,background:"linear-gradient(to bottom,transparent 50%,rgba(8,7,16,.5) 100%)"}}/>
+                  <div style={{position:"absolute",bottom:20,left:20,right:20,display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+                    <span style={{fontFamily:"var(--font-sans)",fontSize:".6rem",fontWeight:500,color:"rgba(255,255,255,.6)",textTransform:"uppercase",letterSpacing:".12em"}}>{tl(r.tag)||""}</span>
+                    <span style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:300,color:"white"}}>{r.price}</span>
+                  </div>
+                </div>
+                <div style={{width:24,height:1,background:"var(--gold)",marginBottom:16,opacity:.5}}/>
+                <h4 style={{fontFamily:"var(--font-serif)",fontSize:"1.15rem",fontWeight:400,color:"var(--text)",marginBottom:8,lineHeight:1.25}}>{tl(r.title)}</h4>
+                <p style={{fontSize:".82rem",fontWeight:300,color:"var(--text-muted)",lineHeight:1.75}}>{tl(r.tagline)}</p>
+                {r.id==="kind"&&<div style={{marginTop:12}} onClick={e=>e.stopPropagation()}><a href={LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf"} target="_blank" rel="noopener" style={{fontSize:".78rem",fontWeight:400,color:"var(--text-muted)",textDecoration:"none",borderBottom:"1px solid currentColor",paddingBottom:1,opacity:.7}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
               </div>
             ))}
           </div>
