@@ -2063,6 +2063,28 @@ function BlueprintPanel({chart,name,onCta}){
   );
 }
 
+// Soft blur gate — hides advanced chart detail behind a warm overlay until purchase.
+// Not a hard paywall: invites curiosity rather than blocking access aggressively.
+function BlurGate({children}){
+  const isEN=LANG==="en";
+  return(
+    <div style={{position:"relative"}}>
+      <div style={{filter:"blur(4px)",pointerEvents:"none",userSelect:"none"}} aria-hidden="true">{children}</div>
+      <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",padding:12}}>
+        <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:7,textAlign:"center",background:"rgba(244,241,235,.6)",padding:"12px 20px",borderRadius:1}}>
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9A8050" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="8.5" cy="8.5" r="4.3"/>
+            <path d="M11.7 11.7L20 20M15.5 16l2.2-2.2M13 18.5l2.2-2.2"/>
+          </svg>
+          <span style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:500,letterSpacing:".06em",color:"#9A8050",lineHeight:1.4}}>
+            {isEN?"Part of your full analysis":"Onderdeel van je volledige analyse"}
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ChartDashboard({chart,name,onOrder}){
   const typeDesc=(TYPE_DESC[LANG]||TYPE_DESC.nl)[chart.type]||"";
   const authDesc=(AUTH_DESC[LANG]||AUTH_DESC.nl)[chart.auth]||"";
@@ -2075,7 +2097,7 @@ function ChartDashboard({chart,name,onOrder}){
       :t("form.definitionMany",{nDef,nCh});
   return(
     <div className="cd">
-      {/* Header */}
+      {/* Header — Type shown fully and prominently, nothing else */}
       <div className="cd-hdr">
         <div>
           <div className="cd-eyebrow">{t("form.chartEyebrow")}</div>
@@ -2084,46 +2106,51 @@ function ChartDashboard({chart,name,onOrder}){
         </div>
         <div style={{textAlign:"right",flexShrink:0}}>
           <div className="cd-hdr-type">{chart.type}</div>
-          <div className="cd-hdr-auth">{chart.auth}</div>
         </div>
       </div>
 
-      {/* Body: left blueprint + right insight cards */}
+      {/* Body: left blueprint (blurred) + right insight cards (Type visible, rest blurred) */}
       <div className="cd-body">
         <div className="cd-left">
-          <BlueprintPanel chart={chart} name={name} onCta={onOrder}/>
+          <BlurGate><BlueprintPanel chart={chart} name={name} onCta={onOrder}/></BlurGate>
         </div>
         <div className="cd-right">
           <InsightCard label={t("form.typeLabel")} value={chart.type} desc={typeDesc} icon="◈" accentColor="#1A1714"/>
-          <InsightCard label={t("form.authorityLabel")} value={xlateAuth(chart.auth)} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
-          <InsightCard label={t("form.strategyLabel")} value={xlateStrat(chart.strat)} desc={t("form.signaturePrefix")+xlateSig(chart.sig)} icon="◇" accentColor="#8A7355"/>
-          <InsightCard label={t("form.profileLabel")} value={chart.profile} desc={t("form.profileDesc")} icon="✦" accentColor="#A08855"/>
+          <BlurGate>
+            <div style={{display:"flex",flexDirection:"column",gap:6}}>
+              <InsightCard label={t("form.authorityLabel")} value={xlateAuth(chart.auth)} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
+              <InsightCard label={t("form.strategyLabel")} value={xlateStrat(chart.strat)} desc={t("form.signaturePrefix")+xlateSig(chart.sig)} icon="◇" accentColor="#8A7355"/>
+              <InsightCard label={t("form.profileLabel")} value={chart.profile} desc={t("form.profileDesc")} icon="✦" accentColor="#A08855"/>
+            </div>
+          </BlurGate>
         </div>
       </div>
 
-      {/* Integrations */}
-      <div className="cd-int">
-        <div className="cd-int-hdr">
-          <div className="cd-int-ttl">{t("form.deeperLabel")}</div>
+      {/* Integrations — blurred */}
+      <BlurGate>
+        <div className="cd-int">
+          <div className="cd-int-hdr">
+            <div className="cd-int-ttl">{t("form.deeperLabel")}</div>
+          </div>
+          <div className="cd-int-row">
+            <IntegrationCard
+              label={t("form.signatureLabel")}
+              value={xlateSig(chart.sig)}
+              desc={t("form.signatureDesc")}
+            />
+            <IntegrationCard
+              label={t("form.notSelfLabel")}
+              value={xlateNotSelf(chart.notSelf)}
+              desc={t("form.notSelfDesc")}
+            />
+            <IntegrationCard
+              label={t("form.definitionLabel")}
+              value={defText}
+              desc={t("form.definitionDesc")}
+            />
+          </div>
         </div>
-        <div className="cd-int-row">
-          <IntegrationCard
-            label={t("form.signatureLabel")}
-            value={xlateSig(chart.sig)}
-            desc={t("form.signatureDesc")}
-          />
-          <IntegrationCard
-            label={t("form.notSelfLabel")}
-            value={xlateNotSelf(chart.notSelf)}
-            desc={t("form.notSelfDesc")}
-          />
-          <IntegrationCard
-            label={t("form.definitionLabel")}
-            value={defText}
-            desc={t("form.definitionDesc")}
-          />
-        </div>
-      </div>
+      </BlurGate>
 
       {/* Footer — hidden when empty */}
       {t("form.chartFooter")&&(
