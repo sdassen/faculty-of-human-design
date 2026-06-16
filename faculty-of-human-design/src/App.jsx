@@ -3795,7 +3795,7 @@ function RapportenPage({go}){
               {LANG==="en"?"Career, the year ahead, or your child — applied to one specific context.":"Loopbaan, het jaar dat komt, of je kind — toegepast op één specifieke context."}
             </p>
           </div>
-          <div className="rapporten-hd-grid">
+          <div className="reports-grid">
             {hdSpecific.map(r=>(
               <div key={r.id} style={{cursor:"pointer"}} onClick={()=>{track("report_card_click",{report:r.id,price:r.priceNum,location:"rapporten"});go("rapport-"+r.id);}}>
                 <div style={{position:"relative",aspectRatio:"4/5",overflow:"hidden",marginBottom:24}}>
