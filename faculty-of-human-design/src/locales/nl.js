@@ -288,7 +288,7 @@ export default {
   inzichten: {
     eyebrow: "Kennis",
     title: "Inzichten",
-    sub: "Artikelen over Human Design, Numerologie en Astrologie, ingedeeld per thema.",
+    sub: "Artikelen over Human Design, ingedeeld per thema.",
     readMore: "Lees artikel",
     backToList: "← Terug naar inzichten",
     loading: "Artikelen laden...",
@@ -300,7 +300,7 @@ export default {
   },
   footer: {
     logoSub: "Ibiza, Spanje — Est. 2014",
-    desc: "Persoonlijke readings gebaseerd op Human Design, Numerologie en Astrologie. Zorgvuldig samengesteld vanuit jouw unieke geboortegegevens en berekend met astronomische precisie.",
+    desc: "Persoonlijke readings gebaseerd op Human Design. Zorgvuldig samengesteld vanuit jouw unieke geboortegegevens en berekend met astronomische precisie.",
     reportsCol: "Rapporten",
     infoCol: "Informatie",
     trustCol: "Vertrouwen",

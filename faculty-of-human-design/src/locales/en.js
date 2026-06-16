@@ -288,7 +288,7 @@ export default {
   inzichten: {
     eyebrow: "Knowledge",
     title: "Insights",
-    sub: "Articles on Human Design, Numerology and Astrology, organised by theme.",
+    sub: "Articles on Human Design, organised by theme.",
     readMore: "Read article",
     backToList: "← Back to insights",
     loading: "Loading articles...",
@@ -300,7 +300,7 @@ export default {
   },
   footer: {
     logoSub: "Ibiza, Spain — Est. 2014",
-    desc: "Personal readings based on Human Design, Numerology and Astrology. Carefully composed from your unique birth data and calculated with astronomical precision.",
+    desc: "Personal readings based on Human Design. Carefully composed from your unique birth data and calculated with astronomical precision.",
     reportsCol: "Reports",
     infoCol: "Information",
     trustCol: "Trust",
