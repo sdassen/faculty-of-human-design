@@ -63,6 +63,24 @@ export async function sendConfirmationEmail({ to, name, reportTitle, reportId, p
   return data;
 }
 
+export async function sendMiniUpsellEmail({ to, name, language, promoCode }) {
+  const lang = language === "en" ? "en" : "nl";
+  const isEN = lang === "en";
+
+  const subject = isEN
+    ? "You discovered your Type & Strategy — want the complete story?"
+    : "Je hebt je Type en Strategie ontdekt — wil je het complete verhaal?";
+
+  const { data, error } = await getResend().emails.send({
+    from: FROM,
+    to,
+    subject,
+    html: miniUpsellHtml({ name, lang, promoCode }),
+  });
+  if (error) throw new Error(`Resend error (mini upsell): ${error.message}`);
+  return data;
+}
+
 export async function sendPortalEmail({ to, portalUrl }) {
   const { data, error } = await getResend().emails.send({
     from: FROM,
@@ -402,6 +420,78 @@ function deliveryHtml({ name, reportTitle, reportId, partnerName, downloadUrl, l
     </p>
     <p style="font-size:11.5px;color:#B0AAA4;line-height:1.75;margin:0;">
       ${questNote}
+    </p>
+  `);
+}
+
+// ─── MINI READING UPSELL TEMPLATE ─────────────────────────────────────────────
+function miniUpsellHtml({ name, lang, promoCode }) {
+  const isEN = lang === "en";
+  const checkoutUrl = isEN ? "https://www.facultyhd.com/en/rapport/volledig" : "https://www.facultyhd.com/rapport/volledig";
+
+  const headline = isEN
+    ? "You discovered your Type & Strategy."
+    : "Je hebt je Type en Strategie ontdekt.";
+  const intro = isEN
+    ? `That is the foundation. But it is only the beginning of what your chart has to say about you.`
+    : `Dat is het fundament. Maar het is pas het begin van wat je chart over je te zeggen heeft.`;
+  const body2 = isEN
+    ? `The <strong style="color:#1A1715;font-weight:500;">Full Blueprint</strong> adds your Profile, your defined and open centers, your active channels and gates, and your Incarnation Cross — the complete architecture of who you are, in 40+ pages.`
+    : `De <strong style="color:#1A1715;font-weight:500;">Volledige Blauwdruk</strong> voegt je Profiel toe, je gedefinieerde en open centra, je actieve kanalen en poorten, en je Inkarnatie-Kruis — de complete architectuur van wie je bent, in 40+ pagina's.`;
+  const offerLine = isEN
+    ? `Your €29 is credited — upgrade today and pay only <strong style="color:#1A1715;font-weight:500;">€46</strong>.`
+    : `Je €29 wordt verrekend — upgrade vandaag en betaal alleen <strong style="color:#1A1715;font-weight:500;">€46</strong> bij.`;
+  const codeLabel = isEN ? "Your code" : "Jouw code";
+  const codeNote = isEN
+    ? "Enter this code at checkout under \"Add promotion code\"."
+    : "Vul deze code in bij checkout onder \"Add promotion code\".";
+  const ctaLabel = isEN ? "Upgrade to the Full Blueprint →" : "Upgrade naar de Volledige Blauwdruk →";
+  const expiryNote = isEN
+    ? "This code is valid for 7 days."
+    : "Deze code is 7 dagen geldig.";
+
+  return base(`
+    <div style="height:0.75px;background:#C9A85C;opacity:.4;margin-bottom:32px;"></div>
+
+    <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:23px;font-weight:400;color:#1A1715;margin:0 0 20px;line-height:1.3;letter-spacing:-.3px;">
+      ${headline}
+    </h1>
+
+    <p style="font-size:14.5px;color:#3A3830;line-height:1.85;margin:0 0 14px;font-weight:300;">
+      ${isEN ? "Dear" : "Beste"} ${escHtml(name)},
+    </p>
+    <p style="font-size:14.5px;color:#4A4840;line-height:1.85;margin:0 0 20px;font-weight:300;">
+      ${intro}
+    </p>
+    <p style="font-size:14px;color:#5A5850;line-height:1.85;margin:0 0 28px;font-weight:300;">
+      ${body2}
+    </p>
+
+    <div style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid #C9A85C;padding:20px 24px;margin:0 0 30px;text-align:center;">
+      <p style="font-size:14px;color:#3A3830;line-height:1.7;margin:0 0 16px;font-weight:400;">${offerLine}</p>
+      <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#9A8050;margin-bottom:8px;font-weight:600;">${codeLabel}</div>
+      <div style="font-family:Georgia,'Times New Roman',serif;font-size:20px;letter-spacing:1.5px;color:#1A1715;margin-bottom:10px;">${escHtml(promoCode)}</div>
+      <p style="font-size:11.5px;color:#9A8050;margin:0;">${codeNote}</p>
+    </div>
+
+    <div style="text-align:center;margin:0 0 16px;">
+      <a href="${escHtml(checkoutUrl)}"
+         style="display:inline-block;background:#1A1715;color:#C9A85C;text-decoration:none;
+                padding:16px 44px;font-size:13.5px;font-weight:500;
+                letter-spacing:1.5px;text-transform:uppercase;line-height:1;">
+        ${ctaLabel}
+      </a>
+    </div>
+
+    <p style="font-size:11px;color:#B0AAA4;text-align:center;margin:0 0 30px;">
+      ${expiryNote}
+    </p>
+
+    <div style="height:1px;background:#EEEBE5;margin:0 0 20px;"></div>
+    <p style="font-size:11.5px;color:#B0AAA4;line-height:1.75;margin:0;">
+      ${isEN
+        ? `Questions? Write to us at <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.`
+        : `Vragen? Schrijf ons via <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.`}
     </p>
   `);
 }

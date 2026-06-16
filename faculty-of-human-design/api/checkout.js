@@ -4,6 +4,7 @@ import { rateLimit, getClientIp } from "../lib/rateLimit.js";
 // NEVER trust price or isSubscription from the client. Always look up here.
 const REPORT_CATALOG = {
   volledig:         { priceNum: 75,  isSubscription: false, title: "Human Design Reading" },
+  "type-strategie": { priceNum: 29,  isSubscription: false, title: "Type & Strategie Reading" },
   relatie_liefde:   { priceNum: 95,  isSubscription: false, title: "Relatie Reading" },
   relatie_business: { priceNum: 85,  isSubscription: false, title: "Zakelijke Reading" },
   relatie_familie:  { priceNum: 75,  isSubscription: false, title: "Familie Reading" },
@@ -95,6 +96,8 @@ export default async function handler(req, res) {
     body.append("mode", "payment");
     // payment_method_types intentionally omitted — Stripe uses dashboard settings
     // (enables iDEAL, Klarna, PayPal, card automatically based on what's enabled there)
+    // Lets customers redeem a mini-reading upgrade promo code at checkout
+    body.append("allow_promotion_codes", "true");
     body.append("line_items[0][quantity]", "1");
     body.append("line_items[0][price_data][currency]", "eur");
     body.append("line_items[0][price_data][product_data][name]", title);

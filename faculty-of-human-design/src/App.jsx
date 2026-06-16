@@ -896,6 +896,33 @@ const REPORTS = [
     },
   },
   {
+    id:"type-strategie", icon:"◈",
+    tag:{ nl:"Begin hier", en:"Start here" },
+    title:{ nl:"Type & Strategie Reading", en:"Type & Strategy Reading" },
+    price:"€29", priceNum:29,
+    sub:{ nl:"Eenmalig · Bezorgd binnen 1 werkdag", en:"One-time · Delivered within 1 business day" },
+    outcome:{ nl:"Ontdek de kern van wie je bent", en:"Discover the core of who you are" },
+    tagline:{ nl:"De kern van wie je bent", en:"The core of who you are" },
+    intro:{ nl:"Een compacte, persoonlijke analyse van de drie fundamenten van je Human Design: je Type, je Strategie en je Autoriteit. De kortste weg naar zelfherkenning — en de eerste stap als je nieuw bent in Human Design.", en:"A compact, personal analysis of the three foundations of your Human Design: your Type, your Strategy and your Authority. The shortest path to self-recognition — and the first step if you're new to Human Design." },
+    includes:["Je Type — wie je energetisch bent","Je Strategie — hoe je het leven navigeert","Je Autoriteit — hoe je beslissingen neemt"],
+    for:{ nl:"Voor wie kennismaakt met Human Design en eerst de basis wil ervaren.", en:"For those new to Human Design who want to experience the basics first." },
+    sections:3, pages:"8-10",
+    prompt_extra:{
+      nl:"### 1. Jouw Type\n### 2. Jouw Strategie\n### 3. Jouw Autoriteit",
+      en:"### 1. Your Type\n### 2. Your Strategy\n### 3. Your Authority",
+    },
+    reviews:{
+      nl:[
+        ["Een mooie, behapbare eerste stap. Ik begreep meteen waarom ik me op bepaalde momenten vastloop op werk.","Iris D., Eindhoven"],
+        ["Kort maar raak. Dit gaf me genoeg om te merken dat ik het hele verhaal wil — heb daarna de volledige blauwdruk besteld.","Bram K., Leiden"],
+      ],
+      en:[
+        ["A lovely, manageable first step. I immediately understood why I get stuck at certain moments at work.","Iris D., Eindhoven"],
+        ["Short but on point. It gave me enough to realise I wanted the whole story — ordered the full blueprint right after.","Bram K., Leiden"],
+      ],
+    },
+  },
+  {
     id:"relatie_liefde", icon:"◎", tag:"",
     title:{ nl:"Relatie Reading", en:"Relationship Reading" },
     price:"€95", priceNum:95,
@@ -2572,7 +2599,7 @@ function SubscriptionManage(){
 }
 
 // ─── REPORT FORM ──────────────────────────────────────────────────────────────
-function ReportForm({rpt,onDone,postPayment}){
+function ReportForm({rpt,go,onDone,postPayment}){
   const[form,setForm]=useState({firstName:"",lastName:"",email:"",day:"",month:"",year:"",hour:"",minute:"",place:"",lat:"",lon:"",timezone:"",tz:"",pFirstName:"",pLastName:"",pday:"",pmonth:"",pyear:"",phour:"",pminute:"",pplace:"",plat:"",plon:"",ptimezone:"",ptz:"",cFirstName:"",cLastName:"",cday:"",cmonth:"",cyear:"",chour:"",cminute:"",cplace:"",clat:"",clon:"",ctimezone:"",ctz:"",familyRolesSwapped:false});
   const[chart,setChart]=useState(null);
   const[ls,setLs]=useState(0);
@@ -3109,38 +3136,93 @@ Geen sectietitel in de tekst.`);
             </div>
             )}
             <div style={{marginTop:40,padding:"48px 0 0",borderTop:"1px solid var(--border)",textAlign:"center"}}>
-              {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<div style={{marginBottom:24}}><a href={
-                  rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
-                  rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
-                  (LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")
-                } target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
-              <button
-                disabled={stripeLoading}
-                style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",display:"inline-flex",alignItems:"center",justifyContent:"center",opacity:stripeLoading?.7:1}}
-                onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
-                onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
-                onClick={async()=>{
-                  if(stripeLoading)return;
-                  setStripeLoading(true);
-                  track("checkout_started",{report:rpt.id,price:rpt.priceNum});
-                  try{
-                    sessionStorage.setItem("pending_purchase",JSON.stringify({report:rpt.id,price:rpt.priceNum}));
-                    await goToStripe(rpt.id,chart,form);
-                  }
-                  finally{ setStripeLoading(false); }
-                }}
-              >
-                {stripeLoading&&<span className="btn-spinner"/>}
-                {stripeLoading
-                  ?(LANG==="en"?"Redirecting…":"Doorsturen…")
-                  :(rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading"))}
-              </button>
-              <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
-              <p style={{marginTop:12,fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)",lineHeight:1.6,textAlign:"center"}}>
-                {LANG==="en"
-                  ?<>By ordering you agree to our <a href="/en/terms" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
-                  :<>Door te bestellen ga je akkoord met onze <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Algemene Voorwaarden & Privacy</a>.</>}
-              </p>
+              {rpt.id==="volledig"?(
+                <>
+                  <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:20,maxWidth:600,margin:"0 auto",textAlign:"left",alignItems:"stretch"}}>
+                    {/* Secondary — Type & Strategie */}
+                    <div style={{border:"1px solid var(--border)",padding:"28px 24px",display:"flex",flexDirection:"column"}}>
+                      <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:6}}>{LANG==="en"?"Type & Strategy Reading":"Type & Strategie Reading"}</div>
+                      <div style={{fontSize:".68rem",color:"var(--text-light)",letterSpacing:".05em",marginBottom:16}}>{LANG==="en"?"€29 — 8-10 pages":"€29 — 8-10 pagina's"}</div>
+                      <p style={{fontSize:".82rem",fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.6,marginBottom:24,flex:1}}>{LANG==="en"?"The core of who you are":"De kern van wie je bent"}</p>
+                      <button
+                        onClick={()=>go("rapport-type-strategie")}
+                        style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 0",cursor:"pointer",transition:"all .3s ease",width:"100%"}}
+                        onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
+                        onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
+                      >{LANG==="en"?"Start here — €29":"Begin hier — €29"}</button>
+                    </div>
+                    {/* Primary — Volledige Blauwdruk */}
+                    <div style={{border:"1px solid var(--text)",padding:"28px 24px",display:"flex",flexDirection:"column",position:"relative"}}>
+                      <div style={{position:"absolute",top:-11,left:24,background:"var(--text)",color:"white",fontSize:".56rem",fontWeight:500,padding:"4px 14px",letterSpacing:".1em",textTransform:"uppercase"}}>{LANG==="en"?"Most popular":"Meest gekozen"}</div>
+                      <div style={{fontFamily:"var(--font-serif)",fontSize:"1.1rem",fontWeight:400,color:"var(--text)",marginTop:10,marginBottom:6}}>{LANG==="en"?"Full Blueprint":"Volledige Blauwdruk"}</div>
+                      <div style={{fontSize:".68rem",color:"var(--text-light)",letterSpacing:".05em",marginBottom:16}}>{LANG==="en"?"€75 — 40+ pages":"€75 — 40+ pagina's"}</div>
+                      <p style={{fontSize:".82rem",fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.6,marginBottom:24,flex:1}}>{LANG==="en"?"Your complete personal analysis":"Je complete persoonlijke analyse"}</p>
+                      <button
+                        disabled={stripeLoading}
+                        style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"white",background:"var(--text)",border:"1px solid var(--text)",padding:"13px 0",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",width:"100%",opacity:stripeLoading?.7:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8}}
+                        onClick={async()=>{
+                          if(stripeLoading)return;
+                          setStripeLoading(true);
+                          track("checkout_started",{report:rpt.id,price:rpt.priceNum});
+                          try{
+                            sessionStorage.setItem("pending_purchase",JSON.stringify({report:rpt.id,price:rpt.priceNum}));
+                            await goToStripe(rpt.id,chart,form);
+                          }
+                          finally{ setStripeLoading(false); }
+                        }}
+                      >
+                        {stripeLoading&&<span className="btn-spinner"/>}
+                        {stripeLoading
+                          ?(LANG==="en"?"Redirecting…":"Doorsturen…")
+                          :(LANG==="en"?"Receive your full blueprint — €75":"Ontvang je volledige blauwdruk — €75")}
+                      </button>
+                    </div>
+                  </div>
+                  <p style={{marginTop:24,fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,color:"var(--text-light)",letterSpacing:".04em"}}>
+                    {LANG==="en"?"Not satisfied? We'll make it right.":"Niet tevreden? Wij lossen het op."}
+                  </p>
+                  <div style={{marginTop:16}}><a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>
+                  <p style={{marginTop:20,fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)",lineHeight:1.6,textAlign:"center"}}>
+                    {LANG==="en"
+                      ?<>By ordering you agree to our <a href="/en/terms" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
+                      :<>Door te bestellen ga je akkoord met onze <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Algemene Voorwaarden & Privacy</a>.</>}
+                  </p>
+                </>
+              ):(
+                <>
+                  {(rpt.id==="relatie_liefde"||rpt.id==="kind")&&<div style={{marginBottom:24}}><a href={
+                      rpt.id==="relatie_liefde"?(LANG==="en"?"/preview-relatie-liefde-en.pdf":"/preview-relatie-liefde.pdf"):
+                      (LANG==="en"?"/preview-kind-en.pdf":"/preview-kind.pdf")
+                    } target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>}
+                  <button
+                    disabled={stripeLoading}
+                    style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"14px 48px",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",display:"inline-flex",alignItems:"center",justifyContent:"center",opacity:stripeLoading?.7:1}}
+                    onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+                    onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.3)";}}
+                    onClick={async()=>{
+                      if(stripeLoading)return;
+                      setStripeLoading(true);
+                      track("checkout_started",{report:rpt.id,price:rpt.priceNum});
+                      try{
+                        sessionStorage.setItem("pending_purchase",JSON.stringify({report:rpt.id,price:rpt.priceNum}));
+                        await goToStripe(rpt.id,chart,form);
+                      }
+                      finally{ setStripeLoading(false); }
+                    }}
+                  >
+                    {stripeLoading&&<span className="btn-spinner"/>}
+                    {stripeLoading
+                      ?(LANG==="en"?"Redirecting…":"Doorsturen…")
+                      :(rpt.id.startsWith("relatie_")?(LANG==="en"?"Receive your reading":"Ontvang jullie reading"):(LANG==="en"?"Receive your reading":"Ontvang je reading"))}
+                  </button>
+                  <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
+                  <p style={{marginTop:12,fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)",lineHeight:1.6,textAlign:"center"}}>
+                    {LANG==="en"
+                      ?<>By ordering you agree to our <a href="/en/terms" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
+                      :<>Door te bestellen ga je akkoord met onze <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Algemene Voorwaarden & Privacy</a>.</>}
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -3160,7 +3242,7 @@ function HomePage({go}){
     jsonLd:{
       "@context":"https://schema.org","@type":"ItemList",
       "name":lang==="en"?"Human Design Readings — Faculty of Human Design":"Human Design Readings — Faculty of Human Design",
-      "description":lang==="en"?"In-depth personal readings based on Human Design, Numerology and Astrology.":"Diepgaande persoonlijke readings op basis van Human Design, Numerologie en Astrologie.",
+      "description":lang==="en"?"In-depth personal readings based on Human Design.":"Diepgaande persoonlijke readings op basis van Human Design.",
       "itemListElement": REPORTS.slice(0,4).map((r,i)=>({
         "@type":"ListItem","position":i+1,
         "name":tl(r.title),"description":tl(r.tagline),
@@ -3616,7 +3698,7 @@ function WatPage({go}){
 }
 
 function RapportenPage({go}){
-  const hdPure=REPORTS.filter(r=>["volledig","jaar","kind","loopbaan"].includes(r.id));
+  const hdPure=REPORTS.filter(r=>["type-strategie","volledig","jaar","kind","loopbaan"].includes(r.id));
   const relatie=REPORTS.filter(r=>r.id.startsWith("relatie_"));
   const visibleReports=REPORTS.filter(r=>!["numerologie","horoscoop"].includes(r.id));
   const sub=REPORTS.find(r=>r.id==="maandelijks");
@@ -3997,7 +4079,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
       {rpt.id==="maandelijks"&&<SubscriptionManage/>}
 
       {/* ── REPORT FORM ──────────────────────────────────────────────────── */}
-      <ReportForm rpt={rpt} onDone={onDone} postPayment={postPayment}/>
+      <ReportForm rpt={rpt} go={go} onDone={onDone} postPayment={postPayment}/>
 
     </div>
   );

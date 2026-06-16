@@ -2639,6 +2639,15 @@ export const orderDelivery = inngest.createFunction(
       });
     });
 
+    // ── Step N+5: Trigger the Mini Reading → Full Blueprint upsell ────────
+    // Only fires for the Type & Strategie Reading; sleeps 24h before emailing.
+    if (order.report_id === "type-strategie") {
+      await step.sendEvent("trigger-mini-upsell", {
+        name: "order/mini-delivered",
+        data: { orderId },
+      });
+    }
+
     return { orderId, downloadToken, deliveredAt: new Date().toISOString() };
   }
 );
