@@ -3370,7 +3370,7 @@ function HomePage({go}){
             ]:[
               ["Sinds 2014","Opgericht op Ibiza, het eiland waar Human Design in 1987 werd ontvangen. Die oorsprong is geen achtergrond. Het is de reden."],
               ["Swiss\nEphemeris","Elke berekening gebruikt de professionele astronomische standaard — exacte planeetposities tot op de graad, geen benaderingen."],
-              ["Één\nsysteem","Type, Autoriteit, Profiel, Centra en Kanalen — één coherente architectuur, geen mix van losse disciplines."],
+              ["1\nsysteem","Type, Autoriteit, Profiel, Centra en Kanalen — één coherente architectuur, geen mix van losse disciplines."],
             ]).map(([n,desc])=>(
               <div key={n} style={{borderTop:"1px solid rgba(255,255,255,.08)",paddingTop:28}}>
                 <div style={{fontFamily:"var(--font-serif)",fontSize:"1.55rem",fontWeight:300,color:"white",lineHeight:1.15,marginBottom:16,whiteSpace:"pre-line"}}>{n}</div>
