@@ -906,7 +906,7 @@ const REPORTS = [
     intro:{ nl:"Een compacte, persoonlijke analyse van de drie fundamenten van je Human Design: je Type, je Strategie en je Autoriteit. De kortste weg naar zelfherkenning — en de eerste stap als je nieuw bent in Human Design.", en:"A compact, personal analysis of the three foundations of your Human Design: your Type, your Strategy and your Authority. The shortest path to self-recognition — and the first step if you're new to Human Design." },
     includes:["Je Type — wie je energetisch bent","Je Strategie — hoe je het leven navigeert","Je Autoriteit — hoe je beslissingen neemt"],
     for:{ nl:"Voor wie kennismaakt met Human Design en eerst de basis wil ervaren.", en:"For those new to Human Design who want to experience the basics first." },
-    sections:3, pages:"8-10",
+    sections:3, pages:"15-20",
     prompt_extra:{
       nl:"### 1. Jouw Type\n### 2. Jouw Strategie\n### 3. Jouw Autoriteit",
       en:"### 1. Your Type\n### 2. Your Strategy\n### 3. Your Authority",
@@ -3142,7 +3142,7 @@ Geen sectietitel in de tekst.`);
                     {/* Secondary — Type & Strategie */}
                     <div style={{border:"1px solid var(--border)",padding:"28px 24px",display:"flex",flexDirection:"column"}}>
                       <div style={{fontFamily:"var(--font-serif)",fontSize:"1.05rem",fontWeight:400,color:"var(--text)",marginBottom:6}}>{LANG==="en"?"Type & Strategy Reading":"Type & Strategie Reading"}</div>
-                      <div style={{fontSize:".68rem",color:"var(--text-light)",letterSpacing:".05em",marginBottom:16}}>{LANG==="en"?"€29 — 8-10 pages":"€29 — 8-10 pagina's"}</div>
+                      <div style={{fontSize:".68rem",color:"var(--text-light)",letterSpacing:".05em",marginBottom:16}}>{LANG==="en"?"€29 — 15-20 pages":"€29 — 15-20 pagina's"}</div>
                       <p style={{fontSize:".82rem",fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.6,marginBottom:24,flex:1}}>{LANG==="en"?"The core of who you are":"De kern van wie je bent"}</p>
                       <button
                         disabled={stripeLoading}
