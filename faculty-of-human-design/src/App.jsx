@@ -4241,8 +4241,18 @@ function InzichtenPage({go,articleId}){
     },
   ];
   useEffect(()=>{
-    // Show STATIC immediately so the page is never blank while Supabase wakes up
-    setArticles(STATIC);
+    const CACHE_KEY="fhd_articles_v1";
+    const norm=t=>(t||"").trim().toLowerCase();
+    const merge=(live,base)=>{
+      const liveIds=new Set(live.map(a=>String(a.id)));
+      const liveTitles=new Set(live.flatMap(a=>[norm(a.title),norm(a.title_en)]).filter(Boolean));
+      return [...live,...base.filter(s=>!liveIds.has(String(s.id))&&!liveTitles.has(norm(s.title))&&!liveTitles.has(norm(s.title_en)))];
+    };
+    // Show cached Supabase articles + STATIC immediately; never show a blank page
+    try{
+      const cached=JSON.parse(localStorage.getItem(CACHE_KEY)||"[]");
+      setArticles(cached.length?merge(cached,STATIC):STATIC);
+    }catch{ setArticles(STATIC); }
     setLoading(false);
     const load=async()=>{
       try{
@@ -4254,11 +4264,8 @@ function InzichtenPage({go,articleId}){
         const data=await res.json();
         const live=data&&Array.isArray(data)?data:[];
         if(!live.length)return;
-        const liveIds=new Set(live.map(a=>String(a.id)));
-        const norm=t=>(t||"").trim().toLowerCase();
-        const liveTitles=new Set(live.flatMap(a=>[norm(a.title),norm(a.title_en)]).filter(Boolean));
-        const merged=[...live,...STATIC.filter(s=>!liveIds.has(String(s.id))&&!liveTitles.has(norm(s.title))&&!liveTitles.has(norm(s.title_en)))];
-        setArticles(merged);
+        try{ localStorage.setItem(CACHE_KEY,JSON.stringify(live)); }catch{}
+        setArticles(merge(live,STATIC));
       }catch{}
     };
     load();
