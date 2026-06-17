@@ -166,6 +166,6 @@ export const IMGS = {
   article_s15:             "/img-coffee.jpg",
 
   // s16 — Planeten in Human Design (uniek — verschilt van s13)
-  article_s16:             "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&auto=format&q=75",
+  article_s16:             "/img-stones-planets.jpg",
 
 };
