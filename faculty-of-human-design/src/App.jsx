@@ -3146,9 +3146,9 @@ Geen sectietitel in de tekst.`);
                       <p style={{fontSize:".82rem",fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.6,marginBottom:24,flex:1}}>{LANG==="en"?"The core of who you are":"De kern van wie je bent"}</p>
                       <button
                         disabled={stripeLoading}
-                        style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 0",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",width:"100%",opacity:stripeLoading?.7:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8}}
-                        onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
-                        onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
+                        style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.55)",padding:"16px 0",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",width:"100%",opacity:stripeLoading?.7:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8}}
+                        onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";e.currentTarget.style.borderColor="var(--text)";}}
+                        onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";e.currentTarget.style.borderColor="rgba(26,23,20,.55)";}}
                         onClick={async()=>{
                           if(stripeLoading)return;
                           setStripeLoading(true);
@@ -3172,7 +3172,9 @@ Geen sectietitel in de tekst.`);
                       <p style={{fontSize:".82rem",fontStyle:"italic",color:"var(--text-muted)",lineHeight:1.6,marginBottom:24,flex:1}}>{LANG==="en"?"Your complete personal analysis":"Je complete persoonlijke analyse"}</p>
                       <button
                         disabled={stripeLoading}
-                        style={{fontFamily:"var(--font-sans)",fontSize:".68rem",fontWeight:400,letterSpacing:".14em",textTransform:"uppercase",color:"white",background:"var(--text)",border:"1px solid var(--text)",padding:"13px 0",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",width:"100%",opacity:stripeLoading?.7:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8}}
+                        style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:500,letterSpacing:".12em",textTransform:"uppercase",color:"white",background:"var(--text)",border:"1px solid var(--text)",padding:"16px 0",cursor:stripeLoading?"default":"pointer",transition:"all .3s ease",width:"100%",opacity:stripeLoading?.7:1,display:"inline-flex",alignItems:"center",justifyContent:"center",gap:8}}
+                        onMouseEnter={e=>{if(stripeLoading)return;e.currentTarget.style.opacity=".85";}}
+                        onMouseLeave={e=>{if(stripeLoading)return;e.currentTarget.style.opacity="1";}}
                         onClick={async()=>{
                           if(stripeLoading)return;
                           setStripeLoading(true);
@@ -3187,7 +3189,7 @@ Geen sectietitel in de tekst.`);
                         {stripeLoading&&<span className="btn-spinner"/>}
                         {stripeLoading
                           ?(LANG==="en"?"Redirecting…":"Doorsturen…")
-                          :(LANG==="en"?"Receive your full blueprint":"Ontvang je volledige blauwdruk")}
+                          :(LANG==="en"?"Receive your full blueprint — €75":"Ontvang je volledige blauwdruk — €75")}
                       </button>
                     </div>
                   </div>
