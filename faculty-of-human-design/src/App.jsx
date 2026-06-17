@@ -3292,13 +3292,6 @@ function HomePage({go}){
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 {t("home.heroCta")}
               </button>
-              <button
-                className="btn btn-lg"
-                style={{background:"transparent",border:"1px solid rgba(255,255,255,.45)",color:"white"}}
-                onClick={()=>{track("hero_cta_mini_click",{location:"hero"});go("rapport-type-strategie");}}
-              >
-                {lang==="en"?"Type & Strategy Reading — €29":"Type & Strategie Reading — €29"}
-              </button>
             </div>
           </div>
         </div>
@@ -3360,6 +3353,14 @@ function HomePage({go}){
               onMouseLeave={e=>{e.currentTarget.style.color="var(--text-muted)";e.currentTarget.style.borderColor="var(--border)";}}>
               {LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}
             </a>
+            <button
+              onClick={()=>{track("featured_mini_click",{location:"featured"});go("rapport-type-strategie");}}
+              style={{background:"none",border:"none",fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:300,letterSpacing:".08em",color:"var(--text-muted)",cursor:"pointer",padding:"4px 0",opacity:.7}}
+              onMouseEnter={e=>e.currentTarget.style.opacity="1"}
+              onMouseLeave={e=>e.currentTarget.style.opacity=".7"}
+            >
+              {LANG==="en"?"Or start with Type & Strategy Reading — €29":"Of begin met de Type & Strategie Reading — €29"}
+            </button>
           </div>
         </div>
         <div className="feature-image-wrap ph">
