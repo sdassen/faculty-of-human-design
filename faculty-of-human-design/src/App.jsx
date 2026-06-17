@@ -3193,10 +3193,7 @@ Geen sectietitel in de tekst.`);
                       </button>
                     </div>
                   </div>
-                  <p style={{marginTop:24,fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,color:"var(--text-light)",letterSpacing:".04em"}}>
-                    {LANG==="en"?"Not satisfied? We'll make it right.":"Niet tevreden? Wij lossen het op."}
-                  </p>
-                  <div style={{marginTop:16}}><a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>
+                  <div style={{marginTop:24}}><a href={LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"} target="_blank" rel="noopener" style={{fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-light)",textDecoration:"none",borderBottom:"1px solid var(--border)",paddingBottom:2}}>{LANG==="en"?"View sample reading →":"Bekijk voorbeeldreading →"}</a></div>
                   <p style={{marginTop:20,fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:300,color:"var(--text-light)",lineHeight:1.6,textAlign:"center"}}>
                     {LANG==="en"
                       ?<>By ordering you agree to our <a href="/en/terms" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
