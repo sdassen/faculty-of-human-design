@@ -151,7 +151,7 @@ export const IMGS = {
   article_s10:             "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=800&auto=format&q=75",
 
   // s11 — Circuits
-  article_s11:             "https://images.unsplash.com/photo-1462275646964-a0e3386b89fa?w=800&auto=format&q=75",
+  article_s11:             "/img-door-patio.jpg",
 
   // s12 — Uitdrukkingsgetal
   article_s12:             "https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=800&auto=format&q=75",
