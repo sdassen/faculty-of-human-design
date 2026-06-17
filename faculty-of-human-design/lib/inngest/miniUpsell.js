@@ -99,11 +99,16 @@ export const miniUpsell = inngest.createFunction(
     const promoCode = await step.run("create-promo-code", () => createUpgradePromoCode(orderId));
 
     await step.run("send-upsell-email", async () => {
+      const chart = (order.birth_data || {}).chart || {};
       await sendMiniUpsellEmail({
         to: order.customer_email,
         name: order.customer_name || (order.language === "en" ? "there" : "daar"),
         language: order.language || "nl",
         promoCode,
+        hdType:    chart.type     || null,
+        strategy:  chart.strat    || null,
+        authority: chart.auth     || null,
+        profile:   chart.profile  || null,
       });
     });
 

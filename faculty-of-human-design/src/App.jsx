@@ -3233,6 +3233,16 @@ Geen sectietitel in de tekst.`);
                       ?<>By ordering you agree to our <a href="/en/terms" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Terms & Privacy</a>.</>
                       :<>Door te bestellen ga je akkoord met onze <a href="/voorwaarden" target="_blank" rel="noopener noreferrer" style={{color:"inherit",textDecoration:"underline"}}>Algemene Voorwaarden & Privacy</a>.</>}
                   </p>
+                  {rpt.id==="type-strategie"&&(
+                    <p style={{marginTop:20,fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:300,color:"var(--text-light)",textAlign:"center",lineHeight:1.6}}>
+                      <button
+                        onClick={()=>go("rapport-volledig")}
+                        style={{background:"none",border:"none",color:"var(--text-light)",fontFamily:"var(--font-sans)",fontSize:".65rem",fontWeight:300,letterSpacing:".06em",cursor:"pointer",textDecoration:"underline",textUnderlineOffset:3,padding:0}}
+                      >
+                        {LANG==="en"?"Or view the Volledige Blauwdruk — 40+ pages · €75 →":"Of bekijk de Volledige Blauwdruk — 40+ pagina's · €75 →"}
+                      </button>
+                    </p>
+                  )}
                 </>
               )}
             </div>
@@ -3281,6 +3291,13 @@ function HomePage({go}){
             <div className="hero-actions" style={{display:"flex",gap:16,flexWrap:"wrap",marginTop:36}}>
               <button className="btn btn-white btn-lg" onClick={()=>{track("hero_cta_click",{location:"hero"});go("rapport-volledig");}}>
                 {t("home.heroCta")}
+              </button>
+              <button
+                className="btn btn-lg"
+                style={{background:"transparent",border:"1px solid rgba(255,255,255,.45)",color:"white"}}
+                onClick={()=>{track("hero_cta_mini_click",{location:"hero"});go("rapport-type-strategie");}}
+              >
+                {lang==="en"?"Type & Strategy Reading — €29":"Type & Strategie Reading — €29"}
               </button>
             </div>
           </div>
@@ -4465,6 +4482,12 @@ function InzichtenPage({go,articleId}){
                     style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:400,letterSpacing:".12em",textTransform:"uppercase",color:"rgba(255,255,255,.5)",background:"transparent",border:"none",padding:"8px 0",cursor:"pointer",textDecoration:"underline",textUnderlineOffset:4}}
                     onClick={()=>{go("rapporten");window.scrollTo(0,0);}}
                   >{isEN?"View all readings →":"Bekijk alle readings →"}</button>
+                  {relRptId!=="type-strategie"&&(
+                    <button
+                      style={{fontFamily:"var(--font-sans)",fontSize:".58rem",fontWeight:300,letterSpacing:".08em",color:"rgba(255,255,255,.3)",background:"transparent",border:"none",padding:"4px 0",cursor:"pointer",textDecoration:"none"}}
+                      onClick={()=>{go("rapport-type-strategie");window.scrollTo(0,0);}}
+                    >{isEN?"Or start with Type & Strategy Reading — €29":"Of begin met Type & Strategie Reading — €29"}</button>
+                  )}
                 </div>
               </div>
             </section>

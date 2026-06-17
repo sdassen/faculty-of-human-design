@@ -63,7 +63,7 @@ export async function sendConfirmationEmail({ to, name, reportTitle, reportId, p
   return data;
 }
 
-export async function sendMiniUpsellEmail({ to, name, language, promoCode }) {
+export async function sendMiniUpsellEmail({ to, name, language, promoCode, hdType, strategy, authority, profile }) {
   const lang = language === "en" ? "en" : "nl";
   const isEN = lang === "en";
 
@@ -75,7 +75,7 @@ export async function sendMiniUpsellEmail({ to, name, language, promoCode }) {
     from: FROM,
     to,
     subject,
-    html: miniUpsellHtml({ name, lang, promoCode }),
+    html: miniUpsellHtml({ name, lang, promoCode, hdType, strategy, authority, profile }),
   });
   if (error) throw new Error(`Resend error (mini upsell): ${error.message}`);
   return data;
@@ -425,16 +425,59 @@ function deliveryHtml({ name, reportTitle, reportId, partnerName, downloadUrl, l
 }
 
 // ─── MINI READING UPSELL TEMPLATE ─────────────────────────────────────────────
-function miniUpsellHtml({ name, lang, promoCode }) {
+// strat and auth values come from the server-side calculator in Dutch.
+// Translate to English when the order language is EN.
+const STRAT_EN = {
+  "Wacht om te reageren":                                    "Wait to respond",
+  "Wacht om te reageren, informeer dan voor je handelt":     "Wait to respond, then inform before acting",
+  "Informeer voor je handelt":                               "Inform before acting",
+  "Wacht op de uitnodiging":                                 "Wait for the invitation",
+  "Wacht een maancyclus van 28 dagen":                       "Wait a lunar cycle of 28 days",
+};
+const AUTH_EN = {
+  "Emotioneel": "Emotional",
+  "Sacraal":    "Sacral",
+  "Splenisch":  "Splenic",
+  "Ego":        "Ego",
+  "G/Self":     "G/Self",
+  "Mentaal":    "Mental",
+  "Maancyclus": "Lunar Cycle",
+};
+const TYPE_NL = {
+  "Generator":             "Generator",
+  "Manifesting Generator": "Manifesterende Generator",
+  "Projector":             "Projector",
+  "Manifestor":            "Manifestor",
+  "Reflector":             "Reflector",
+};
+
+function miniUpsellHtml({ name, lang, promoCode, hdType, strategy, authority, profile }) {
   const isEN = lang === "en";
   const checkoutUrl = isEN ? "https://www.facultyhd.com/en/rapport/volledig" : "https://www.facultyhd.com/rapport/volledig";
 
-  const headline = isEN
-    ? "You discovered your Type & Strategy."
-    : "Je hebt je Type en Strategie ontdekt.";
-  const intro = isEN
-    ? `That is the foundation. But it is only the beginning of what your chart has to say about you.`
-    : `Dat is het fundament. Maar het is pas het begin van wat je chart over je te zeggen heeft.`;
+  // Localised chart labels (calculator always outputs Dutch; type names are English)
+  const typeLabel     = hdType ? (isEN ? hdType : (TYPE_NL[hdType] || hdType)) : null;
+  const stratLabel    = strategy  ? (isEN ? (STRAT_EN[strategy]  || strategy)  : strategy)  : null;
+  const authLabel     = authority ? (isEN ? (AUTH_EN[authority]  || authority) : authority) : null;
+
+  // Personalised headline + intro when chart data is available
+  let headline, intro;
+  if (typeLabel && stratLabel && authLabel) {
+    if (isEN) {
+      headline = `You are a ${escHtml(typeLabel)}.`;
+      intro    = `Your Strategy: <em>${escHtml(stratLabel)}</em>. Your Authority: <em>${escHtml(authLabel)}</em>.<br><br>That is the foundation. But it is only the beginning of what your chart has to say about you.`;
+    } else {
+      headline = `Je bent een ${escHtml(typeLabel)}.`;
+      intro    = `Je Strategie: <em>${escHtml(stratLabel)}</em>. Je Autoriteit: <em>${escHtml(authLabel)}</em>.<br><br>Dat is het fundament. Maar het is pas het begin van wat je chart over je te zeggen heeft.`;
+    }
+  } else {
+    headline = isEN
+      ? "You discovered your Type & Strategy."
+      : "Je hebt je Type en Strategie ontdekt.";
+    intro = isEN
+      ? `That is the foundation. But it is only the beginning of what your chart has to say about you.`
+      : `Dat is het fundament. Maar het is pas het begin van wat je chart over je te zeggen heeft.`;
+  }
   const body2 = isEN
     ? `The <strong style="color:#1A1715;font-weight:500;">Full Blueprint</strong> adds your Profile, your defined and open centers, your active channels and gates, and your Incarnation Cross — the complete architecture of who you are, in 40+ pages.`
     : `De <strong style="color:#1A1715;font-weight:500;">Volledige Blauwdruk</strong> voegt je Profiel toe, je gedefinieerde en open centra, je actieve kanalen en poorten, en je Inkarnatie-Kruis — de complete architectuur van wie je bent, in 40+ pagina's.`;
