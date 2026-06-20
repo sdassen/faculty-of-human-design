@@ -2633,15 +2633,20 @@ function ReportForm({rpt,go,onDone,postPayment}){
     const y=parseInt(form.year),m=parseInt(form.month),d=parseInt(form.day);
     const fullName1=(form.firstName+" "+(form.lastName||"")).trim();
     if(!form.firstName||!d||!m||!y){alert(LANG==="en"?"Please fill in all required fields.":"Vul alle verplichte velden in.");return;}
-    if(isNum){const num=calcNumerology(fullName1,d,m,y);setChart({...num,isNumerology:true});}
-    else{
-      const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
-      // Compute tz offset for birth date (accounts for DST)
-      const tz=form.timezone?getUTCOffsetHours(form.timezone,y,m,d,h,min):parseFloat(form.tz||"0")||0;
-      setForm(f=>({...f,tz:String(tz)}));
-      setChart(isHoro?{...calcHoroscoop(y,m,d,h,min,tz),isHoroscoop:true}:calcHD(y,m,d,h,min,tz));
+    try{
+      if(isNum){const num=calcNumerology(fullName1,d,m,y);setChart({...num,isNumerology:true});}
+      else{
+        const h=parseInt(form.hour||"12"),min=parseInt(form.minute||"0");
+        // Compute tz offset for birth date (accounts for DST)
+        const tz=form.timezone?getUTCOffsetHours(form.timezone,y,m,d,h,min):parseFloat(form.tz||"0")||0;
+        setForm(f=>({...f,tz:String(tz)}));
+        setChart(isHoro?{...calcHoroscoop(y,m,d,h,min,tz),isHoroscoop:true}:calcHD(y,m,d,h,min,tz));
+      }
+      setTimeout(()=>document.getElementById("chart-res")?.scrollIntoView({behavior:"smooth"}),300);
+    }catch(e){
+      console.error("doChart error",e);
+      alert(LANG==="en"?"Something went wrong calculating your chart. Please check your details and try again.":"Er ging iets mis bij het berekenen van je chart. Controleer je gegevens en probeer het opnieuw.");
     }
-    setTimeout(()=>document.getElementById("chart-res")?.scrollIntoView({behavior:"smooth"}),80);
   };
 
   const doReport=async()=>{
