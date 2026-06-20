@@ -641,18 +641,19 @@ function orderUpsellHtml({ name, lang, reportId, reportTitle, personalCode, frie
       ${body2}
     </p>
 
-    <!-- Two code blocks side by side — styled on <td> so row height is always equal -->
+    <!-- Two code blocks — stack on mobile -->
+    <style>@media only screen and (max-width:480px){.code-box{display:block!important;width:100%!important;box-sizing:border-box}.code-gap{display:none!important}.code-box-2{margin-top:12px!important}}</style>
     <table width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 30px;">
       <tr>
-        <td width="48%" valign="top" style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid #C9A85C;padding:18px 20px;text-align:center;">
+        <td class="code-box" width="48%" valign="top" style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid #C9A85C;padding:18px 20px;text-align:center;">
           <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#9A8050;margin-bottom:6px;font-weight:600;">${personalTitle}</div>
           <p style="font-size:12px;color:#5A5850;line-height:1.6;margin:0 0 12px;font-weight:300;">${personalDesc}</p>
           <div style="font-family:Georgia,'Times New Roman',serif;font-size:17px;letter-spacing:1.5px;color:#1A1715;margin-bottom:8px;">${escHtml(personalCode)}</div>
           <p style="font-size:10.5px;color:#9A8050;margin:0 0 6px;line-height:1.5;">${personalNote}</p>
           <p style="font-size:10px;color:#B0AAA4;margin:0;">${personalExpiry}</p>
         </td>
-        <td width="4%"></td>
-        <td width="48%" valign="top" style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid rgba(201,168,92,.4);padding:18px 20px;text-align:center;">
+        <td class="code-gap" width="4%"></td>
+        <td class="code-box code-box-2" width="48%" valign="top" style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid rgba(201,168,92,.4);padding:18px 20px;text-align:center;">
           <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#9A8050;margin-bottom:6px;font-weight:600;">${friendTitle}</div>
           <p style="font-size:12px;color:#5A5850;line-height:1.6;margin:0 0 12px;font-weight:300;">${friendDesc}</p>
           <div style="font-family:Georgia,'Times New Roman',serif;font-size:17px;letter-spacing:1.5px;color:#1A1715;margin-bottom:8px;">${escHtml(friendCode)}</div>
