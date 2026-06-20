@@ -3739,7 +3739,7 @@ function RapportenPage({go}){
   const sub=REPORTS.find(r=>r.id==="maandelijks");
   useSEO({
     title:LANG==="en"?"Human Design Readings — Choose your personal reading":"Human Design Readings — Kies je persoonlijke reading",
-    description:LANG==="en"?"Choose from in-depth Human Design readings: full reading, Relationship, Career, Year and Child. Personal and delivered within 1 business day. From €45.":"Kies uit diepgaande Human Design readings: volledige reading, Relationship, Loopbaan, Jaar en Kind. Persoonlijk en bezorgd binnen 1 werkdag. Vanaf €45.",
+    description:LANG==="en"?"Discover your Human Design. Choose a personal reading, from Type & Strategy (€29) to your complete blueprint (€75). Delivered within 1 business day.":"Ontdek jouw Human Design. Kies een persoonlijke reading, van Type & Strategie (€29) tot je complete blauwdruk (€75). Bezorgd binnen 1 werkdag.",
     canonical:SITE+"/readings",
     image:IMGS.cosmos,
     jsonLd:{
