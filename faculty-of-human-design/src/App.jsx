@@ -3069,7 +3069,7 @@ Geen sectietitel in de tekst.`);
               const lbl=tl(rpt.partnerLabel)||"Partner";
               const c2=(form.pday&&form.pmonth&&form.pyear)?calcHD(parseInt(form.pyear),parseInt(form.pmonth),parseInt(form.pday),parseInt(form.phour||"12"),parseInt(form.pminute||"0")):null;
               const gedeeld=c2?chart.allGates.filter(g=>c2.allGates.includes(g)):[];
-              const onOrder=()=>document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth"});
+              const onOrder=()=>document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"});
               return(
                 <>
                   {c2
@@ -3096,7 +3096,7 @@ Geen sectietitel in de tekst.`);
             {rpt.needsChild&&(()=>{
               const childChart=(form.cday&&form.cmonth&&form.cyear)?calcHD(parseInt(form.cyear),parseInt(form.cmonth),parseInt(form.cday),parseInt(form.chour||"12"),parseInt(form.cminute||"0")):null;
               const childLabel=LANG==="en"?"Child":"Kind";
-              const onOrder=()=>document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth"});
+              const onOrder=()=>document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"});
               return(
                 <>
                   {childChart
@@ -3118,7 +3118,7 @@ Geen sectietitel in de tekst.`);
               <ChartDashboard
                 chart={chart}
                 name={form.firstName}
-                onOrder={()=>document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth"})}
+                onOrder={()=>document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"})}
               />
             )}
             {/* ── Numerologie / Horoscoop: compact table + symbol card ── */}
@@ -3988,7 +3988,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"white",background:"transparent",border:"1px solid rgba(255,255,255,.45)",padding:"14px 40px",cursor:"pointer",transition:"all .3s ease"}}
               onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.12)";e.currentTarget.style.borderColor="rgba(255,255,255,.7)";}}
               onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor="rgba(255,255,255,.45)";}}
-              onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth"});}}
+              onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"});}}
             >{heroCta}</button>
             {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<a href={
                 rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
@@ -4071,7 +4071,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
             style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 36px",cursor:"pointer",transition:"all .3s ease"}}
             onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
             onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
-            onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"mid_cta"});document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth"});}}
+            onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"mid_cta"});document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"});}}
           >{heroCta}</button>
           <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
           {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&(
