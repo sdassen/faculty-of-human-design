@@ -2092,20 +2092,24 @@ function BlueprintPanel({chart,name,onCta}){
 
 // Soft blur gate — hides advanced chart detail behind a warm overlay until purchase.
 // Not a hard paywall: invites curiosity rather than blocking access aggressively.
-function BlurGate({children}){
+function BlurGate({children,onCta}){
   const isEN=LANG==="en";
   return(
     <div style={{position:"relative"}}>
       <div style={{filter:"blur(4px)",pointerEvents:"none",userSelect:"none"}} aria-hidden="true">{children}</div>
-      <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",padding:12}}>
+      <div
+        style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",padding:12,cursor:onCta?"pointer":"default"}}
+        onClick={onCta||undefined}
+      >
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:7,textAlign:"center",background:"rgba(244,241,235,.6)",padding:"12px 20px",borderRadius:1}}>
           <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9A8050" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="8.5" cy="8.5" r="4.3"/>
             <path d="M11.7 11.7L20 20M15.5 16l2.2-2.2M13 18.5l2.2-2.2"/>
           </svg>
           <span style={{fontFamily:"var(--font-sans)",fontSize:".62rem",fontWeight:500,letterSpacing:".06em",color:"#9A8050",lineHeight:1.4}}>
-            {isEN?"Part of your full analysis":"Onderdeel van je volledige analyse"}
+            {onCta?(isEN?"Receive your reading":"Ontvang je reading"):(isEN?"Part of your full analysis":"Onderdeel van je volledige analyse")}
           </span>
+          {onCta&&<span style={{fontFamily:"var(--font-sans)",fontSize:".56rem",fontWeight:400,color:"rgba(154,128,80,.55)",letterSpacing:".06em"}}>↓</span>}
         </div>
       </div>
     </div>
@@ -2144,10 +2148,10 @@ function ChartDashboard({chart,name,onOrder}){
       {/* Body: left blueprint (blurred) + right insight cards (all blurred) */}
       <div className="cd-body">
         <div className="cd-left">
-          <BlurGate><BlueprintPanel chart={chart} name={name} onCta={onOrder}/></BlurGate>
+          <BlurGate onCta={onOrder}><BlueprintPanel chart={chart} name={name} onCta={onOrder}/></BlurGate>
         </div>
         <div className="cd-right">
-          <BlurGate>
+          <BlurGate onCta={onOrder}>
             <div style={{display:"flex",flexDirection:"column",gap:6}}>
               <InsightCard label={t("form.authorityLabel")} value={xlateAuth(chart.auth)} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
               <InsightCard label={t("form.strategyLabel")} value={xlateStrat(chart.strat)} desc={t("form.signaturePrefix")+xlateSig(chart.sig)} icon="◇" accentColor="#8A7355"/>
@@ -2158,7 +2162,7 @@ function ChartDashboard({chart,name,onOrder}){
       </div>
 
       {/* Integrations — blurred */}
-      <BlurGate>
+      <BlurGate onCta={onOrder}>
         <div className="cd-int">
           <div className="cd-int-hdr">
             <div className="cd-int-ttl">{t("form.deeperLabel")}</div>
@@ -2935,6 +2939,14 @@ Geen sectietitel in de tekst.`);
       setTimeout(()=>{setLoading(false);onDone(chart,form,allText.trim(),rpt);},400);
     }catch(e){setLoading(false);onDone(chart,form,(LANG==="en"?"Something went wrong: ":"Er is iets misgegaan: ")+e.message,rpt);}
   };
+
+  if(stripeLoading)return(
+    <div className="loading-overlay">
+      <div className="loading-icon">✦</div>
+      <div className="loading-title">{LANG==="en"?"Preparing your order":"Je bestelling wordt voorbereid"}</div>
+      <div className="loading-counter">{LANG==="en"?"You will be redirected to the payment page shortly":"Je wordt zo doorgestuurd naar de betaalpagina"}</div>
+    </div>
+  );
 
   if(loading)return(
     <div className="loading-overlay">
