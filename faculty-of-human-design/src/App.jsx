@@ -2148,7 +2148,7 @@ function ChartDashboard({chart,name,onOrder}){
       {/* Body: left blueprint (blurred) + right insight cards (all blurred) */}
       <div className="cd-body">
         <div className="cd-left">
-          <BlurGate onCta={onOrder}><BlueprintPanel chart={chart} name={name} onCta={onOrder}/></BlurGate>
+          <BlueprintPanel chart={chart} name={name}/>
         </div>
         <div className="cd-right">
           <BlurGate onCta={onOrder}>
