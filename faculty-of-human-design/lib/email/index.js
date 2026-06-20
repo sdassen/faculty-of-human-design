@@ -81,6 +81,24 @@ export async function sendMiniUpsellEmail({ to, name, language, promoCode, hdTyp
   return data;
 }
 
+export async function sendOrderUpsellEmail({ to, name, language, reportId, reportTitle, personalCode, friendCode, hdType, strategy, authority }) {
+  const lang = language === "en" ? "en" : "nl";
+  const isEN = lang === "en";
+
+  const subject = isEN
+    ? `A small thank-you, and a code to share`
+    : `Een kleine attentie, en een code om te delen`;
+
+  const { data, error } = await getResend().emails.send({
+    from: FROM,
+    to,
+    subject,
+    html: orderUpsellHtml({ name, lang, reportId, reportTitle, personalCode, friendCode, hdType, strategy, authority }),
+  });
+  if (error) throw new Error(`Resend error (order upsell): ${error.message}`);
+  return data;
+}
+
 export async function sendPortalEmail({ to, portalUrl }) {
   const { data, error } = await getResend().emails.send({
     from: FROM,
@@ -529,6 +547,129 @@ function miniUpsellHtml({ name, lang, promoCode, hdType, strategy, authority, pr
     <p style="font-size:11px;color:#B0AAA4;text-align:center;margin:0 0 30px;">
       ${expiryNote}
     </p>
+
+    <div style="height:1px;background:#EEEBE5;margin:0 0 20px;"></div>
+    <p style="font-size:11.5px;color:#B0AAA4;line-height:1.75;margin:0;">
+      ${isEN
+        ? `Questions? Write to us at <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.`
+        : `Vragen? Schrijf ons via <a href="mailto:info@facultyhd.com" style="color:#9A8050;text-decoration:none;">info@facultyhd.com</a>.`}
+    </p>
+  `);
+}
+
+// ─── ORDER UPSELL TEMPLATE ───────────────────────────────────────────────────
+// Fires 3 days after delivery for all reports except type-strategie (has its own)
+// and maandelijks. Two Stripe codes: one personal (€15 off), one to share with a friend.
+const REPORT_LABEL_NL = {
+  "volledig":        "Human Design Reading",
+  "relatie_liefde":  "Relatie Reading",
+  "relatie_business":"Zakelijke Reading",
+  "relatie_familie": "Familie Reading",
+  "jaar":            "Jaarrapport",
+  "kind":            "Kinderrapport",
+  "loopbaan":        "Loopbaan Reading",
+  "numerologie":     "Numerologie Reading",
+  "horoscoop":       "Geboortehoroscoop Reading",
+};
+const REPORT_LABEL_EN = {
+  "volledig":        "Human Design Reading",
+  "relatie_liefde":  "Relationship Reading",
+  "relatie_business":"Business Reading",
+  "relatie_familie": "Family Reading",
+  "jaar":            "Annual Report",
+  "kind":            "Child Report",
+  "loopbaan":        "Career Reading",
+  "numerologie":     "Numerology Reading",
+  "horoscoop":       "Birth Horoscope Reading",
+};
+
+function orderUpsellHtml({ name, lang, reportId, reportTitle, personalCode, friendCode, hdType, strategy, authority }) {
+  const isEN = lang === "en";
+  const siteUrl = isEN ? "https://www.facultyhd.com/en/readings" : "https://www.facultyhd.com/readings";
+
+  // Personalised opening if chart data is available
+  const typeLabel = hdType ? (isEN ? hdType : (TYPE_NL[hdType] || hdType)) : null;
+  const stratLabel = strategy ? (isEN ? (STRAT_EN[strategy] || strategy) : strategy) : null;
+  const chartLine = (typeLabel && stratLabel)
+    ? (isEN
+        ? `As a <strong style="color:#1A1715;font-weight:500;">${escHtml(typeLabel)}</strong> with strategy <em>${escHtml(stratLabel)}</em>. We hope the reading gave you something to sit with.`
+        : `Als <strong style="color:#1A1715;font-weight:500;">${escHtml(typeLabel)}</strong> met strategie <em>${escHtml(stratLabel)}</em>. We hopen dat de reading je iets te overdenken heeft gegeven.`)
+    : null;
+
+  const rptLabel = (isEN ? REPORT_LABEL_EN[reportId] : REPORT_LABEL_NL[reportId]) || escHtml(reportTitle);
+
+  const headline = isEN
+    ? "A few days after your reading."
+    : "Een paar dagen na je reading.";
+  const intro = isEN
+    ? `We wanted to reach out after your <strong style="color:#1A1715;font-weight:500;">${escHtml(rptLabel)}</strong>. ${chartLine || "We hope the reading gave you something real to work with."}`
+    : `We wilden even contact opnemen na jouw <strong style="color:#1A1715;font-weight:500;">${escHtml(rptLabel)}</strong>. ${chartLine || "We hopen dat de reading je iets concreets heeft gegeven om mee te werken."}`;
+  const body2 = isEN
+    ? `As a small thank-you, here is a discount for your next reading. And a second code to pass on to someone you think might benefit from this too.`
+    : `Als kleine attentie ontvang je een kortingscode voor je volgende reading. En een tweede code om door te geven aan iemand van wie je denkt dat dit ook bij hen past.`;
+
+  const personalTitle = isEN ? "For you" : "Voor jou";
+  const personalDesc  = isEN ? "€15 off your next reading" : "€15 korting op je volgende reading";
+  const personalNote  = isEN
+    ? "Enter this code at checkout under \"Add promotion code\"."
+    : "Vul deze code in bij checkout onder \"Add promotion code\".";
+  const personalExpiry = isEN ? "Valid for 30 days." : "30 dagen geldig.";
+
+  const friendTitle = isEN ? "To share" : "Om te delen";
+  const friendDesc  = isEN ? "€15 off for someone you'd like to give this to" : "€15 korting voor iemand aan wie je dit wilt geven";
+  const friendNote  = isEN
+    ? "Forward this code — it works for any reading."
+    : "Stuur deze code door — geldig op alle readings.";
+  const friendExpiry = isEN ? "Valid for 30 days." : "30 dagen geldig.";
+
+  const ctaLabel = isEN ? "View all readings →" : "Bekijk alle readings →";
+
+  return base(`
+    <div style="height:0.75px;background:#C9A85C;opacity:.4;margin-bottom:32px;"></div>
+
+    <h1 style="font-family:Georgia,'Times New Roman',serif;font-size:23px;font-weight:400;color:#1A1715;margin:0 0 20px;line-height:1.3;letter-spacing:-.3px;">
+      ${headline}
+    </h1>
+
+    <p style="font-size:14.5px;color:#3A3830;line-height:1.85;margin:0 0 14px;font-weight:300;">
+      ${isEN ? "Dear" : "Beste"} ${escHtml(name)},
+    </p>
+    <p style="font-size:14.5px;color:#4A4840;line-height:1.85;margin:0 0 16px;font-weight:300;">
+      ${intro}
+    </p>
+    <p style="font-size:14px;color:#5A5850;line-height:1.85;margin:0 0 30px;font-weight:300;">
+      ${body2}
+    </p>
+
+    <!-- Two code blocks side by side — styled on <td> so row height is always equal -->
+    <table width="100%" cellspacing="0" cellpadding="0" style="margin:0 0 30px;">
+      <tr>
+        <td width="48%" valign="top" style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid #C9A85C;padding:18px 20px;text-align:center;">
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#9A8050;margin-bottom:6px;font-weight:600;">${personalTitle}</div>
+          <p style="font-size:12px;color:#5A5850;line-height:1.6;margin:0 0 12px;font-weight:300;">${personalDesc}</p>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:17px;letter-spacing:1.5px;color:#1A1715;margin-bottom:8px;">${escHtml(personalCode)}</div>
+          <p style="font-size:10.5px;color:#9A8050;margin:0 0 6px;line-height:1.5;">${personalNote}</p>
+          <p style="font-size:10px;color:#B0AAA4;margin:0;">${personalExpiry}</p>
+        </td>
+        <td width="4%"></td>
+        <td width="48%" valign="top" style="background:#FAFAF7;border:1px solid #E5E0D8;border-left:3px solid rgba(201,168,92,.4);padding:18px 20px;text-align:center;">
+          <div style="font-size:8px;letter-spacing:3px;text-transform:uppercase;color:#9A8050;margin-bottom:6px;font-weight:600;">${friendTitle}</div>
+          <p style="font-size:12px;color:#5A5850;line-height:1.6;margin:0 0 12px;font-weight:300;">${friendDesc}</p>
+          <div style="font-family:Georgia,'Times New Roman',serif;font-size:17px;letter-spacing:1.5px;color:#1A1715;margin-bottom:8px;">${escHtml(friendCode)}</div>
+          <p style="font-size:10.5px;color:#9A8050;margin:0 0 6px;line-height:1.5;">${friendNote}</p>
+          <p style="font-size:10px;color:#B0AAA4;margin:0;">${friendExpiry}</p>
+        </td>
+      </tr>
+    </table>
+
+    <div style="text-align:center;margin:0 0 28px;">
+      <a href="${escHtml(siteUrl)}"
+         style="display:inline-block;background:#1A1715;color:#C9A85C;text-decoration:none;
+                padding:15px 44px;font-size:13px;font-weight:500;
+                letter-spacing:1.5px;text-transform:uppercase;line-height:1;">
+        ${ctaLabel}
+      </a>
+    </div>
 
     <div style="height:1px;background:#EEEBE5;margin:0 0 20px;"></div>
     <p style="font-size:11.5px;color:#B0AAA4;line-height:1.75;margin:0;">

@@ -2639,11 +2639,17 @@ export const orderDelivery = inngest.createFunction(
       });
     });
 
-    // ── Step N+5: Trigger the Mini Reading → Full Blueprint upsell ────────
-    // Only fires for the Type & Strategie Reading; sleeps 24h before emailing.
+    // ── Step N+5: Trigger upsell emails ──────────────────────────────────
     if (order.report_id === "type-strategie") {
+      // Mini reading: 24h upsell → Volledige Blauwdruk (handled by miniUpsell.js)
       await step.sendEvent("trigger-mini-upsell", {
         name: "order/mini-delivered",
+        data: { orderId },
+      });
+    } else if (order.report_id !== "maandelijks") {
+      // All other reports: 3-day thank-you email with two €15 discount codes
+      await step.sendEvent("trigger-order-upsell", {
+        name: "order/delivered",
         data: { orderId },
       });
     }
