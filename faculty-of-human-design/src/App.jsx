@@ -2136,13 +2136,17 @@ function ChartDashboard({chart,name,onOrder}){
         </div>
       </div>
 
-      {/* Body: left blueprint (blurred) + right insight cards (Type visible, rest blurred) */}
+      {/* Type — prominent and fully visible, above the blurred content */}
+      <div style={{padding:"0 0 20px"}}>
+        <InsightCard label={t("form.typeLabel")} value={chart.type} desc={typeDesc} icon="◈" accentColor="#1A1714"/>
+      </div>
+
+      {/* Body: left blueprint (blurred) + right insight cards (all blurred) */}
       <div className="cd-body">
         <div className="cd-left">
           <BlurGate><BlueprintPanel chart={chart} name={name} onCta={onOrder}/></BlurGate>
         </div>
         <div className="cd-right">
-          <InsightCard label={t("form.typeLabel")} value={chart.type} desc={typeDesc} icon="◈" accentColor="#1A1714"/>
           <BlurGate>
             <div style={{display:"flex",flexDirection:"column",gap:6}}>
               <InsightCard label={t("form.authorityLabel")} value={xlateAuth(chart.auth)} desc={authDesc} icon="◎" accentColor="#C9A85C"/>
