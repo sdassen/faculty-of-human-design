@@ -5752,8 +5752,8 @@ function TermsPage({go}){
               :<>De rapporten die wij leveren zijn <strong>gepersonaliseerde digitale producten</strong>. Elk rapport wordt volledig op maat samengesteld op basis van de door jou opgegeven geboortedatum, -tijd en -plaats. Het eindproduct is een PDF-bestand dat uitsluitend voor jou is opgesteld.</>
             }</P>
             <P>{isEn
-              ?<>Our reports are intended as a personal insight tool. They are <strong>not a substitute for professional medical, psychological, legal or financial advice</strong>. The content is based on the systems of Human Design, Numerology and Astrology and serves as a complement to — not a replacement for — recognised professional help.</>
-              :<>Onze rapporten zijn bedoeld als persoonlijk inzichtsinstrument. Ze vormen <strong>geen vervanging voor professioneel medisch, psychologisch, juridisch of financieel advies</strong>. De inhoud is gebaseerd op de systemen van Human Design, Numerologie en Astrologie en dient als aanvulling op — niet als alternatief voor — erkende professionele hulpverlening.</>
+              ?<>Our reports are intended as a personal insight tool. They are <strong>not a substitute for professional medical, psychological, legal or financial advice</strong>.</>
+              :<>Onze rapporten zijn bedoeld als persoonlijk inzichtsinstrument. Ze vormen <strong>geen vervanging voor professioneel medisch, psychologisch, juridisch of financieel advies</strong>.</>
             }</P>
           </Section>
 
