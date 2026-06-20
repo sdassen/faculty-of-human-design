@@ -3988,7 +3988,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
               style={{fontFamily:"var(--font-sans)",fontSize:".72rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"white",background:"transparent",border:"1px solid rgba(255,255,255,.45)",padding:"14px 40px",cursor:"pointer",transition:"all .3s ease"}}
               onMouseEnter={e=>{e.currentTarget.style.background="rgba(255,255,255,.12)";e.currentTarget.style.borderColor="rgba(255,255,255,.7)";}}
               onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.borderColor="rgba(255,255,255,.45)";}}
-              onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"});}}
+              onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"detail_hero"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
             >{heroCta}</button>
             {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&<a href={
                 rpt.id==="volledig"?(LANG==="en"?"/preview-volledig-en.pdf":"/preview-volledig.pdf"):
@@ -4071,7 +4071,7 @@ function ReportDetailPage({rpt,go,onDone,postPayment}){
             style={{fontFamily:"var(--font-sans)",fontSize:".7rem",fontWeight:400,letterSpacing:".16em",textTransform:"uppercase",color:"var(--text)",background:"transparent",border:"1px solid rgba(26,23,20,.3)",padding:"13px 36px",cursor:"pointer",transition:"all .3s ease"}}
             onMouseEnter={e=>{e.currentTarget.style.background="var(--text)";e.currentTarget.style.color="white";}}
             onMouseLeave={e=>{e.currentTarget.style.background="transparent";e.currentTarget.style.color="var(--text)";}}
-            onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"mid_cta"});document.getElementById("rapport-ctas")?.scrollIntoView({behavior:"smooth",block:"center"});}}
+            onClick={()=>{track("checkout_started",{report:rpt.id,price:rpt.priceNum,location:"mid_cta"});document.getElementById("bestel")?.scrollIntoView({behavior:"smooth"});}}
           >{heroCta}</button>
           <div style={{marginTop:16,fontFamily:"var(--font-sans)",fontSize:".78rem",letterSpacing:".1em",color:"var(--text-light)",textTransform:"uppercase"}}>{rpt.price}</div>
           {(rpt.id==="volledig"||rpt.id==="relatie_liefde"||rpt.id==="kind")&&(
